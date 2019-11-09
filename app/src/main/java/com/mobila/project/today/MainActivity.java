@@ -20,4 +20,5 @@ public class MainActivity extends AppCompatActivity {
         overridePendingTransition( R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
+    //i made a commit
 }
