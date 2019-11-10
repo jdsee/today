@@ -34,8 +34,8 @@ public class EditorActivity extends AppCompatActivity {
         //set action-bar heading
         Objects.requireNonNull(getSupportActionBar()).setTitle(improvisedEvent);
         //set action-bar subtitle
-        getSupportActionBar().setSubtitle(improvisedDate + " - "+  improvisedSubjectCategorie
-                + ", "+ improvisedSubject);
+        getSupportActionBar().setSubtitle(improvisedDate + " - " + improvisedSubjectCategorie
+                + ", " + improvisedSubject);
 
         //set textEdit-listener to display current headline in Action-bar
         headline = findViewById(R.id.editor_headline);
@@ -52,17 +52,17 @@ public class EditorActivity extends AppCompatActivity {
         //set keyboard-eventlistener to disblay either the extension-toolbar or the text-toolbar
         KeyboardVisibilityEvent.setEventListener(this,
                 new KeyboardVisibilityEventListener() {
-            @Override
-            public void onVisibilityChanged(boolean isOpen) {
-                if (isOpen){
-                    findViewById(R.id.bottom_font_view).setVisibility(View.VISIBLE);
-                    findViewById(R.id.bottom_extension_view).setVisibility(View.INVISIBLE);
-                } else {
-                    findViewById(R.id.bottom_font_view).setVisibility(View.INVISIBLE);
-                    findViewById(R.id.bottom_extension_view).setVisibility(View.VISIBLE);
-                }
-            }
-        });
+                    @Override
+                    public void onVisibilityChanged(boolean isOpen) {
+                        if (isOpen) {
+                            findViewById(R.id.bottom_font_view).setVisibility(View.VISIBLE);
+                            findViewById(R.id.bottom_extension_view).setVisibility(View.INVISIBLE);
+                        } else {
+                            findViewById(R.id.bottom_font_view).setVisibility(View.INVISIBLE);
+                            findViewById(R.id.bottom_extension_view).setVisibility(View.VISIBLE);
+                        }
+                    }
+                });
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.mobila.project.today;//package com.example.editoractivity.control;
+package com.mobila.project.today.control;//package com.example.editoractivity.control;
 //
 //import android.content.Context;
 //import android.text.Editable;

@@ -14,11 +14,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-    public void openEditor(View view){
+    public void openEditor(View v) {
         Intent intent = new Intent(this, EditorActivity.class);
         startActivity(intent);
-        overridePendingTransition( R.anim.slide_in_right, R.anim.slide_out_left);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
-    //i made a commit
+    public void openCourseList(View v) {
+        Intent intent = new Intent(this, CourseListActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+    }
 }
