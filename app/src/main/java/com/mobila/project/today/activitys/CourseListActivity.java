@@ -1,4 +1,4 @@
-package com.mobila.project.today;
+package com.mobila.project.today.activitys;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 
+import com.mobila.project.today.R;
 import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Section;
 import com.mobila.project.today.model.Task;

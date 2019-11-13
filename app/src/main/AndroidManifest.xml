@@ -9,9 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".CourseListActivity"></activity>
+        <activity android:name=".activitys.CourseListActivity"></activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".activitys.MainActivity"
             android:windowSoftInputMode="stateVisible|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,8 +20,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".EditorActivity"
-            android:parentActivityName=".MainActivity"
+            android:name=".activitys.EditorActivity"
+            android:parentActivityName=".activitys.MainActivity"
             android:windowSoftInputMode="stateVisible|adjustResize" />
     </application>
 
