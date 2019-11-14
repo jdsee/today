@@ -7,6 +7,7 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.mobila.project.today.R;
+import com.mobila.project.today.activitys.editorActivity.EditorActivity;
 
 public class MainActivity extends AppCompatActivity {
 
