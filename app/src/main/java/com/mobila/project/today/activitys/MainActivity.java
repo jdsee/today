@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Opens EditorActivity
-     * @param v
+     * @param v View that performs this action
      */
     public void openEditor(View v) {
         Intent intent = new Intent(this, EditorActivity.class);
@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Opens CourseListActivity
-     * @param v
+     * @param v View that performs this action
      */
     public void openCourseList(View v) {
         Intent intent = new Intent(this, CourseListActivity.class);

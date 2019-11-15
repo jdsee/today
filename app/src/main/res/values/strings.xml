@@ -7,7 +7,7 @@
     <string name="open_editor">Open Editor</string>
     <string name="open_course_list">Open Course List</string>
     <string name="hint_headline">Enter a Headline</string>
-    <string name="hint_note">Enter a Note</string>
+    <string name="hint_note">…</string>
     <string name="action_add_attachment">Add Attachment</string>
     <string name="action_attachments">Attachments</string>
     <string name="action_take_photo">Take Photo</string>
