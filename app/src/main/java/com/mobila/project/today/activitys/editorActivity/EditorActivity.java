@@ -1,11 +1,14 @@
 package com.mobila.project.today.activitys.editorActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.text.SpannableString;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
@@ -17,6 +20,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -31,42 +35,36 @@ public class EditorActivity extends AppCompatActivity {
     private Note note;
     private EditText editTextHeadline;
     private EditText editTextContent;
+    final int REQUEST_IMAGE_CAPTURE = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         this.note = new Note(3, "Headline", new SpannableString("Inhalt"),
                 2, "Mobile Anwendungen", "Übung",
                 "Veranstalltung 3", "07.05.18");
-
         //set view
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
-
         //set action-bar heading
-        Objects.requireNonNull(getSupportActionBar()).setTitle(note.getEvent());
-
+        Objects.requireNonNull(getSupportActionBar()).setTitle(this.note.getEvent());
         //set action-bar subtitle
-        getSupportActionBar().setSubtitle(note.getDate() + " - " + note.getCategory()
-                + ", " + note.getCourse());
-
+        getSupportActionBar().setSubtitle(this.note.getDate() + " - " + this.note.getCategory()
+                + ", " + this.note.getCourse());
         //checks if device has camera. If not the "take-photo" item gets hidden
         if(!deviceHasCamera()){
             MenuItem cameraItem=findViewById(R.id.action_take_photo);
             cameraItem.setVisible(false);
         }
-
         //set textEdit-listener to display current editTextHeadline in Action-bar
-        editTextHeadline = findViewById(R.id.editor_headline);
-        editTextHeadline.addTextChangedListener(
-                new EditorHeadlineTextChangeListener(editTextHeadline, this,
-                        editTextHeadline, note));
-
+        this.editTextHeadline = findViewById(R.id.editor_headline);
+        this.editTextHeadline.addTextChangedListener(
+                new EditorHeadlineTextChangeListener(this.editTextHeadline, this,
+                        this.editTextHeadline, this.note));
         //set textEdit-listener to keep the Note synchronized with the EditText-view
-        editTextContent = findViewById(R.id.editor_note);
-        editTextContent.addTextChangedListener(
-                new EditorContentTextChangeListener(editTextContent, this,
-                        editTextContent, note));
-
+        this.editTextContent = findViewById(R.id.editor_note);
+        this.editTextContent.addTextChangedListener(
+                new EditorContentTextChangeListener(this.editTextContent, this,
+                        this.editTextContent, this.note));
         //set keyboard-eventListener to display either the extension-toolbar or the text-toolbar
         KeyboardVisibilityEvent.setEventListener(
                 this, new EditorKeyboardEventListener(this));
@@ -129,18 +127,44 @@ public class EditorActivity extends AppCompatActivity {
         setStyle(new StyleSpan(Typeface.ITALIC));
     }
 
+
+    /**
+     * Opens Camera
+     * @param item The item which was pressed
+     */
+    public void onTakePhotoPickerPressed(MenuItem item){
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager())!=null){
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
     /**
      * Applies given Style onto the selected text
      * @param parcelable The style that should be applied
      */
     private void setStyle(Parcelable parcelable){
-        int startSelection = editTextContent.getSelectionStart();
-        int endSelection = editTextContent.getSelectionEnd();
-        note.getContent().setSpan(parcelable, startSelection, endSelection, 0);
-        editTextContent.setText(note.getContent(), TextView.BufferType.SPANNABLE);
-
+        int startSelection = this.editTextContent.getSelectionStart();
+        int endSelection = this.editTextContent.getSelectionEnd();
+        this.note.getContent().setSpan(parcelable, startSelection, endSelection, 0);
+        this.editTextContent.setText(this.note.getContent(), TextView.BufferType.SPANNABLE);
         //moves cursor to the end of the selection
-        editTextContent.setSelection(endSelection);
+        this.editTextContent.setSelection(endSelection);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode==REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
+            Bundle extras = data.getExtras();
+            if (extras != null) {
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                this.note.addExtension(imageBitmap);
+                Toast toast = Toast.makeText(getApplicationContext(),
+                        "Saved", Toast.LENGTH_LONG);
+                toast.show();
+            }
+        }
     }
 
     private boolean deviceHasCamera(){

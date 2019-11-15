@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item android:id="@+id/action_notes"
-        android:title="Notes"
+        android:title="@string/app_bar_note"
         android:icon="@drawable/baseline_note_24"
         app:showAsAction="ifRoom"/>
 

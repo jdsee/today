@@ -1,7 +1,14 @@
 package com.mobila.project.today.model;
 
+import android.annotation.SuppressLint;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import javax.xml.datatype.Duration;
 
 
 public class Note {
@@ -13,6 +20,7 @@ public class Note {
     private String category;
     private String event;
     private String date;
+    private ArrayList<Object> extensions;
 
     public Note(long id, String title, SpannableString content, long semester, String course, String category, String event, String date) {
         this.id = id;
@@ -23,6 +31,12 @@ public class Note {
         this.category = category;
         this.event = event;
         this.date = date;
+    }
+
+    public Note(long id, String title, String content) {
+        this.id = id;
+        this.title = title;
+        this.content = new SpannableString(content);
     }
 
     public long getSemester() {
@@ -57,12 +71,6 @@ public class Note {
         this.event = event;
     }
 
-    public Note(long id, String title, String content) {
-        this.id = id;
-        this.title = title;
-        this.content = new SpannableString(content);
-    }
-
     public long getId() {
         return id;
     }
@@ -93,5 +101,16 @@ public class Note {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    /**
+     * Method for adding a extension
+     * @param extension The extension which should be stored
+     */
+    public void addExtension(Object extension){
+        if (this.extensions==null){
+            this.extensions=new ArrayList<>();
+        }
+        this.extensions.add(extension);
     }
 }
