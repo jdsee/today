@@ -1,9 +1,9 @@
 package com.mobila.project.today.activitys.editorActivity;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.fonts.FontStyle;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.SpannableString;
@@ -48,6 +48,12 @@ public class EditorActivity extends AppCompatActivity {
         //set action-bar subtitle
         getSupportActionBar().setSubtitle(note.getDate() + " - " + note.getCategory()
                 + ", " + note.getCourse());
+
+        //checks if device has camera. If not the "take-photo" item gets hidden
+        if(!deviceHasCamera()){
+            MenuItem cameraItem=findViewById(R.id.action_take_photo);
+            cameraItem.setVisible(false);
+        }
 
         //set textEdit-listener to display current editTextHeadline in Action-bar
         editTextHeadline = findViewById(R.id.editor_headline);
@@ -132,5 +138,10 @@ public class EditorActivity extends AppCompatActivity {
         int endSelection = editTextContent.getSelectionEnd();
         note.getContent().setSpan(parcelable, startSelection, endSelection, 0);
         editTextContent.setText(note.getContent(), TextView.BufferType.SPANNABLE);
+    }
+
+    private boolean deviceHasCamera(){
+        PackageManager pm = getBaseContext().getPackageManager();
+        return pm.hasSystemFeature(PackageManager.FEATURE_CAMERA);
     }
 }
