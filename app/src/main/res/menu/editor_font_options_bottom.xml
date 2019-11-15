@@ -3,7 +3,8 @@
 
     <item android:id="@+id/action_style"
         android:title="Style"
-        android:icon="@drawable/baseline_text_format_24"/>
+        android:icon="@drawable/baseline_text_format_24"
+        android:onClick="onStylePickerPressed"/>
 
     <item android:id="@+id/action_color"
         android:title="Color"
@@ -12,6 +13,7 @@
 
     <item android:id="@+id/action_highlight"
         android:title="Highlight"
-        android:icon="@drawable/outline_format_paint_24"/>
+        android:icon="@drawable/outline_format_paint_24"
+        android:onClick="onHighlightPickerPressed"/>
 
 </menu>

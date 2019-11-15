@@ -2,7 +2,6 @@ package com.mobila.project.today.activitys.editorActivity;
 
 import android.text.Editable;
 import android.text.Spannable;
-import android.text.SpannableString;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
