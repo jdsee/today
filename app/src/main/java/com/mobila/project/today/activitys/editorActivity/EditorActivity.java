@@ -138,6 +138,9 @@ public class EditorActivity extends AppCompatActivity {
         int endSelection = editTextContent.getSelectionEnd();
         note.getContent().setSpan(parcelable, startSelection, endSelection, 0);
         editTextContent.setText(note.getContent(), TextView.BufferType.SPANNABLE);
+
+        //moves cursor to the end of the selection
+        editTextContent.setSelection(endSelection);
     }
 
     private boolean deviceHasCamera(){
