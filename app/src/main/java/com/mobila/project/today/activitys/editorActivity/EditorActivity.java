@@ -1,12 +1,19 @@
 package com.mobila.project.today.activitys.editorActivity;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,14 +25,15 @@ import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 import java.util.Objects;
 
 public class EditorActivity extends AppCompatActivity {
-    private EditText editTextHeadline;
     private Note note;
+    private EditText editTextHeadline;
+    private EditText editTextContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        this.note=new Note(3, "Headline", "Inhalt", 2,
-                "Mobile Anwendungen", "Übung", "Veranstalltung 3",
-                "07.05.18");
+        this.note = new Note(3, "Headline", new SpannableString("Inhalt"),
+                2, "Mobile Anwendungen", "Übung",
+                "Veranstalltung 3", "07.05.18");
 
         //set view
         super.onCreate(savedInstanceState);
@@ -43,6 +51,11 @@ public class EditorActivity extends AppCompatActivity {
         editTextHeadline.addTextChangedListener(
                 new EditorHeadlineTextChangeListener(editTextHeadline, this,
                         editTextHeadline, note));
+
+        editTextContent = findViewById(R.id.editor_note);
+        editTextContent.addTextChangedListener(
+                new EditorContentTextChangeListener(editTextContent, this,
+                        editTextContent, note));
 
         //set keyboard-eventListener to display either the extension-toolbar or the text-toolbar
         KeyboardVisibilityEvent.setEventListener(
@@ -79,4 +92,10 @@ public class EditorActivity extends AppCompatActivity {
     }
 
 
+    public void onColourPickerPressed(MenuItem item) {
+        int startSelection = editTextContent.getSelectionStart();
+        int endSelection = editTextContent.getSelectionEnd();
+        note.getContent().setSpan(new ForegroundColorSpan(Color.RED), startSelection, endSelection, 0);
+        editTextContent.setText(note.getContent(), TextView.BufferType.SPANNABLE);
+    }
 }

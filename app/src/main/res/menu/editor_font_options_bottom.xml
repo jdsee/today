@@ -7,7 +7,8 @@
 
     <item android:id="@+id/action_color"
         android:title="Color"
-        android:icon="@drawable/outline_color_lens_24"/>
+        android:icon="@drawable/outline_color_lens_24"
+        android:onClick="onColourPickerPressed"/>
 
     <item android:id="@+id/action_highlight"
         android:title="Highlight"

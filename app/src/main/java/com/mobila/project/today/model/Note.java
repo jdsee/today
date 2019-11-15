@@ -1,16 +1,20 @@
 package com.mobila.project.today.model;
 
+import android.text.Spannable;
+import android.text.SpannableString;
+
+
 public class Note {
     private long id;
     private String title;
-    private String content;
+    private Spannable content;
     private long semester;
     private String course;
     private String category;
     private String event;
     private String date;
 
-    public Note(long id, String title, String content, long semester, String course, String category, String event, String date) {
+    public Note(long id, String title, SpannableString content, long semester, String course, String category, String event, String date) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -56,7 +60,7 @@ public class Note {
     public Note(long id, String title, String content) {
         this.id = id;
         this.title = title;
-        this.content = content;
+        this.content = new SpannableString(content);
     }
 
     public long getId() {
@@ -75,11 +79,11 @@ public class Note {
         this.title = title;
     }
 
-    public String getContent() {
+    public Spannable  getContent() {
         return content;
     }
 
-    public void setContent(String content) {
+    public void setContent(Spannable content) {
         this.content = content;
     }
 
