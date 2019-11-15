@@ -39,6 +39,9 @@ public class EditorActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //Slide-in Animation
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+
         this.note = new Note(3, "Headline", new SpannableString("Inhalt"),
                 2, "Mobile Anwendungen", "Übung",
                 "Veranstalltung 3", "07.05.18");

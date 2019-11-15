@@ -24,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
     public void openEditor(View v) {
         Intent intent = new Intent(this, EditorActivity.class);
         startActivity(intent);
-        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     /**

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.mobila.project.today">
 
     <uses-feature
@@ -7,12 +8,13 @@
         android:required="false" />
 
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".activitys.CourseListActivity" />
         <activity
             android:name=".activitys.MainActivity"
@@ -26,7 +28,53 @@
         <activity
             android:name=".activitys.editorActivity.EditorActivity"
             android:parentActivityName=".activitys.MainActivity"
-            android:windowSoftInputMode="stateVisible|adjustResize" />
+            android:windowSoftInputMode="stateVisible|adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="file" />
+                <data android:host="*" />
+                <data android:pathPattern=".*\\.toda" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="http" />
+                <data android:host="*" />
+                <data android:mimeType="application/toda" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="http" />
+                <data android:host="*" />
+                <data android:pathPattern=".*\\.toda" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="file" />
+                <data android:scheme="content" />
+                <data android:mimeType="*/*" />
+                <!--
+                    Work around Android's ugly primitive PatternMatcher
+                    implementation that can't cope with finding a . early in
+                    the path unless it's explicitly matched.
+                -->
+                <data android:host="*" />
+                <data android:pathPattern=".*\\.toda" />
+                <data android:pathPattern=".*\\..*\\.toda" />
+                <data android:pathPattern=".*\\..*\\..*\\.toda" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.toda" />
+                <!-- keep going if you need more -->
+
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
