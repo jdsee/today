@@ -6,18 +6,81 @@
         android:title="@string/action_style"
         android:icon="@drawable/baseline_text_format_24"
         android:onClick="onStylePickerPressed"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom">
+        <menu>
+            <item android:id="@+id/style_bold"
+                android:title="Bold"
+                android:icon="@drawable/baseline_format_bold_24" />
+            <item android:id="@+id/style_underlined"
+                android:title="Underlined"
+                android:icon="@drawable/baseline_text_format_24" />
+            <item android:id="@+id/style_italic"
+                android:title="Italic"
+                android:icon="@drawable/baseline_format_italic_24" />
+        </menu>
+    </item>
 
     <item android:id="@+id/action_color"
         android:title="@string/action_colour"
         android:icon="@drawable/outline_color_lens_24"
         android:onClick="onColourPickerPressed"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom">
+        <menu>
+            <item android:id="@+id/colour_yellow"
+                android:title="Yellow"
+                android:icon="@drawable/baseline_lens_24"
+                app:iconTint="@color/textcolour_yellow"/>
+            <item android:id="@+id/colour_orange"
+                android:title="Orange"
+                android:icon="@drawable/baseline_lens_24"
+                app:iconTint="@color/textcolour_orange"/>
+            <item android:id="@+id/colour_red"
+                android:title="Red"
+                android:icon="@drawable/baseline_lens_24"
+                app:iconTint="@color/textcolour_red"/>
+            <item android:id="@+id/colour_purple"
+                android:title="Purple"
+                android:icon="@drawable/baseline_lens_24"
+                app:iconTint="@color/textcolour_purple"/>
+            <item android:id="@+id/colour_blue"
+                android:title="Blue"
+                android:icon="@drawable/baseline_lens_24"
+                app:iconTint="@color/textcolour_blue"/>
+            <item android:id="@+id/colour_green"
+                android:title="Green"
+                android:icon="@drawable/baseline_lens_24"
+                app:iconTint="@color/textcolour_green"/>
+
+        </menu>
+    </item>
 
     <item android:id="@+id/action_highlight"
         android:title="@string/action_highlight"
         android:icon="@drawable/outline_format_paint_24"
         android:onClick="onHighlightPickerPressed"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom">
+        <menu>
+            <item android:id="@+id/highlighter_yellow"
+                android:title="Yellow"
+                android:icon="@drawable/baseline_lens_24"
+                app:iconTint="@color/highlighter_yellow"/>
+            <item android:id="@+id/highlighter_green"
+                android:title="Green"
+                android:icon="@drawable/baseline_lens_24"
+                app:iconTint="@color/highlighter_green"/>
+            <item android:id="@+id/highlighter_blue"
+                android:title="Blue"
+                android:icon="@drawable/baseline_lens_24"
+                app:iconTint="@color/highlighter_blue"/>
+            <item android:id="@+id/highlighter_purple"
+                android:title="Purple"
+                android:icon="@drawable/baseline_lens_24"
+                app:iconTint="@color/highlighter_purple"/>
+            <item android:id="@+id/highlighter_red"
+                android:title="Blue"
+                android:icon="@drawable/baseline_lens_24"
+                app:iconTint="@color/highlighter_red"/>
+        </menu>
+    </item>
 
 </menu>
