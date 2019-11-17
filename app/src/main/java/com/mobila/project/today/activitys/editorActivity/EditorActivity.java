@@ -1,5 +1,6 @@
 package com.mobila.project.today.activitys.editorActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -40,6 +41,7 @@ public class EditorActivity extends AppCompatActivity {
     private EditText editTextContent;
     private boolean keyBoardOpen;
     final int REQUEST_IMAGE_CAPTURE = 0;
+    final int REQUEST_FILE_OPEN = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +65,7 @@ public class EditorActivity extends AppCompatActivity {
         //focus to the NoteEditText if pressed
         headline.setOnEditorActionListener(new TitleOnEditorActionListener(this));
         //Set subtitle to appropriate content of the note
-        TextView textView =findViewById(R.id.editor_subtitle);
+        TextView textView = findViewById(R.id.editor_subtitle);
         textView.setText(
                 String.format("%s  -  %s %s", note.getDate(), note.getCourse(), note.getCategory()));
 
@@ -72,8 +74,8 @@ public class EditorActivity extends AppCompatActivity {
 
         Objects.requireNonNull(getSupportActionBar()).setTitle("");
         //checks if device has camera. If not the "take-photo" item gets hidden
-        if(!deviceHasCamera()){
-            MenuItem cameraItem=findViewById(R.id.action_take_photo);
+        if (!deviceHasCamera()) {
+            MenuItem cameraItem = findViewById(R.id.action_take_photo);
             cameraItem.setVisible(false);
         }
         //set textEdit-listener to keep the Note synchronized with the EditText-view
@@ -90,12 +92,13 @@ public class EditorActivity extends AppCompatActivity {
         actionButton.setCompatElevation(0);
     }
 
-    public void setKeyboardOpen(Boolean keyBoardOpen){
-        this.keyBoardOpen=keyBoardOpen;
+    public void setKeyboardOpen(Boolean keyBoardOpen) {
+        this.keyBoardOpen = keyBoardOpen;
     }
 
     /**
      * Method to close Activity
+     *
      * @param view The vie that is taking this action
      */
     public void onBackPressed(View view) {
@@ -104,7 +107,7 @@ public class EditorActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         finish();
         prepareGoBack();
     }
@@ -119,7 +122,7 @@ public class EditorActivity extends AppCompatActivity {
     /**
      * Method for preparing leaving the activity
      */
-    private void prepareGoBack(){
+    private void prepareGoBack() {
         //force keyboard to close
         View view = this.getCurrentFocus();
         if (view != null) {
@@ -136,6 +139,7 @@ public class EditorActivity extends AppCompatActivity {
     /**
      * Is invoked by pressing the Colour-Symbol in the lower menu.
      * It sets the colour of the selected text
+     *
      * @param item The item which was pressed
      */
     public void onColourPickerPressed(MenuItem item) {
@@ -144,37 +148,28 @@ public class EditorActivity extends AppCompatActivity {
 
     /**
      * Is invoked by pressing the Highlight-Symbol in the lower menu.
+     *
      * @param item The item which was pressed
      */
-    public void onHighlightPickerPressed(MenuItem item){
+    public void onHighlightPickerPressed(MenuItem item) {
         setStyle(new BackgroundColorSpan(Color.GREEN));
     }
 
     /**
      * Is invoked by pressing the Style-Symbol in the lower menu.
+     *
      * @param item The item which was pressed
      */
-    public void onStylePickerPressed(MenuItem item){
+    public void onStylePickerPressed(MenuItem item) {
         setStyle(new StyleSpan(Typeface.ITALIC));
-    }
-
-
-    /**
-     * Opens Camera
-     * @param item The item which was pressed
-     */
-    public void onTakePhotoPickerPressed(MenuItem item){
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager())!=null){
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        }
     }
 
     /**
      * Applies given Style onto the selected text
+     *
      * @param parcelable The style that should be applied
      */
-    private void setStyle(Parcelable parcelable){
+    private void setStyle(Parcelable parcelable) {
         int startSelection = this.editTextContent.getSelectionStart();
         int endSelection = this.editTextContent.getSelectionEnd();
         this.note.getContent().setSpan(parcelable, startSelection, endSelection, 0);
@@ -183,50 +178,89 @@ public class EditorActivity extends AppCompatActivity {
         this.editTextContent.setSelection(endSelection);
     }
 
+
+    /**
+     * Opens Camera
+     *
+     * @param item The item which was pressed
+     */
+    public void onTakePhotoPickerPressed(MenuItem item) {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    public void onFilePickerPressed(MenuItem item) {
+        Intent openFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        openFileIntent.setType("*/*");
+        startActivityForResult(openFileIntent, REQUEST_FILE_OPEN);
+    }
+
+    @SuppressLint("ShowToast")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode==REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
+        if (resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             if (extras != null) {
-                Bitmap imageBitmap = (Bitmap) extras.get("data");
-                this.note.addExtension(imageBitmap);
+                Object attachedData = extras.get("data");
+                this.note.addExtension(attachedData);
+                Toast toast;
+                if (requestCode == REQUEST_IMAGE_CAPTURE) {
+                    toast = Toast.makeText(getApplicationContext(),
+                            "Image Saved", Toast.LENGTH_LONG);
+                } else if (requestCode == REQUEST_FILE_OPEN) {
+                    toast = Toast.makeText(getApplicationContext(),
+                            "File Saved", Toast.LENGTH_LONG);
+                } else {
+                    toast = Toast.makeText(getApplicationContext(),
+                            "Something went Wrong!", Toast.LENGTH_LONG);
+                }
+                toast.show();
+            } else {
                 Toast toast = Toast.makeText(getApplicationContext(),
-                        "Saved", Toast.LENGTH_LONG);
+                        "Nothing got back", Toast.LENGTH_LONG);
                 toast.show();
             }
+        } else {
+            Toast toast = Toast.makeText(getApplicationContext(),
+                    "Nothing was saved", Toast.LENGTH_LONG);
+            toast.show();
         }
     }
 
     /**
      * Method for detecting if the device on which the application is installed has a camera
+     *
      * @return If the device has a camera
      */
-    private boolean deviceHasCamera(){
+    private boolean deviceHasCamera() {
         PackageManager pm = getBaseContext().getPackageManager();
         return pm.hasSystemFeature(PackageManager.FEATURE_CAMERA);
     }
 
     /**
      * Method for opening the functions hidden behind the three dots in the Toolbar
+     *
      * @param view the view that calls this method
      */
     public void showEditorHiddenFunctions(View view) {
         PopupMenu popup = new PopupMenu(this, view);
-        MenuInflater inflater =popup.getMenuInflater();
+        MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.editor_action_bar, popup.getMenu());
         popup.show();
     }
 
-     @Override
-    public boolean onPrepareOptionsMenu(Menu menu){
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
         menu.clear();
-        MenuInflater inflater=getMenuInflater();
-        if(keyBoardOpen){
+        MenuInflater inflater = getMenuInflater();
+        if (keyBoardOpen) {
             inflater.inflate(R.menu.editor_font_options_bottom, menu);
         } else {
             inflater.inflate(R.menu.editor_extension_bottom, menu);
         }
         return true;
-     }
+    }
 }

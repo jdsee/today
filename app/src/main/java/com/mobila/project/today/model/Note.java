@@ -1,14 +1,9 @@
 package com.mobila.project.today.model;
 
-import android.annotation.SuppressLint;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-
-import javax.xml.datatype.Duration;
 
 
 public class Note {
