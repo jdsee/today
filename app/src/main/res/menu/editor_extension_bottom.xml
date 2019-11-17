@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item android:id="@+id/action_take_photo"
         android:title="@string/action_take_photo"
         android:icon="@drawable/outline_add_a_photo_24"
-        android:onClick="onTakePhotoPickerPressed"/>
+        android:onClick="onTakePhotoPickerPressed"
+        app:showAsAction="ifRoom"/>
 
     <item android:id="@+id/action_attachment"
         android:title="@string/action_attachments"
-        android:icon="@drawable/baseline_attach_file_24"/>
+        android:icon="@drawable/baseline_attach_file_24"
+        app:showAsAction="ifRoom"/>
 
     <item android:id="@+id/action_add_attachment"
         android:title="@string/action_add_attachment"
-        android:icon="@drawable/baseline_add_24"/>
+        android:icon="@drawable/baseline_add_24"
+        app:showAsAction="ifRoom"/>
 
 </menu>

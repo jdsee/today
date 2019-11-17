@@ -1,29 +1,22 @@
 package com.mobila.project.today.activitys.editorActivity;
 
-import android.app.Activity;
-import android.view.View;
-
-import com.mobila.project.today.R;
-
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener;
 
 public class EditorKeyboardEventListener implements KeyboardVisibilityEventListener {
-    private View bottomFont;
-    private View bottomExtension;
+    private EditorActivity activity;
 
-    EditorKeyboardEventListener(Activity activity) {
-        bottomFont = activity.findViewById(R.id.bottom_font_view);
-        bottomExtension = activity.findViewById(R.id.bottom_extension_view);
+    EditorKeyboardEventListener(EditorActivity activity) {
+        this.activity=activity;
     }
+
 
     @Override
     public void onVisibilityChanged(boolean isOpen) {
         if (isOpen) {
-            bottomFont.setVisibility(View.VISIBLE);
-            bottomExtension.setVisibility(View.INVISIBLE);
+            this.activity.setKeyboardOpen(true);
         } else {
-            bottomFont.setVisibility(View.INVISIBLE);
-            bottomExtension.setVisibility(View.VISIBLE);
+            this.activity.setKeyboardOpen(false);
         }
+        this.activity.invalidateOptionsMenu();
     }
 }

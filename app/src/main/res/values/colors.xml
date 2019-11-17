@@ -6,4 +6,5 @@
     <color name="lightGrey">#E2E2E2</color>
     <color name="icon_black">#000000</color>
     <color name="icon_text_grey">#808080</color>
+    <color name="note_colour">#E6BE6B</color>
 </resources>

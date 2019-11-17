@@ -19,11 +19,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
+import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mobila.project.today.R;
 import com.mobila.project.today.model.Note;
 
@@ -33,8 +37,8 @@ import java.util.Objects;
 
 public class EditorActivity extends AppCompatActivity {
     private Note note;
-    private EditText editTextHeadline;
     private EditText editTextContent;
+    private boolean keyBoardOpen;
     final int REQUEST_IMAGE_CAPTURE = 0;
 
     @Override
@@ -47,48 +51,75 @@ public class EditorActivity extends AppCompatActivity {
                 "Veranstalltung 3", "07.05.18");
         //set view
         super.onCreate(savedInstanceState);
+        setTheme(R.style.Theme_MaterialComponents_Light_NoActionBar_Bridge);
+        getWindow().setNavigationBarColor(Color.GRAY);
         setContentView(R.layout.activity_editor);
-        //set action-bar heading
-        Objects.requireNonNull(getSupportActionBar()).setTitle(this.note.getEvent());
-        //set action-bar subtitle
-        getSupportActionBar().setSubtitle(this.note.getDate() + " - " + this.note.getCategory()
-                + ", " + this.note.getCourse());
+        Toolbar bar = findViewById(R.id.editor_toolbar);
+        setSupportActionBar(bar);
+        //sets preset Title
+        EditText headline = findViewById(R.id.editor_title);
+        headline.setHint(note.getEvent());
+        //Sets Action-Listener on "next-button" of keyboard inside the TitleEditText to move the
+        //focus to the NoteEditText if pressed
+        headline.setOnEditorActionListener(new TitleOnEditorActionListener(this));
+        //Set subtitle to appropriate content of the note
+        TextView textView =findViewById(R.id.editor_subtitle);
+        textView.setText(
+                String.format("%s  -  %s %s", note.getDate(), note.getCourse(), note.getCategory()));
+
+        BottomAppBar bottomAppBar = findViewById(R.id.bottom_app_bar);
+        setSupportActionBar(bottomAppBar);
+
+        Objects.requireNonNull(getSupportActionBar()).setTitle("");
         //checks if device has camera. If not the "take-photo" item gets hidden
         if(!deviceHasCamera()){
             MenuItem cameraItem=findViewById(R.id.action_take_photo);
             cameraItem.setVisible(false);
         }
-        //set textEdit-listener to display current editTextHeadline in Action-bar
-        this.editTextHeadline = findViewById(R.id.editor_headline);
-        this.editTextHeadline.addTextChangedListener(
-                new EditorHeadlineTextChangeListener(this.editTextHeadline, this,
-                        this.editTextHeadline, this.note));
         //set textEdit-listener to keep the Note synchronized with the EditText-view
         this.editTextContent = findViewById(R.id.editor_note);
-        this.editTextContent.addTextChangedListener(
-                new EditorContentTextChangeListener(this.editTextContent, this,
+        editTextContent.addTextChangedListener(
+                new EditorContentTextChangeListener(this,
                         this.editTextContent, this.note));
+
         //set keyboard-eventListener to display either the extension-toolbar or the text-toolbar
         KeyboardVisibilityEvent.setEventListener(
                 this, new EditorKeyboardEventListener(this));
+        //Remove elevation from note-button
+        FloatingActionButton actionButton = findViewById(R.id.button_note);
+        actionButton.setCompatElevation(0);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.editor_action_bar, menu);
-        return true;
+    public void setKeyboardOpen(Boolean keyBoardOpen){
+        this.keyBoardOpen=keyBoardOpen;
     }
 
-    @Override
-    public void onBackPressed() {
+    /**
+     * Method to close Activity
+     * @param view The vie that is taking this action
+     */
+    public void onBackPressed(View view) {
         finish();
-        //sliding animation to the left out of the activity
-        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        prepareGoBack();
+    }
+
+    @Override
+    public void onBackPressed(){
+        finish();
+        prepareGoBack();
     }
 
     @Override
     public boolean onSupportNavigateUp() {
+        onBackPressed();
+        prepareGoBack();
+        return true;
+    }
+
+    /**
+     * Method for preparing leaving the activity
+     */
+    private void prepareGoBack(){
         //force keyboard to close
         View view = this.getCurrentFocus();
         if (view != null) {
@@ -97,11 +128,8 @@ public class EditorActivity extends AppCompatActivity {
             assert imm != null;
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
-
-        onBackPressed();
         //sliding animation to the left out of the activity
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-        return true;
     }
 
 
@@ -170,8 +198,35 @@ public class EditorActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Method for detecting if the device on which the application is installed has a camera
+     * @return If the device has a camera
+     */
     private boolean deviceHasCamera(){
         PackageManager pm = getBaseContext().getPackageManager();
         return pm.hasSystemFeature(PackageManager.FEATURE_CAMERA);
     }
+
+    /**
+     * Method for opening the functions hidden behind the three dots in the Toolbar
+     * @param view the view that calls this method
+     */
+    public void showEditorHiddenFunctions(View view) {
+        PopupMenu popup = new PopupMenu(this, view);
+        MenuInflater inflater =popup.getMenuInflater();
+        inflater.inflate(R.menu.editor_action_bar, popup.getMenu());
+        popup.show();
+    }
+
+     @Override
+    public boolean onPrepareOptionsMenu(Menu menu){
+        menu.clear();
+        MenuInflater inflater=getMenuInflater();
+        if(keyBoardOpen){
+            inflater.inflate(R.menu.editor_font_options_bottom, menu);
+        } else {
+            inflater.inflate(R.menu.editor_extension_bottom, menu);
+        }
+        return true;
+     }
 }

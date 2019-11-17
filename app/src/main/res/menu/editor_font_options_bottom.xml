@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item android:id="@+id/action_style"
         android:title="@string/action_style"
         android:icon="@drawable/baseline_text_format_24"
-        android:onClick="onStylePickerPressed"/>
+        android:onClick="onStylePickerPressed"
+        app:showAsAction="ifRoom"/>
 
     <item android:id="@+id/action_color"
         android:title="@string/action_colour"
         android:icon="@drawable/outline_color_lens_24"
-        android:onClick="onColourPickerPressed"/>
+        android:onClick="onColourPickerPressed"
+        app:showAsAction="ifRoom"/>
 
     <item android:id="@+id/action_highlight"
         android:title="@string/action_highlight"
         android:icon="@drawable/outline_format_paint_24"
-        android:onClick="onHighlightPickerPressed"/>
+        android:onClick="onHighlightPickerPressed"
+        app:showAsAction="ifRoom"/>
 
 </menu>

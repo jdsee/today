@@ -6,60 +6,79 @@
     android:layout_height="match_parent"
     tools:context=".activitys.editorActivity.EditorActivity">
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_font_view"
-        android:layout_width="0dp"
-        android:layout_height="42dp"
-        android:background="@color/lightGrey"
-        android:visibility="invisible"
-        app:itemIconSize="28dp"
-        app:itemIconTint="@color/icon_black"
-        app:itemTextAppearanceActive="@style/BottomNavigationView.Active"
-        app:itemTextAppearanceInactive="@style/BottomNavigationView"
-        app:itemTextColor="@color/icon_text_grey"
-        app:labelVisibilityMode="labeled"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/editor_font_options_bottom">
 
-    </com.google.android.material.bottomnavigation.BottomNavigationView>
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_extension_view"
-        android:layout_width="0dp"
-        android:layout_height="42dp"
-        android:background="@color/lightGrey"
-        android:visibility="visible"
-        app:itemIconSize="28dp"
-        app:itemIconTint="@color/icon_black"
-        app:itemTextAppearanceActive="@style/BottomNavigationView.Active"
-        app:itemTextAppearanceInactive="@style/BottomNavigationView"
-        app:itemTextColor="@color/icon_text_grey"
-        app:labelVisibilityMode="labeled"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/editor_extension_bottom" />
-
-    <EditText
-        android:id="@+id/editor_headline"
-        android:layout_width="0dp"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/editor_toolbar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:ems="10"
-        android:hint="@string/hint_headline"
-        android:imeOptions="flagNoExtractUi"
-        android:inputType="textPersonName"
+        android:background="@color/lightGrey"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:autofillHints="headline">
+        app:layout_constraintTop_toTopOf="parent">
 
-        <requestFocus />
-    </EditText>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:layout_width="36dp"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:src="@drawable/baseline_arrow_back_ios_24"
+                android:onClick="onBackPressed"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="0.7">
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="6dp"
+                    tools:ignore="UselessLeaf" />
+
+                <EditText
+                    android:id="@+id/editor_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textSize="24sp"
+                    android:background="@null"
+                    android:inputType="textPersonName"
+                    android:imeOptions="actionNext"
+                    android:autofillHints=""
+                    android:hint="@string/error_message">
+                    <requestFocus/>
+                </EditText>
+
+                <TextView
+                    android:id="@+id/editor_subtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/icon_text_grey"
+                    android:textSize="12sp" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp"
+                    tools:ignore="UselessLeaf" />
+
+
+            </LinearLayout>
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:src="@drawable/baseline_more_vert_24"
+                android:onClick="showEditorHiddenFunctions"/>
+
+        </LinearLayout>
+
+
+    </androidx.appcompat.widget.Toolbar>
 
     <EditText
         android:id="@+id/editor_note"
@@ -68,20 +87,47 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="-50dp"
+        android:autofillHints="note"
         android:background="@null"
         android:ems="10"
         android:gravity="start|top"
         android:hint="@string/hint_note"
         android:imeOptions="flagNoExtractUi"
         android:inputType="textMultiLine"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_font_view"
+        app:layout_constraintBottom_toTopOf="@+id/coordinatorLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editor_headline"
-        app:layout_constraintVertical_bias="1.0"
-        android:autofillHints="note" />
+        app:layout_constraintTop_toBottomOf="@+id/editor_toolbar" />
 
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinatorLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <com.google.android.material.bottomappbar.BottomAppBar
+            android:id="@+id/bottom_app_bar"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:layout_gravity="bottom"
+            app:backgroundTint="@color/lightGrey"
+            app:buttonGravity="bottom|top"
+            app:fabAlignmentMode="end"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/button_note"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_list_24"
+            app:backgroundTint="@color/note_colour"
+            app:fabSize="auto"
+            app:layout_anchor="@id/bottom_app_bar"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:layout_marginTop="30dp"/>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
