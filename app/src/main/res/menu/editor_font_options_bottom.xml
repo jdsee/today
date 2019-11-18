@@ -1,21 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/action_tab"
+        android:title="@string/tab"
+        android:icon="@drawable/baseline_keyboard_tab_24"
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
+
+    <item android:id="@+id/action_bullet_list"
+        android:title="@string/bullet_list"
+        android:icon="@drawable/baseline_format_list_bulleted_24"
+        app:showAsAction="always"/>
+
+    <item android:id="@+id/action_numbered_list"
+        android:title="@string/number_list"
+        android:icon="@drawable/baseline_format_list_numbered_24"
+        app:showAsAction="always"/>
 
     <item android:id="@+id/action_style"
         android:title="@string/action_style"
         android:icon="@drawable/baseline_text_format_24"
         android:onClick="onStylePickerPressed"
-        app:showAsAction="ifRoom">
+        app:showAsAction="always">
         <menu>
             <item android:id="@+id/style_bold"
-                android:title="Bold"
+                android:title="@string/bold"
                 android:icon="@drawable/baseline_format_bold_24" />
             <item android:id="@+id/style_underlined"
-                android:title="Underlined"
+                android:title="@string/underlined"
                 android:icon="@drawable/baseline_text_format_24" />
             <item android:id="@+id/style_italic"
-                android:title="Italic"
+                android:title="@string/italic"
                 android:icon="@drawable/baseline_format_italic_24" />
         </menu>
     </item>
@@ -24,30 +41,30 @@
         android:title="@string/action_colour"
         android:icon="@drawable/outline_color_lens_24"
         android:onClick="onColourPickerPressed"
-        app:showAsAction="ifRoom">
+        app:showAsAction="always">
         <menu>
             <item android:id="@+id/colour_yellow"
-                android:title="Yellow"
+                android:title="@string/fontcolour_yellow"
                 android:icon="@drawable/baseline_lens_24"
                 app:iconTint="@color/textcolour_yellow"/>
             <item android:id="@+id/colour_orange"
-                android:title="Orange"
+                android:title="@string/fontocolour_orange"
                 android:icon="@drawable/baseline_lens_24"
                 app:iconTint="@color/textcolour_orange"/>
             <item android:id="@+id/colour_red"
-                android:title="Red"
+                android:title="@string/fontcolour_red"
                 android:icon="@drawable/baseline_lens_24"
                 app:iconTint="@color/textcolour_red"/>
             <item android:id="@+id/colour_purple"
-                android:title="Purple"
+                android:title="@string/fontcolour_purple"
                 android:icon="@drawable/baseline_lens_24"
                 app:iconTint="@color/textcolour_purple"/>
             <item android:id="@+id/colour_blue"
-                android:title="Blue"
+                android:title="@string/fontcolour_blue"
                 android:icon="@drawable/baseline_lens_24"
                 app:iconTint="@color/textcolour_blue"/>
             <item android:id="@+id/colour_green"
-                android:title="Green"
+                android:title="@string/fontcolour_green"
                 android:icon="@drawable/baseline_lens_24"
                 app:iconTint="@color/textcolour_green"/>
 
@@ -58,26 +75,26 @@
         android:title="@string/action_highlight"
         android:icon="@drawable/outline_format_paint_24"
         android:onClick="onHighlightPickerPressed"
-        app:showAsAction="ifRoom">
+        app:showAsAction="always">
         <menu>
             <item android:id="@+id/highlighter_yellow"
-                android:title="Yellow"
+                android:title="@string/background_font_colour_yellow"
                 android:icon="@drawable/baseline_lens_24"
                 app:iconTint="@color/highlighter_yellow"/>
             <item android:id="@+id/highlighter_green"
-                android:title="Green"
+                android:title="@string/background_font_colour_green"
                 android:icon="@drawable/baseline_lens_24"
                 app:iconTint="@color/highlighter_green"/>
             <item android:id="@+id/highlighter_blue"
-                android:title="Blue"
+                android:title="@string/background_font_colour_blue"
                 android:icon="@drawable/baseline_lens_24"
                 app:iconTint="@color/highlighter_blue"/>
             <item android:id="@+id/highlighter_purple"
-                android:title="Purple"
+                android:title="@string/background_font_colour_purple"
                 android:icon="@drawable/baseline_lens_24"
                 app:iconTint="@color/highlighter_purple"/>
             <item android:id="@+id/highlighter_red"
-                android:title="Blue"
+                android:title="@string/background_font_colour_red"
                 android:icon="@drawable/baseline_lens_24"
                 app:iconTint="@color/highlighter_red"/>
         </menu>
