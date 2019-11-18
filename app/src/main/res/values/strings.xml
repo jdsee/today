@@ -15,4 +15,21 @@
     <string name="action_colour">Colour</string>
     <string name="action_style">Style</string>
     <string name="error_message">something went wrong</string>
+    <string name="tab">Tab</string>
+    <string name="bullet_list">Bullet List</string>
+    <string name="number_list">Number List</string>
+    <string name="bold">Bold</string>
+    <string name="underlined">Underlined</string>
+    <string name="italic">Italic</string>
+    <string name="fontcolour_yellow">Yellow</string>
+    <string name="fontocolour_orange">Orange</string>
+    <string name="fontcolour_red">Red</string>
+    <string name="fontcolour_purple">Purple</string>
+    <string name="fontcolour_blue">Blue</string>
+    <string name="fontcolour_green">Green</string>
+    <string name="background_font_colour_yellow">Yellow</string>
+    <string name="background_font_colour_green">Green</string>
+    <string name="background_font_colour_blue">Blue</string>
+    <string name="background_font_colour_purple">Purple</string>
+    <string name="background_font_colour_red">Red</string>
 </resources>
