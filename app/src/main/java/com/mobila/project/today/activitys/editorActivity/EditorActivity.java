@@ -196,14 +196,6 @@ public class EditorActivity extends AppCompatActivity {
         this.editTextContent.setSelection(startSelection+1);
     }
 
-    public void onNumberedBulledPointListCLicked(MenuItem item) {
-        //TODO
-    }
-
-    public void onBulletPointListClicked(MenuItem item) {
-        //TODO
-    }
-
 
     /**
      * Opens Camera
