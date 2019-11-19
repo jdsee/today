@@ -183,16 +183,17 @@ public class EditorActivity extends AppCompatActivity {
         int startSelection = this.editTextContent.getSelectionStart();
         int endSelection = this.editTextContent.getSelectionEnd();
         String tab = "\t";
+        editTextContent.getText().delete(startSelection, endSelection);
         editTextContent.getText().insert(startSelection, tab);
         this.note.setContent(editTextContent.getText());
         this.note.getContent().setSpan(
                 new CustomTabWidthSpan(
                         Float.valueOf(tabWidth).intValue()),
-                startSelection, endSelection+1,
+                startSelection, startSelection+1,
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         this.editTextContent.setText(this.note.getContent(), TextView.BufferType.SPANNABLE);
         //moves cursor to the end of the selection
-        this.editTextContent.setSelection(endSelection+1);
+        this.editTextContent.setSelection(startSelection+1);
     }
 
     public void onNumberedBulledPointListCLicked(MenuItem item) {
