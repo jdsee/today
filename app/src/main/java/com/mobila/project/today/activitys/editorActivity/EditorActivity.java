@@ -14,6 +14,7 @@ import android.text.SpannableString;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
+import android.text.style.UnderlineSpan;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -26,6 +27,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -39,9 +41,11 @@ import java.util.Objects;
 public class EditorActivity extends AppCompatActivity {
     private Note note;
     private EditText editTextContent;
+
     private boolean keyBoardOpen;
-    final int REQUEST_IMAGE_CAPTURE = 0;
-    final int REQUEST_FILE_OPEN = 1;
+
+    private final int REQUEST_IMAGE_CAPTURE = 0;
+    private final int REQUEST_FILE_OPEN = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,26 +146,70 @@ public class EditorActivity extends AppCompatActivity {
      *
      * @param item The item which was pressed
      */
-    public void onColourPickerPressed(MenuItem item) {
-        setStyle(new ForegroundColorSpan(Color.RED));
-    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            //Text-Color Options
+            case R.id.colour_yellow:
+                setStyle(new ForegroundColorSpan(
+                        ContextCompat.getColor(this, R.color.textcolour_yellow)));
+                return true;
+            case R.id.colour_orange:
+                setStyle(new ForegroundColorSpan(
+                        ContextCompat.getColor(this, R.color.textcolour_orange)));
+                return true;
+            case R.id.colour_red:
+                setStyle(new ForegroundColorSpan(
+                        ContextCompat.getColor(this, R.color.textcolour_red)));
+                return true;
+            case R.id.colour_purple:
+                setStyle(new ForegroundColorSpan(
+                        ContextCompat.getColor(this, R.color.textcolour_purple)));
+                return true;
+            case R.id.colour_blue:
+                setStyle(new ForegroundColorSpan(
+                        ContextCompat.getColor(this, R.color.textcolour_blue)));
+                return true;
+            case R.id.colour_green:
+                setStyle(new ForegroundColorSpan(
+                        ContextCompat.getColor(this, R.color.textcolour_green)));
+                return true;
 
-    /**
-     * Is invoked by pressing the Highlight-Symbol in the lower menu.
-     *
-     * @param item The item which was pressed
-     */
-    public void onHighlightPickerPressed(MenuItem item) {
-        setStyle(new BackgroundColorSpan(Color.GREEN));
-    }
+                //Highlighter Options
+            case R.id.highlighter_yellow:
+                setStyle(new BackgroundColorSpan(
+                        ContextCompat.getColor(this, R.color.highlighter_yellow)));
+                return true;
+            case R.id.highlighter_green:
+                setStyle(new BackgroundColorSpan(
+                        ContextCompat.getColor(this, R.color.highlighter_green)));
+                return true;
+            case R.id.highlighter_blue:
+                setStyle(new BackgroundColorSpan(
+                        ContextCompat.getColor(this, R.color.highlighter_blue)));
+                return true;
+            case R.id.highlighter_purple:
+                setStyle(new BackgroundColorSpan(
+                        ContextCompat.getColor(this, R.color.highlighter_purple)));
+                return true;
+            case R.id.highlighter_red:
+                setStyle(new BackgroundColorSpan(
+                        ContextCompat.getColor(this, R.color.highlighter_red)));
+                return true;
 
-    /**
-     * Is invoked by pressing the Style-Symbol in the lower menu.
-     *
-     * @param item The item which was pressed
-     */
-    public void onStylePickerPressed(MenuItem item) {
-        setStyle(new StyleSpan(Typeface.ITALIC));
+                //Style Options
+            case R.id.style_bold:
+                setStyle(new StyleSpan(Typeface.BOLD));
+                return true;
+            case R.id.style_italic:
+                setStyle(new StyleSpan(Typeface.ITALIC));
+                return true;
+            case R.id.style_underlined:
+                setStyle(new UnderlineSpan());
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     /**
@@ -189,11 +237,11 @@ public class EditorActivity extends AppCompatActivity {
         this.note.getContent().setSpan(
                 new CustomTabWidthSpan(
                         Float.valueOf(tabWidth).intValue()),
-                startSelection, startSelection+1,
+                startSelection, startSelection + 1,
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         this.editTextContent.setText(this.note.getContent(), TextView.BufferType.SPANNABLE);
         //moves cursor to the end of the selection
-        this.editTextContent.setSelection(startSelection+1);
+        this.editTextContent.setSelection(startSelection + 1);
     }
 
 
