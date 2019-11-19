@@ -4,12 +4,12 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
@@ -176,6 +176,31 @@ public class EditorActivity extends AppCompatActivity {
         this.editTextContent.setText(this.note.getContent(), TextView.BufferType.SPANNABLE);
         //moves cursor to the end of the selection
         this.editTextContent.setSelection(endSelection);
+    }
+
+    public void onTabButtonClicked(MenuItem item) {
+        int tabWidth = 150;
+        int startSelection = this.editTextContent.getSelectionStart();
+        int endSelection = this.editTextContent.getSelectionEnd();
+        String tab = "\t";
+        editTextContent.getText().insert(startSelection, tab);
+        this.note.setContent(editTextContent.getText());
+        this.note.getContent().setSpan(
+                new CustomTabWidthSpan(
+                        Float.valueOf(tabWidth).intValue()),
+                startSelection, endSelection+1,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        this.editTextContent.setText(this.note.getContent(), TextView.BufferType.SPANNABLE);
+        //moves cursor to the end of the selection
+        this.editTextContent.setSelection(endSelection+1);
+    }
+
+    public void onNumberedBulledPointListCLicked(MenuItem item) {
+        //TODO
+    }
+
+    public void onBulletPointListClicked(MenuItem item) {
+        //TODO
     }
 
 
