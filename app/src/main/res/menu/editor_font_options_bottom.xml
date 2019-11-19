@@ -7,17 +7,20 @@
         android:title="@string/tab"
         android:icon="@drawable/baseline_keyboard_tab_24"
         app:showAsAction="always"
-        tools:ignore="AlwaysShowAction" />
+        tools:ignore="AlwaysShowAction"
+        android:onClick="onTabButtonClicked"/>
 
     <item android:id="@+id/action_bullet_list"
         android:title="@string/bullet_list"
         android:icon="@drawable/baseline_format_list_bulleted_24"
-        app:showAsAction="always"/>
+        app:showAsAction="always"
+        android:onClick="onBulletPointListClicked"/>
 
     <item android:id="@+id/action_numbered_list"
         android:title="@string/number_list"
         android:icon="@drawable/baseline_format_list_numbered_24"
-        app:showAsAction="always"/>
+        app:showAsAction="always"
+        android:onClick="onNumberedBulledPointListCLicked"/>
 
     <item android:id="@+id/action_style"
         android:title="@string/action_style"
