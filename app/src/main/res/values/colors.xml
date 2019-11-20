@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="lightGrey">#E2E2E2</color>
+    <color name="slightly_darker_grey">#CACACA</color>
     <color name="icon_black">#000000</color>
     <color name="icon_text_grey">#808080</color>
     <color name="note_colour">#E6BE6B</color>

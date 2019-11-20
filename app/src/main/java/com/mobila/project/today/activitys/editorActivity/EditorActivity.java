@@ -351,6 +351,7 @@ public class EditorActivity extends AppCompatActivity {
         if (keyBoardOpen) {
             if (extensionsOpen) {
                 recyclerviewContainer.setVisibility(View.GONE);
+                findViewById(R.id.action_attachment).setBackgroundColor(Color.TRANSPARENT);
                 extensionsOpen = false;
             }
             inflater.inflate(R.menu.editor_font_options_bottom, menu);
@@ -362,7 +363,7 @@ public class EditorActivity extends AppCompatActivity {
 
     /**
      * opens or closes the extension list depending on if it was open or closed before the button
-     * was pressed. If it was open it gets closed and vise versa
+     * was pressed. If it was open, it gets closed and vise versa
      * @param item Has no purpose because there isn't a menu populated with items attached to this
      *             button. It is just there for the compiler.
      */
@@ -371,9 +372,12 @@ public class EditorActivity extends AppCompatActivity {
         if (extensionsOpen){
             recyclerviewContainer.setVisibility(View.GONE);
             extensionsOpen = false;
+            findViewById(R.id.action_attachment).setBackgroundColor(Color.TRANSPARENT);
         } else {
             initRecyclerView();
             recyclerviewContainer.setVisibility(View.VISIBLE);
+            findViewById(R.id.action_attachment).setBackgroundColor(
+                    ContextCompat.getColor(this, R.color.slightly_darker_grey));
             extensionsOpen = true;
         }
     }

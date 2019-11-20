@@ -154,7 +154,7 @@
             android:id="@+id/recyclerview_files"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/lightGrey"/>
+            android:background="@color/slightly_darker_grey"/>
 
     </RelativeLayout>
 
