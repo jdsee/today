@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.MediaStore;
@@ -28,14 +29,18 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mobila.project.today.R;
+import com.mobila.project.today.activitys.editorActivity.FileHolder.FileHolderAdapter;
 import com.mobila.project.today.model.Note;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class EditorActivity extends AppCompatActivity {
@@ -47,14 +52,34 @@ public class EditorActivity extends AppCompatActivity {
     private final int REQUEST_IMAGE_CAPTURE = 0;
     private final int REQUEST_FILE_OPEN = 1;
 
+    private ArrayList<String> fileNames = new ArrayList<>();
+    private ArrayList<Drawable> fileIcons = new ArrayList<>();
+
+    private boolean extensionsOpen=false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //Slide-in Animation
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 
+        //temporary inits
         this.note = new Note(3, "Headline", new SpannableString("Inhalt"),
                 2, "Mobile Anwendungen", "Übung",
                 "Veranstalltung 3", "07.05.18");
+
+        fileNames.add("präsentation.pdf");
+        fileIcons.add(ContextCompat.getDrawable(
+                this, R.drawable.baseline_picture_as_pdf_24));
+
+        fileNames.add("project_folder");
+        fileIcons.add(ContextCompat.getDrawable(
+                this, R.drawable.baseline_folder_24));
+
+        fileNames.add("Blackboard_last_minute.jpg");
+        fileIcons.add(ContextCompat.getDrawable(
+                this, R.drawable.baseline_insert_photo_24));
+        //
+
         //set view
         super.onCreate(savedInstanceState);
         setTheme(R.style.Theme_MaterialComponents_Light_NoActionBar_Bridge);
@@ -322,11 +347,41 @@ public class EditorActivity extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         menu.clear();
         MenuInflater inflater = getMenuInflater();
+        View recyclerviewContainer = findViewById(R.id.recyclerview_holder);
         if (keyBoardOpen) {
+            if (extensionsOpen) {
+                recyclerviewContainer.setVisibility(View.GONE);
+                extensionsOpen = false;
+            }
             inflater.inflate(R.menu.editor_font_options_bottom, menu);
         } else {
             inflater.inflate(R.menu.editor_extension_bottom, menu);
         }
         return true;
+    }
+
+    /**
+     * opens or closes the extension list depending on if it was open or closed before the button
+     * was pressed. If it was open it gets closed and vise versa
+     * @param item Has no purpose because there isn't a menu populated with items attached to this
+     *             button. It is just there for the compiler.
+     */
+    public void onExtensionsPressed(MenuItem item) {
+        View recyclerviewContainer = findViewById(R.id.recyclerview_holder);
+        if (extensionsOpen){
+            recyclerviewContainer.setVisibility(View.GONE);
+            extensionsOpen = false;
+        } else {
+            initRecyclerView();
+            recyclerviewContainer.setVisibility(View.VISIBLE);
+            extensionsOpen = true;
+        }
+    }
+
+    private void initRecyclerView(){
+        RecyclerView recyclerView = findViewById(R.id.recyclerview_files);
+        FileHolderAdapter adapter = new FileHolderAdapter(this, fileNames, fileIcons);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 }

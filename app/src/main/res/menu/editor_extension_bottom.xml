@@ -5,7 +5,8 @@
     <item android:id="@+id/action_attachment"
         android:title="@string/action_attachments"
         android:icon="@drawable/baseline_attach_file_24"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom"
+        android:onClick="onExtensionsPressed"/>
 
     <item android:id="@+id/action_add_attachment"
         android:title="@string/action_add_attachment"

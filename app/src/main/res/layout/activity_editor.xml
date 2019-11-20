@@ -83,6 +83,7 @@
     </androidx.appcompat.widget.Toolbar>
 
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:fillViewport="true"
@@ -117,7 +118,7 @@
         android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toTopOf="@+id/recyclerview_holder">
 
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/bottom_app_bar"
@@ -126,7 +127,7 @@
             android:layout_gravity="bottom"
             app:backgroundTint="@color/lightGrey"
             app:buttonGravity="bottom|top"
-            app:fabAlignmentMode="end"/>
+            app:fabAlignmentMode="end" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/button_note"
@@ -138,8 +139,23 @@
             android:src="@drawable/baseline_list_24"
             app:backgroundTint="@color/note_colour"
             app:fabSize="auto"
-            app:layout_anchor="@id/bottom_app_bar"/>
+            app:layout_anchor="@id/bottom_app_bar" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <RelativeLayout
+        android:id="@+id/recyclerview_holder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview_files"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/lightGrey"/>
+
+    </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
