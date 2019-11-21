@@ -7,9 +7,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 
 import com.mobila.project.today.R;
-import com.mobila.project.today.model.Course;
-import com.mobila.project.today.model.Section;
-import com.mobila.project.today.model.Task;
+import com.mobila.project.today.modelMock.Course;
+import com.mobila.project.today.modelMock.Section;
+import com.mobila.project.today.modelMock.Task;
 
 import java.util.ArrayList;
 import java.util.List;

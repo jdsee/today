@@ -4,7 +4,7 @@ import android.text.Editable;
 import android.text.Spannable;
 import android.widget.EditText;
 
-import com.mobila.project.today.model.Note;
+import com.mobila.project.today.modelMock.Note;
 import com.mobila.project.today.utils.TextChangeListener;
 
 

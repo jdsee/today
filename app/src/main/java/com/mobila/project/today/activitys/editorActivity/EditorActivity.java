@@ -36,7 +36,7 @@ import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mobila.project.today.R;
 import com.mobila.project.today.activitys.editorActivity.FileHolder.FileHolderAdapter;
-import com.mobila.project.today.model.Note;
+import com.mobila.project.today.modelMock.Note;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 
