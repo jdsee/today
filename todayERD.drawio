@@ -1,4 +1,4 @@
-<mxfile host="www.draw.io" modified="2019-11-21T12:50:28.482Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.2 Safari/605.1.15" etag="_b4US-T80bmOb_aQ46UV" version="12.2.7" type="github" pages="1">
+<mxfile host="www.draw.io" modified="2019-11-21T12:55:26.803Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.2 Safari/605.1.15" etag="bZEaZQh8mWIJcIQArh3c" version="12.2.7" type="github" pages="1">
   <diagram id="-zOznc9YO3qfhNgqn0We" name="Page-1">
     <mxGraphModel dx="1784" dy="692" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -132,10 +132,10 @@
           <mxGeometry x="-226" y="530" width="80" height="50" as="geometry"/>
         </mxCell>
         <mxCell id="yqrmD4MauSipaye6TM8u-41" value="Notiz" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="44" y="270" width="120" height="60" as="geometry"/>
+          <mxGeometry x="74" y="270" width="120" height="60" as="geometry"/>
         </mxCell>
-        <mxCell id="yqrmD4MauSipaye6TM8u-42" value="enthält" style="rhombus;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="-81" y="270" width="80" height="60" as="geometry"/>
+        <mxCell id="yqrmD4MauSipaye6TM8u-42" value="&lt;span style=&quot;text-align: left ; white-space: nowrap&quot;&gt;◀︎&lt;/span&gt;bezogen auf" style="rhombus;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="-81" y="260" width="101" height="70" as="geometry"/>
         </mxCell>
         <mxCell id="yqrmD4MauSipaye6TM8u-43" value="1&lt;br&gt;(1,*)" style="endArrow=none;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="yqrmD4MauSipaye6TM8u-2" target="yqrmD4MauSipaye6TM8u-42" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
