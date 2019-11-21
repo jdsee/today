@@ -70,19 +70,25 @@
                 <data android:scheme="content" />
                 <data android:mimeType="*/*" />
                 <!--
-                    Work around Android's ugly primitive PatternMatcher
-                    implementation that can't cope with finding a . early in
-                    the path unless it's explicitly matched.
+                    Work around for opening files
                 -->
                 <data android:host="*" />
                 <data android:pathPattern=".*\\.toda" />
                 <data android:pathPattern=".*\\..*\\.toda" />
                 <data android:pathPattern=".*\\..*\\..*\\.toda" />
                 <data android:pathPattern=".*\\..*\\..*\\..*\\.toda" />
-                <!-- keep going if you need more -->
-
             </intent-filter>
         </activity>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.mobila.project.today.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 
 </manifest>

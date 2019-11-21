@@ -1,13 +1,14 @@
 package com.mobila.project.today.activitys.editorActivity;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.text.Spannable;
@@ -29,6 +30,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -40,7 +42,11 @@ import com.mobila.project.today.model.Note;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Objects;
 
 public class EditorActivity extends AppCompatActivity {
@@ -50,12 +56,15 @@ public class EditorActivity extends AppCompatActivity {
     private boolean keyBoardOpen;
 
     private final int REQUEST_IMAGE_CAPTURE = 0;
-    private final int REQUEST_FILE_OPEN = 1;
+    private final int REQUEST_TAKE_PHOTO = 1;
+    private final int REQUEST_FILE_OPEN = 2;
 
     private ArrayList<String> fileNames = new ArrayList<>();
     private ArrayList<Drawable> fileIcons = new ArrayList<>();
 
-    private boolean extensionsOpen=false;
+    private boolean extensionsOpen = false;
+
+    String currentPhotoPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,7 +209,7 @@ public class EditorActivity extends AppCompatActivity {
                         ContextCompat.getColor(this, R.color.textcolour_green)));
                 return true;
 
-                //Highlighter Options
+            //Highlighter Options
             case R.id.highlighter_yellow:
                 setStyle(new BackgroundColorSpan(
                         ContextCompat.getColor(this, R.color.highlighter_yellow)));
@@ -222,7 +231,7 @@ public class EditorActivity extends AppCompatActivity {
                         ContextCompat.getColor(this, R.color.highlighter_red)));
                 return true;
 
-                //Style Options
+            //Style Options
             case R.id.style_bold:
                 setStyle(new StyleSpan(Typeface.BOLD));
                 return true;
@@ -288,7 +297,6 @@ public class EditorActivity extends AppCompatActivity {
         startActivityForResult(openFileIntent, REQUEST_FILE_OPEN);
     }
 
-    @SuppressLint("ShowToast")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -297,29 +305,61 @@ public class EditorActivity extends AppCompatActivity {
             if (extras != null) {
                 Object attachedData = extras.get("data");
                 this.note.addExtension(attachedData);
-                Toast toast;
                 if (requestCode == REQUEST_IMAGE_CAPTURE) {
-                    toast = Toast.makeText(getApplicationContext(),
-                            "Image Saved", Toast.LENGTH_LONG);
+                    Toast.makeText(getApplicationContext(),
+                            "Image Saved", Toast.LENGTH_LONG).show();
                 } else if (requestCode == REQUEST_FILE_OPEN) {
-                    toast = Toast.makeText(getApplicationContext(),
-                            "File Saved", Toast.LENGTH_LONG);
+                    Toast.makeText(getApplicationContext(),
+                            "File Saved", Toast.LENGTH_LONG).show();
                 } else {
-                    toast = Toast.makeText(getApplicationContext(),
-                            "Something went Wrong!", Toast.LENGTH_LONG);
+                    Toast.makeText(getApplicationContext(),
+                            "Something went Wrong!", Toast.LENGTH_LONG).show();
                 }
-                toast.show();
             } else {
-                Toast toast = Toast.makeText(getApplicationContext(),
-                        "Nothing got back", Toast.LENGTH_LONG);
-                toast.show();
+                Toast.makeText(getApplicationContext(),
+                        "Nothing got back", Toast.LENGTH_LONG).show();
             }
         } else {
-            Toast toast = Toast.makeText(getApplicationContext(),
-                    "Nothing was saved", Toast.LENGTH_LONG);
-            toast.show();
+            Toast.makeText(getApplicationContext(),
+                    "Nothing was saved", Toast.LENGTH_LONG).show();
         }
     }
+
+    private File createImageFile() throws IOException {
+        //File creation
+        String timeStamp = DateFormat.getDateTimeInstance().format(new Date());
+        String imageFileName = "IMAGE_" + timeStamp;
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,
+                ".jpg",
+                storageDir);
+        //save file Path for other intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    private void dispatchTakePictureIntent(){
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        //ensuring there is a camera on the device
+        if(takePictureIntent.resolveActivity(getPackageManager())!=null){
+            //Create File for photo
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            //check if file was created
+            if(photoFile != null){
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.example.android.fileprovider", photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+            }
+        }
+    }
+
 
     /**
      * Method for detecting if the device on which the application is installed has a camera
@@ -364,25 +404,26 @@ public class EditorActivity extends AppCompatActivity {
     /**
      * opens or closes the extension list depending on if it was open or closed before the button
      * was pressed. If it was open, it gets closed and vise versa
+     *
      * @param item Has no purpose because there isn't a menu populated with items attached to this
      *             button. It is just there for the compiler.
      */
     public void onExtensionsPressed(MenuItem item) {
-        View recyclerviewContainer = findViewById(R.id.recyclerview_holder);
-        if (extensionsOpen){
-            recyclerviewContainer.setVisibility(View.GONE);
+        View recyclerContainer = findViewById(R.id.recyclerview_holder);
+        if (extensionsOpen) {
+            recyclerContainer.setVisibility(View.GONE);
             extensionsOpen = false;
             findViewById(R.id.action_attachment).setBackgroundColor(Color.TRANSPARENT);
         } else {
             initRecyclerView();
-            recyclerviewContainer.setVisibility(View.VISIBLE);
+            recyclerContainer.setVisibility(View.VISIBLE);
             findViewById(R.id.action_attachment).setBackgroundColor(
                     ContextCompat.getColor(this, R.color.slightly_darker_grey));
             extensionsOpen = true;
         }
     }
 
-    private void initRecyclerView(){
+    private void initRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.recyclerview_files);
         FileHolderAdapter adapter = new FileHolderAdapter(this, fileNames, fileIcons);
         recyclerView.setAdapter(adapter);
