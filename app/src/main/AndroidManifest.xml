@@ -79,6 +79,7 @@
                 <data android:pathPattern=".*\\..*\\..*\\..*\\.toda" />
             </intent-filter>
         </activity>
+        <activity android:name=".CourseListActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

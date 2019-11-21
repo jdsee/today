@@ -38,7 +38,7 @@ import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mobila.project.today.R;
 import com.mobila.project.today.activitys.editorActivity.FileHolder.FileHolderAdapter;
-import com.mobila.project.today.modelMock.Note;
+import com.mobila.project.today.modelMock.NoteMock;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 
@@ -50,7 +50,7 @@ import java.util.Date;
 import java.util.Objects;
 
 public class EditorActivity extends AppCompatActivity {
-    private Note note;
+    private NoteMock note;
     private EditText editTextContent;
 
     private boolean keyBoardOpen;
@@ -72,7 +72,7 @@ public class EditorActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 
         //temporary inits
-        this.note = new Note(3, "Headline", new SpannableString("Inhalt"),
+        this.note = new NoteMock(3, "Headline", new SpannableString("Inhalt"),
                 2, "Mobile Anwendungen", "Übung",
                 "Veranstalltung 3", "07.05.18");
 
@@ -116,7 +116,7 @@ public class EditorActivity extends AppCompatActivity {
             MenuItem cameraItem = findViewById(R.id.action_take_photo);
             cameraItem.setVisible(false);
         }
-        //set textEdit-listener to keep the Note synchronized with the EditText-view
+        //set textEdit-listener to keep the NoteMock synchronized with the EditText-view
         this.editTextContent = findViewById(R.id.editor_note);
         editTextContent.addTextChangedListener(
                 new EditorContentTextChangeListener(this,

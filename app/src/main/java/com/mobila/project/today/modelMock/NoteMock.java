@@ -6,7 +6,7 @@ import android.text.SpannableString;
 import java.util.ArrayList;
 
 
-public class Note {
+public class NoteMock {
     private long id;
     private String title;
     private Spannable content;
@@ -17,7 +17,7 @@ public class Note {
     private String date;
     private ArrayList<Object> extensions;
 
-    public Note(long id, String title, SpannableString content, long semester, String course, String category, String event, String date) {
+    public NoteMock(long id, String title, SpannableString content, long semester, String course, String category, String event, String date) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -28,7 +28,7 @@ public class Note {
         this.date = date;
     }
 
-    public Note(long id, String title, String content) {
+    public NoteMock(long id, String title, String content) {
         this.id = id;
         this.title = title;
         this.content = new SpannableString(content);

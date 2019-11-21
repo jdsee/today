@@ -8,28 +8,36 @@
     <string name="open_course_list">Open Course List</string>
     <string name="hint_headline">Enter a Headline</string>
     <string name="hint_note"/>
+
     <string name="action_add_attachment">Add Attachment</string>
     <string name="action_attachments">Attachments</string>
     <string name="action_take_photo">Take Photo</string>
     <string name="action_highlight">Highlight</string>
     <string name="action_colour">Colour</string>
     <string name="action_style">Style</string>
+
     <string name="error_message">something went wrong</string>
+
     <string name="tab">Tab</string>
     <string name="bullet_list">Bullet List</string>
     <string name="number_list">Number List</string>
+
     <string name="bold">Bold</string>
     <string name="underlined">Underlined</string>
     <string name="italic">Italic</string>
+
     <string name="fontcolour_yellow">Yellow</string>
     <string name="fontocolour_orange">Orange</string>
     <string name="fontcolour_red">Red</string>
     <string name="fontcolour_purple">Purple</string>
     <string name="fontcolour_blue">Blue</string>
     <string name="fontcolour_green">Green</string>
+
     <string name="background_font_colour_yellow">Yellow</string>
     <string name="background_font_colour_green">Green</string>
     <string name="background_font_colour_blue">Blue</string>
     <string name="background_font_colour_purple">Purple</string>
     <string name="background_font_colour_red">Red</string>
+
+    <string name="add_course">Add course</string>
 </resources>

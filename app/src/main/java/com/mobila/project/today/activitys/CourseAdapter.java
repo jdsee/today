@@ -10,19 +10,19 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mobila.project.today.R;
-import com.mobila.project.today.modelMock.Course;
+import com.mobila.project.today.modelMock.CourseMock;
 
 import java.util.List;
 
 public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder> {
-    private List<Course> courses;
+    private List<CourseMock> courses;
     private ItemClicked activity;
 
     public interface ItemClicked {
         void onItemClicked(int index);
     }
 
-    CourseAdapter(Context context, List<Course> courses) {
+    CourseAdapter(Context context, List<CourseMock> courses) {
         this.courses = courses;
         this.activity = (ItemClicked) context;
     }
@@ -40,7 +40,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    activity.onItemClicked(courses.indexOf((Course)itemView.getTag()));
+                    activity.onItemClicked(courses.indexOf((CourseMock)itemView.getTag()));
                 }
             });
         }

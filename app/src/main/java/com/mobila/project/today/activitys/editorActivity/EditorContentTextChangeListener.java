@@ -4,15 +4,15 @@ import android.text.Editable;
 import android.text.Spannable;
 import android.widget.EditText;
 
-import com.mobila.project.today.modelMock.Note;
+import com.mobila.project.today.modelMock.NoteMock;
 import com.mobila.project.today.utils.TextChangeListener;
 
 
 public class EditorContentTextChangeListener extends TextChangeListener {
     private EditText editText;
-    private Note note;
+    private NoteMock note;
 
-    EditorContentTextChangeListener(Object target, EditText editText, Note note) {
+    EditorContentTextChangeListener(Object target, EditText editText, NoteMock note) {
         super(target);
         this.editText = editText;
         this.note = note;

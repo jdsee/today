@@ -2,14 +2,14 @@ package com.mobila.project.today.modelMock;
 
 import java.util.List;
 
-public class Course {
+public class CourseMock {
     private int id;
     private String name;
     private String lecturer;
-    private List<Task> tasks;
-    private List<Section> sections;
+    private List<TaskMock> tasks;
+    private List<SectionMock> sections;
 
-    public Course(int id, String name, String lecturer, List<Task> tasks, List<Section> sections) {
+    public CourseMock(int id, String name, String lecturer, List<TaskMock> tasks, List<SectionMock> sections) {
         this.id = id;
         this.name = name;
         this.lecturer = lecturer;
@@ -41,19 +41,19 @@ public class Course {
         this.lecturer = lecturer;
     }
 
-    public List<Task> getTasks() {
+    public List<TaskMock> getTasks() {
         return tasks;
     }
 
-    public void setTasks(List<Task> tasks) {
+    public void setTasks(List<TaskMock> tasks) {
         this.tasks = tasks;
     }
 
-    public List<Section> getSections() {
+    public List<SectionMock> getSections() {
         return sections;
     }
 
-    public void setSections(List<Section> sections) {
+    public void setSections(List<SectionMock> sections) {
         this.sections = sections;
     }
 }
