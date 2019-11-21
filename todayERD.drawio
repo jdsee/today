@@ -1,6 +1,6 @@
-<mxfile host="www.draw.io" modified="2019-11-21T12:55:26.803Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.2 Safari/605.1.15" etag="bZEaZQh8mWIJcIQArh3c" version="12.2.7" type="github" pages="1">
+<mxfile host="www.draw.io" modified="2019-11-21T13:58:28.848Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36" etag="FXrDZyEltMW4lJkZcMm_" version="12.2.7" type="github" pages="1">
   <diagram id="-zOznc9YO3qfhNgqn0We" name="Page-1">
-    <mxGraphModel dx="1784" dy="692" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="2078" dy="678" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0"/>
         <mxCell id="1" parent="0"/>
@@ -107,7 +107,7 @@
             <mxPoint x="-336" y="260" as="targetPoint"/>
           </mxGeometry>
         </mxCell>
-        <mxCell id="yqrmD4MauSipaye6TM8u-34" value="Name" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+        <mxCell id="yqrmD4MauSipaye6TM8u-34" value="Titel" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="-466" y="240" width="65" height="40" as="geometry"/>
         </mxCell>
         <mxCell id="yqrmD4MauSipaye6TM8u-35" value="" style="endArrow=none;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" parent="1" source="yqrmD4MauSipaye6TM8u-2" target="yqrmD4MauSipaye6TM8u-34" edge="1">
@@ -271,7 +271,7 @@
         <mxCell id="xab8R1kc0-YQB8v2l7pW-39" value="Referenz" style="text;html=1;resizable=0;points=[];autosize=1;align=left;verticalAlign=top;spacingTop=-4;" parent="1" vertex="1">
           <mxGeometry x="239" y="607.5" width="60" height="20" as="geometry"/>
         </mxCell>
-        <mxCell id="jnvQCNFVmyH9fAy6hpZg-3" value="Name" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+        <mxCell id="jnvQCNFVmyH9fAy6hpZg-3" value="Titel" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="-502" y="387.5" width="76" height="40" as="geometry"/>
         </mxCell>
         <mxCell id="jnvQCNFVmyH9fAy6hpZg-4" value="&lt;u&gt;AbschnittNr&lt;/u&gt;" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
