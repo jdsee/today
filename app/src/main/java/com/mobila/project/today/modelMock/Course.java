@@ -1,4 +1,4 @@
-package com.mobila.project.today.model;
+package com.mobila.project.today.modelMock;
 
 import java.util.List;
 

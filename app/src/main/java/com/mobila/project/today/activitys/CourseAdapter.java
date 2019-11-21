@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mobila.project.today.R;
-import com.mobila.project.today.model.Course;
+import com.mobila.project.today.modelMock.Course;
 
 import java.util.List;
 
@@ -22,16 +22,16 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
         void onItemClicked(int index);
     }
 
-    public CourseAdapter(Context context, List<Course> courses) {
+    CourseAdapter(Context context, List<Course> courses) {
         this.courses = courses;
         this.activity = (ItemClicked) context;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvCourseName;
         TextView tvLecturer;
 
-        public ViewHolder(@NonNull final View itemView) {
+        ViewHolder(@NonNull final View itemView) {
             super(itemView);
 
             tvCourseName = itemView.findViewById(R.id.txt_course_name);

@@ -1,4 +1,4 @@
-package com.mobila.project.today.model;
+package com.mobila.project.today.modelMock;
 
 public class Task {
     private String description;
