@@ -3,10 +3,11 @@ package com.mobila.project.today.modelMock;
 import android.text.Spannable;
 import android.text.SpannableString;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
-public class NoteMock {
+public class NoteMock{
     private long id;
     private String title;
     private Spannable content;
@@ -102,7 +103,7 @@ public class NoteMock {
      * Method for adding a extension
      * @param extension The extension which should be stored
      */
-    public void addExtension(Object extension){
+    public void addAttachment(Object extension){
         if (this.extensions==null){
             this.extensions=new ArrayList<>();
         }

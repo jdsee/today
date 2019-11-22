@@ -1,5 +1,6 @@
 package com.mobila.project.today.activitys.editorActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -44,7 +45,7 @@ import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
@@ -286,8 +287,22 @@ public class EditorActivity extends AppCompatActivity {
      */
     public void onTakePhotoPickerPressed(MenuItem item) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        //ensuring there is a camera on the device
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            //Create File for photo
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            //check if file was created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.mobila.project.today.fileprovider", photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+            }
         }
     }
 
@@ -301,23 +316,20 @@ public class EditorActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            if (extras != null) {
-                Object attachedData = extras.get("data");
-                this.note.addExtension(attachedData);
-                if (requestCode == REQUEST_IMAGE_CAPTURE) {
+            if (requestCode == REQUEST_TAKE_PHOTO) {
+                if (currentPhotoPath!=null) {
+                    note.addAttachment(new File(currentPhotoPath));
                     Toast.makeText(getApplicationContext(),
                             "Image Saved", Toast.LENGTH_LONG).show();
-                } else if (requestCode == REQUEST_FILE_OPEN) {
-                    Toast.makeText(getApplicationContext(),
-                            "File Saved", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(getApplicationContext(),
-                            "Something went Wrong!", Toast.LENGTH_LONG).show();
-                }
+                    currentPhotoPath=null;
+                } else Toast.makeText(getApplicationContext(),
+                        "Image was lost", Toast.LENGTH_LONG).show();
+            } else if (requestCode == REQUEST_FILE_OPEN) {
+                Toast.makeText(getApplicationContext(),
+                        "File Saved", Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText(getApplicationContext(),
-                        "Nothing got back", Toast.LENGTH_LONG).show();
+                        "Something went Wrong!", Toast.LENGTH_LONG).show();
             }
         } else {
             Toast.makeText(getApplicationContext(),
@@ -327,7 +339,8 @@ public class EditorActivity extends AppCompatActivity {
 
     private File createImageFile() throws IOException {
         //File creation
-        String timeStamp = DateFormat.getDateTimeInstance().format(new Date());
+        @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat(
+                getString(R.string.date_format)).format(new Date());
         String imageFileName = "IMAGE_" + timeStamp;
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
@@ -337,27 +350,6 @@ public class EditorActivity extends AppCompatActivity {
         //save file Path for other intents
         currentPhotoPath = image.getAbsolutePath();
         return image;
-    }
-
-    private void dispatchTakePictureIntent(){
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        //ensuring there is a camera on the device
-        if(takePictureIntent.resolveActivity(getPackageManager())!=null){
-            //Create File for photo
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            //check if file was created
-            if(photoFile != null){
-                Uri photoURI = FileProvider.getUriForFile(this,
-                        "com.example.android.fileprovider", photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-            }
-        }
     }
 
 
