@@ -3,6 +3,7 @@ package com.mobila.project.today.modelMock;
 import android.text.Spannable;
 import android.text.SpannableString;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -16,7 +17,7 @@ public class NoteMock{
     private String category;
     private String event;
     private String date;
-    private ArrayList<Object> extensions;
+    private ArrayList<File> extensions;
 
     public NoteMock(long id, String title, SpannableString content, long semester, String course, String category, String event, String date) {
         this.id = id;
@@ -101,12 +102,12 @@ public class NoteMock{
 
     /**
      * Method for adding a extension
-     * @param extension The extension which should be stored
+     * @param attachment The extension which should be stored
      */
-    public void addAttachment(Object extension){
+    public void addAttachment(File attachment){
         if (this.extensions==null){
             this.extensions=new ArrayList<>();
         }
-        this.extensions.add(extension);
+        this.extensions.add(attachment);
     }
 }

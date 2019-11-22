@@ -56,7 +56,6 @@ public class EditorActivity extends AppCompatActivity {
 
     private boolean keyBoardOpen;
 
-    private final int REQUEST_IMAGE_CAPTURE = 0;
     private final int REQUEST_TAKE_PHOTO = 1;
     private final int REQUEST_FILE_OPEN = 2;
 
@@ -66,6 +65,8 @@ public class EditorActivity extends AppCompatActivity {
     private boolean extensionsOpen = false;
 
     String currentPhotoPath;
+
+    FileHolderAdapter fileHolderAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -318,10 +319,18 @@ public class EditorActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_TAKE_PHOTO) {
                 if (currentPhotoPath!=null) {
-                    note.addAttachment(new File(currentPhotoPath));
+                    File imageFile = new File(currentPhotoPath);
+                    note.addAttachment(imageFile);
                     Toast.makeText(getApplicationContext(),
                             "Image Saved", Toast.LENGTH_LONG).show();
                     currentPhotoPath=null;
+
+                    fileNames.add(imageFile.getName());
+                    fileIcons.add(ContextCompat.getDrawable(
+                            this, R.drawable.baseline_insert_photo_24));
+                    if (fileHolderAdapter!=null) {
+                        fileHolderAdapter.notifyDataSetChanged();
+                    }
                 } else Toast.makeText(getApplicationContext(),
                         "Image was lost", Toast.LENGTH_LONG).show();
             } else if (requestCode == REQUEST_FILE_OPEN) {
@@ -417,8 +426,8 @@ public class EditorActivity extends AppCompatActivity {
 
     private void initRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.recyclerview_files);
-        FileHolderAdapter adapter = new FileHolderAdapter(this, fileNames, fileIcons);
-        recyclerView.setAdapter(adapter);
+        this.fileHolderAdapter = new FileHolderAdapter(this, fileNames, fileIcons);
+        recyclerView.setAdapter(this.fileHolderAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 }
