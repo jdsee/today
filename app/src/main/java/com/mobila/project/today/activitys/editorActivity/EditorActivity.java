@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -12,6 +13,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.BackgroundColorSpan;
@@ -64,7 +66,7 @@ public class EditorActivity extends AppCompatActivity {
 
     private boolean extensionsOpen = false;
 
-    String currentPhotoPath;
+    String currentImagePath;
 
     FileHolderAdapter fileHolderAdapter;
 
@@ -310,6 +312,7 @@ public class EditorActivity extends AppCompatActivity {
     public void onFilePickerPressed(MenuItem item) {
         Intent openFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
         openFileIntent.setType("*/*");
+        openFileIntent.addCategory(Intent.CATEGORY_OPENABLE);
         startActivityForResult(openFileIntent, REQUEST_FILE_OPEN);
     }
 
@@ -317,32 +320,37 @@ public class EditorActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            if (requestCode == REQUEST_TAKE_PHOTO) {
-                if (currentPhotoPath!=null) {
-                    File imageFile = new File(currentPhotoPath);
-                    note.addAttachment(imageFile);
+            if (requestCode == REQUEST_TAKE_PHOTO && currentImagePath != null) {
+                File file = new File(currentImagePath);
+                note.addAttachment(file);
+                Toast.makeText(getApplicationContext(),
+                        "Image Saved", Toast.LENGTH_LONG).show();
+                fileIcons.add(ContextCompat.getDrawable(
+                        this, R.drawable.baseline_insert_photo_24));
+                fileNames.add(file.getName());
+                if (fileHolderAdapter != null) {
+                    fileHolderAdapter.notifyDataSetChanged();
+                }
+                currentImagePath = null;
+            } else if (requestCode == REQUEST_FILE_OPEN && data != null) {
+                Uri fileUri = data.getData();
+                if (fileUri != null) {
+                    File file = new File(Objects.requireNonNull(fileUri.getPath()));
                     Toast.makeText(getApplicationContext(),
-                            "Image Saved", Toast.LENGTH_LONG).show();
-                    currentPhotoPath=null;
-
-                    fileNames.add(imageFile.getName());
+                            "File Saved", Toast.LENGTH_LONG).show();
+                    note.addAttachment(file);
                     fileIcons.add(ContextCompat.getDrawable(
-                            this, R.drawable.baseline_insert_photo_24));
-                    if (fileHolderAdapter!=null) {
+                            this, R.drawable.baseline_insert_drive_file_24));
+                    fileNames.add(getFileName(fileUri));
+                    if (fileHolderAdapter != null) {
                         fileHolderAdapter.notifyDataSetChanged();
                     }
                 } else Toast.makeText(getApplicationContext(),
-                        "Image was lost", Toast.LENGTH_LONG).show();
-            } else if (requestCode == REQUEST_FILE_OPEN) {
-                Toast.makeText(getApplicationContext(),
-                        "File Saved", Toast.LENGTH_LONG).show();
+                        "File was lost", Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText(getApplicationContext(),
-                        "Something went Wrong!", Toast.LENGTH_LONG).show();
+                        "Nothing was saved", Toast.LENGTH_LONG).show();
             }
-        } else {
-            Toast.makeText(getApplicationContext(),
-                    "Nothing was saved", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -357,8 +365,28 @@ public class EditorActivity extends AppCompatActivity {
                 ".jpg",
                 storageDir);
         //save file Path for other intents
-        currentPhotoPath = image.getAbsolutePath();
+        currentImagePath = image.getAbsolutePath();
         return image;
+    }
+
+    public String getFileName(Uri uri) {
+        String result = null;
+        if (Objects.requireNonNull(uri.getScheme()).equals("content")) {
+            try (Cursor cursor = getContentResolver().query(uri, null, null, null, null)) {
+                if (cursor != null && cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                }
+            }
+        }
+        if (result == null) {
+            result = uri.getPath();
+            assert result != null;
+            int cut = result.lastIndexOf('/');
+            if (cut != -1) {
+                result = result.substring(cut + 1);
+            }
+        }
+        return result;
     }
 
 
