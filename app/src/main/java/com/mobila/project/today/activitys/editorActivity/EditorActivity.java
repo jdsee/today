@@ -15,7 +15,6 @@ import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
@@ -47,6 +46,7 @@ import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -61,7 +61,6 @@ public class EditorActivity extends AppCompatActivity {
     private final int REQUEST_TAKE_PHOTO = 1;
     private final int REQUEST_FILE_OPEN = 2;
 
-    private ArrayList<String> fileNames = new ArrayList<>();
     private ArrayList<Drawable> fileIcons = new ArrayList<>();
 
     private boolean extensionsOpen = false;
@@ -74,27 +73,12 @@ public class EditorActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         //Slide-in Animation
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-
-        //temporary inits
-        this.note = new NoteMock(3, "Headline", new SpannableString("Inhalt"),
-                2, "Mobile Anwendungen", "Übung",
-                "Veranstalltung 3", "07.05.18");
-
-        fileNames.add("präsentation.pdf");
-        fileIcons.add(ContextCompat.getDrawable(
-                this, R.drawable.baseline_picture_as_pdf_24));
-
-        fileNames.add("project_folder");
-        fileIcons.add(ContextCompat.getDrawable(
-                this, R.drawable.baseline_folder_24));
-
-        fileNames.add("Blackboard_last_minute.jpg");
-        fileIcons.add(ContextCompat.getDrawable(
-                this, R.drawable.baseline_insert_photo_24));
-        //
-
         //set view
         super.onCreate(savedInstanceState);
+        //get Note from Intent
+        Intent intent = getIntent();
+        this.note = intent.getParcelableExtra("EXTRA_NOTE");
+        //set Theme with grey Navigation-Bar
         setTheme(R.style.Theme_MaterialComponents_Light_NoActionBar_Bridge);
         getWindow().setNavigationBarColor(Color.GRAY);
         setContentView(R.layout.activity_editor);
@@ -109,11 +93,10 @@ public class EditorActivity extends AppCompatActivity {
         //Set subtitle to appropriate content of the note
         TextView textView = findViewById(R.id.editor_subtitle);
         textView.setText(
-                String.format("%s  -  %s %s", note.getDate(), note.getCourse(), note.getCategory()));
-
+                String.format(
+                        "%s  -  %s %s", note.getDate(), note.getCourse(), note.getCategory()));
         BottomAppBar bottomAppBar = findViewById(R.id.bottom_app_bar);
         setSupportActionBar(bottomAppBar);
-
         Objects.requireNonNull(getSupportActionBar()).setTitle("");
         //checks if device has camera. If not the "take-photo" item gets hidden
         if (!deviceHasCamera()) {
@@ -125,7 +108,6 @@ public class EditorActivity extends AppCompatActivity {
         editTextContent.addTextChangedListener(
                 new EditorContentTextChangeListener(this,
                         this.editTextContent, this.note));
-
         //set keyboard-eventListener to display either the extension-toolbar or the text-toolbar
         KeyboardVisibilityEvent.setEventListener(
                 this, new EditorKeyboardEventListener(this));
@@ -293,12 +275,7 @@ public class EditorActivity extends AppCompatActivity {
         //ensuring there is a camera on the device
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             //Create File for photo
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            File photoFile = createImageFile();
             //check if file was created
             if (photoFile != null) {
                 Uri photoURI = FileProvider.getUriForFile(this,
@@ -318,30 +295,44 @@ public class EditorActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //TODO Needs t avoid content provider all together after SQL db is established to make content provider obsolete
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_TAKE_PHOTO && currentImagePath != null) {
                 File file = new File(currentImagePath);
-                note.addAttachment(file);
+                this.note.addAttachment(file);
                 Toast.makeText(getApplicationContext(),
                         "Image Saved", Toast.LENGTH_LONG).show();
-                fileIcons.add(ContextCompat.getDrawable(
+                this.fileIcons.add(ContextCompat.getDrawable(
                         this, R.drawable.baseline_insert_photo_24));
-                fileNames.add(file.getName());
                 if (fileHolderAdapter != null) {
                     fileHolderAdapter.notifyDataSetChanged();
                 }
-                currentImagePath = null;
+                this.currentImagePath = null;
             } else if (requestCode == REQUEST_FILE_OPEN && data != null) {
                 Uri fileUri = data.getData();
                 if (fileUri != null) {
-                    File file = new File(Objects.requireNonNull(fileUri.getPath()));
+                    String sourceString = fileUri.getPath();
+                    File sourceFile = null;
+                    if (sourceString != null) {
+                        sourceFile = new File(sourceString);
+                    }
+                    String filename = getFileName(fileUri);
+                    File destinationFile;
+                    destinationFile =
+                            new File(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), filename);
+                    try {
+                        if (sourceFile != null) {
+                            Files.copy(sourceFile.toPath(), destinationFile.toPath());
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     Toast.makeText(getApplicationContext(),
                             "File Saved", Toast.LENGTH_LONG).show();
-                    note.addAttachment(file);
-                    fileIcons.add(ContextCompat.getDrawable(
+                    this.note.addAttachment(destinationFile);
+                    this.fileIcons.add(ContextCompat.getDrawable(
                             this, R.drawable.baseline_insert_drive_file_24));
-                    fileNames.add(getFileName(fileUri));
                     if (fileHolderAdapter != null) {
                         fileHolderAdapter.notifyDataSetChanged();
                     }
@@ -354,18 +345,16 @@ public class EditorActivity extends AppCompatActivity {
         }
     }
 
-    private File createImageFile() throws IOException {
+    private File createImageFile() {
         //File creation
-        @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat(
+        @SuppressLint("SimpleDateFormat")
+        String timeStamp = new SimpleDateFormat(
                 getString(R.string.date_format)).format(new Date());
         String imageFileName = "IMAGE_" + timeStamp;
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,
-                ".jpg",
-                storageDir);
+        File image = new File(storageDir, imageFileName + ".jpg");
         //save file Path for other intents
-        currentImagePath = image.getAbsolutePath();
+        this.currentImagePath = image.getAbsolutePath();
         return image;
     }
 
@@ -387,6 +376,13 @@ public class EditorActivity extends AppCompatActivity {
             }
         }
         return result;
+    }
+
+    public void openFile(File file){
+        //TODO after Establishing SQLite Database
+//        Intent intent = new Intent(Intent.ACTION_VIEW);
+//        intent.setDataAndType(Uri.fromFile(file), "*/*");
+//        startActivity(intent);
     }
 
 
@@ -416,12 +412,12 @@ public class EditorActivity extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         menu.clear();
         MenuInflater inflater = getMenuInflater();
-        View recyclerviewContainer = findViewById(R.id.recyclerview_holder);
-        if (keyBoardOpen) {
-            if (extensionsOpen) {
-                recyclerviewContainer.setVisibility(View.GONE);
+        View recyclerViewContainer = findViewById(R.id.recycler_view_file_holder);
+        if (this.keyBoardOpen) {
+            if (this.extensionsOpen) {
+                recyclerViewContainer.setVisibility(View.GONE);
                 findViewById(R.id.action_attachment).setBackgroundColor(Color.TRANSPARENT);
-                extensionsOpen = false;
+                this.extensionsOpen = false;
             }
             inflater.inflate(R.menu.editor_font_options_bottom, menu);
         } else {
@@ -438,23 +434,24 @@ public class EditorActivity extends AppCompatActivity {
      *             button. It is just there for the compiler.
      */
     public void onExtensionsPressed(MenuItem item) {
-        View recyclerContainer = findViewById(R.id.recyclerview_holder);
-        if (extensionsOpen) {
+        View recyclerContainer = findViewById(R.id.recycler_view_file_holder);
+        if (this.extensionsOpen) {
             recyclerContainer.setVisibility(View.GONE);
-            extensionsOpen = false;
+            this.extensionsOpen = false;
             findViewById(R.id.action_attachment).setBackgroundColor(Color.TRANSPARENT);
         } else {
             initRecyclerView();
             recyclerContainer.setVisibility(View.VISIBLE);
             findViewById(R.id.action_attachment).setBackgroundColor(
                     ContextCompat.getColor(this, R.color.slightly_darker_grey));
-            extensionsOpen = true;
+            this.extensionsOpen = true;
         }
     }
 
     private void initRecyclerView() {
-        RecyclerView recyclerView = findViewById(R.id.recyclerview_files);
-        this.fileHolderAdapter = new FileHolderAdapter(this, fileNames, fileIcons);
+        RecyclerView recyclerView = findViewById(R.id.recycler_view_files);
+        this.fileHolderAdapter = new FileHolderAdapter(
+                this, this, this.note, this.fileIcons);
         recyclerView.setAdapter(this.fileHolderAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }

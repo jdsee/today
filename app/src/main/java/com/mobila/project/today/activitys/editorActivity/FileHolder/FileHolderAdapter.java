@@ -14,21 +14,25 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mobila.project.today.R;
+import com.mobila.project.today.activitys.editorActivity.EditorActivity;
+import com.mobila.project.today.modelMock.NoteMock;
 
 import java.util.ArrayList;
 
 public class FileHolderAdapter extends RecyclerView.Adapter<FileHolderAdapter.ViewHolder>{
 
-    private ArrayList<String> mFileNames;
+    private NoteMock note;
     private ArrayList<Drawable> mFileImages;
     private Context mContext;
+    private EditorActivity activity;
 
-    public FileHolderAdapter(Context mContext,
-                             ArrayList<String> mFileNames,
+    public FileHolderAdapter(EditorActivity activity, Context mContext,
+                             NoteMock note,
                              ArrayList<Drawable> mFileImages) {
-        this.mFileNames = mFileNames;
+        this.note = note;
         this.mFileImages = mFileImages;
         this.mContext = mContext;
+        this.activity = activity;
     }
 
     @NonNull
@@ -41,13 +45,14 @@ public class FileHolderAdapter extends RecyclerView.Adapter<FileHolderAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        holder.fileName.setText(mFileNames.get(position));
+        holder.fileName.setText(note.getAttachment(position).getName());
         holder.fileImage.setImageDrawable(mFileImages.get(position));
 
         holder.fileHolder.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, mFileNames.get(position), Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, note.getAttachment(position).getName(), Toast.LENGTH_LONG).show();
+                activity.openFile(note.getAttachment(position));
             }
         });
     }

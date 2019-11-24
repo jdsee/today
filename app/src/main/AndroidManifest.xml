@@ -38,7 +38,7 @@
 
                 <data android:scheme="file" />
                 <data android:host="*" />
-                <data android:pathPattern=".*\\.toda" />
+                <data android:pathPattern=".*\\.today" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -48,7 +48,7 @@
 
                 <data android:scheme="http" />
                 <data android:host="*" />
-                <data android:mimeType="application/toda" />
+                <data android:mimeType="application/today" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -58,7 +58,7 @@
 
                 <data android:scheme="http" />
                 <data android:host="*" />
-                <data android:pathPattern=".*\\.toda" />
+                <data android:pathPattern=".*\\.today" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -73,10 +73,10 @@
                     Work around for opening files
                 -->
                 <data android:host="*" />
-                <data android:pathPattern=".*\\.toda" />
-                <data android:pathPattern=".*\\..*\\.toda" />
-                <data android:pathPattern=".*\\..*\\..*\\.toda" />
-                <data android:pathPattern=".*\\..*\\..*\\..*\\.toda" />
+                <data android:pathPattern=".*\\.today" />
+                <data android:pathPattern=".*\\..*\\.today" />
+                <data android:pathPattern=".*\\..*\\..*\\.today" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.today" />
             </intent-filter>
         </activity>
         <activity android:name=".CourseListActivity" />

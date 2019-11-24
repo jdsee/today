@@ -2,12 +2,14 @@ package com.mobila.project.today.activitys;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.SpannableString;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.mobila.project.today.R;
 import com.mobila.project.today.activitys.editorActivity.EditorActivity;
+import com.mobila.project.today.modelMock.NoteMock;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,6 +25,11 @@ public class MainActivity extends AppCompatActivity {
      */
     public void openEditor(View v) {
         Intent intent = new Intent(this, EditorActivity.class);
+        //temporary inits
+        NoteMock note = new NoteMock(3, "Headline", new SpannableString("Inhalt"),
+                2, "Mobile Anwendungen", "Übung",
+                "Veranstalltung 3", "07.05.18");
+        intent.putExtra("EXTRA_NOTE", note);
         startActivity(intent);
     }
 

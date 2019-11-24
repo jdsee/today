@@ -36,15 +36,11 @@
                 android:layout_weight="0.7"
                 android:orientation="vertical">
 
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="6dp"
-                    tools:ignore="UselessLeaf" />
-
                 <EditText
                     android:id="@+id/editor_title"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginTop="4dp"
                     android:autofillHints=""
                     android:background="@null"
                     android:hint="@string/error_message"
@@ -59,14 +55,10 @@
                     android:id="@+id/editor_subtitle"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginBottom="8dp"
+                    android:text="@string/error_message"
                     android:textColor="@color/icon_text_grey"
                     android:textSize="12sp" />
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="4dp"
-                    tools:ignore="UselessLeaf" />
-
 
             </LinearLayout>
 
@@ -118,7 +110,7 @@
         android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/recyclerview_holder">
+        app:layout_constraintBottom_toTopOf="@+id/recycler_view_file_holder">
 
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/bottom_app_bar"
@@ -144,17 +136,17 @@
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <RelativeLayout
-        android:id="@+id/recyclerview_holder"
+        android:id="@+id/recycler_view_file_holder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerview_files"
+            android:id="@+id/recycler_view_files"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/slightly_darker_grey"/>
+            android:background="@color/slightly_darker_grey" />
 
     </RelativeLayout>
 
