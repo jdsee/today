@@ -1,4 +1,4 @@
-package com.mobila.project.today.activitys.editorActivity;
+package com.mobila.project.today.activitys.editorActivity.listeners;
 
 import android.app.Activity;
 import android.view.KeyEvent;
@@ -11,7 +11,7 @@ import com.mobila.project.today.R;
 public class TitleOnEditorActionListener implements TextView.OnEditorActionListener {
     private Activity activity;
 
-    TitleOnEditorActionListener(Activity activity) {
+    public TitleOnEditorActionListener(Activity activity) {
         this.activity=activity;
     }
 

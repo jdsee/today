@@ -39,7 +39,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mobila.project.today.R;
-import com.mobila.project.today.activitys.editorActivity.FileHolder.FileHolderAdapter;
+import com.mobila.project.today.activitys.editorActivity.listeners.EditorContentTextChangeListener;
+import com.mobila.project.today.activitys.editorActivity.listeners.EditorKeyboardEventListener;
+import com.mobila.project.today.activitys.editorActivity.listeners.TitleOnEditorActionListener;
 import com.mobila.project.today.modelMock.NoteMock;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
@@ -48,9 +50,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
+
+import javax.xml.datatype.Duration;
 
 public class EditorActivity extends AppCompatActivity {
     private NoteMock note;
@@ -60,8 +63,6 @@ public class EditorActivity extends AppCompatActivity {
 
     private final int REQUEST_TAKE_PHOTO = 1;
     private final int REQUEST_FILE_OPEN = 2;
-
-    private ArrayList<Drawable> fileIcons = new ArrayList<>();
 
     private boolean extensionsOpen = false;
 
@@ -303,8 +304,6 @@ public class EditorActivity extends AppCompatActivity {
                 this.note.addAttachment(file);
                 Toast.makeText(getApplicationContext(),
                         "Image Saved", Toast.LENGTH_LONG).show();
-                this.fileIcons.add(ContextCompat.getDrawable(
-                        this, R.drawable.baseline_insert_photo_24));
                 if (fileHolderAdapter != null) {
                     fileHolderAdapter.notifyDataSetChanged();
                 }
@@ -331,8 +330,6 @@ public class EditorActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),
                             "File Saved", Toast.LENGTH_LONG).show();
                     this.note.addAttachment(destinationFile);
-                    this.fileIcons.add(ContextCompat.getDrawable(
-                            this, R.drawable.baseline_insert_drive_file_24));
                     if (fileHolderAdapter != null) {
                         fileHolderAdapter.notifyDataSetChanged();
                     }
@@ -433,25 +430,25 @@ public class EditorActivity extends AppCompatActivity {
      * @param item Has no purpose because there isn't a menu populated with items attached to this
      *             button. It is just there for the compiler.
      */
-    public void onExtensionsPressed(MenuItem item) {
+    public void onAttachmentsPressed(MenuItem item) {
         View recyclerContainer = findViewById(R.id.recycler_view_file_holder);
         if (this.extensionsOpen) {
             recyclerContainer.setVisibility(View.GONE);
             this.extensionsOpen = false;
             findViewById(R.id.action_attachment).setBackgroundColor(Color.TRANSPARENT);
-        } else {
+        } else if(this.note.getAttachmentCount()!=0){
             initRecyclerView();
             recyclerContainer.setVisibility(View.VISIBLE);
             findViewById(R.id.action_attachment).setBackgroundColor(
                     ContextCompat.getColor(this, R.color.slightly_darker_grey));
             this.extensionsOpen = true;
-        }
+        } else Toast.makeText(
+                this, "Put your attachments here", Toast.LENGTH_SHORT).show();
     }
 
     private void initRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.recycler_view_files);
-        this.fileHolderAdapter = new FileHolderAdapter(
-                this, this, this.note, this.fileIcons);
+        this.fileHolderAdapter = new FileHolderAdapter(this, this, this.note);
         recyclerView.setAdapter(this.fileHolderAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }

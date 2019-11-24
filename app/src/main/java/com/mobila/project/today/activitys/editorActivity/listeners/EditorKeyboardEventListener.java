@@ -1,11 +1,13 @@
-package com.mobila.project.today.activitys.editorActivity;
+package com.mobila.project.today.activitys.editorActivity.listeners;
+
+import com.mobila.project.today.activitys.editorActivity.EditorActivity;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener;
 
 public class EditorKeyboardEventListener implements KeyboardVisibilityEventListener {
     private EditorActivity activity;
 
-    EditorKeyboardEventListener(EditorActivity activity) {
+    public EditorKeyboardEventListener(EditorActivity activity) {
         this.activity=activity;
     }
 

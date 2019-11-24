@@ -18,7 +18,7 @@ public class NoteMock implements Parcelable {
     private String category;
     private String event;
     private String date;
-    private ArrayList<File> attachments;
+    private ArrayList<File> attachments = new ArrayList<>();
 
     public NoteMock(long id, String title, SpannableString content, long semester, String course, String category, String event, String date) {
         this.id = id;
@@ -136,6 +136,10 @@ public class NoteMock implements Parcelable {
 
     public File getAttachment(int position){
         return attachments.get(position);
+    }
+
+    public int getAttachmentCount(){
+        return attachments.size();
     }
 
     @Override
