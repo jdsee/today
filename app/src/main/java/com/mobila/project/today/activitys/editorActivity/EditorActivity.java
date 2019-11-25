@@ -418,7 +418,7 @@ public class EditorActivity extends AppCompatActivity {
             }
             inflater.inflate(R.menu.editor_font_options_bottom, menu);
         } else {
-            inflater.inflate(R.menu.editor_extension_bottom, menu);
+            inflater.inflate(R.menu.editor_attachments_bottom, menu);
         }
         return true;
     }
