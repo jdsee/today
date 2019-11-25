@@ -14,9 +14,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.button.MaterialButton;
 import com.mobila.project.today.R;
 import com.mobila.project.today.modelMock.NoteMock;
 
@@ -58,6 +60,14 @@ public class FileHolderAdapter extends RecyclerView.Adapter<FileHolderAdapter.Vi
                 activity.openFile(note.getAttachment(position));
             }
         });
+        holder.button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                note.removeAttachment(position);
+                notifyDataSetChanged();
+                if (note.getAttachmentCount()==0) activity.closeAttachments();
+            }
+        });
     }
 
     @Override
@@ -70,12 +80,14 @@ public class FileHolderAdapter extends RecyclerView.Adapter<FileHolderAdapter.Vi
         ImageView fileImage;
         TextView fileName;
         RelativeLayout fileHolder;
+        AppCompatImageButton button;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
             fileImage = itemView.findViewById(R.id.file_icon);
             fileName = itemView.findViewById(R.id.file_title);
             fileHolder = itemView.findViewById(R.id.parent_fileholder);
+            button = itemView.findViewById(R.id.button_remove_file);
         }
     }
 

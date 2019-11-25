@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -53,8 +52,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
-import javax.xml.datatype.Duration;
-
 public class EditorActivity extends AppCompatActivity {
     private NoteMock note;
     private EditText editTextContent;
@@ -69,6 +66,8 @@ public class EditorActivity extends AppCompatActivity {
     String currentImagePath;
 
     FileHolderAdapter fileHolderAdapter;
+
+    View fileContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +114,8 @@ public class EditorActivity extends AppCompatActivity {
         //Remove elevation from note-button
         FloatingActionButton actionButton = findViewById(R.id.button_note);
         actionButton.setCompatElevation(0);
+
+        fileContainer = findViewById(R.id.recycler_view_file_holder);
     }
 
     public void setKeyboardOpen(Boolean keyBoardOpen) {
@@ -265,7 +266,6 @@ public class EditorActivity extends AppCompatActivity {
         this.editTextContent.setSelection(startSelection + 1);
     }
 
-
     /**
      * Opens Camera
      *
@@ -296,7 +296,7 @@ public class EditorActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //TODO Needs t avoid content provider all together after SQL db is established to make content provider obsolete
+        //TODO Needs to avoid content provider all together after SQL db is established to make content provider obsolete
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_TAKE_PHOTO && currentImagePath != null) {
@@ -431,19 +431,26 @@ public class EditorActivity extends AppCompatActivity {
      *             button. It is just there for the compiler.
      */
     public void onAttachmentsPressed(MenuItem item) {
-        View recyclerContainer = findViewById(R.id.recycler_view_file_holder);
         if (this.extensionsOpen) {
-            recyclerContainer.setVisibility(View.GONE);
-            this.extensionsOpen = false;
-            findViewById(R.id.action_attachment).setBackgroundColor(Color.TRANSPARENT);
+            closeAttachments();
         } else if(this.note.getAttachmentCount()!=0){
-            initRecyclerView();
-            recyclerContainer.setVisibility(View.VISIBLE);
-            findViewById(R.id.action_attachment).setBackgroundColor(
-                    ContextCompat.getColor(this, R.color.slightly_darker_grey));
-            this.extensionsOpen = true;
+            openAttachments();
         } else Toast.makeText(
                 this, "Put your attachments here", Toast.LENGTH_SHORT).show();
+    }
+
+    public void closeAttachments(){
+        this.extensionsOpen = false;
+        findViewById(R.id.action_attachment).setBackgroundColor(Color.TRANSPARENT);
+        fileContainer.setVisibility(View.GONE);
+    }
+
+    public void openAttachments(){
+        initRecyclerView();
+        fileContainer.setVisibility(View.VISIBLE);
+        findViewById(R.id.action_attachment).setBackgroundColor(
+                ContextCompat.getColor(this, R.color.slightly_darker_grey));
+        this.extensionsOpen = true;
     }
 
     private void initRecyclerView() {

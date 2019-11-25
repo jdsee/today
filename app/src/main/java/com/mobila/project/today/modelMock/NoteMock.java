@@ -134,6 +134,10 @@ public class NoteMock implements Parcelable {
         this.attachments.add(attachment);
     }
 
+    public void removeAttachment(int position){
+        attachments.remove(position);
+    }
+
     public File getAttachment(int position){
         return attachments.get(position);
     }
