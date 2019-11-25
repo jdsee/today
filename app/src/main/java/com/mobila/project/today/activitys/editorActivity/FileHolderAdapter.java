@@ -18,7 +18,6 @@ import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.button.MaterialButton;
 import com.mobila.project.today.R;
 import com.mobila.project.today.modelMock.NoteMock;
 
@@ -86,7 +85,7 @@ public class FileHolderAdapter extends RecyclerView.Adapter<FileHolderAdapter.Vi
             super(itemView);
             fileImage = itemView.findViewById(R.id.file_icon);
             fileName = itemView.findViewById(R.id.file_title);
-            fileHolder = itemView.findViewById(R.id.parent_fileholder);
+            fileHolder = itemView.findViewById(R.id.parent_file_holder);
             button = itemView.findViewById(R.id.button_remove_file);
         }
     }

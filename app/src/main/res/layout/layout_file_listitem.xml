@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="4dp"
-    android:id="@+id/parent_fileholder">
+    android:id="@+id/parent_file_holder">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/file_icon"
@@ -20,15 +21,18 @@
         android:layout_toEndOf="@id/file_icon"
         android:text="@string/error_message"
         android:textColor="@color/icon_black"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        tools:ignore="RelativeOverlap" />
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/button_remove_file"
-        android:layout_width="40dp"
+        android:layout_width="80dp"
         android:layout_height="40dp"
         android:layout_alignParentEnd="true"
+        android:background="@drawable/gradient"
+        android:paddingStart="40dp"
+        android:paddingEnd="0dp"
         android:src="@drawable/baseline_clear_24"
-        android:background="@android:color/transparent"
-        android:tint="@color/icon_text_grey"/>
+        android:tint="@color/icon_text_grey" />
 
 </RelativeLayout>
