@@ -114,7 +114,6 @@ public class EditorActivity extends AppCompatActivity {
         //Remove elevation from note-button
         FloatingActionButton actionButton = findViewById(R.id.button_note);
         actionButton.setCompatElevation(0);
-
         fileContainer = findViewById(R.id.recycler_view_file_holder);
     }
 
