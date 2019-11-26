@@ -25,8 +25,7 @@ public class FileHolderAdapter extends RecyclerView.Adapter<FileHolderAdapter.Vi
     private Context mContext;
     private EditorActivity activity;
 
-    FileHolderAdapter(EditorActivity activity, Context mContext,
-                      NoteMock note) {
+    FileHolderAdapter(EditorActivity activity, Context mContext, NoteMock note) {
         this.note = note;
         this.mContext = mContext;
         this.activity = activity;

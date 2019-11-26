@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         NoteMock note = new NoteMock(3, "Headline", new SpannableString("Inhalt"),
                 2, "Mobile Anwendungen", "Übung",
                 "Veranstalltung 3", "07.05.18");
-        intent.putExtra("EXTRA_NOTE", note);
+        intent.putExtra(NoteMock.INTENT_EXTRA_CODE,  note);
         startActivity(intent);
     }
 

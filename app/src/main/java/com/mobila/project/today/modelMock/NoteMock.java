@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 
 public class NoteMock implements Parcelable {
+    public static final String INTENT_EXTRA_CODE = "EXTRA_NOTE";
     private long id;
     private String title;
     private Spannable content;
