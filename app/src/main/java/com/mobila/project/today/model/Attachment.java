@@ -12,7 +12,7 @@ public interface Attachment<T> extends Identifiable {
 
     void addContent(T content);
 
-    void removeContent(Identifiable id);
+    void removeContent(Identifiable content);
 
     String getTitle();
 

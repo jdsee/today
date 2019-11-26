@@ -3,11 +3,12 @@ package com.mobila.project.today.model;
 import java.util.List;
 
 /**
- * Allows access to all data contained in the "CourseMock"-entity.
+ * Allows access to all data contained in the "Course"-entity.
  * The main content are the sections, which store all relevant data for taking notes.
- * There are also course related notes stored in the @code{CourseMock}.
+ * There are also course related notes stored in the @code{Course}.
  */
 public interface Course extends Identifiable {
+
     /**
      * Returns the semester containing this course.
      *
@@ -46,7 +47,7 @@ public interface Course extends Identifiable {
     /**
      * Removes a section of this course.
      */
-    void removeSection(Identifiable id);
+    void removeSection(Identifiable section);
 
     /**
      * Returns a list with all tasks contained in this course.
@@ -63,5 +64,5 @@ public interface Course extends Identifiable {
     /**
      * Removes a task contained in this course.
      */
-    void removeTask(Identifiable id);
+    void removeTask(Identifiable task);
 }

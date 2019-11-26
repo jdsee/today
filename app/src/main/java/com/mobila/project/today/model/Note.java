@@ -28,9 +28,11 @@ public interface Note extends Identifiable, Serializable {
 
     void addAttachment(Attachment attachment);
 
-    void removeAttachment(Attachment attachment);
+    void removeAttachment(Identifiable attachment);
 
     List<NoteReference> getReferences();
 
     void addReference(Identifiable ref, int row);
+
+    void removeReference(Identifiable ref);
 }

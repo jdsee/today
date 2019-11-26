@@ -1,4 +1,4 @@
-package com.mobila.project.today.activitys;
+package com.mobila.project.today.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,7 +8,9 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.mobila.project.today.R;
-import com.mobila.project.today.activitys.editorActivity.EditorActivity;
+import com.mobila.project.today.activities.dataStructureView.CourseListActivity;
+import com.mobila.project.today.activities.editorActivity.EditorActivity;
+import com.mobila.project.today.activities.taskView.CourseTasksActivity;
 import com.mobila.project.today.modelMock.NoteMock;
 
 public class MainActivity extends AppCompatActivity {
@@ -39,6 +41,16 @@ public class MainActivity extends AppCompatActivity {
      */
     public void openCourseList(View v) {
         Intent intent = new Intent(this, CourseListActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+    }
+
+    /**
+     * Opens CourseTasksActivity
+     * @param v View that performs this action
+     */
+    public void openCourseTasks(View v) {
+        Intent intent = new Intent(this, CourseTasksActivity.class);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }

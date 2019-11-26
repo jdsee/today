@@ -41,4 +41,7 @@
 
     <string name="add_course">Add course</string>
     <string name="date_format">yyyy.MM.dd-HH:mm:ss</string>
+    <string name="add_task">Add task</string>
+    <string name="task_item_title">Example task</string>
+    <string name="open_course_tasks">Open Tasks</string>
 </resources>

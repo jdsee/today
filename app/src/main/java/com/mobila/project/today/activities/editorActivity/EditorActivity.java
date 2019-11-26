@@ -1,4 +1,4 @@
-package com.mobila.project.today.activitys.editorActivity;
+package com.mobila.project.today.activities.editorActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -38,9 +38,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mobila.project.today.R;
-import com.mobila.project.today.activitys.editorActivity.listeners.EditorContentTextChangeListener;
-import com.mobila.project.today.activitys.editorActivity.listeners.EditorKeyboardEventListener;
-import com.mobila.project.today.activitys.editorActivity.listeners.TitleOnEditorActionListener;
+import com.mobila.project.today.activities.editorActivity.listeners.EditorContentTextChangeListener;
+import com.mobila.project.today.activities.editorActivity.listeners.EditorKeyboardEventListener;
+import com.mobila.project.today.activities.editorActivity.listeners.TitleOnEditorActionListener;
 import com.mobila.project.today.modelMock.NoteMock;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;

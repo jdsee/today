@@ -1,5 +1,7 @@
 package com.mobila.project.today.model;
 
+import com.mobila.project.today.TodayException;
+
 import java.util.List;
 
 /**
@@ -12,5 +14,5 @@ public interface Semester extends Identifiable {
      *
      * @return a list with all courses contained in this semester
      */
-    List<Course> getCourses();
+    List<Course> getCourses() throws TodayException;
 }

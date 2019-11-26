@@ -12,6 +12,8 @@ public interface Lecture extends Identifiable {
 
     Note getNote();
 
+    void removeNote(Identifiable note);
+
     String getRoom();
 
     void setRoom(String room);

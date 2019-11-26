@@ -5,7 +5,7 @@
     android:id="@+id/activityRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activitys.MainActivity">
+    tools:context=".activities.MainActivity">
 
     <Button
         android:id="@+id/btn_open_editor"
@@ -22,7 +22,7 @@
     <Button
         android:id="@+id/btn_open_course_list"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:onClick="openCourseList"
         android:text="@string/open_course_list"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -31,5 +31,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.525" />
+
+    <Button
+        android:id="@+id/btn_open_course_tasks"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/open_course_tasks"
+        android:onClick="openCourseTasks"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_open_course_list"
+        app:layout_constraintVertical_bias="0.101" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,7 +3,7 @@ package com.mobila.project.today.model;
 import java.util.List;
 
 /**
- * Allows access to all data contained in the "SectionMock"-entity.
+ * Allows access to all data contained in the "Section"-entity.
  * The main content are the sections, which store all relevant data for taking notes.
  */
 public interface Section extends Identifiable {
@@ -23,6 +23,7 @@ public interface Section extends Identifiable {
 
     /**
      * Sets the title for this section.
+     *
      */
     void setTitle(String title);
 
@@ -30,5 +31,5 @@ public interface Section extends Identifiable {
 
     void addLecture(Lecture lecture);
 
-    void removeLecture(Identifiable id);
+    void removeLecture(Identifiable lecture);
 }

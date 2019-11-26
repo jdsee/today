@@ -1,4 +1,4 @@
-package com.mobila.project.today.activitys.editorActivity;
+package com.mobila.project.today.activities.editorActivity;
 
 import android.content.ContentResolver;
 import android.content.Context;
