@@ -77,7 +77,7 @@ public class EditorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //get Note from Intent
         Intent intent = getIntent();
-        this.note = intent.getParcelableExtra("EXTRA_NOTE");
+        this.note = intent.getParcelableExtra(NoteMock.INTENT_EXTRA_CODE);
         //set Theme with grey Navigation-Bar
         setTheme(R.style.Theme_MaterialComponents_Light_NoActionBar_Bridge);
         getWindow().setNavigationBarColor(Color.GRAY);
