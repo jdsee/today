@@ -22,7 +22,8 @@
         android:text="@string/error_message"
         android:textColor="@color/icon_black"
         android:textSize="20sp"
-        tools:ignore="RelativeOverlap" />
+        tools:ignore="RelativeOverlap"
+        android:maxLines="1"/>
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/button_remove_file"
