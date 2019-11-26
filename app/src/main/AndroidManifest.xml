@@ -18,9 +18,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activitys.CourseListActivity" />
+        <activity android:name=".activities.CourseListActivity" />
         <activity
-            android:name=".activitys.MainActivity"
+            android:name=".activities.MainActivity"
             android:windowSoftInputMode="stateVisible|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,8 +29,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activitys.editorActivity.EditorActivity"
-            android:parentActivityName=".activitys.MainActivity"
+            android:name=".activities.editorActivity.EditorActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:windowSoftInputMode="stateVisible|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

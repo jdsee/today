@@ -1,4 +1,4 @@
-package com.mobila.project.today.activitys;
+package com.mobila.project.today.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,7 +8,7 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.mobila.project.today.R;
-import com.mobila.project.today.activitys.editorActivity.EditorActivity;
+import com.mobila.project.today.activities.editorActivity.EditorActivity;
 import com.mobila.project.today.modelMock.NoteMock;
 
 public class MainActivity extends AppCompatActivity {

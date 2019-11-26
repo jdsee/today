@@ -1,4 +1,4 @@
-package com.mobila.project.today.activitys;
+package com.mobila.project.today.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;

@@ -1,4 +1,4 @@
-package com.mobila.project.today.activitys.editorActivity;
+package com.mobila.project.today.activities.editorActivity;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;

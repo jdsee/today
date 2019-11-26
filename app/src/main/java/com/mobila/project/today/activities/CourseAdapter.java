@@ -1,4 +1,4 @@
-package com.mobila.project.today.activitys;
+package com.mobila.project.today.activities;
 
 import android.content.Context;
 import android.view.LayoutInflater;

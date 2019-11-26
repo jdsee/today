@@ -1,6 +1,6 @@
-package com.mobila.project.today.activitys.editorActivity.listeners;
+package com.mobila.project.today.activities.editorActivity.listeners;
 
-import com.mobila.project.today.activitys.editorActivity.EditorActivity;
+import com.mobila.project.today.activities.editorActivity.EditorActivity;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener;
 
