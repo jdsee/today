@@ -1,7 +1,6 @@
 package com.mobila.project.today.model;
 
-import com.mobila.project.today.TodayException;
-import com.mobila.project.today.control.OrganizerDataRep;
+import com.mobila.project.today.dataModelAccess.OrganizerDataRep;
 
 import java.util.List;
 

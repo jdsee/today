@@ -1,18 +1,19 @@
-package com.mobila.project.today.control;
+package com.mobila.project.today.dataModelAccess;
 
 import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Identifiable;
-import com.mobila.project.today.model.Lecture;
 import com.mobila.project.today.model.Note;
 import com.mobila.project.today.model.NoteReference;
-import com.mobila.project.today.model.Section;
 import com.mobila.project.today.model.Semester;
 import com.mobila.project.today.model.Task;
 
 import java.util.Date;
 import java.util.List;
 
-public interface OrganizerDataRepExpl {
+/**
+ * Implement as singleton!
+ */
+public interface OrganizerDataRep {
     /*
     static OrganizerDataRep getInstance() {
         return OrganizerDataRepMock.getInstance();
@@ -21,18 +22,7 @@ public interface OrganizerDataRepExpl {
 
     List<Semester> getSemesters();
 
-    List<Course> getCourses();
-
-    void addCourse(Identifiable course);
-
-    List<Section> getSections();
-
-    void addSection(Identifiable section);
-
-    List<Lecture> getLectures();
-
-    void addLecture(Identifiable lecture);
-
+    <T extends Identifiable, R extends Identifiable> List<R> getChildren(T context);
 
     <T extends Identifiable, R extends Identifiable> void addChild(T context, R child);
 
