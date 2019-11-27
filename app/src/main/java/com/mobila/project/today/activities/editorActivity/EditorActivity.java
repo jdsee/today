@@ -4,10 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,7 +18,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,14 +27,10 @@ import com.mobila.project.today.R;
 import com.mobila.project.today.activities.editorActivity.listeners.EditorKeyboardEventListener;
 import com.mobila.project.today.activities.editorActivity.listeners.TitleOnEditorActionListener;
 import com.mobila.project.today.modelMock.NoteMock;
-import com.mobila.project.today.utils.AttachmentUtils;
 import com.mobila.project.today.views.adapters.FileHolderAdapter;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.Objects;
 
 public class EditorActivity extends AppCompatActivity {
@@ -178,7 +170,7 @@ public class EditorActivity extends AppCompatActivity {
      * @param item has no function other than being there as default for menus root
      */
     public void onFilePickerPressed(MenuItem item) {
-        attachments.openFile();
+        attachments.importFile();
     }
 
     @Override

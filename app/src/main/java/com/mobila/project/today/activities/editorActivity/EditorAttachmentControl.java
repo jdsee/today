@@ -35,6 +35,9 @@ class EditorAttachmentControl {
         this.adapter = adapter;
     }
 
+    /**
+     * Method for taking a picture by opening a camera app
+     */
     void takePicture() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         //ensuring there is a camera on the device
@@ -50,13 +53,22 @@ class EditorAttachmentControl {
         }
     }
 
-    void openFile() {
+    /**
+     * Method for importing a file by opening a file explorer app
+     */
+    void importFile() {
         Intent openFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
         openFileIntent.setType("*/*");
         openFileIntent.addCategory(Intent.CATEGORY_OPENABLE);
         context.startActivityForResult(openFileIntent, REQUEST_FILE_OPEN);
     }
 
+    /**
+     * Method that saves the files that were returned by a intent
+     * @param requestCode the Code of the request
+     * @param resultCode the confirmation if the request was successful
+     * @param data the optional data of the intent-result
+     */
     void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_TAKE_PHOTO && currentImagePath != null) {

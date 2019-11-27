@@ -33,6 +33,11 @@ class EditorNoteControl {
                         this.editorContent, this.note));
     }
 
+    /**
+     * Method for choosing a style to be set on the selected text
+     * @param item the style that was selected
+     * @return if an operation was successful
+     */
     boolean choseStyle(MenuItem item){
         switch (item.getItemId()) {
             //Text-Color Options
@@ -112,6 +117,9 @@ class EditorNoteControl {
         this.editorContent.setSelection(endSelection);
     }
 
+    /**
+     * Method for inserting a tab in the note-content
+     */
     void insertTab() {
         int tabWidth = 150;
         int startSelection = this.editorContent.getSelectionStart();
