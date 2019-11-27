@@ -45,7 +45,6 @@ public class EditorActivity extends AppCompatActivity {
     private boolean extensionsOpen = false;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //Slide-in Animation
@@ -53,47 +52,58 @@ public class EditorActivity extends AppCompatActivity {
         //set view
         super.onCreate(savedInstanceState);
         //get Note from Intent
-        Intent intent = getIntent();
-        this.note = intent.getParcelableExtra(NoteMock.INTENT_EXTRA_CODE);
-        //set Theme with grey Navigation-Bar
+        this.note = getIntent().getParcelableExtra(NoteMock.INTENT_EXTRA_CODE);
+
+        setupViews();
+        hideCameraIfNotAvailable();
+        setupContent();
+        setupListeners();
+        setupControls();
+    }
+
+    private void setupViews() {
         setTheme(R.style.Theme_MaterialComponents_Light_NoActionBar_Bridge);
         getWindow().setNavigationBarColor(Color.GRAY);
         setContentView(R.layout.activity_editor);
-        Toolbar bar = findViewById(R.id.editor_toolbar);
-        setSupportActionBar(bar);
-        //sets preset Title
-        EditText headline = findViewById(R.id.editor_title);
-        headline.setHint(note.getEvent());
-        //Sets Action-Listener on "next-button" of keyboard inside the TitleEditText to move the
-        //focus to the NoteEditText if pressed
-        headline.setOnEditorActionListener(new TitleOnEditorActionListener(this));
-        //Set subtitle to appropriate content of the note
-        TextView textView = findViewById(R.id.editor_subtitle);
-        textView.setText(
-                String.format(
-                        "%s  -  %s %s", note.getDate(), note.getCourse(), note.getCategory()));
-        BottomAppBar bottomAppBar = findViewById(R.id.bottom_app_bar);
-        setSupportActionBar(bottomAppBar);
-        Objects.requireNonNull(getSupportActionBar()).setTitle("");
-        //checks if device has camera. If not the "take-photo" item gets hidden
+        setSupportActionBar((Toolbar) findViewById(R.id.editor_toolbar));
+        FloatingActionButton actionButton = findViewById(R.id.button_note);
+        actionButton.setCompatElevation(0);
+        setSupportActionBar((BottomAppBar) findViewById(R.id.bottom_app_bar));
+        fileContainer = findViewById(R.id.recycler_view_file_holder);
+    }
+
+    private void hideCameraIfNotAvailable() {
         if (!deviceHasCamera()) {
             MenuItem cameraItem = findViewById(R.id.action_take_photo);
             cameraItem.setVisible(false);
         }
-        //set textEdit-listener to keep the NoteMock synchronized with the EditText-view
+    }
+
+    private void setupControls() {
         this.noteEditor = new EditorNoteControl(this, this.note);
         this.attachments = new EditorAttachmentControl(this, note, fileHolderAdapter);
-        //set keyboard-eventListener to display either the extension-toolbar or the text-toolbar
+    }
+
+    private void setupListeners() {
+        EditText headline = findViewById(R.id.editor_title);
+        headline.setOnEditorActionListener(new TitleOnEditorActionListener(this));
         KeyboardVisibilityEvent.setEventListener(
                 this, new EditorKeyboardEventListener(this));
-        //Remove elevation from note-button
-        FloatingActionButton actionButton = findViewById(R.id.button_note);
-        actionButton.setCompatElevation(0);
-        fileContainer = findViewById(R.id.recycler_view_file_holder);
     }
+
+    private void setupContent() {
+        EditText headline = findViewById(R.id.editor_title);
+        headline.setHint(note.getEvent());
+        TextView textView = findViewById(R.id.editor_subtitle);
+        textView.setText(String.format(
+                "%s  -  %s %s", note.getDate(), note.getCourse(), note.getCategory()));
+        Objects.requireNonNull(getSupportActionBar()).setTitle("");
+    }
+
 
     /**
      * Method for setting the state of the keyboard
+     *
      * @param keyBoardOpen Defines if the keyboard is open or closed
      */
     public void setKeyboardOpen(Boolean keyBoardOpen) {
@@ -102,6 +112,7 @@ public class EditorActivity extends AppCompatActivity {
 
     /**
      * Method to close Activity
+     *
      * @param view The vie that is taking this action
      */
     public void onBackPressed(View view) {
@@ -142,6 +153,7 @@ public class EditorActivity extends AppCompatActivity {
     /**
      * Is invoked by pressing the Colour-Symbol in the lower menu.
      * It sets the colour of the selected text
+     *
      * @param item The item which was pressed
      */
     @Override
@@ -151,6 +163,7 @@ public class EditorActivity extends AppCompatActivity {
 
     /**
      * Method for inserting a Tab in the note-content
+     *
      * @param item has no function other than being there as default for menus root
      */
     public void onTabButtonClicked(MenuItem item) {
@@ -159,6 +172,7 @@ public class EditorActivity extends AppCompatActivity {
 
     /**
      * Opens Camera
+     *
      * @param item The item which was pressed
      */
     public void onTakePhotoPickerPressed(MenuItem item) {
@@ -167,6 +181,7 @@ public class EditorActivity extends AppCompatActivity {
 
     /**
      * Method for importing a file into a note
+     *
      * @param item has no function other than being there as default for menus root
      */
     public void onFilePickerPressed(MenuItem item) {
@@ -182,6 +197,7 @@ public class EditorActivity extends AppCompatActivity {
 
     /**
      * Method for detecting if the device on which the application is installed has a camera
+     *
      * @return If the device has a camera
      */
     private boolean deviceHasCamera() {
@@ -191,6 +207,7 @@ public class EditorActivity extends AppCompatActivity {
 
     /**
      * Method for opening the functions hidden behind the three dots in the Toolbar
+     *
      * @param view the view that calls this method
      */
     public void showEditorHiddenFunctions(View view) {
@@ -221,6 +238,7 @@ public class EditorActivity extends AppCompatActivity {
     /**
      * opens or closes the extension list depending on if it was open or closed before the button
      * was pressed. If it was open, it gets closed and vise versa
+     *
      * @param item Has no purpose because there isn't a menu populated with items attached to this
      *             button. It is just there for the compiler.
      */
