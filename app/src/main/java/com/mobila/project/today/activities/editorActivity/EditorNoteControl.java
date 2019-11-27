@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat;
 import com.mobila.project.today.R;
 import com.mobila.project.today.activities.editorActivity.listeners.EditorContentTextChangeListener;
 import com.mobila.project.today.modelMock.NoteMock;
+import com.mobila.project.today.utils.CustomTabWidthSpan;
 
 class EditorNoteControl {
     private AppCompatActivity context;
