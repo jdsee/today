@@ -52,7 +52,7 @@ public class FileHolderAdapter extends RecyclerView.Adapter<FileHolderAdapter.Vi
             public void onClick(View v) {
                 Toast.makeText(mContext, AttachmentUtils.getMimeType(activity, attachment),
                         Toast.LENGTH_LONG).show();
-                activity.openFile(note.getAttachment(position));
+                AttachmentUtils.openFile(note.getAttachment(position));
             }
         });
         holder.button.setOnClickListener(new View.OnClickListener() {

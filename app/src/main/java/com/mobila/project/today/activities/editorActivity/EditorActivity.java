@@ -1,16 +1,13 @@
 package com.mobila.project.today.activities.editorActivity;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.provider.OpenableColumns;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -34,6 +31,7 @@ import com.mobila.project.today.R;
 import com.mobila.project.today.activities.editorActivity.listeners.EditorKeyboardEventListener;
 import com.mobila.project.today.activities.editorActivity.listeners.TitleOnEditorActionListener;
 import com.mobila.project.today.modelMock.NoteMock;
+import com.mobila.project.today.utils.AttachmentUtils;
 import com.mobila.project.today.views.adapters.FileHolderAdapter;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
@@ -41,8 +39,6 @@ import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Objects;
 
 public class EditorActivity extends AppCompatActivity {
@@ -104,13 +100,16 @@ public class EditorActivity extends AppCompatActivity {
         fileContainer = findViewById(R.id.recycler_view_file_holder);
     }
 
+    /**
+     * Method for setting the state of the keyboard
+     * @param keyBoardOpen Defines if the keyboard is open or closed
+     */
     public void setKeyboardOpen(Boolean keyBoardOpen) {
         this.keyBoardOpen = keyBoardOpen;
     }
 
     /**
      * Method to close Activity
-     *
      * @param view The vie that is taking this action
      */
     public void onBackPressed(View view) {
@@ -151,7 +150,6 @@ public class EditorActivity extends AppCompatActivity {
     /**
      * Is invoked by pressing the Colour-Symbol in the lower menu.
      * It sets the colour of the selected text
-     *
      * @param item The item which was pressed
      */
     @Override
@@ -159,13 +157,16 @@ public class EditorActivity extends AppCompatActivity {
         return noteEditor.choseStyle(item);
     }
 
+    /**
+     * Method for inserting a Tab in the note-content
+     * @param item has no function other than being there as default for menus root
+     */
     public void onTabButtonClicked(MenuItem item) {
         this.noteEditor.insertTab();
     }
 
     /**
      * Opens Camera
-     *
      * @param item The item which was pressed
      */
     public void onTakePhotoPickerPressed(MenuItem item) {
@@ -173,17 +174,21 @@ public class EditorActivity extends AppCompatActivity {
         //ensuring there is a camera on the device
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             //Create File for photo
-            File photoFile = createImageFile();
+            File photoFile = AttachmentUtils.createImageFile(this);
+            this.currentImagePath = photoFile.getAbsolutePath();
             //check if file was created
-            if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(this,
-                        "com.mobila.project.today.fileprovider", photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-            }
+            Uri photoURI = FileProvider.getUriForFile(this,
+                    "com.mobila.project.today.fileprovider", photoFile);
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+            startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+
         }
     }
 
+    /**
+     * Method for importing a file into a note
+     * @param item has no function other than being there as default for menus root
+     */
     public void onFilePickerPressed(MenuItem item) {
         Intent openFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
         openFileIntent.setType("*/*");
@@ -213,7 +218,7 @@ public class EditorActivity extends AppCompatActivity {
                     if (sourceString != null) {
                         sourceFile = new File(sourceString);
                     }
-                    String filename = getFileName(fileUri);
+                    String filename = AttachmentUtils.getFileName(this, fileUri);
                     File destinationFile;
                     destinationFile =
                             new File(getExternalFilesDir(
@@ -240,51 +245,8 @@ public class EditorActivity extends AppCompatActivity {
         }
     }
 
-    private File createImageFile() {
-        //File creation
-        @SuppressLint("SimpleDateFormat")
-        String timeStamp = new SimpleDateFormat(
-                getString(R.string.date_format)).format(new Date());
-        String imageFileName = "IMAGE_" + timeStamp;
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = new File(storageDir, imageFileName + ".jpg");
-        //save file Path for other intents
-        this.currentImagePath = image.getAbsolutePath();
-        return image;
-    }
-
-    public String getFileName(Uri uri) {
-        String result = null;
-        if (Objects.requireNonNull(uri.getScheme()).equals("content")) {
-            try (Cursor cursor = getContentResolver()
-                    .query(uri, null, null, null, null)) {
-                if (cursor != null && cursor.moveToFirst()) {
-                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
-                }
-            }
-        }
-        if (result == null) {
-            result = uri.getPath();
-            assert result != null;
-            int cut = result.lastIndexOf('/');
-            if (cut != -1) {
-                result = result.substring(cut + 1);
-            }
-        }
-        return result;
-    }
-
-    public void openFile(File file){
-        //TODO after Establishing SQLite Database
-//        Intent intent = new Intent(Intent.ACTION_VIEW);
-//        intent.setDataAndType(Uri.fromFile(file), "*/*");
-//        startActivity(intent);
-    }
-
-
     /**
      * Method for detecting if the device on which the application is installed has a camera
-     *
      * @return If the device has a camera
      */
     private boolean deviceHasCamera() {
@@ -294,7 +256,6 @@ public class EditorActivity extends AppCompatActivity {
 
     /**
      * Method for opening the functions hidden behind the three dots in the Toolbar
-     *
      * @param view the view that calls this method
      */
     public void showEditorHiddenFunctions(View view) {
@@ -325,34 +286,42 @@ public class EditorActivity extends AppCompatActivity {
     /**
      * opens or closes the extension list depending on if it was open or closed before the button
      * was pressed. If it was open, it gets closed and vise versa
-     *
      * @param item Has no purpose because there isn't a menu populated with items attached to this
      *             button. It is just there for the compiler.
      */
     public void onAttachmentsPressed(MenuItem item) {
         if (this.extensionsOpen) {
             closeAttachments();
-        } else if(this.note.getAttachmentCount()!=0){
+        } else if (this.note.getAttachmentCount() != 0) {
             openAttachments();
         } else Toast.makeText(
                 this, "Put your attachments here", Toast.LENGTH_SHORT).show();
     }
 
-    public void closeAttachments(){
+    /**
+     * Method for closing the attachment-view
+     */
+    public void closeAttachments() {
         this.extensionsOpen = false;
         findViewById(R.id.action_attachment).setBackgroundColor(Color.TRANSPARENT);
         fileContainer.setVisibility(View.GONE);
     }
 
-    public void openAttachments(){
-        initRecyclerView();
+    /**
+     * Method for opening the attachments-view
+     */
+    public void openAttachments() {
+        initAttachmentsView();
         fileContainer.setVisibility(View.VISIBLE);
         findViewById(R.id.action_attachment).setBackgroundColor(
                 ContextCompat.getColor(this, R.color.slightly_darker_grey));
         this.extensionsOpen = true;
     }
 
-    private void initRecyclerView() {
+    /**
+     * Method for initializing the attachments-view
+     */
+    private void initAttachmentsView() {
         RecyclerView recyclerView = findViewById(R.id.recycler_view_files);
         this.fileHolderAdapter = new FileHolderAdapter(this, this, this.note);
         recyclerView.setAdapter(this.fileHolderAdapter);
