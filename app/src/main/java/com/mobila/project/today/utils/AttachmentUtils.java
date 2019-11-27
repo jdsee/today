@@ -73,7 +73,6 @@ public class AttachmentUtils {
                 return ContextCompat.getDrawable(context, R.drawable.file_format_wma);
             case "application/xml":
                 return ContextCompat.getDrawable(context, R.drawable.file_format_xml);
-
             default:
                 return ContextCompat.getDrawable(context, R.drawable.file_format_unknown);
         }

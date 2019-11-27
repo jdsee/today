@@ -1,4 +1,4 @@
-package com.mobila.project.today.activities.editorActivity;
+package com.mobila.project.today.views.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -14,6 +14,7 @@ import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mobila.project.today.R;
+import com.mobila.project.today.activities.editorActivity.EditorActivity;
 import com.mobila.project.today.modelMock.NoteMock;
 import com.mobila.project.today.utils.AttachmentUtils;
 
@@ -25,7 +26,7 @@ public class FileHolderAdapter extends RecyclerView.Adapter<FileHolderAdapter.Vi
     private Context mContext;
     private EditorActivity activity;
 
-    FileHolderAdapter(EditorActivity activity, Context mContext, NoteMock note) {
+    public FileHolderAdapter(EditorActivity activity, Context mContext, NoteMock note) {
         this.note = note;
         this.mContext = mContext;
         this.activity = activity;

@@ -6,18 +6,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
-import android.text.Spannable;
-import android.text.style.BackgroundColorSpan;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
-import android.text.style.UnderlineSpan;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -38,10 +31,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mobila.project.today.R;
-import com.mobila.project.today.activities.editorActivity.listeners.EditorContentTextChangeListener;
 import com.mobila.project.today.activities.editorActivity.listeners.EditorKeyboardEventListener;
 import com.mobila.project.today.activities.editorActivity.listeners.TitleOnEditorActionListener;
 import com.mobila.project.today.modelMock.NoteMock;
+import com.mobila.project.today.views.adapters.FileHolderAdapter;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 
@@ -54,20 +47,17 @@ import java.util.Objects;
 
 public class EditorActivity extends AppCompatActivity {
     private NoteMock note;
-    private EditText editTextContent;
+    private EditorNoteControl noteEditor;
+
+    private FileHolderAdapter fileHolderAdapter;
+    private View fileContainer;
 
     private boolean keyBoardOpen;
+    private boolean extensionsOpen = false;
 
     private final int REQUEST_TAKE_PHOTO = 1;
     private final int REQUEST_FILE_OPEN = 2;
-
-    private boolean extensionsOpen = false;
-
-    String currentImagePath;
-
-    FileHolderAdapter fileHolderAdapter;
-
-    View fileContainer;
+    private String currentImagePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,10 +94,7 @@ public class EditorActivity extends AppCompatActivity {
             cameraItem.setVisible(false);
         }
         //set textEdit-listener to keep the NoteMock synchronized with the EditText-view
-        this.editTextContent = findViewById(R.id.editor_note);
-        editTextContent.addTextChangedListener(
-                new EditorContentTextChangeListener(this,
-                        this.editTextContent, this.note));
+        this.noteEditor = new EditorNoteControl(this, this.note);
         //set keyboard-eventListener to display either the extension-toolbar or the text-toolbar
         KeyboardVisibilityEvent.setEventListener(
                 this, new EditorKeyboardEventListener(this));
@@ -169,100 +156,11 @@ public class EditorActivity extends AppCompatActivity {
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            //Text-Color Options
-            case R.id.colour_yellow:
-                setStyle(new ForegroundColorSpan(
-                        ContextCompat.getColor(this, R.color.textcolour_yellow)));
-                return true;
-            case R.id.colour_orange:
-                setStyle(new ForegroundColorSpan(
-                        ContextCompat.getColor(this, R.color.textcolour_orange)));
-                return true;
-            case R.id.colour_red:
-                setStyle(new ForegroundColorSpan(
-                        ContextCompat.getColor(this, R.color.textcolour_red)));
-                return true;
-            case R.id.colour_purple:
-                setStyle(new ForegroundColorSpan(
-                        ContextCompat.getColor(this, R.color.textcolour_purple)));
-                return true;
-            case R.id.colour_blue:
-                setStyle(new ForegroundColorSpan(
-                        ContextCompat.getColor(this, R.color.textcolour_blue)));
-                return true;
-            case R.id.colour_green:
-                setStyle(new ForegroundColorSpan(
-                        ContextCompat.getColor(this, R.color.textcolour_green)));
-                return true;
-
-            //Highlighter Options
-            case R.id.highlighter_yellow:
-                setStyle(new BackgroundColorSpan(
-                        ContextCompat.getColor(this, R.color.highlighter_yellow)));
-                return true;
-            case R.id.highlighter_green:
-                setStyle(new BackgroundColorSpan(
-                        ContextCompat.getColor(this, R.color.highlighter_green)));
-                return true;
-            case R.id.highlighter_blue:
-                setStyle(new BackgroundColorSpan(
-                        ContextCompat.getColor(this, R.color.highlighter_blue)));
-                return true;
-            case R.id.highlighter_purple:
-                setStyle(new BackgroundColorSpan(
-                        ContextCompat.getColor(this, R.color.highlighter_purple)));
-                return true;
-            case R.id.highlighter_red:
-                setStyle(new BackgroundColorSpan(
-                        ContextCompat.getColor(this, R.color.highlighter_red)));
-                return true;
-
-            //Style Options
-            case R.id.style_bold:
-                setStyle(new StyleSpan(Typeface.BOLD));
-                return true;
-            case R.id.style_italic:
-                setStyle(new StyleSpan(Typeface.ITALIC));
-                return true;
-            case R.id.style_underlined:
-                setStyle(new UnderlineSpan());
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    /**
-     * Applies given Style onto the selected text
-     *
-     * @param parcelable The style that should be applied
-     */
-    private void setStyle(Parcelable parcelable) {
-        int startSelection = this.editTextContent.getSelectionStart();
-        int endSelection = this.editTextContent.getSelectionEnd();
-        this.note.getContent().setSpan(parcelable, startSelection, endSelection, 0);
-        this.editTextContent.setText(this.note.getContent(), TextView.BufferType.SPANNABLE);
-        //moves cursor to the end of the selection
-        this.editTextContent.setSelection(endSelection);
+        return noteEditor.choseStyle(item);
     }
 
     public void onTabButtonClicked(MenuItem item) {
-        int tabWidth = 150;
-        int startSelection = this.editTextContent.getSelectionStart();
-        int endSelection = this.editTextContent.getSelectionEnd();
-        String tab = "\t";
-        editTextContent.getText().delete(startSelection, endSelection);
-        editTextContent.getText().insert(startSelection, tab);
-        this.note.setContent(editTextContent.getText());
-        this.note.getContent().setSpan(
-                new CustomTabWidthSpan(
-                        Float.valueOf(tabWidth).intValue()),
-                startSelection, startSelection + 1,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        this.editTextContent.setText(this.note.getContent(), TextView.BufferType.SPANNABLE);
-        //moves cursor to the end of the selection
-        this.editTextContent.setSelection(startSelection + 1);
+        this.noteEditor.insertTab();
     }
 
     /**
@@ -318,7 +216,8 @@ public class EditorActivity extends AppCompatActivity {
                     String filename = getFileName(fileUri);
                     File destinationFile;
                     destinationFile =
-                            new File(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), filename);
+                            new File(getExternalFilesDir(
+                                    Environment.DIRECTORY_DOCUMENTS), filename);
                     try {
                         if (sourceFile != null) {
                             Files.copy(sourceFile.toPath(), destinationFile.toPath());
@@ -357,7 +256,8 @@ public class EditorActivity extends AppCompatActivity {
     public String getFileName(Uri uri) {
         String result = null;
         if (Objects.requireNonNull(uri.getScheme()).equals("content")) {
-            try (Cursor cursor = getContentResolver().query(uri, null, null, null, null)) {
+            try (Cursor cursor = getContentResolver()
+                    .query(uri, null, null, null, null)) {
                 if (cursor != null && cursor.moveToFirst()) {
                     result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
                 }
