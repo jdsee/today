@@ -1,4 +1,4 @@
-package com.mobila.project.today.dataModelAccess;
+package com.mobila.project.today.dataAccess;
 
 import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Identifiable;

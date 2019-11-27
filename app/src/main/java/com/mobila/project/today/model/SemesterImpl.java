@@ -1,6 +1,6 @@
 package com.mobila.project.today.model;
 
-import com.mobila.project.today.dataModelAccess.OrganizerDataRep;
+import com.mobila.project.today.dataAccess.OrganizerDataRep;
 
 import java.util.List;
 
