@@ -132,19 +132,6 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <RelativeLayout
-        android:id="@+id/recycler_view_file_holder"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view_files"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/slightly_darker_grey" />
-
-    </RelativeLayout>
+    <include layout="@layout/view_fileholder"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

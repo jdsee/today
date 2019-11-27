@@ -36,7 +36,7 @@ public class FileHolderAdapter extends RecyclerView.Adapter<FileHolderAdapter.Vi
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.layout_file_listitem, parent, false);
+                .inflate(R.layout.listitem_file, parent, false);
         return new ViewHolder(view);
     }
 
