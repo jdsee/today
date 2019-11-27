@@ -44,6 +44,7 @@ import java.util.Objects;
 public class EditorActivity extends AppCompatActivity {
     private NoteMock note;
     private EditorNoteControl noteEditor;
+    private EditorAttachmentControl attachments;
 
     private FileHolderAdapter fileHolderAdapter;
     private View fileContainer;
@@ -51,9 +52,7 @@ public class EditorActivity extends AppCompatActivity {
     private boolean keyBoardOpen;
     private boolean extensionsOpen = false;
 
-    private final int REQUEST_TAKE_PHOTO = 1;
-    private final int REQUEST_FILE_OPEN = 2;
-    private String currentImagePath;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +90,7 @@ public class EditorActivity extends AppCompatActivity {
         }
         //set textEdit-listener to keep the NoteMock synchronized with the EditText-view
         this.noteEditor = new EditorNoteControl(this, this.note);
+        this.attachments = new EditorAttachmentControl(this, note, fileHolderAdapter);
         //set keyboard-eventListener to display either the extension-toolbar or the text-toolbar
         KeyboardVisibilityEvent.setEventListener(
                 this, new EditorKeyboardEventListener(this));
@@ -170,19 +170,7 @@ public class EditorActivity extends AppCompatActivity {
      * @param item The item which was pressed
      */
     public void onTakePhotoPickerPressed(MenuItem item) {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        //ensuring there is a camera on the device
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            //Create File for photo
-            File photoFile = AttachmentUtils.createImageFile(this);
-            this.currentImagePath = photoFile.getAbsolutePath();
-            //check if file was created
-            Uri photoURI = FileProvider.getUriForFile(this,
-                    "com.mobila.project.today.fileprovider", photoFile);
-            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-            startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-
-        }
+        attachments.takePicture();
     }
 
     /**
@@ -190,59 +178,14 @@ public class EditorActivity extends AppCompatActivity {
      * @param item has no function other than being there as default for menus root
      */
     public void onFilePickerPressed(MenuItem item) {
-        Intent openFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
-        openFileIntent.setType("*/*");
-        openFileIntent.addCategory(Intent.CATEGORY_OPENABLE);
-        startActivityForResult(openFileIntent, REQUEST_FILE_OPEN);
+        attachments.openFile();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //TODO Needs to avoid content provider all together after SQL db is established to make content provider obsolete
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            if (requestCode == REQUEST_TAKE_PHOTO && currentImagePath != null) {
-                File file = new File(currentImagePath);
-                this.note.addAttachment(file);
-                Toast.makeText(getApplicationContext(),
-                        "Image Saved", Toast.LENGTH_LONG).show();
-                if (fileHolderAdapter != null) {
-                    fileHolderAdapter.notifyDataSetChanged();
-                }
-                this.currentImagePath = null;
-            } else if (requestCode == REQUEST_FILE_OPEN && data != null) {
-                Uri fileUri = data.getData();
-                if (fileUri != null) {
-                    String sourceString = fileUri.getPath();
-                    File sourceFile = null;
-                    if (sourceString != null) {
-                        sourceFile = new File(sourceString);
-                    }
-                    String filename = AttachmentUtils.getFileName(this, fileUri);
-                    File destinationFile;
-                    destinationFile =
-                            new File(getExternalFilesDir(
-                                    Environment.DIRECTORY_DOCUMENTS), filename);
-                    try {
-                        if (sourceFile != null) {
-                            Files.copy(sourceFile.toPath(), destinationFile.toPath());
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    Toast.makeText(getApplicationContext(),
-                            "File Saved", Toast.LENGTH_LONG).show();
-                    this.note.addAttachment(destinationFile);
-                    if (fileHolderAdapter != null) {
-                        fileHolderAdapter.notifyDataSetChanged();
-                    }
-                } else Toast.makeText(getApplicationContext(),
-                        "File was lost", Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(getApplicationContext(),
-                        "Nothing was saved", Toast.LENGTH_LONG).show();
-            }
-        }
+        attachments.onActivityResult(requestCode, resultCode, data);
     }
 
     /**
