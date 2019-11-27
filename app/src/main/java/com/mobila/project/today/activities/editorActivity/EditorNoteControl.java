@@ -20,13 +20,14 @@ import com.mobila.project.today.modelMock.NoteMock;
 import com.mobila.project.today.utils.CustomTabWidthSpan;
 
 class EditorNoteControl {
-    private AppCompatActivity context;
+
+    private AppCompatActivity activity;
     private NoteMock note;
     private EditText editorContent;
 
-    EditorNoteControl(AppCompatActivity context, NoteMock note){
-        this.context=context;
-        this.editorContent = context.findViewById(R.id.editor_note);
+    EditorNoteControl(AppCompatActivity activity, NoteMock note){
+        this.activity=activity;
+        this.editorContent = activity.findViewById(R.id.editor_note);
         this.note=note;
         editorContent.addTextChangedListener(
                 new EditorContentTextChangeListener(this,
@@ -43,49 +44,49 @@ class EditorNoteControl {
             //Text-Color Options
             case R.id.colour_yellow:
                 setStyle(new ForegroundColorSpan(
-                        ContextCompat.getColor(context, R.color.textcolour_yellow)));
+                        ContextCompat.getColor(activity, R.color.textcolour_yellow)));
                 return true;
             case R.id.colour_orange:
                 setStyle(new ForegroundColorSpan(
-                        ContextCompat.getColor(context, R.color.textcolour_orange)));
+                        ContextCompat.getColor(activity, R.color.textcolour_orange)));
                 return true;
             case R.id.colour_red:
                 setStyle(new ForegroundColorSpan(
-                        ContextCompat.getColor(context, R.color.textcolour_red)));
+                        ContextCompat.getColor(activity, R.color.textcolour_red)));
                 return true;
             case R.id.colour_purple:
                 setStyle(new ForegroundColorSpan(
-                        ContextCompat.getColor(context, R.color.textcolour_purple)));
+                        ContextCompat.getColor(activity, R.color.textcolour_purple)));
                 return true;
             case R.id.colour_blue:
                 setStyle(new ForegroundColorSpan(
-                        ContextCompat.getColor(context, R.color.textcolour_blue)));
+                        ContextCompat.getColor(activity, R.color.textcolour_blue)));
                 return true;
             case R.id.colour_green:
                 setStyle(new ForegroundColorSpan(
-                        ContextCompat.getColor(context, R.color.textcolour_green)));
+                        ContextCompat.getColor(activity, R.color.textcolour_green)));
                 return true;
 
             //Highlighter Options
             case R.id.highlighter_yellow:
                 setStyle(new BackgroundColorSpan(
-                        ContextCompat.getColor(context, R.color.highlighter_yellow)));
+                        ContextCompat.getColor(activity, R.color.highlighter_yellow)));
                 return true;
             case R.id.highlighter_green:
                 setStyle(new BackgroundColorSpan(
-                        ContextCompat.getColor(context, R.color.highlighter_green)));
+                        ContextCompat.getColor(activity, R.color.highlighter_green)));
                 return true;
             case R.id.highlighter_blue:
                 setStyle(new BackgroundColorSpan(
-                        ContextCompat.getColor(context, R.color.highlighter_blue)));
+                        ContextCompat.getColor(activity, R.color.highlighter_blue)));
                 return true;
             case R.id.highlighter_purple:
                 setStyle(new BackgroundColorSpan(
-                        ContextCompat.getColor(context, R.color.highlighter_purple)));
+                        ContextCompat.getColor(activity, R.color.highlighter_purple)));
                 return true;
             case R.id.highlighter_red:
                 setStyle(new BackgroundColorSpan(
-                        ContextCompat.getColor(context, R.color.highlighter_red)));
+                        ContextCompat.getColor(activity, R.color.highlighter_red)));
                 return true;
 
             //Style Options

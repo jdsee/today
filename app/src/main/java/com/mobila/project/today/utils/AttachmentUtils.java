@@ -2,6 +2,7 @@ package com.mobila.project.today.utils;
 
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -55,7 +56,7 @@ public class AttachmentUtils {
      * @param file the file in question
      * @return the Mime-Type of the file
      */
-    public static String getMimeType(AppCompatActivity context, File file) {
+    public static String getMimeType(Context context, File file) {
         Uri uri = Uri.fromFile(file);
         String mimeType;
         if (Objects.requireNonNull(uri.getScheme()).equals(ContentResolver.SCHEME_CONTENT)) {
@@ -76,7 +77,7 @@ public class AttachmentUtils {
      * @param mimeType the Mime-Type of the file in question
      * @return a Drawable containing a symbolic icon
      */
-    public static Drawable getDrawable(AppCompatActivity context, String mimeType) {
+    public static Drawable getDrawable(Context context, String mimeType) {
         switch (mimeType) {
             case "application/pdf":
                 return ContextCompat.getDrawable(context, R.drawable.file_format_pdf);
@@ -129,7 +130,7 @@ public class AttachmentUtils {
      * @param file the file for which the icon is searched for
      * @return a symbolic icon
      */
-    public static Drawable getDrawable(AppCompatActivity context, File file) {
+    public static Drawable getDrawable(Context context, File file) {
         String mimeType = getMimeType(context, file);
         return getDrawable(context, mimeType);
     }

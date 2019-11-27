@@ -20,7 +20,8 @@ import java.nio.file.Files;
 import static android.app.Activity.RESULT_OK;
 
 class EditorAttachmentControl {
-    private AppCompatActivity context;
+
+    private AppCompatActivity activity;
     private NoteMock note;
     private FileHolderAdapter adapter;
 
@@ -29,8 +30,8 @@ class EditorAttachmentControl {
 
     private String currentImagePath;
 
-    EditorAttachmentControl(AppCompatActivity context, NoteMock note, FileHolderAdapter adapter) {
-        this.context = context;
+    EditorAttachmentControl(AppCompatActivity activity, NoteMock note, FileHolderAdapter adapter) {
+        this.activity = activity;
         this.note = note;
         this.adapter = adapter;
     }
@@ -41,15 +42,15 @@ class EditorAttachmentControl {
     void takePicture() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         //ensuring there is a camera on the device
-        if (takePictureIntent.resolveActivity(context.getPackageManager()) != null) {
+        if (takePictureIntent.resolveActivity(activity.getPackageManager()) != null) {
             //Create File for photo
-            File photoFile = AttachmentUtils.createImageFile(context);
+            File photoFile = AttachmentUtils.createImageFile(activity);
             this.currentImagePath=photoFile.getAbsolutePath();
             //check if file was created
-            Uri photoURI = FileProvider.getUriForFile(context,
+            Uri photoURI = FileProvider.getUriForFile(activity,
                     "com.mobila.project.today.fileprovider", photoFile);
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-            context.startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+            activity.startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
         }
     }
 
@@ -60,7 +61,7 @@ class EditorAttachmentControl {
         Intent openFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
         openFileIntent.setType("*/*");
         openFileIntent.addCategory(Intent.CATEGORY_OPENABLE);
-        context.startActivityForResult(openFileIntent, REQUEST_FILE_OPEN);
+        activity.startActivityForResult(openFileIntent, REQUEST_FILE_OPEN);
     }
 
     /**
@@ -74,7 +75,7 @@ class EditorAttachmentControl {
             if (requestCode == REQUEST_TAKE_PHOTO && currentImagePath != null) {
                 File file = new File(currentImagePath);
                 this.note.addAttachment(file);
-                Toast.makeText(context.getApplicationContext(),
+                Toast.makeText(activity.getApplicationContext(),
                         "Image Saved", Toast.LENGTH_LONG).show();
                 if (adapter != null) {
                     adapter.notifyDataSetChanged();
@@ -88,10 +89,10 @@ class EditorAttachmentControl {
                     if (sourceString != null) {
                         sourceFile = new File(sourceString);
                     }
-                    String filename = AttachmentUtils.getFileName(context, fileUri);
+                    String filename = AttachmentUtils.getFileName(activity, fileUri);
                     File destinationFile;
                     destinationFile =
-                            new File(context.getExternalFilesDir(
+                            new File(activity.getExternalFilesDir(
                                     Environment.DIRECTORY_DOCUMENTS), filename);
                     try {
                         if (sourceFile != null) {
@@ -100,16 +101,16 @@ class EditorAttachmentControl {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    Toast.makeText(context.getApplicationContext(),
+                    Toast.makeText(activity.getApplicationContext(),
                             "File Saved", Toast.LENGTH_LONG).show();
                     this.note.addAttachment(destinationFile);
                     if (adapter != null) {
                         adapter.notifyDataSetChanged();
                     }
-                } else Toast.makeText(context.getApplicationContext(),
+                } else Toast.makeText(activity.getApplicationContext(),
                         "File was lost", Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(context.getApplicationContext(),
+                Toast.makeText(activity.getApplicationContext(),
                         "Nothing was saved", Toast.LENGTH_LONG).show();
             }
         }

@@ -14,7 +14,6 @@ import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mobila.project.today.R;
-import com.mobila.project.today.activities.editorActivity.EditorActivity;
 import com.mobila.project.today.modelMock.NoteMock;
 import com.mobila.project.today.utils.AttachmentUtils;
 
@@ -23,13 +22,11 @@ import java.io.File;
 public class FileHolderAdapter extends RecyclerView.Adapter<FileHolderAdapter.ViewHolder> {
 
     private NoteMock note;
-    private Context mContext;
-    private EditorActivity activity;
+    private Context context;
 
-    public FileHolderAdapter(EditorActivity activity, Context mContext, NoteMock note) {
+    public FileHolderAdapter(Context context, NoteMock note) {
         this.note = note;
-        this.mContext = mContext;
-        this.activity = activity;
+        this.context = context;
     }
 
     @NonNull
@@ -45,23 +42,16 @@ public class FileHolderAdapter extends RecyclerView.Adapter<FileHolderAdapter.Vi
         final File attachment = note.getAttachment(position);
         //Set name and icon of file
         holder.fileName.setText(attachment.getName());
-        holder.fileImage.setImageDrawable(AttachmentUtils.getDrawable(activity, attachment));
+        holder.fileImage.setImageDrawable(AttachmentUtils.getDrawable(context, attachment));
         //setClickListener for List Item
-        holder.fileHolder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(mContext, AttachmentUtils.getMimeType(activity, attachment),
-                        Toast.LENGTH_LONG).show();
-                AttachmentUtils.openFile(note.getAttachment(position));
-            }
+        holder.fileHolder.setOnClickListener(v -> {
+            Toast.makeText(context, AttachmentUtils.getMimeType(context, attachment),
+                    Toast.LENGTH_LONG).show();
+            AttachmentUtils.openFile(note.getAttachment(position));
         });
-        holder.button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                note.removeAttachment(position);
-                notifyDataSetChanged();
-                if (note.getAttachmentCount()==0) activity.closeAttachments();
-            }
+        holder.button.setOnClickListener(v -> {
+            note.removeAttachment(position);
+            notifyDataSetChanged();
         });
     }
 

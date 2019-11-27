@@ -2,26 +2,28 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="76dp"
+    android:background="@color/lightGrey"
     android:orientation="vertical"
     android:padding="4dp"
-    android:background="@color/lightGrey">
+    android:paddingStart="12dp"
+    android:paddingEnd="12dp">
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/course_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Mobile Anwendungen"
         android:textSize="30sp" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/professor_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView4"
+        android:layout_below="@+id/course_name"
         android:text="Prof. Dr.-Ing. Thomas Schwotzer" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/room_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"

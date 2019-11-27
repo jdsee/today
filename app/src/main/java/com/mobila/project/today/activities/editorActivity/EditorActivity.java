@@ -44,7 +44,6 @@ public class EditorActivity extends AppCompatActivity {
     private boolean keyBoardOpen;
     private boolean extensionsOpen = false;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //Slide-in Animation
@@ -100,7 +99,6 @@ public class EditorActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setTitle("");
     }
 
-
     /**
      * Method for setting the state of the keyboard
      *
@@ -148,7 +146,6 @@ public class EditorActivity extends AppCompatActivity {
         //sliding animation to the left out of the activity
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
-
 
     /**
      * Is invoked by pressing the Colour-Symbol in the lower menu.
@@ -276,7 +273,7 @@ public class EditorActivity extends AppCompatActivity {
      */
     private void initAttachmentsView() {
         RecyclerView recyclerView = findViewById(R.id.recycler_view_files);
-        this.fileHolderAdapter = new FileHolderAdapter(this, this, this.note);
+        this.fileHolderAdapter = new FileHolderAdapter( this, this.note);
         recyclerView.setAdapter(this.fileHolderAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
