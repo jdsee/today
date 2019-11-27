@@ -18,6 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".activities.TodayActivity"></activity>
         <activity android:name=".activities.dataStructureView.CourseListActivity" />
         <activity
             android:name=".activities.MainActivity"
@@ -37,6 +38,7 @@
             android:windowSoftInputMode="stateVisible|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:scheme="file" />
@@ -72,9 +74,7 @@
                 <data android:scheme="file" />
                 <data android:scheme="content" />
                 <data android:mimeType="*/*" />
-                <!--
-                    Work around for opening files
-                -->
+                <!--                     Work around for opening files -->
                 <data android:host="*" />
                 <data android:pathPattern=".*\\.today" />
                 <data android:pathPattern=".*\\..*\\.today" />

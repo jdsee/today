@@ -65,10 +65,10 @@ public class EditorActivity extends AppCompatActivity {
         setTheme(R.style.Theme_MaterialComponents_Light_NoActionBar_Bridge);
         getWindow().setNavigationBarColor(Color.GRAY);
         setContentView(R.layout.activity_editor);
-        setSupportActionBar((Toolbar) findViewById(R.id.editor_toolbar));
+        setSupportActionBar(findViewById(R.id.editor_toolbar));
         FloatingActionButton actionButton = findViewById(R.id.button_note);
         actionButton.setCompatElevation(0);
-        setSupportActionBar((BottomAppBar) findViewById(R.id.bottom_app_bar));
+        setSupportActionBar(findViewById(R.id.bottom_app_bar));
         fileContainer = findViewById(R.id.recycler_view_file_holder);
     }
 
