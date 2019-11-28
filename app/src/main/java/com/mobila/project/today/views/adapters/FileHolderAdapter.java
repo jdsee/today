@@ -1,4 +1,4 @@
-package com.mobila.project.today.activities.editorActivity;
+package com.mobila.project.today.views.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -22,20 +22,18 @@ import java.io.File;
 public class FileHolderAdapter extends RecyclerView.Adapter<FileHolderAdapter.ViewHolder> {
 
     private NoteMock note;
-    private Context mContext;
-    private EditorActivity activity;
+    private Context context;
 
-    FileHolderAdapter(EditorActivity activity, Context mContext, NoteMock note) {
+    public FileHolderAdapter(Context context, NoteMock note) {
         this.note = note;
-        this.mContext = mContext;
-        this.activity = activity;
+        this.context = context;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.layout_file_listitem, parent, false);
+                .inflate(R.layout.listitem_file, parent, false);
         return new ViewHolder(view);
     }
 
@@ -44,23 +42,16 @@ public class FileHolderAdapter extends RecyclerView.Adapter<FileHolderAdapter.Vi
         final File attachment = note.getAttachment(position);
         //Set name and icon of file
         holder.fileName.setText(attachment.getName());
-        holder.fileImage.setImageDrawable(AttachmentUtils.getDrawable(activity, attachment));
+        holder.fileImage.setImageDrawable(AttachmentUtils.getDrawable(context, attachment));
         //setClickListener for List Item
-        holder.fileHolder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(mContext, AttachmentUtils.getMimeType(activity, attachment),
-                        Toast.LENGTH_LONG).show();
-                activity.openFile(note.getAttachment(position));
-            }
+        holder.fileHolder.setOnClickListener(v -> {
+            Toast.makeText(context, AttachmentUtils.getMimeType(context, attachment),
+                    Toast.LENGTH_LONG).show();
+            AttachmentUtils.openFile(note.getAttachment(position));
         });
-        holder.button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                note.removeAttachment(position);
-                notifyDataSetChanged();
-                if (note.getAttachmentCount()==0) activity.closeAttachments();
-            }
+        holder.button.setOnClickListener(v -> {
+            note.removeAttachment(position);
+            notifyDataSetChanged();
         });
     }
 

@@ -1,13 +1,13 @@
-package com.mobila.project.today.activities.editorActivity;
+package com.mobila.project.today.utils;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.text.style.ReplacementSpan;
 
-class CustomTabWidthSpan extends ReplacementSpan {
+public class CustomTabWidthSpan extends ReplacementSpan {
 
     private int tabWidth;
-    CustomTabWidthSpan(int tabWidth){
+    public CustomTabWidthSpan(int tabWidth){
         this.tabWidth=tabWidth;
     }
     @Override

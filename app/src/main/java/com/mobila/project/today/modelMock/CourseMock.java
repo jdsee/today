@@ -6,6 +6,7 @@ public class CourseMock {
     private int id;
     private String name;
     private String lecturer;
+    private String room;
     private List<TaskMock> tasks;
     private List<SectionMock> sections;
 
@@ -15,6 +16,13 @@ public class CourseMock {
         this.lecturer = lecturer;
         this.tasks = tasks;
         this.sections = sections;
+    }
+
+    public CourseMock(int id, String name, String lecturer, String room) {
+        this.id = id;
+        this.name = name;
+        this.lecturer = lecturer;
+        this.room = room;
     }
 
     public int getId() {
@@ -55,5 +63,13 @@ public class CourseMock {
 
     public void setSections(List<SectionMock> sections) {
         this.sections = sections;
+    }
+
+    public String getRoom() {
+        return room;
+    }
+
+    public void setRoom(String room) {
+        this.room = room;
     }
 }

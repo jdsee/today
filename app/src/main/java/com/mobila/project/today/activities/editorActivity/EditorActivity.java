@@ -1,23 +1,10 @@
 package com.mobila.project.today.activities.editorActivity;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Color;
-import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Parcelable;
-import android.provider.MediaStore;
-import android.provider.OpenableColumns;
-import android.text.Spannable;
-import android.text.style.BackgroundColorSpan;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
-import android.text.style.UnderlineSpan;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -31,43 +18,31 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mobila.project.today.R;
-import com.mobila.project.today.activities.editorActivity.listeners.EditorContentTextChangeListener;
 import com.mobila.project.today.activities.editorActivity.listeners.EditorKeyboardEventListener;
 import com.mobila.project.today.activities.editorActivity.listeners.TitleOnEditorActionListener;
 import com.mobila.project.today.modelMock.NoteMock;
+import com.mobila.project.today.views.adapters.FileHolderAdapter;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Objects;
 
 public class EditorActivity extends AppCompatActivity {
     private NoteMock note;
-    private EditText editTextContent;
+    private EditorNoteControl noteEditor;
+    private EditorAttachmentControl attachments;
+
+    private FileHolderAdapter fileHolderAdapter;
+    private View fileContainer;
 
     private boolean keyBoardOpen;
-
-    private final int REQUEST_TAKE_PHOTO = 1;
-    private final int REQUEST_FILE_OPEN = 2;
-
     private boolean extensionsOpen = false;
-
-    String currentImagePath;
-
-    FileHolderAdapter fileHolderAdapter;
-
-    View fileContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,47 +51,59 @@ public class EditorActivity extends AppCompatActivity {
         //set view
         super.onCreate(savedInstanceState);
         //get Note from Intent
-        Intent intent = getIntent();
-        this.note = intent.getParcelableExtra(NoteMock.INTENT_EXTRA_CODE);
-        //set Theme with grey Navigation-Bar
+        this.note = getIntent().getParcelableExtra(NoteMock.INTENT_EXTRA_CODE);
+
+        setupViews();
+        hideCameraIfNotAvailable();
+        setupContent();
+        setupListeners();
+        setupControls();
+    }
+
+    private void setupViews() {
         setTheme(R.style.Theme_MaterialComponents_Light_NoActionBar_Bridge);
         getWindow().setNavigationBarColor(Color.GRAY);
         setContentView(R.layout.activity_editor);
-        Toolbar bar = findViewById(R.id.editor_toolbar);
-        setSupportActionBar(bar);
-        //sets preset Title
-        EditText headline = findViewById(R.id.editor_title);
-        headline.setHint(note.getEvent());
-        //Sets Action-Listener on "next-button" of keyboard inside the TitleEditText to move the
-        //focus to the NoteEditText if pressed
-        headline.setOnEditorActionListener(new TitleOnEditorActionListener(this));
-        //Set subtitle to appropriate content of the note
-        TextView textView = findViewById(R.id.editor_subtitle);
-        textView.setText(
-                String.format(
-                        "%s  -  %s %s", note.getDate(), note.getCourse(), note.getCategory()));
-        BottomAppBar bottomAppBar = findViewById(R.id.bottom_app_bar);
-        setSupportActionBar(bottomAppBar);
-        Objects.requireNonNull(getSupportActionBar()).setTitle("");
-        //checks if device has camera. If not the "take-photo" item gets hidden
+        setSupportActionBar(findViewById(R.id.editor_toolbar));
+        FloatingActionButton actionButton = findViewById(R.id.button_note);
+        actionButton.setCompatElevation(0);
+        setSupportActionBar(findViewById(R.id.bottom_app_bar));
+        fileContainer = findViewById(R.id.recycler_view_file_holder);
+    }
+
+    private void hideCameraIfNotAvailable() {
         if (!deviceHasCamera()) {
             MenuItem cameraItem = findViewById(R.id.action_take_photo);
             cameraItem.setVisible(false);
         }
-        //set textEdit-listener to keep the NoteMock synchronized with the EditText-view
-        this.editTextContent = findViewById(R.id.editor_note);
-        editTextContent.addTextChangedListener(
-                new EditorContentTextChangeListener(this,
-                        this.editTextContent, this.note));
-        //set keyboard-eventListener to display either the extension-toolbar or the text-toolbar
-        KeyboardVisibilityEvent.setEventListener(
-                this, new EditorKeyboardEventListener(this));
-        //Remove elevation from note-button
-        FloatingActionButton actionButton = findViewById(R.id.button_note);
-        actionButton.setCompatElevation(0);
-        fileContainer = findViewById(R.id.recycler_view_file_holder);
     }
 
+    private void setupControls() {
+        this.noteEditor = new EditorNoteControl(this, this.note);
+        this.attachments = new EditorAttachmentControl(this, note, fileHolderAdapter);
+    }
+
+    private void setupListeners() {
+        EditText headline = findViewById(R.id.editor_title);
+        headline.setOnEditorActionListener(new TitleOnEditorActionListener(this));
+        KeyboardVisibilityEvent.setEventListener(
+                this, new EditorKeyboardEventListener(this));
+    }
+
+    private void setupContent() {
+        EditText headline = findViewById(R.id.editor_title);
+        headline.setHint(note.getEvent());
+        TextView textView = findViewById(R.id.editor_subtitle);
+        textView.setText(String.format(
+                "%s  -  %s %s", note.getDate(), note.getCourse(), note.getCategory()));
+        Objects.requireNonNull(getSupportActionBar()).setTitle("");
+    }
+
+    /**
+     * Method for setting the state of the keyboard
+     *
+     * @param keyBoardOpen Defines if the keyboard is open or closed
+     */
     public void setKeyboardOpen(Boolean keyBoardOpen) {
         this.keyBoardOpen = keyBoardOpen;
     }
@@ -160,7 +147,6 @@ public class EditorActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
-
     /**
      * Is invoked by pressing the Colour-Symbol in the lower menu.
      * It sets the colour of the selected text
@@ -169,100 +155,16 @@ public class EditorActivity extends AppCompatActivity {
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            //Text-Color Options
-            case R.id.colour_yellow:
-                setStyle(new ForegroundColorSpan(
-                        ContextCompat.getColor(this, R.color.textcolour_yellow)));
-                return true;
-            case R.id.colour_orange:
-                setStyle(new ForegroundColorSpan(
-                        ContextCompat.getColor(this, R.color.textcolour_orange)));
-                return true;
-            case R.id.colour_red:
-                setStyle(new ForegroundColorSpan(
-                        ContextCompat.getColor(this, R.color.textcolour_red)));
-                return true;
-            case R.id.colour_purple:
-                setStyle(new ForegroundColorSpan(
-                        ContextCompat.getColor(this, R.color.textcolour_purple)));
-                return true;
-            case R.id.colour_blue:
-                setStyle(new ForegroundColorSpan(
-                        ContextCompat.getColor(this, R.color.textcolour_blue)));
-                return true;
-            case R.id.colour_green:
-                setStyle(new ForegroundColorSpan(
-                        ContextCompat.getColor(this, R.color.textcolour_green)));
-                return true;
-
-            //Highlighter Options
-            case R.id.highlighter_yellow:
-                setStyle(new BackgroundColorSpan(
-                        ContextCompat.getColor(this, R.color.highlighter_yellow)));
-                return true;
-            case R.id.highlighter_green:
-                setStyle(new BackgroundColorSpan(
-                        ContextCompat.getColor(this, R.color.highlighter_green)));
-                return true;
-            case R.id.highlighter_blue:
-                setStyle(new BackgroundColorSpan(
-                        ContextCompat.getColor(this, R.color.highlighter_blue)));
-                return true;
-            case R.id.highlighter_purple:
-                setStyle(new BackgroundColorSpan(
-                        ContextCompat.getColor(this, R.color.highlighter_purple)));
-                return true;
-            case R.id.highlighter_red:
-                setStyle(new BackgroundColorSpan(
-                        ContextCompat.getColor(this, R.color.highlighter_red)));
-                return true;
-
-            //Style Options
-            case R.id.style_bold:
-                setStyle(new StyleSpan(Typeface.BOLD));
-                return true;
-            case R.id.style_italic:
-                setStyle(new StyleSpan(Typeface.ITALIC));
-                return true;
-            case R.id.style_underlined:
-                setStyle(new UnderlineSpan());
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+        return noteEditor.choseStyle(item);
     }
 
     /**
-     * Applies given Style onto the selected text
+     * Method for inserting a Tab in the note-content
      *
-     * @param parcelable The style that should be applied
+     * @param item has no function other than being there as default for menus root
      */
-    private void setStyle(Parcelable parcelable) {
-        int startSelection = this.editTextContent.getSelectionStart();
-        int endSelection = this.editTextContent.getSelectionEnd();
-        this.note.getContent().setSpan(parcelable, startSelection, endSelection, 0);
-        this.editTextContent.setText(this.note.getContent(), TextView.BufferType.SPANNABLE);
-        //moves cursor to the end of the selection
-        this.editTextContent.setSelection(endSelection);
-    }
-
     public void onTabButtonClicked(MenuItem item) {
-        int tabWidth = 150;
-        int startSelection = this.editTextContent.getSelectionStart();
-        int endSelection = this.editTextContent.getSelectionEnd();
-        String tab = "\t";
-        editTextContent.getText().delete(startSelection, endSelection);
-        editTextContent.getText().insert(startSelection, tab);
-        this.note.setContent(editTextContent.getText());
-        this.note.getContent().setSpan(
-                new CustomTabWidthSpan(
-                        Float.valueOf(tabWidth).intValue()),
-                startSelection, startSelection + 1,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        this.editTextContent.setText(this.note.getContent(), TextView.BufferType.SPANNABLE);
-        //moves cursor to the end of the selection
-        this.editTextContent.setSelection(startSelection + 1);
+        this.noteEditor.insertTab();
     }
 
     /**
@@ -271,116 +173,24 @@ public class EditorActivity extends AppCompatActivity {
      * @param item The item which was pressed
      */
     public void onTakePhotoPickerPressed(MenuItem item) {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        //ensuring there is a camera on the device
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            //Create File for photo
-            File photoFile = createImageFile();
-            //check if file was created
-            if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(this,
-                        "com.mobila.project.today.fileprovider", photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-            }
-        }
+        attachments.takePicture();
     }
 
+    /**
+     * Method for importing a file into a note
+     *
+     * @param item has no function other than being there as default for menus root
+     */
     public void onFilePickerPressed(MenuItem item) {
-        Intent openFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
-        openFileIntent.setType("*/*");
-        openFileIntent.addCategory(Intent.CATEGORY_OPENABLE);
-        startActivityForResult(openFileIntent, REQUEST_FILE_OPEN);
+        attachments.importFile();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //TODO Needs to avoid content provider all together after SQL db is established to make content provider obsolete
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            if (requestCode == REQUEST_TAKE_PHOTO && currentImagePath != null) {
-                File file = new File(currentImagePath);
-                this.note.addAttachment(file);
-                Toast.makeText(getApplicationContext(),
-                        "Image Saved", Toast.LENGTH_LONG).show();
-                if (fileHolderAdapter != null) {
-                    fileHolderAdapter.notifyDataSetChanged();
-                }
-                this.currentImagePath = null;
-            } else if (requestCode == REQUEST_FILE_OPEN && data != null) {
-                Uri fileUri = data.getData();
-                if (fileUri != null) {
-                    String sourceString = fileUri.getPath();
-                    File sourceFile = null;
-                    if (sourceString != null) {
-                        sourceFile = new File(sourceString);
-                    }
-                    String filename = getFileName(fileUri);
-                    File destinationFile;
-                    destinationFile =
-                            new File(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), filename);
-                    try {
-                        if (sourceFile != null) {
-                            Files.copy(sourceFile.toPath(), destinationFile.toPath());
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    Toast.makeText(getApplicationContext(),
-                            "File Saved", Toast.LENGTH_LONG).show();
-                    this.note.addAttachment(destinationFile);
-                    if (fileHolderAdapter != null) {
-                        fileHolderAdapter.notifyDataSetChanged();
-                    }
-                } else Toast.makeText(getApplicationContext(),
-                        "File was lost", Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(getApplicationContext(),
-                        "Nothing was saved", Toast.LENGTH_LONG).show();
-            }
-        }
+        attachments.onActivityResult(requestCode, resultCode, data);
     }
-
-    private File createImageFile() {
-        //File creation
-        @SuppressLint("SimpleDateFormat")
-        String timeStamp = new SimpleDateFormat(
-                getString(R.string.date_format)).format(new Date());
-        String imageFileName = "IMAGE_" + timeStamp;
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = new File(storageDir, imageFileName + ".jpg");
-        //save file Path for other intents
-        this.currentImagePath = image.getAbsolutePath();
-        return image;
-    }
-
-    public String getFileName(Uri uri) {
-        String result = null;
-        if (Objects.requireNonNull(uri.getScheme()).equals("content")) {
-            try (Cursor cursor = getContentResolver().query(uri, null, null, null, null)) {
-                if (cursor != null && cursor.moveToFirst()) {
-                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
-                }
-            }
-        }
-        if (result == null) {
-            result = uri.getPath();
-            assert result != null;
-            int cut = result.lastIndexOf('/');
-            if (cut != -1) {
-                result = result.substring(cut + 1);
-            }
-        }
-        return result;
-    }
-
-    public void openFile(File file){
-        //TODO after Establishing SQLite Database
-//        Intent intent = new Intent(Intent.ACTION_VIEW);
-//        intent.setDataAndType(Uri.fromFile(file), "*/*");
-//        startActivity(intent);
-    }
-
 
     /**
      * Method for detecting if the device on which the application is installed has a camera
@@ -432,29 +242,38 @@ public class EditorActivity extends AppCompatActivity {
     public void onAttachmentsPressed(MenuItem item) {
         if (this.extensionsOpen) {
             closeAttachments();
-        } else if(this.note.getAttachmentCount()!=0){
+        } else if (this.note.getAttachmentCount() != 0) {
             openAttachments();
         } else Toast.makeText(
                 this, "Put your attachments here", Toast.LENGTH_SHORT).show();
     }
 
-    public void closeAttachments(){
+    /**
+     * Method for closing the attachment-view
+     */
+    public void closeAttachments() {
         this.extensionsOpen = false;
         findViewById(R.id.action_attachment).setBackgroundColor(Color.TRANSPARENT);
         fileContainer.setVisibility(View.GONE);
     }
 
-    public void openAttachments(){
-        initRecyclerView();
+    /**
+     * Method for opening the attachments-view
+     */
+    public void openAttachments() {
+        initAttachmentsView();
         fileContainer.setVisibility(View.VISIBLE);
         findViewById(R.id.action_attachment).setBackgroundColor(
                 ContextCompat.getColor(this, R.color.slightly_darker_grey));
         this.extensionsOpen = true;
     }
 
-    private void initRecyclerView() {
+    /**
+     * Method for initializing the attachments-view
+     */
+    private void initAttachmentsView() {
         RecyclerView recyclerView = findViewById(R.id.recycler_view_files);
-        this.fileHolderAdapter = new FileHolderAdapter(this, this, this.note);
+        this.fileHolderAdapter = new FileHolderAdapter( this, this.note);
         recyclerView.setAdapter(this.fileHolderAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
