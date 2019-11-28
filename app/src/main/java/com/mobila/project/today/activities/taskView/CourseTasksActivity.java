@@ -45,6 +45,6 @@ public class CourseTasksActivity extends AppCompatActivity {
 
     public void onAddTaskClicked(View view) {
         tasks.add(createExampleTask());
-        adapter.notifyDataSetChanged();
+        this.adapter.notifyDataSetChanged();
     }
 }

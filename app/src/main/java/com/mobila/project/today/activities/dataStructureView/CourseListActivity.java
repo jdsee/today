@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.View;
 
 import com.mobila.project.today.R;
 import com.mobila.project.today.modelMock.CourseMock;
@@ -14,7 +15,7 @@ import com.mobila.project.today.modelMock.TaskMock;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CourseListActivity extends AppCompatActivity implements CourseAdapter.ItemClicked {
+public class CourseListActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     RecyclerView.Adapter adapter;
     RecyclerView.LayoutManager layoutManager;
@@ -48,8 +49,8 @@ public class CourseListActivity extends AppCompatActivity implements CourseAdapt
         return new CourseMock(id, name, lecturer, tasks, sections);
     }
 
-    @Override
-    public void onItemClicked(int index) {
-        //TODO expand course here
+    public void onAddCourseClicked(View view) {
+        courses.add(createExampleCourse(5, "mobila", "Prof. Schowtzer"));
+        this.adapter.notifyDataSetChanged();
     }
 }

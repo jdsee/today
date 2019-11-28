@@ -16,15 +16,10 @@ import java.util.List;
 
 public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder> {
     private List<CourseMock> courses;
-    private ItemClicked activity;
-
-    public interface ItemClicked {
-        void onItemClicked(int index);
-    }
 
     CourseAdapter(Context context, List<CourseMock> courses) {
+        super();
         this.courses = courses;
-        this.activity = (ItemClicked) context;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -37,12 +32,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
             tvCourseName = itemView.findViewById(R.id.txt_course_name);
             tvLecturer = itemView.findViewById(R.id.txt_lecturer);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    activity.onItemClicked(courses.indexOf((CourseMock)itemView.getTag()));
-                }
-            });
+            itemView.setOnClickListener(view -> {});
         }
     }
 
