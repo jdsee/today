@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:id="@+id/recycler_view_file_holder"
+<LinearLayout android:id="@+id/recycler_view_file_holder"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -13,4 +13,4 @@
         android:layout_height="wrap_content"
         android:background="@color/slightly_darker_grey" />
 
-</RelativeLayout>
+</LinearLayout>
