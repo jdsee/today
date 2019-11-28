@@ -44,6 +44,7 @@
             android:layout_marginEnd="10dp"
             android:layout_toEndOf="@+id/imageButton1"
             android:gravity="center_vertical"
+            android:text="Semester 3"
             android:textSize="21sp" />
 
         <ImageButton
@@ -53,7 +54,7 @@
             android:layout_alignParentEnd="false"
             android:layout_marginStart="50dp"
             android:background="@android:color/transparent"
-            app:srcCompat="@drawable/baseline_arrow_back_ios_24"/>
+            app:srcCompat="@drawable/baseline_arrow_back_ios_24" />
 
         <ImageButton
             android:id="@+id/imageButton2"
