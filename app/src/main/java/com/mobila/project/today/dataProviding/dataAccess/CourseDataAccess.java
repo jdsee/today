@@ -26,11 +26,11 @@ public interface CourseDataAccess {
 
     void setDate(Identifiable course, Date date) throws DataKeyNotFoundException;
 
-    String getLectureRoom();
+    String getLectureRoom(Identifiable course) throws DataKeyNotFoundException;
 
     void setLectureRoom(Identifiable course, String room) throws DataKeyNotFoundException;
 
-    String getLecturer();
+    String getLecturer(Identifiable course) throws DataKeyNotFoundException;
 
     void setLecturer(Identifiable course, String lecturer) throws DataKeyNotFoundException;
 }
