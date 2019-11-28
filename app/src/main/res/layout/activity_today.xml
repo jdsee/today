@@ -44,7 +44,7 @@
             android:layout_alignParentEnd="false"
             android:layout_marginStart="50dp"
             android:background="@android:color/transparent"
-            app:srcCompat="@drawable/baseline_arrow_back_ios_24" />
+            app:srcCompat="@drawable/baseline_arrow_back_ios_24"/>
 
         <ImageButton
             android:id="@+id/imageButton2"
@@ -68,6 +68,9 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView">
+
+        <include layout="@layout/view_taskholder"/>
+
     </RelativeLayout>
 
     <LinearLayout

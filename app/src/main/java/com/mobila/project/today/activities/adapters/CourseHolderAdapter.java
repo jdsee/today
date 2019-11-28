@@ -11,13 +11,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.mobila.project.today.R;
 import com.mobila.project.today.modelMock.CourseMock;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class CourseHolderAdapter extends RecyclerView.Adapter<CourseHolderAdapter.ViewHolder> {
 
-    private ArrayList<CourseMock> courses;
+    private List<CourseMock> courses;
 
-    public CourseHolderAdapter(ArrayList<CourseMock> courses) {
+    public CourseHolderAdapter(List<CourseMock> courses) {
         this.courses = courses;
     }
 

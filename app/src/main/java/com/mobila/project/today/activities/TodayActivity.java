@@ -27,10 +27,10 @@ public class TodayActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     RecyclerView.Adapter adapter;
     RecyclerView.LayoutManager layoutManager;
-    List<Task> tasks;
+    List<Task> tasks= new ArrayList<>();
 
     CourseHolderAdapter courseHolderAdapter;
-    ArrayList<CourseMock> courses = new ArrayList<>();
+    List<CourseMock> courses = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,15 +57,21 @@ public class TodayActivity extends AppCompatActivity {
         courses.add(new CourseMock(1, "Programmieren 3",
                 "Eine Hubrich", "WHC 624"));
 
+        tasks.add(new TaskImpl());
+        tasks.add(new TaskImpl());
+        tasks.add(new TaskImpl());
+        tasks.add(new TaskImpl());
+        tasks.add(new TaskImpl());
+
+
         initCourseView();
-        //initTaskView();
+        initTaskView();
     }
 
     private void initTaskView() {
         recyclerView = findViewById(R.id.rv_course_tasks);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        tasks = new ArrayList<>();
         tasks.add(new TaskImpl());
         adapter = new TaskAdapter(this, tasks);
         recyclerView.setAdapter(adapter);
