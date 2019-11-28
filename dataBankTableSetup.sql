@@ -35,21 +35,21 @@ CREATE TABLE lectures
 	lecturer	VARCHAR(64),
 	containedBy	INTEGER REFERENCES sections ON DELETE CASCADE);
 
-CREATE TABLE note
+CREATE TABLE notes
 	(noteID		INTEGER PRIMARY KEY,
 	title 		VARCHAR(64),
 	content		BYTEA,
-	lectureID	INTEGER REFERENCES lecture ON DELETE CASCADE);
+	lectureID	INTEGER REFERENCES lectures ON DELETE CASCADE);
 
 
 CREATE TABLE noteReferences
 	(referenceID	INTEGER PRIMARY KEY,
 	row		INTEGER,
-	noteID		INTEGER REFERENCES note);
+	noteID		INTEGER REFERENCES notes);
 
 
 CREATE TABLE attachments
 	(attachmentID	INTEGER PRIMARY KEY,
 	content		BYTEA,
 	position	INTEGER,
-	lectureID	INTEGER REFERENCES lecture);
+	lectureID	INTEGER REFERENCES lectures);
