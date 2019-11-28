@@ -1,4 +1,7 @@
-package com.mobila.project.today.model;
+package com.mobila.project.today.model.implementations;
+
+import com.mobila.project.today.model.Course;
+import com.mobila.project.today.model.Task;
 
 import java.util.Date;
 

@@ -1,5 +1,6 @@
-package com.mobila.project.today.dataAccess;
+package com.mobila.project.today.dataProviding.dataAccess;
 
+import com.mobila.project.today.dataProviding.DataKeyNotFoundException;
 import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Identifiable;
 

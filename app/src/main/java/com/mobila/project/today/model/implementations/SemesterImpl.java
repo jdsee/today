@@ -1,6 +1,8 @@
-package com.mobila.project.today.model;
+package com.mobila.project.today.model.implementations;
 
-import com.mobila.project.today.dataAccess.OrganizerDataRep;
+import com.mobila.project.today.dataProviding.OrganizerDataRep;
+import com.mobila.project.today.model.Course;
+import com.mobila.project.today.model.Semester;
 
 import java.util.List;
 
