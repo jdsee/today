@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">to day</string>
+    <string name="app_name">today</string>
     <string name="share">share note</string>
     <string name="settings">app settings</string>
     <string name="delete_note">delete note</string>

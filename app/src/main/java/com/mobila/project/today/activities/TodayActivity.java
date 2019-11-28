@@ -9,10 +9,9 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.mobila.project.today.R;
-import com.mobila.project.today.activities.adapters.CourseAdapter;
 import com.mobila.project.today.activities.adapters.TaskAdapter;
 import com.mobila.project.today.model.Task;
-import com.mobila.project.today.model.TaskImpl;
+import com.mobila.project.today.model.implementations.TaskImpl;
 import com.mobila.project.today.modelMock.CourseMock;
 import com.mobila.project.today.activities.adapters.CourseHolderAdapter;
 
@@ -47,7 +46,7 @@ public class TodayActivity extends AppCompatActivity {
                 "Eine Hubrich", "WHC 624"));
 
         initCourseView();
-        initTaskView();
+        //initTaskView();
     }
 
     private void initTaskView() {
@@ -62,8 +61,8 @@ public class TodayActivity extends AppCompatActivity {
 
     private void initCourseView() {
         RecyclerView recyclerView = findViewById(R.id.recycler_view_courses);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         this.courseHolderAdapter = new CourseHolderAdapter(courses);
         recyclerView.setAdapter(this.courseHolderAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 }
