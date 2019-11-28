@@ -50,6 +50,6 @@ CREATE TABLE noteReferences
 
 CREATE TABLE attachments
 	(attachmentID	INTEGER PRIMARY KEY,
-	content		BLOB,
+	content		BYTEA,
 	position	INTEGER,
 	lectureID	INTEGER REFERENCES lecture);
