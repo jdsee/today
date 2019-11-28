@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+
+    <TextView
+        android:id="@+id/task_item_text_alt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="8dp"
+        android:layout_toStartOf="@+id/cb_task_item"
+        android:gravity="start|top"
+        android:text="this is a task you should ignore"
+        android:textSize="24sp" />
+
+    <CheckBox
+        android:id="@+id/cb_task_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:text="" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/task_item_text_alt"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="44dp"
+        android:background="@color/note_line_colour" />
+
+
+
+</RelativeLayout>

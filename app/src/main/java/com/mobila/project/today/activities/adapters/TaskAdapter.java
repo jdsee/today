@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,14 +25,14 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         this.context = context;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        CheckBox cbTask;
+    class ViewHolder extends RecyclerView.ViewHolder {
+        TextView taskText;
         LinearLayout linearLayout;
 
-        public ViewHolder(@NonNull View itemView) {
+        ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            this.cbTask = itemView.findViewById(R.id.cb_task_item);
+            this.taskText = itemView.findViewById(R.id.task_item_text_alt);
             this.linearLayout = itemView.findViewById(R.id.ll_course_tasks);
         }
     }
@@ -40,7 +41,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
     @Override
     public TaskAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.task_item, parent, false);
+                .inflate(R.layout.task_item_alt, parent, false);
 
         return new TaskAdapter.ViewHolder(v);
     }
@@ -48,7 +49,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull TaskAdapter.ViewHolder holder, int position) {
         holder.itemView.setTag(tasks.get(position));
-        holder.cbTask.setText(tasks.get(position).getContent());
+        holder.taskText.setText(tasks.get(position).getContent());
     }
 
     @Override
