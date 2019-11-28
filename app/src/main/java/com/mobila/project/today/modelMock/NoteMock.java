@@ -17,18 +17,18 @@ public class NoteMock implements Parcelable {
     private long semester;
     private String course;
     private String category;
-    private String event;
+    private String section;
     private String date;
     private ArrayList<File> attachments = new ArrayList<>();
 
-    public NoteMock(long id, String title, SpannableString content, long semester, String course, String category, String event, String date) {
+    public NoteMock(long id, String title, SpannableString content, long semester, String course, String category, String section, String date) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.semester = semester;
         this.course = course;
         this.category = category;
-        this.event = event;
+        this.section = section;
         this.date = date;
     }
 
@@ -44,7 +44,7 @@ public class NoteMock implements Parcelable {
         this.semester = in.readLong();
         this.course = in.readString();
         this.category = in.readString();
-        this.event = in.readString();
+        this.section = in.readString();
         this.date = in.readString();
     }
 
@@ -84,12 +84,12 @@ public class NoteMock implements Parcelable {
         this.category = category;
     }
 
-    public String getEvent() {
-        return event;
+    public String getSection() {
+        return section;
     }
 
-    public void setEvent(String event) {
-        this.event = event;
+    public void setSection(String section) {
+        this.section = section;
     }
 
     public long getId() {
@@ -159,7 +159,7 @@ public class NoteMock implements Parcelable {
         dest.writeLong(semester);
         dest.writeString(course);
         dest.writeString(category);
-        dest.writeString(event);
+        dest.writeString(section);
         dest.writeString(date);
     }
 }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.FocusFinder;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -83,15 +84,18 @@ public class EditorActivity extends AppCompatActivity {
     }
 
     private void setupListeners() {
+        //Todo title doesn't need to adapt anymore
         EditText headline = findViewById(R.id.editor_title);
+        //todo find out if still necessary with focus
         headline.setOnEditorActionListener(new TitleOnEditorActionListener(this));
         KeyboardVisibilityEvent.setEventListener(
                 this, new EditorKeyboardEventListener(this));
     }
 
     private void setupContent() {
+        //Todo Title just needs to be preset if no other has been set
         EditText headline = findViewById(R.id.editor_title);
-        headline.setHint(note.getEvent());
+        headline.setHint(note.getSection());
         TextView textView = findViewById(R.id.editor_subtitle);
         textView.setText(String.format(
                 "%s  -  %s %s", note.getDate(), note.getCourse(), note.getCategory()));
