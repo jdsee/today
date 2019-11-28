@@ -36,7 +36,7 @@ public class TodayActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_today);
-        getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.lightGrey));
+        getWindow().setNavigationBarColor(Color.WHITE);
         Objects.requireNonNull(getSupportActionBar()).hide();
         getWindow().setStatusBarColor(Color.TRANSPARENT);
         getWindow().getDecorView().setSystemUiVisibility(
