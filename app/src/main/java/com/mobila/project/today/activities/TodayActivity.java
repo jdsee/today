@@ -19,6 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static android.view.View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+import static android.view.WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS;
+
 public class TodayActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
@@ -36,12 +39,21 @@ public class TodayActivity extends AppCompatActivity {
         getWindow().setNavigationBarColor(Color.TRANSPARENT);
         Objects.requireNonNull(getSupportActionBar()).hide();
         getWindow().setStatusBarColor(Color.TRANSPARENT);
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR|SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
 
         courses.add(new CourseMock(1, "Mobile Anwendungen",
                 "Prof. Dr.-Ing Schwotzer", "WHC 442"));
         courses.add(new CourseMock(1, "Software Engeneering",
                 "Dr. Peter Habdichlieb", "TAC 832"));
+        courses.add(new CourseMock(1, "Programmieren 3",
+                "Eine Hubrich", "WHC 624"));
+        courses.add(new CourseMock(1, "Mobile Anwendungen",
+                "Prof. Dr.-Ing Schwotzer", "WHC 442"));
+        courses.add(new CourseMock(1, "Software Engeneering",
+                "Dr. Peter Habdichlieb", "TAC 832"));
+        courses.add(new CourseMock(1, "Programmieren 3",
+                "Eine Hubrich", "WHC 624"));
         courses.add(new CourseMock(1, "Programmieren 3",
                 "Eine Hubrich", "WHC 624"));
 
