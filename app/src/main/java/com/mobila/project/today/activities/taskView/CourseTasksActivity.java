@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mobila.project.today.R;
+import com.mobila.project.today.activities.adapters.TaskAdapter;
 import com.mobila.project.today.model.Task;
 import com.mobila.project.today.model.TaskImpl;
 

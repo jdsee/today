@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.mobila.project.today.R;
+import com.mobila.project.today.activities.adapters.CourseAdapter;
 import com.mobila.project.today.modelMock.CourseMock;
 import com.mobila.project.today.modelMock.SectionMock;
 import com.mobila.project.today.modelMock.TaskMock;

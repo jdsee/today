@@ -9,10 +9,12 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.mobila.project.today.R;
+import com.mobila.project.today.activities.adapters.CourseAdapter;
 import com.mobila.project.today.modelMock.CourseMock;
 import com.mobila.project.today.activities.adapters.CourseHolderAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class TodayActivity extends AppCompatActivity {
@@ -41,10 +43,8 @@ public class TodayActivity extends AppCompatActivity {
 
     private void initCourseView() {
         RecyclerView recyclerView = findViewById(R.id.recycler_view_courses);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         this.courseHolderAdapter = new CourseHolderAdapter(courses);
         recyclerView.setAdapter(this.courseHolderAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
-
-
 }

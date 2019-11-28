@@ -1,4 +1,4 @@
-package com.mobila.project.today.activities.dataStructureView;
+package com.mobila.project.today.activities.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -17,7 +17,7 @@ import java.util.List;
 public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder> {
     private List<CourseMock> courses;
 
-    CourseAdapter(Context context, List<CourseMock> courses) {
+    public CourseAdapter(Context context, List<CourseMock> courses) {
         super();
         this.courses = courses;
     }

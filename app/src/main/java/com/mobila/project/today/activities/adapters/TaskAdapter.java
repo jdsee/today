@@ -1,11 +1,9 @@
-package com.mobila.project.today.activities.taskView;
+package com.mobila.project.today.activities.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 
@@ -17,7 +15,7 @@ import com.mobila.project.today.model.Task;
 
 import java.util.List;
 
-class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
+public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
     private final List<Task> tasks;
     private final Context context;
 
