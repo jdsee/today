@@ -8,38 +8,38 @@ DROP TABLE noteReferences;
 DROP TABLE attachments;
 
 CREATE TABLE semesters
-        (semesterID	INTEGER PRIMARY KEY ON DELETE CASCADE,
+        (semesterID	INTEGER PRIMARY KEY,
          semesterNr	INTEGER);
 
 CREATE TABLE courses
-        (courseID	INTEGER PRIMARY KEY ON DELETE CASCADE,
-         name		VARCHAR(128)
-	 semesterID	INTEGER REFERENCES semesters);
+        (courseID	INTEGER PRIMARY KEY,
+         name		VARCHAR(128) NOT NULL,
+	 semesterID	INTEGER REFERENCES semesters ON DELETE CASCADE);
 
 CREATE TABLE tasks
-       (taskID		INTEGER PRIMARY KEY ON DELETE CASCADE,
+       (taskID		INTEGER PRIMARY KEY,
         deadline	INTEGER,
-	content		VARCHAR(128),
-	relatedTo	INTEGER REFERENCES courses);
+	content		VARCHAR(128) NOT NULL,
+	relatedTo	INTEGER REFERENCES courses ON DELETE CASCADE);
 
 CREATE TABLE sections
-	(sectionID	INTEGER PRIMARY KEY ON DELETE CASCADE,
+	(sectionID	INTEGER PRIMARY KEY,
 	 name		VARCHAR(64),
- 	 containedBy	INTEGER REFERENCES courses);
+ 	 containedBy	INTEGER REFERENCES courses ON DELETE CASCADE);
 
 CREATE TABLE lectures
-	(lectureID	INTEGER PRIMARY KEY ON DELETE CASCADE,
+	(lectureID	INTEGER PRIMARY KEY,
 	 lectureNr	INTEGER,
  	 roomNr		VARCHAR(32),
  	 time		INTEGER,
  	 lecturer	VARCHAR(64),
- 	 containedBy	INTEGER REFERENCES sections);
+ 	 containedBy	INTEGER REFERENCES sections ON DELETE CASCADE);
 
 CREATE TABLE note
-  	(noteID      	INTEGER PRIMARY KEY ON DELETE CASCADE,
+  	(noteID      	INTEGER PRIMARY KEY,
    	 title		VARCHAR(64),
    	 content    	BLOB,
-   	 lectureID    	INTEGER REFERENCES lecture);
+   	 lectureID    	INTEGER REFERENCES lecture ON DELETE CASCADE);
 
 
 CREATE TABLE noteReferences
