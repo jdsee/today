@@ -10,8 +10,7 @@ import android.view.View;
 
 import com.mobila.project.today.R;
 import com.mobila.project.today.modelMock.CourseMock;
-import com.mobila.project.today.views.adapters.CourseHolderAdapter;
-import com.mobila.project.today.views.adapters.FileHolderAdapter;
+import com.mobila.project.today.activities.adapters.CourseHolderAdapter;
 
 import java.util.ArrayList;
 import java.util.Objects;

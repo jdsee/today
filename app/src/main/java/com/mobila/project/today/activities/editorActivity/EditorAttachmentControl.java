@@ -11,7 +11,7 @@ import androidx.core.content.FileProvider;
 
 import com.mobila.project.today.modelMock.NoteMock;
 import com.mobila.project.today.utils.AttachmentUtils;
-import com.mobila.project.today.views.adapters.FileHolderAdapter;
+import com.mobila.project.today.activities.adapters.FileHolderAdapter;
 
 import java.io.File;
 import java.io.IOException;

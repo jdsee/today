@@ -1,4 +1,4 @@
-package com.mobila.project.today.views.adapters;
+package com.mobila.project.today.activities.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;

@@ -15,19 +15,18 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mobila.project.today.R;
 import com.mobila.project.today.activities.editorActivity.listeners.EditorKeyboardEventListener;
 import com.mobila.project.today.activities.editorActivity.listeners.TitleOnEditorActionListener;
 import com.mobila.project.today.modelMock.NoteMock;
-import com.mobila.project.today.views.adapters.FileHolderAdapter;
+import com.mobila.project.today.activities.adapters.FileHolderAdapter;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 
@@ -154,7 +153,7 @@ public class EditorActivity extends AppCompatActivity {
      * @param item The item which was pressed
      */
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         return noteEditor.choseStyle(item);
     }
 
