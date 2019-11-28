@@ -1,4 +1,4 @@
-package com.mobila.project.today.dataAccess;
+package com.mobila.project.today.dataProviding;
 
 import com.mobila.project.today.model.Attachment;
 import com.mobila.project.today.model.Identifiable;
@@ -13,15 +13,9 @@ import java.util.List;
 
 public interface OrganizerDataProvider {
 
+    //<T extends Definable, R extends Identifiable> R getParent(T context);
+
     <T extends Definable, R extends Identifiable> List<R> getChildren(T context);
-
-    //Semester getSemester(Identifiable course) throws DataKeyNotFoundException;
-    //Course getCourse(Identifiable section) throws DataKeyNotFoundException;
-    //Section getSection(Identifiable lecture) throws DataKeyNotFoundException;
-
-    List<Lecture> getLectures(Identifiable course) throws DataKeyNotFoundException;
-
-    void addLecture(Identifiable section, Lecture lecture) throws DataKeyNotFoundException;
 
     Note getNote(Identifiable lecture) throws DataKeyNotFoundException;
 
@@ -33,20 +27,17 @@ public interface OrganizerDataProvider {
 
     List<Task> getAllTasks();
 
+    void removeEntityInstance(Identifiable instance) throws DataKeyNotFoundException;
 
-    void removeEntity(Identifiable entity) throws DataKeyNotFoundException;
+    <T extends Definable> String getTitle(T context);
 
-    <T extends Identifiable, R extends Identifiable> R getParent(T context);
+    <T extends Definable> void setTitle(T context, String title);
 
-    <T extends Identifiable> String getTitle(T context);
+    <T extends Definable, R extends Identifiable> R getContent(T context);
 
-    <T extends Identifiable> void setTitle(T context, String title);
+    <T extends Definable> Date getDate(T context);
 
-    <T extends Identifiable, R> R getContent(T context);
-
-    <T extends Identifiable> Date getDate(T context);
-
-    <T extends Identifiable> void setDate(T context, Date date);
+    <T extends Definable> void setDate(T context, Date date);
 
     String getLectureRoom();
 

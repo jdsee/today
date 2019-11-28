@@ -42,7 +42,7 @@ class CourseImpl implements Course {
 
     @Override
     public void removeSection(Identifiable section) {
-        dataRep.removeEntity(section);
+        dataRep.removeEntityInstance(section);
     }
 
     @Override

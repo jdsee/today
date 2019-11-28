@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.mobila.project.today.R;
 import com.mobila.project.today.activities.adapters.TaskAdapter;
 import com.mobila.project.today.model.Task;
-import com.mobila.project.today.model.TaskImpl;
+import com.mobila.project.today.model.implementations.TaskImpl;
 
 import java.util.ArrayList;
 import java.util.List;
