@@ -33,6 +33,8 @@ import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 
 import java.util.Objects;
 
+import static android.view.View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+
 public class EditorActivity extends AppCompatActivity {
     private NoteMock note;
     private EditorNoteControl noteEditor;
@@ -62,12 +64,16 @@ public class EditorActivity extends AppCompatActivity {
 
     private void setupViews() {
         setTheme(R.style.Theme_MaterialComponents_Light_NoActionBar_Bridge);
-        getWindow().setNavigationBarColor(Color.GRAY);
+        getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.lightGrey));
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR|SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+        getWindow().setStatusBarColor(Color.TRANSPARENT);
         setContentView(R.layout.activity_editor);
         setSupportActionBar(findViewById(R.id.editor_toolbar));
         FloatingActionButton actionButton = findViewById(R.id.button_note);
         actionButton.setCompatElevation(0);
         setSupportActionBar(findViewById(R.id.bottom_app_bar));
+        getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.lightGrey));
         fileContainer = findViewById(R.id.recycler_view_file_holder);
     }
 
