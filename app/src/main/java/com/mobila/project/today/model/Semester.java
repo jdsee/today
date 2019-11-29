@@ -15,4 +15,8 @@ public interface Semester extends Identifiable {
      * @return a list with all courses contained in this semester
      */
     List<Course> getCourses() throws TodayException;
+
+    void addCourse(Course course) throws TodayException;
+
+    void removeCourse(Course course) throws TodayException;
 }

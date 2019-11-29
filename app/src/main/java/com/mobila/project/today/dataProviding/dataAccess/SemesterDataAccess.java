@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface SemesterDataAccess {
 
-    void addCourse(Identifiable semester, Course course) throws DataKeyNotFoundException;
-
     List<Course> getCourses(Identifiable semester) throws DataKeyNotFoundException;
+
+    void addCourse(Identifiable semester, Course course) throws DataKeyNotFoundException;
 }

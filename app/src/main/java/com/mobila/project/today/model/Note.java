@@ -8,7 +8,7 @@ import java.util.List;
 /**
  *
  */
-public interface Note extends Identifiable, Serializable {
+public interface Note extends Identifiable {
     /**
      * Returns the lecture containing this attachment.
      *
@@ -16,19 +16,23 @@ public interface Note extends Identifiable, Serializable {
      */
     Lecture getLecture();
 
+
     String getTitle();
 
     void setTitle(String title);
 
+
     Spannable getContent();
 
-    Spannable setContent(String content);
+    void setContent(Spannable content);
+
 
     List<Attachment> getAttachments();
 
     void addAttachment(Attachment attachment);
 
     void removeAttachment(Identifiable attachment);
+
 
     List<NoteReference> getReferences();
 

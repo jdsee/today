@@ -9,5 +9,9 @@ import java.util.List;
 public interface SectionDataAccess {
     List<Lecture> getLectures(Identifiable course) throws DataKeyNotFoundException;
 
+    String getTitle(Identifiable section) throws DataKeyNotFoundException;
+
+    String setTitle(Identifiable section, String title) throws DataKeyNotFoundException;
+
     void addLecture(Identifiable section, Lecture lecture) throws DataKeyNotFoundException;
 }

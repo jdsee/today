@@ -14,21 +14,26 @@ public interface CourseDataAccess {
 
     void addTask(Identifiable course, Task task) throws DataKeyNotFoundException;
 
+
     List<Section> getSections(Identifiable course) throws DataKeyNotFoundException;
 
     void addSection(Identifiable course, Section section) throws DataKeyNotFoundException;
+
 
     String getTitle(Identifiable course) throws DataKeyNotFoundException;
 
     void setTitle(Identifiable course, String title) throws DataKeyNotFoundException;
 
+
     Date getDate(Identifiable course) throws DataKeyNotFoundException;
 
     void setDate(Identifiable course, Date date) throws DataKeyNotFoundException;
 
+
     String getLectureRoom(Identifiable course) throws DataKeyNotFoundException;
 
     void setLectureRoom(Identifiable course, String room) throws DataKeyNotFoundException;
+
 
     String getLecturer(Identifiable course) throws DataKeyNotFoundException;
 

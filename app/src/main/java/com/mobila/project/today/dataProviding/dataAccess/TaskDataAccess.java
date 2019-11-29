@@ -9,7 +9,13 @@ import java.util.Date;
 public interface TaskDataAccess {
     Course getCourse(Identifiable section) throws DataKeyNotFoundException;
 
-    Date getDate(Identifiable task);
 
-    void setDate(Identifiable task, Date date);
+    Date getDeadline(Identifiable task) throws DataKeyNotFoundException;
+
+    void setDeatline(Identifiable task, Date date) throws DataKeyNotFoundException;
+
+
+    String getContent(Identifiable task) throws DataKeyNotFoundException;
+
+    void setContent(Identifiable task, String content) throws DataKeyNotFoundException;
 }
