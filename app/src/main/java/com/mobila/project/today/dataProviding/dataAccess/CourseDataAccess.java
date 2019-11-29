@@ -23,19 +23,4 @@ public interface CourseDataAccess {
     String getTitle(Identifiable course) throws DataKeyNotFoundException;
 
     void setTitle(Identifiable course, String title) throws DataKeyNotFoundException;
-
-
-    Date getDate(Identifiable course) throws DataKeyNotFoundException;
-
-    void setDate(Identifiable course, Date date) throws DataKeyNotFoundException;
-
-
-    String getLectureRoom(Identifiable course) throws DataKeyNotFoundException;
-
-    void setLectureRoom(Identifiable course, String room) throws DataKeyNotFoundException;
-
-
-    String getLecturer(Identifiable course) throws DataKeyNotFoundException;
-
-    void setLecturer(Identifiable course, String lecturer) throws DataKeyNotFoundException;
 }

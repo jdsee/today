@@ -10,17 +10,29 @@ public interface Lecture extends Identifiable {
      */
     Section getSection();
 
+
     Note getNote();
 
-    void removeNote(Identifiable note);
+
+    int getLectureNr();
+
+    void setLetureNr();
+
+
+    int getLecturePosition();
+
+    void setLecturePosition();
+
 
     String getRoom();
 
     void setRoom(String room);
 
+
     Date getDate();
 
     void setDate(Date date);
+
 
     String getLecturer();
 
