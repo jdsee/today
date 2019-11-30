@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/style_bold"
+        android:icon="@drawable/baseline_format_bold_24"
+        android:title="@string/bold" />
+    <item
+        android:id="@+id/style_underlined"
+        android:icon="@drawable/baseline_text_format_24"
+        android:title="@string/underlined" />
+    <item
+        android:id="@+id/style_italic"
+        android:icon="@drawable/baseline_format_italic_24"
+        android:title="@string/italic" />
+</menu>

@@ -1,3 +1,4 @@
+/*
 package com.mobila.project.today.model.implementations;
 
 import com.mobila.project.today.dataProviding.OrganizerDataProvider;
@@ -13,11 +14,13 @@ class SemesterImpl implements Semester, Definable {
     private static OrganizerDataProvider dataProvider;
     private final int id;
 
-    /*
+    */
+/*
     static {
         dataProvider = OrganizerDataProvider.getInstance();
     }
-    */
+    *//*
+
 
     public SemesterImpl(int id) {
         this.id = id;
@@ -38,3 +41,4 @@ class SemesterImpl implements Semester, Definable {
         return SEMESTER_TYPE_IDENTIFIER;
     }
 }
+*/

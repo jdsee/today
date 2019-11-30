@@ -5,24 +5,24 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.FocusFinder;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mobila.project.today.R;
 import com.mobila.project.today.activities.editorActivity.listeners.EditorKeyboardEventListener;
 import com.mobila.project.today.activities.editorActivity.listeners.TitleOnEditorActionListener;
@@ -31,6 +31,7 @@ import com.mobila.project.today.activities.adapters.FileHolderAdapter;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 
+import java.util.Locale;
 import java.util.Objects;
 
 import static android.view.View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
@@ -40,11 +41,10 @@ public class EditorActivity extends AppCompatActivity {
     private EditorNoteControl noteEditor;
     private EditorAttachmentControl attachments;
 
-    private FileHolderAdapter fileHolderAdapter;
+    private EditorFileHolderAdapter fileHolderAdapter;
     private View fileContainer;
 
     private boolean keyBoardOpen;
-    private boolean extensionsOpen = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,17 +70,15 @@ public class EditorActivity extends AppCompatActivity {
         getWindow().setStatusBarColor(Color.TRANSPARENT);
         setContentView(R.layout.activity_editor);
         setSupportActionBar(findViewById(R.id.editor_toolbar));
-        FloatingActionButton actionButton = findViewById(R.id.button_note);
-        actionButton.setCompatElevation(0);
-        setSupportActionBar(findViewById(R.id.bottom_app_bar));
         getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.lightGrey));
-        fileContainer = findViewById(R.id.recycler_view_file_holder);
+        fileContainer = findViewById(R.id.recycler_view_files);
+        initAttachmentsView();
     }
 
     private void hideCameraIfNotAvailable() {
         if (!deviceHasCamera()) {
-            MenuItem cameraItem = findViewById(R.id.action_take_photo);
-            cameraItem.setVisible(false);
+            ImageButton cameraItem = findViewById(R.id.button_add_photo);
+            cameraItem.setVisibility(View.GONE);
         }
     }
 
@@ -178,19 +176,15 @@ public class EditorActivity extends AppCompatActivity {
 
     /**
      * Opens Camera
-     *
-     * @param item The item which was pressed
      */
-    public void onTakePhotoPickerPressed(MenuItem item) {
+    public void onTakePhotoPickerPressed(View view) {
         attachments.takePicture();
     }
 
     /**
      * Method for importing a file into a note
-     *
-     * @param item has no function other than being there as default for menus root
      */
-    public void onFilePickerPressed(MenuItem item) {
+    public void onFilePickerPressed(View view) {
         attachments.importFile();
     }
 
@@ -219,24 +213,16 @@ public class EditorActivity extends AppCompatActivity {
     public void showEditorHiddenFunctions(View view) {
         PopupMenu popup = new PopupMenu(this, view);
         MenuInflater inflater = popup.getMenuInflater();
-        inflater.inflate(R.menu.editor_action_bar, popup.getMenu());
+        inflater.inflate(R.menu.editor_toolbar_options, popup.getMenu());
         popup.show();
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        menu.clear();
-        MenuInflater inflater = getMenuInflater();
-        View recyclerViewContainer = findViewById(R.id.recycler_view_file_holder);
         if (this.keyBoardOpen) {
-            if (this.extensionsOpen) {
-                recyclerViewContainer.setVisibility(View.GONE);
-                findViewById(R.id.action_attachment).setBackgroundColor(Color.TRANSPARENT);
-                this.extensionsOpen = false;
+            if (findViewById(R.id.recycler_view_files).getVisibility()==View.VISIBLE) {
+                closeAttachments();
             }
-            inflater.inflate(R.menu.editor_font_options_bottom, menu);
-        } else {
-            inflater.inflate(R.menu.editor_attachments_bottom, menu);
         }
         return true;
     }
@@ -244,37 +230,56 @@ public class EditorActivity extends AppCompatActivity {
     /**
      * opens or closes the extension list depending on if it was open or closed before the button
      * was pressed. If it was open, it gets closed and vise versa
-     *
-     * @param item Has no purpose because there isn't a menu populated with items attached to this
-     *             button. It is just there for the compiler.
      */
-    public void onAttachmentsPressed(MenuItem item) {
-        if (this.extensionsOpen) {
+    public void onAttachmentsPressed(View view) {
+        if (findViewById(R.id.recycler_view_files).getVisibility()==View.VISIBLE) {
             closeAttachments();
         } else if (this.note.getAttachmentCount() != 0) {
             openAttachments();
         } else Toast.makeText(
-                this, "Put your attachments here", Toast.LENGTH_SHORT).show();
+                this, "Your attachments go here", Toast.LENGTH_SHORT).show();
     }
 
     /**
      * Method for closing the attachment-view
      */
     public void closeAttachments() {
-        this.extensionsOpen = false;
-        findViewById(R.id.action_attachment).setBackgroundColor(Color.TRANSPARENT);
         fileContainer.setVisibility(View.GONE);
+        displayFileNumber();
     }
 
     /**
      * Method for opening the attachments-view
      */
     public void openAttachments() {
-        initAttachmentsView();
         fileContainer.setVisibility(View.VISIBLE);
-        findViewById(R.id.action_attachment).setBackgroundColor(
-                ContextCompat.getColor(this, R.color.slightly_darker_grey));
-        this.extensionsOpen = true;
+        findViewById(R.id.attachment_counter).setVisibility(View.GONE);
+        hideFileNumber();
+    }
+
+    private void hideFileNumber() {
+        findViewById(R.id.attachment_counter).setVisibility(View.GONE);
+    }
+
+    public void displayFileNumber(){
+        TextView attachmentCounter = findViewById(R.id.attachment_counter);
+        if (note.getAttachmentCount()==0){
+            attachmentCounter.setVisibility(View.GONE);
+        }
+        else {
+            attachmentCounter.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void updateFileNumber(){
+        TextView attachmentCounter = findViewById(R.id.attachment_counter);
+        int numberOfAttachments = note.getAttachmentCount();
+        attachmentCounter.setText(
+                String.format(Locale.getDefault(), "%d", numberOfAttachments));
+        if (numberOfAttachments == 0)
+            closeAttachments();
+        if (findViewById(R.id.recycler_view_files).getVisibility()==View.GONE)
+            displayFileNumber();
     }
 
     /**
@@ -282,8 +287,34 @@ public class EditorActivity extends AppCompatActivity {
      */
     private void initAttachmentsView() {
         RecyclerView recyclerView = findViewById(R.id.recycler_view_files);
-        this.fileHolderAdapter = new FileHolderAdapter( this, this.note);
+        this.fileHolderAdapter = new EditorFileHolderAdapter( this, this.note);
         recyclerView.setAdapter(this.fileHolderAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    public void openTasks(View view){
+        displayCloseNoteButton();
+        CoordinatorLayout noteView = findViewById(R.id.note_view);
+        noteView.setVisibility(View.VISIBLE);
+    }
+
+    public void closeTasks(View view){
+        displayNoteButton();
+        CoordinatorLayout noteView = findViewById(R.id.note_view);
+        noteView.setVisibility(View.GONE);
+    }
+
+    private void displayNoteButton(){
+        CoordinatorLayout taskButton = findViewById(R.id.note_action_button);
+        taskButton.setVisibility(View.VISIBLE);
+        CoordinatorLayout closeButton = findViewById(R.id.go_back_actionButton);
+        closeButton.setVisibility(View.GONE);
+    }
+
+    private void displayCloseNoteButton(){
+        CoordinatorLayout taskButton = findViewById(R.id.note_action_button);
+        taskButton.setVisibility(View.GONE);
+        CoordinatorLayout closeButton = findViewById(R.id.go_back_actionButton);
+        closeButton.setVisibility(View.VISIBLE);
     }
 }

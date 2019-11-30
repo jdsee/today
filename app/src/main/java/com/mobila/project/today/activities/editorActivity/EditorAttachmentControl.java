@@ -6,7 +6,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 
 import com.mobila.project.today.modelMock.NoteMock;
@@ -21,7 +21,7 @@ import static android.app.Activity.RESULT_OK;
 
 class EditorAttachmentControl {
 
-    private AppCompatActivity activity;
+    private EditorActivity activity;
     private NoteMock note;
     private FileHolderAdapter adapter;
 
@@ -30,7 +30,8 @@ class EditorAttachmentControl {
 
     private String currentImagePath;
 
-    EditorAttachmentControl(AppCompatActivity activity, NoteMock note, FileHolderAdapter adapter) {
+    EditorAttachmentControl(EditorActivity activity,
+                            NoteMock note, @NonNull FileHolderAdapter adapter) {
         this.activity = activity;
         this.note = note;
         this.adapter = adapter;
@@ -45,7 +46,7 @@ class EditorAttachmentControl {
         if (takePictureIntent.resolveActivity(activity.getPackageManager()) != null) {
             //Create File for photo
             File photoFile = AttachmentUtils.createImageFile(activity);
-            this.currentImagePath=photoFile.getAbsolutePath();
+            this.currentImagePath = photoFile.getAbsolutePath();
             //check if file was created
             Uri photoURI = FileProvider.getUriForFile(activity,
                     "com.mobila.project.today.fileprovider", photoFile);
@@ -66,9 +67,10 @@ class EditorAttachmentControl {
 
     /**
      * Method that saves the files that were returned by a intent
+     *
      * @param requestCode the Code of the request
-     * @param resultCode the confirmation if the request was successful
-     * @param data the optional data of the intent-result
+     * @param resultCode  the confirmation if the request was successful
+     * @param data        the optional data of the intent-result
      */
     void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
@@ -77,9 +79,6 @@ class EditorAttachmentControl {
                 this.note.addAttachment(file);
                 Toast.makeText(activity.getApplicationContext(),
                         "Image Saved", Toast.LENGTH_LONG).show();
-                if (adapter != null) {
-                    adapter.notifyDataSetChanged();
-                }
                 this.currentImagePath = null;
             } else if (requestCode == REQUEST_FILE_OPEN && data != null) {
                 Uri fileUri = data.getData();
@@ -104,15 +103,14 @@ class EditorAttachmentControl {
                     Toast.makeText(activity.getApplicationContext(),
                             "File Saved", Toast.LENGTH_LONG).show();
                     this.note.addAttachment(destinationFile);
-                    if (adapter != null) {
-                        adapter.notifyDataSetChanged();
-                    }
                 } else Toast.makeText(activity.getApplicationContext(),
                         "File was lost", Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText(activity.getApplicationContext(),
                         "Nothing was saved", Toast.LENGTH_LONG).show();
             }
+            adapter.notifyDataSetChanged();
+            activity.updateFileNumber();
         }
     }
 }

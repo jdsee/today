@@ -9,6 +9,7 @@
     <color name="icon_text_grey">#808080</color>
     <color name="note_colour">#E6BE6B</color>
     <color name="note_line_colour">#AF8C51</color>
+    <color name="overlay_transparant">#40000000</color>
 
     <color name="textcolour_yellow">#FFEB3B</color>
     <color name="textcolour_orange">#FF5722</color>

@@ -24,6 +24,4 @@ public interface AttachmentDataAccess {
     int getPosition(Identifiable attachment) throws DataKeyNotFoundException;
 
     void setPosition(Identifiable attachment, int position) throws DataKeyNotFoundException;
-
-    //test
 }

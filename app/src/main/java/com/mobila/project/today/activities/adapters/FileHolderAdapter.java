@@ -43,12 +43,13 @@ public class FileHolderAdapter extends RecyclerView.Adapter<FileHolderAdapter.Vi
         //Set name and icon of file
         holder.fileName.setText(attachment.getName());
         holder.fileImage.setImageDrawable(AttachmentUtils.getDrawable(context, attachment));
-        //setClickListener for List Item
+
         holder.fileHolder.setOnClickListener(v -> {
             Toast.makeText(context, AttachmentUtils.getMimeType(context, attachment),
                     Toast.LENGTH_LONG).show();
             AttachmentUtils.openFile(note.getAttachment(position));
         });
+
         holder.button.setOnClickListener(v -> {
             note.removeAttachment(position);
             notifyDataSetChanged();
@@ -60,12 +61,12 @@ public class FileHolderAdapter extends RecyclerView.Adapter<FileHolderAdapter.Vi
         return note.getAttachmentCount();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView fileImage;
-        TextView fileName;
-        RelativeLayout fileHolder;
-        AppCompatImageButton button;
+        public ImageView fileImage;
+        public TextView fileName;
+        public RelativeLayout fileHolder;
+        public AppCompatImageButton button;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);

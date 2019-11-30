@@ -11,6 +11,7 @@
         android:id="@+id/recycler_view_files"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/slightly_darker_grey" />
+        android:background="@color/slightly_darker_grey"
+        android:visibility="gone"/>
 
 </LinearLayout>

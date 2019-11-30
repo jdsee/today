@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+        <item
+            android:id="@+id/highlighter_yellow"
+            android:icon="@drawable/baseline_lens_24"
+            android:title="@string/background_font_colour_yellow"
+            app:iconTint="@color/highlighter_yellow" />
+        <item
+            android:id="@+id/highlighter_green"
+            android:icon="@drawable/baseline_lens_24"
+            android:title="@string/background_font_colour_green"
+            app:iconTint="@color/highlighter_green" />
+        <item
+            android:id="@+id/highlighter_blue"
+            android:icon="@drawable/baseline_lens_24"
+            android:title="@string/background_font_colour_blue"
+            app:iconTint="@color/highlighter_blue" />
+        <item
+            android:id="@+id/highlighter_purple"
+            android:icon="@drawable/baseline_lens_24"
+            android:title="@string/background_font_colour_purple"
+            app:iconTint="@color/highlighter_purple" />
+        <item
+            android:id="@+id/highlighter_red"
+            android:icon="@drawable/baseline_lens_24"
+            android:title="@string/background_font_colour_red"
+            app:iconTint="@color/highlighter_red" />
+
+</menu>
