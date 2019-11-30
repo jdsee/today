@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/edit_items"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:visibility="gone"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ImageButton
+        android:id="@+id/button_tab"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_margin="8dp"
+        android:background="@drawable/baseline_keyboard_tab_24"
+        android:onClick="onTabButtonClicked" />
+
+    <ImageButton
+        android:id="@+id/button_style"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_margin="8dp"
+        android:background="@drawable/baseline_text_format_24"
+        android:onClick="onFontStyleChooserClicked"/>
+
+    <ImageButton
+        android:id="@+id/button_text_color"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_margin="8dp"
+        android:background="@drawable/outline_color_lens_24"
+        android:onClick="onFontColourChooserClicked"/>
+
+    <ImageButton
+        android:id="@+id/button_background_color"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_margin="8dp"
+        android:background="@drawable/outline_format_paint_24"
+        android:onClick="onFontHighlighterChooserPressed"/>
+</LinearLayout>

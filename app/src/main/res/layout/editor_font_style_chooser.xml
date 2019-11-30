@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/editor_font_styles"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginStart="48dp"
+    android:background="@color/lightGrey"
+    android:orientation="vertical"
+    app:layout_constraintBottom_toTopOf="@+id/bottom_icon_bar"
+    app:layout_constraintStart_toStartOf="parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:visibility="gone">
+
+    <ImageButton
+        android:id="@+id/font_style_underlined"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_margin="8dp"
+        android:background="@drawable/baseline_text_format_24"
+        android:onClick="onStyleSetterClicked"/>
+
+    <ImageButton
+        android:id="@+id/font_style_italic"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_margin="8dp"
+        android:background="@drawable/baseline_format_italic_24"
+        android:onClick="onStyleSetterClicked"/>
+
+    <ImageButton
+        android:id="@+id/font_style_bold"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_margin="8dp"
+        android:background="@drawable/baseline_format_bold_24"
+        android:onClick="onStyleSetterClicked"/>
+</LinearLayout>

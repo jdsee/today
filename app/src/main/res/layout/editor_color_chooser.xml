@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/editor_color_chooser"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginStart="96dp"
+    android:orientation="vertical"
+    app:layout_constraintBottom_toTopOf="@+id/bottom_icon_bar"
+    app:layout_constraintStart_toStartOf="parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:visibility="gone">
+
+    <ImageButton
+        android:id="@+id/font_color_yellow"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_margin="8dp"
+        android:background="@drawable/editor_color_circle"
+        android:backgroundTint="@color/textcolour_yellow"
+        android:onClick="onStyleSetterClicked"/>
+
+    <ImageButton
+        android:id="@+id/font_color_orange"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_margin="8dp"
+        android:background="@drawable/editor_color_circle"
+        android:backgroundTint="@color/textcolour_orange"
+        android:onClick="onStyleSetterClicked"/>
+
+    <ImageButton
+        android:id="@+id/font_color_red"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_margin="8dp"
+        android:background="@drawable/editor_color_circle"
+        android:backgroundTint="@color/textcolour_red"
+        android:onClick="onStyleSetterClicked"/>
+
+    <ImageButton
+        android:id="@+id/font_color_purple"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_margin="8dp"
+        android:background="@drawable/editor_color_circle"
+        android:backgroundTint="@color/textcolour_purple"
+        android:onClick="onStyleSetterClicked"/>
+
+    <ImageButton
+        android:id="@+id/font_color_blue"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_margin="8dp"
+        android:background="@drawable/editor_color_circle"
+        android:backgroundTint="@color/textcolour_blue"
+        android:onClick="onStyleSetterClicked"/>
+
+    <ImageButton
+        android:id="@+id/font_color_green"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_margin="8dp"
+        android:background="@drawable/editor_color_circle"
+        android:backgroundTint="@color/textcolour_green"
+        android:onClick="onStyleSetterClicked"/>
+</LinearLayout>

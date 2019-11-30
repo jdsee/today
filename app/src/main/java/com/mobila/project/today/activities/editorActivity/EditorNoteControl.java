@@ -7,11 +7,10 @@ import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
-import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.mobila.project.today.R;
@@ -21,11 +20,11 @@ import com.mobila.project.today.utils.CustomTabWidthSpan;
 
 class EditorNoteControl {
 
-    private AppCompatActivity activity;
+    private EditorActivity activity;
     private NoteMock note;
     private EditText editorContent;
 
-    EditorNoteControl(AppCompatActivity activity, NoteMock note){
+    EditorNoteControl(EditorActivity activity, NoteMock note){
         this.activity=activity;
         this.editorContent = activity.findViewById(R.id.editor_note);
         this.note=note;
@@ -34,75 +33,77 @@ class EditorNoteControl {
                         this.editorContent, this.note));
     }
 
+
+
     /**
      * Method for choosing a style to be set on the selected text
-     * @param item the style that was selected
-     * @return if an operation was successful
      */
-    boolean choseStyle(MenuItem item){
-        switch (item.getItemId()) {
+    void applyStyle(View view){
+        switch (view.getId()) {
             //Text-Color Options
-            case R.id.colour_yellow:
+            case R.id.font_color_yellow:
                 setStyle(new ForegroundColorSpan(
                         ContextCompat.getColor(activity, R.color.textcolour_yellow)));
-                return true;
-            case R.id.colour_orange:
+                break;
+            case R.id.font_color_orange:
                 setStyle(new ForegroundColorSpan(
                         ContextCompat.getColor(activity, R.color.textcolour_orange)));
-                return true;
-            case R.id.colour_red:
+                break;
+            case R.id.font_color_red:
                 setStyle(new ForegroundColorSpan(
                         ContextCompat.getColor(activity, R.color.textcolour_red)));
-                return true;
-            case R.id.colour_purple:
+                break;
+            case R.id.font_color_purple:
                 setStyle(new ForegroundColorSpan(
                         ContextCompat.getColor(activity, R.color.textcolour_purple)));
-                return true;
-            case R.id.colour_blue:
+                break;
+            case R.id.font_color_blue:
                 setStyle(new ForegroundColorSpan(
                         ContextCompat.getColor(activity, R.color.textcolour_blue)));
-                return true;
-            case R.id.colour_green:
+                break;
+            case R.id.font_color_green:
                 setStyle(new ForegroundColorSpan(
                         ContextCompat.getColor(activity, R.color.textcolour_green)));
-                return true;
+                break;
 
             //Highlighter Options
-            case R.id.highlighter_yellow:
+            case R.id.font_highlighter_yellow:
                 setStyle(new BackgroundColorSpan(
                         ContextCompat.getColor(activity, R.color.highlighter_yellow)));
-                return true;
-            case R.id.highlighter_green:
+                break;
+            case R.id.font_highlighter_green:
                 setStyle(new BackgroundColorSpan(
                         ContextCompat.getColor(activity, R.color.highlighter_green)));
-                return true;
-            case R.id.highlighter_blue:
+                break;
+            case R.id.font_highlighter_blue:
                 setStyle(new BackgroundColorSpan(
                         ContextCompat.getColor(activity, R.color.highlighter_blue)));
-                return true;
-            case R.id.highlighter_purple:
+                break;
+            case R.id.font_highlighter_purple:
                 setStyle(new BackgroundColorSpan(
                         ContextCompat.getColor(activity, R.color.highlighter_purple)));
-                return true;
-            case R.id.highlighter_red:
+                break;
+            case R.id.font_highlighter_red:
                 setStyle(new BackgroundColorSpan(
                         ContextCompat.getColor(activity, R.color.highlighter_red)));
-                return true;
+                break;
 
             //Style Options
-            case R.id.style_bold:
+            case R.id.font_style_bold:
                 setStyle(new StyleSpan(Typeface.BOLD));
-                return true;
-            case R.id.style_italic:
+                break;
+            case R.id.font_style_italic:
                 setStyle(new StyleSpan(Typeface.ITALIC));
-                return true;
-            case R.id.style_underlined:
+                break;
+            case R.id.font_style_underlined:
                 setStyle(new UnderlineSpan());
-                return true;
+                break;
             default:
-                return false;
+                break;
         }
+        activity.closeMenus();
     }
+
 
     /**
      * Applies given Style onto the selected text

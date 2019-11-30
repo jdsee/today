@@ -15,6 +15,7 @@ public class EditorKeyboardEventListener implements KeyboardVisibilityEventListe
     @Override
     public void onVisibilityChanged(boolean isOpen) {
         this.activity.setKeyboardOpen(isOpen);
-        this.activity.invalidateOptionsMenu();
+        this.activity.showAppropiateItems();
+        this.activity.closeMenus();
     }
 }

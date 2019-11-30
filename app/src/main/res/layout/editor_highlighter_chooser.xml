@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/font_highlighter_chooser"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginStart="144dp"
+    android:orientation="vertical"
+    app:layout_constraintBottom_toTopOf="@+id/bottom_icon_bar"
+    app:layout_constraintStart_toStartOf="parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:visibility="gone">
+
+    <ImageButton
+        android:id="@+id/font_highlighter_yellow"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_margin="8dp"
+        android:background="@drawable/editor_color_circle"
+        android:backgroundTint="@color/highlighter_yellow"
+        android:onClick="onStyleSetterClicked"/>
+
+    <ImageButton
+        android:id="@+id/font_highlighter_red"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_margin="8dp"
+        android:background="@drawable/editor_color_circle"
+        android:backgroundTint="@color/highlighter_red"
+        android:onClick="onStyleSetterClicked"/>
+
+    <ImageButton
+        android:id="@+id/font_highlighter_purple"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_margin="8dp"
+        android:background="@drawable/editor_color_circle"
+        android:backgroundTint="@color/highlighter_purple"
+        android:onClick="onStyleSetterClicked"/>
+
+    <ImageButton
+        android:id="@+id/font_highlighter_blue"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_margin="8dp"
+        android:background="@drawable/editor_color_circle"
+        android:backgroundTint="@color/highlighter_blue"
+        android:onClick="onStyleSetterClicked"/>
+
+    <ImageButton
+        android:id="@+id/font_highlighter_green"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_margin="8dp"
+        android:background="@drawable/editor_color_circle"
+        android:backgroundTint="@color/highlighter_green"
+        android:onClick="onStyleSetterClicked"/>
+</LinearLayout>

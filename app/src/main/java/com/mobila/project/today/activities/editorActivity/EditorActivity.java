@@ -12,12 +12,14 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -27,7 +29,6 @@ import com.mobila.project.today.R;
 import com.mobila.project.today.activities.editorActivity.listeners.EditorKeyboardEventListener;
 import com.mobila.project.today.activities.editorActivity.listeners.TitleOnEditorActionListener;
 import com.mobila.project.today.modelMock.NoteMock;
-import com.mobila.project.today.activities.adapters.FileHolderAdapter;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 
@@ -88,7 +89,6 @@ public class EditorActivity extends AppCompatActivity {
     }
 
     private void setupListeners() {
-        //Todo title doesn't need to adapt anymore
         EditText headline = findViewById(R.id.editor_title);
         //todo find out if still necessary with focus
         headline.setOnEditorActionListener(new TitleOnEditorActionListener(this));
@@ -113,6 +113,7 @@ public class EditorActivity extends AppCompatActivity {
      */
     public void setKeyboardOpen(Boolean keyBoardOpen) {
         this.keyBoardOpen = keyBoardOpen;
+        closeAttachments();
     }
 
     /**
@@ -154,23 +155,45 @@ public class EditorActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
-    /**
-     * Is invoked by pressing the Colour-Symbol in the lower menu.
-     * It sets the colour of the selected text
-     *
-     * @param item The item which was pressed
-     */
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        return noteEditor.choseStyle(item);
+    public void onFontStyleChooserClicked(View view){
+        LinearLayout fontStyleOptions = findViewById(R.id.editor_font_styles);
+        handleMenuClick(fontStyleOptions);
+    }
+
+    public void onFontColourChooserClicked(View view){
+        LinearLayout fontColorOptions = findViewById(R.id.editor_color_chooser);
+        handleMenuClick(fontColorOptions);
+    }
+
+    public void onFontHighlighterChooserPressed(View view){
+        LinearLayout fontHighlighterOptions = findViewById(R.id.font_highlighter_chooser);
+        handleMenuClick(fontHighlighterOptions);
+    }
+
+    private void handleMenuClick(LinearLayout menu){
+        if (menu.getVisibility() == View.GONE){
+            closeTasks(menu);
+            closeMenus();
+            menu.setVisibility(View.VISIBLE);
+        } else {
+            menu.setVisibility(View.GONE);
+        }
+    }
+
+    public void onStyleSetterClicked(View view){
+        noteEditor.applyStyle(view);
+    }
+
+    public void closeMenus(){
+        findViewById(R.id.font_highlighter_chooser).setVisibility(View.GONE);
+        findViewById(R.id.editor_color_chooser).setVisibility(View.GONE);
+        findViewById(R.id.editor_font_styles).setVisibility(View.GONE);
     }
 
     /**
      * Method for inserting a Tab in the note-content
-     *
-     * @param item has no function other than being there as default for menus root
      */
-    public void onTabButtonClicked(MenuItem item) {
+    public void onTabButtonClicked(View view) {
         this.noteEditor.insertTab();
     }
 
@@ -293,6 +316,7 @@ public class EditorActivity extends AppCompatActivity {
     }
 
     public void openTasks(View view){
+        closeMenus();
         displayCloseNoteButton();
         CoordinatorLayout noteView = findViewById(R.id.note_view);
         noteView.setVisibility(View.VISIBLE);
@@ -316,5 +340,17 @@ public class EditorActivity extends AppCompatActivity {
         taskButton.setVisibility(View.GONE);
         CoordinatorLayout closeButton = findViewById(R.id.go_back_actionButton);
         closeButton.setVisibility(View.VISIBLE);
+    }
+
+    public void showAppropiateItems() {
+        LinearLayout editItems= findViewById(R.id.edit_items);
+        CoordinatorLayout attachmentItems = findViewById(R.id.attachment_items);
+        if (keyBoardOpen){
+            editItems.setVisibility(View.VISIBLE);
+            attachmentItems.setVisibility(View.GONE);
+        } else {
+            editItems.setVisibility(View.GONE);
+            attachmentItems.setVisibility(View.VISIBLE);
+        }
     }
 }
