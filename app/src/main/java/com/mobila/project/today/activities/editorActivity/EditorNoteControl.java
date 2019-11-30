@@ -65,6 +65,10 @@ class EditorNoteControl {
                 setStyle(new ForegroundColorSpan(
                         ContextCompat.getColor(activity, R.color.textcolour_green)));
                 break;
+            case R.id.font_color_black:
+                setStyle(new ForegroundColorSpan(
+                        ContextCompat.getColor(activity, R.color.icon_black)));
+                break;
 
             //Highlighter Options
             case R.id.font_highlighter_yellow:
@@ -87,16 +91,20 @@ class EditorNoteControl {
                 setStyle(new BackgroundColorSpan(
                         ContextCompat.getColor(activity, R.color.highlighter_red)));
                 break;
+            case R.id.font_highlighter_remove:
+                setStyle(new BackgroundColorSpan(
+                        ContextCompat.getColor(activity, R.color.white)));
+                break;
 
             //Style Options
             case R.id.font_style_bold:
-                setStyle(new StyleSpan(Typeface.BOLD));
+                setExclusivStyle(new StyleSpan(Typeface.BOLD));
                 break;
             case R.id.font_style_italic:
-                setStyle(new StyleSpan(Typeface.ITALIC));
+                setExclusivStyle(new StyleSpan(Typeface.ITALIC));
                 break;
             case R.id.font_style_underlined:
-                setStyle(new UnderlineSpan());
+                setExclusivStyle(new UnderlineSpan());
                 break;
             default:
                 break;
@@ -113,7 +121,18 @@ class EditorNoteControl {
     private void setStyle(Parcelable parcelable) {
         int startSelection = this.editorContent.getSelectionStart();
         int endSelection = this.editorContent.getSelectionEnd();
-        this.note.getContent().setSpan(parcelable, startSelection, endSelection, 0);
+        this.note.getContent().setSpan(
+                parcelable, startSelection, endSelection, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        this.editorContent.setText(this.note.getContent(), TextView.BufferType.SPANNABLE);
+        //moves cursor to the end of the selection
+        this.editorContent.setSelection(endSelection);
+    }
+
+    private void setExclusivStyle(Parcelable parcelable){
+        int startSelection = this.editorContent.getSelectionStart();
+        int endSelection = this.editorContent.getSelectionEnd();
+        this.note.getContent().setSpan(
+                parcelable, startSelection, endSelection, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
         this.editorContent.setText(this.note.getContent(), TextView.BufferType.SPANNABLE);
         //moves cursor to the end of the selection
         this.editorContent.setSelection(endSelection);

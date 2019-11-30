@@ -64,4 +64,13 @@
         android:background="@drawable/editor_color_circle"
         android:backgroundTint="@color/textcolour_green"
         android:onClick="onStyleSetterClicked"/>
+
+    <ImageButton
+        android:id="@+id/font_color_black"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_margin="8dp"
+        android:background="@drawable/editor_color_circle"
+        android:backgroundTint="@color/icon_black"
+        android:onClick="onStyleSetterClicked"/>
 </LinearLayout>

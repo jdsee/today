@@ -35,4 +35,5 @@
         android:layout_margin="8dp"
         android:background="@drawable/baseline_format_bold_24"
         android:onClick="onStyleSetterClicked"/>
+
 </LinearLayout>
