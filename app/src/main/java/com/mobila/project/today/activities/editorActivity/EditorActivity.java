@@ -26,12 +26,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mobila.project.today.R;
+import com.mobila.project.today.activities.adapters.TaskAdapter;
 import com.mobila.project.today.activities.editorActivity.listeners.EditorKeyboardEventListener;
 import com.mobila.project.today.activities.editorActivity.listeners.TitleOnEditorActionListener;
+import com.mobila.project.today.model.Task;
+import com.mobila.project.today.model.implementations.TaskImpl;
 import com.mobila.project.today.modelMock.NoteMock;
+import com.mobila.project.today.modelMock.TaskMock;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -72,8 +78,9 @@ public class EditorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_editor);
         setSupportActionBar(findViewById(R.id.editor_toolbar));
         getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.lightGrey));
-        fileContainer = findViewById(R.id.recycler_view_files);
+        this.fileContainer = findViewById(R.id.recycler_view_files);
         initAttachmentsView();
+        initTaskView();
     }
 
     private void hideCameraIfNotAvailable() {
@@ -312,6 +319,17 @@ public class EditorActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.recycler_view_files);
         this.fileHolderAdapter = new EditorFileHolderAdapter( this, this.note);
         recyclerView.setAdapter(this.fileHolderAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    private void initTaskView() {
+        RecyclerView recyclerView = findViewById(R.id.rv_course_tasks);
+        List<Task> tasks = new ArrayList<>();
+        tasks.add(new TaskImpl());
+        tasks.add(new TaskImpl());
+        tasks.add(new TaskImpl());
+        TaskAdapter taskAdapter = new TaskAdapter(this, tasks);
+        recyclerView.setAdapter(taskAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
