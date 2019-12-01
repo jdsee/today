@@ -1,5 +1,6 @@
 package com.mobila.project.today.model.implementations;
 
+import com.mobila.project.today.dataProviding.OrganizerDataProvider;
 import com.mobila.project.today.dataProviding.dataAccess.LectureDataAccess;
 import com.mobila.project.today.dataProviding.dataAccess.RootDataAccess;
 import com.mobila.project.today.model.Lecture;
@@ -16,7 +17,17 @@ class LectureImpl implements Lecture {
     private int nr;
     private int position;
     private String room;
-    
+
+    public LectureImpl(int ID, int nr, int position, String room) {
+        this.ID = ID;
+        this.nr = nr;
+        this.position = position;
+        this.room = room;
+
+        OrganizerDataProvider dataProvider = OrganizerDataProvider.getInstance();
+        this.rootAccess = dataProvider.getRootDataAccess();
+        this.lectureAccess = dataProvider.getLectureDataAccess();
+    }
 
     @Override
     public Section getSection() {
