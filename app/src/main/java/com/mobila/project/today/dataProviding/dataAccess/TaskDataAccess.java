@@ -12,7 +12,7 @@ public interface TaskDataAccess {
 
     Date getDeadline(Identifiable task) throws DataKeyNotFoundException;
 
-    void setDeatline(Identifiable task, Date date) throws DataKeyNotFoundException;
+    void setDeadline(Identifiable task, Date date) throws DataKeyNotFoundException;
 
 
     String getContent(Identifiable task) throws DataKeyNotFoundException;

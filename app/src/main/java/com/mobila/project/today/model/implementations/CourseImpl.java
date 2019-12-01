@@ -1,53 +1,56 @@
-/*
 package com.mobila.project.today.model;
+
+import com.mobila.project.today.dataProviding.DataKeyNotFoundException;
+import com.mobila.project.today.dataProviding.OperationNotSupportedInActualContextException;
+import com.mobila.project.today.dataProviding.OrganizerDataProvider;
 
 import java.util.List;
 
 class CourseImpl implements Course {
-    private static OrganizerDataRep dataRep;
-    private final int id;
+    private static OrganizerDataProvider dataProvider;
 
-    static {
-        //dataRep = OrganizerDataRep.getInstance();
-    }
+    private final int ID;
+    private String title;
 
-    public CourseImpl(int id) {
-        this.id = id;
+    public CourseImpl(int ID) {
+        this.ID = ID;
     }
 
     @Override
-    public Semester getSemester() {
-        return dataRep.getParent(this);
+    public Semester getSemester()
+            throws DataKeyNotFoundException, OperationNotSupportedInActualContextException {
+        return dataProvider.getParent(this);
     }
 
     @Override
     public String getTitle() {
-        return dataRep.getTitle(this);
+        return this.title;
     }
 
     @Override
-    public void setTitle(String title) {
-        dataRep.setTitle(this, title);
+    public void setTitle(String title) throws DataKeyNotFoundException {
+        dataProvider.updateEntityInstance(this);
     }
 
     @Override
-    public List<Section> getSections() {
-        return dataRep.getChildren(this);
+    public List<Section> getSections()
+            throws DataKeyNotFoundException, OperationNotSupportedInActualContextException {
+        return dataProvider.getChildren(this);
     }
 
     @Override
     public void addSection(Section section) {
-        dataRep.addChild(this, section);
+        dataProvider.addChild(this, section);
     }
 
     @Override
     public void removeSection(Identifiable section) {
-        dataRep.removeEntityInstance(section);
+
     }
 
     @Override
     public List<Task> getTasks() {
-        return dataRep.getTasks(this);
+        return null;
     }
 
     @Override
@@ -62,7 +65,11 @@ class CourseImpl implements Course {
 
     @Override
     public int getID() {
-        return 0;
+        return this.ID;
+    }
+
+    @Override
+    public String getTypeIdentifier() {
+        return null;
     }
 }
-*/

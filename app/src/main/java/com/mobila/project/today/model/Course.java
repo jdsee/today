@@ -1,5 +1,8 @@
 package com.mobila.project.today.model;
 
+import com.mobila.project.today.dataProviding.DataKeyNotFoundException;
+import com.mobila.project.today.dataProviding.OperationNotSupportedInActualContextException;
+
 import java.util.List;
 
 /**
@@ -7,14 +10,15 @@ import java.util.List;
  * The main content are the sections, which store all relevant data for taking notes.
  * There are also course related notes stored in the @code{Course}.
  */
-public interface Course extends Identifiable {
+public interface Course extends Identifiable, Definable {
+    public static final String COURSE_TYPE_IDENTIFIER = "course";
 
     /**
      * Returns the semester containing this course.
      *
      * @return the semester containing this course
      */
-    Semester getSemester();
+    Semester getSemester() throws DataKeyNotFoundException, OperationNotSupportedInActualContextException;
 
     /**
      * Returns the title of this course.
@@ -28,14 +32,14 @@ public interface Course extends Identifiable {
      *
      * @param title title of this course
      */
-    void setTitle(String title);
+    void setTitle(String title) throws DataKeyNotFoundException;
 
     /**
      * Returns a list with all sections contained in this course.
      *
      * @return a list with all sections contained in this course
      */
-    List<Section> getSections();
+    List<Section> getSections() throws DataKeyNotFoundException, OperationNotSupportedInActualContextException;
 
     /**
      * Adds a section to this course.

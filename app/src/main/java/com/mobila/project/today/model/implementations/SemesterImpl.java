@@ -1,7 +1,7 @@
+/*
 package com.mobila.project.today.model.implementations;
 
 import com.mobila.project.today.dataProviding.OrganizerDataProvider;
-import com.mobila.project.today.dataProviding.OrganizerDataRep;
 import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Definable;
 import com.mobila.project.today.model.Semester;
@@ -9,7 +9,6 @@ import com.mobila.project.today.model.Semester;
 import java.util.List;
 
 class SemesterImpl implements Semester, Definable {
-    public static final String SEMESTER_TYPE_IDENTIFIER = "semester";
     private static OrganizerDataProvider dataProvider;
     private final int id;
 
@@ -18,7 +17,7 @@ class SemesterImpl implements Semester, Definable {
         dataProvider = OrganizerDataProvider.getInstance();
     }
     */
-
+/*
     public SemesterImpl(int id) {
         this.id = id;
     }
@@ -38,3 +37,4 @@ class SemesterImpl implements Semester, Definable {
         return SEMESTER_TYPE_IDENTIFIER;
     }
 }
+*/
