@@ -52,6 +52,7 @@ public class EditorActivity extends AppCompatActivity {
     private View fileContainer;
 
     private boolean keyBoardOpen;
+    private List<Task> tasks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +62,7 @@ public class EditorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //get Note from Intent
         this.note = getIntent().getParcelableExtra(NoteMock.INTENT_EXTRA_CODE);
+        this.tasks = getIntent().getParcelableArrayListExtra(Task.INTENT_EXTRA_CODE);
 
         setupViews();
         hideCameraIfNotAvailable();
@@ -324,10 +326,6 @@ public class EditorActivity extends AppCompatActivity {
 
     private void initTaskView() {
         RecyclerView recyclerView = findViewById(R.id.rv_course_tasks);
-        List<Task> tasks = new ArrayList<>();
-        tasks.add(new TaskImpl());
-        tasks.add(new TaskImpl());
-        tasks.add(new TaskImpl());
         TaskAdapter taskAdapter = new TaskAdapter(this, tasks);
         recyclerView.setAdapter(taskAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
