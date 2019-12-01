@@ -8,13 +8,6 @@ import com.mobila.project.today.dataProviding.dataAccess.RootDataAccess;
 import com.mobila.project.today.dataProviding.dataAccess.SectionDataAccess;
 import com.mobila.project.today.dataProviding.dataAccess.SemesterDataAccess;
 import com.mobila.project.today.dataProviding.dataAccess.TaskDataAccess;
-import com.mobila.project.today.model.Course;
-import com.mobila.project.today.model.Definable;
-import com.mobila.project.today.model.Identifiable;
-import com.mobila.project.today.model.Semester;
-import com.mobila.project.today.model.Task;
-
-import java.util.List;
 
 class OrganizerDataProviderImpl implements OrganizerDataProvider {
     private static final OrganizerDataProviderImpl instance = new OrganizerDataProviderImpl();
@@ -36,63 +29,42 @@ class OrganizerDataProviderImpl implements OrganizerDataProvider {
     }
 
     @Override
-    public List<Semester> getAllSemesters() {
-        return this.rootAccess.getAllSemesters();
+    public RootDataAccess getRootDataAccess() {
+        return this.rootAccess;
     }
 
     @Override
-    public List<Task> getAllTasks() {
-        return this.rootAccess.getAllTasks();
+    public SemesterDataAccess getSemesterDataAccess() {
+        return this.semesterAccess;
     }
 
     @Override
-    public void updateEntityInstance(Identifiable instance) throws DataKeyNotFoundException {
-
+    public CourseDataAccess getCourseDataAccess() {
+        return this.courseAccess;
     }
 
     @Override
-    public void removeEntityInstance(Identifiable instance) throws DataKeyNotFoundException {
-        this.rootAccess.removeEntityInstance(instance);
+    public SectionDataAccess getSectionDataAccess() {
+        return this.sectionAccess;
     }
 
     @Override
-    public <T extends Definable, R extends Identifiable> R getParent(T context)
-            throws OperationNotSupportedInActualContextException, DataKeyNotFoundException {
-        switch (context.getTypeIdentifier()) {
-            case Course.COURSE_TYPE_IDENTIFIER:
-                return null;
-        }
-        return null;
+    public LectureDataAccess getLectureDataAccess() {
+        return this.lectureAccess;
     }
 
     @Override
-    public <T extends Definable, R extends Identifiable> List<R> getChildren(T context)
-            throws OperationNotSupportedInActualContextException, DataKeyNotFoundException {
-            Identifiable contextID = (Identifiable) context;
-            switch (context.getTypeIdentifier()) {
-                case Semester.SEMESTER_TYPE_IDENTIFIER:
-                    return (List<R>) semesterAccess.getCourses(contextID);
-                case Course.COURSE_TYPE_IDENTIFIER:
-                    return (List<R>) courseAccess.getSections(contextID);
-
-            }
-        return null;
+    public NoteDataAccess getNoteDataAccess() {
+        return this.noteAccess;
     }
 
     @Override
-    public <T extends Definable, R extends Identifiable> void addChild(T context, R child) {
-
+    public AttachmentDataAccess getAttachmentDataAccess() {
+        return this.attachmentAccess;
     }
 
     @Override
-    public <T extends Definable, R extends Identifiable> R getContent(T context)
-            throws OperationNotSupportedInActualContextException, DataKeyNotFoundException {
-        return null;
-    }
-
-    @Override
-    public <T extends Definable, R extends Identifiable> R setContent(T context, R content)
-            throws OperationNotSupportedInActualContextException, DataKeyNotFoundException {
-        return null;
+    public TaskDataAccess getTaskDataAccess() {
+        return taskAccess;
     }
 }

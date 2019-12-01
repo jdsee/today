@@ -13,4 +13,6 @@ public interface SemesterDataAccess {
     void addCourse(Identifiable semester, Course course) throws DataKeyNotFoundException;
 
     int getNumber(Identifiable semester) throws DataKeyNotFoundException;
+
+    void setNumber(Identifiable semester, int nr);
 }
