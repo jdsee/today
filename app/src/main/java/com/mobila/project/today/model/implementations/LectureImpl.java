@@ -1,5 +1,6 @@
 package com.mobila.project.today.model.implementations;
 
+import com.mobila.project.today.dataProviding.DataKeyNotFoundException;
 import com.mobila.project.today.dataProviding.OrganizerDataProvider;
 import com.mobila.project.today.dataProviding.dataAccess.LectureDataAccess;
 import com.mobila.project.today.dataProviding.dataAccess.RootDataAccess;
@@ -10,87 +11,102 @@ import com.mobila.project.today.model.Section;
 import java.util.Date;
 
 class LectureImpl implements Lecture {
-    private final RootDataAccess rootAccess;
-    private final LectureDataAccess lectureAccess;
+    private final RootDataAccess rootDataAccess;
+    private final LectureDataAccess dataAccess;
 
     private final int ID;
-    private int nr;
+    private int lectureNr;
     private int position;
-    private String room;
+    private Date date;
+    private String roomNr;
+    private String lecturer;
 
-    public LectureImpl(int ID, int nr, int position, String room) {
+    public LectureImpl(int ID, int lectureNr, int position) {
         this.ID = ID;
-        this.nr = nr;
+        this.lectureNr = lectureNr;
         this.position = position;
-        this.room = room;
+        this.roomNr = roomNr;
 
         OrganizerDataProvider dataProvider = OrganizerDataProvider.getInstance();
-        this.rootAccess = dataProvider.getRootDataAccess();
-        this.lectureAccess = dataProvider.getLectureDataAccess();
+        this.rootDataAccess = dataProvider.getRootDataAccess();
+        this.dataAccess = dataProvider.getLectureDataAccess();
+    }
+
+    public LectureImpl(int ID, int lectureNr, int position, Date date, String roomNr, String lecturer) {
+        this(ID, lectureNr, position);
+        this.date = date;
+        this.roomNr = roomNr;
+        this.lecturer = lecturer;
+    }
+
+
+    @Override
+    public Section getSection() throws DataKeyNotFoundException {
+        return this.dataAccess.getSection(this);
     }
 
     @Override
-    public Section getSection() {
-        return null;
+    public Note getNote() throws DataKeyNotFoundException {
+        return this.dataAccess.getNote(this);
     }
 
     @Override
-    public Note getNote() {
-        return null;
+    public int getLectureNr() throws DataKeyNotFoundException {
+        return this.dataAccess.getLectureNumber(this);
     }
 
     @Override
-    public int getLectureNr() {
-        return 0;
+    public void setLectureNr(int number) throws DataKeyNotFoundException {
+        this.lectureNr = number;
+        this.dataAccess.setLectureNumber(this, number);
     }
 
     @Override
-    public void setLetureNr() {
-
+    public int getLecturePosition() throws DataKeyNotFoundException {
+        return this.dataAccess.getLecturePosition(this);
     }
 
     @Override
-    public int getLecturePosition() {
-        return 0;
+    public void setLecturePosition(int position) throws DataKeyNotFoundException {
+        this.position = position;
+        this.dataAccess.setLecturePosition(this, position);
     }
 
     @Override
-    public void setLecturePosition() {
-
+    public String getRoomNumber() throws DataKeyNotFoundException {
+        return this.dataAccess.getRoomNumber(this);
     }
 
     @Override
-    public String getRoom() {
-        return null;
+    public void setRoomNumber(String roomNr) throws DataKeyNotFoundException {
+        this.roomNr = roomNr;
+        this.dataAccess.setRoomNumber(this, roomNr);
     }
 
     @Override
-    public void setRoom(String room) {
-
+    public Date getDate() throws DataKeyNotFoundException {
+        return this.dataAccess.getDate(this);
     }
 
     @Override
-    public Date getDate() {
-        return null;
+    public void setDate(Date date) throws DataKeyNotFoundException {
+        this.date = date;
+        this.dataAccess.setDate(this, date);
     }
 
     @Override
-    public void setDate(Date date) {
-
+    public String getLecturer() throws DataKeyNotFoundException {
+        return this.dataAccess.getLecturer(this);
     }
 
     @Override
-    public String getLecturer() {
-        return null;
-    }
-
-    @Override
-    public void setLecturer(String lecturer) {
-
+    public void setLecturer(String lecturer) throws DataKeyNotFoundException {
+        this.lecturer = lecturer;
+        this.dataAccess.setLecturer(this, lecturer);
     }
 
     @Override
     public int getID() {
-        return 0;
+        return this.ID;
     }
 }

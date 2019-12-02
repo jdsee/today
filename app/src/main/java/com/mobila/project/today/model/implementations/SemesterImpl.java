@@ -10,45 +10,45 @@ import com.mobila.project.today.model.Semester;
 import java.util.List;
 
 class SemesterImpl implements Semester {
-    private final RootDataAccess rootAccess;
-    private final SemesterDataAccess semesterAccess;
+    private final RootDataAccess rootDataAccess;
+    private final SemesterDataAccess dataAccess;
 
     private final int ID;
-    private int nr;
+    private int semesterNr;
 
-    public SemesterImpl(int ID, int nr) {
+    public SemesterImpl(int ID, int semesterNr) {
         this.ID = ID;
-        this.nr = nr;
+        this.semesterNr = semesterNr;
 
         OrganizerDataProvider dataProvider = OrganizerDataProvider.getInstance();
-        this.rootAccess = dataProvider.getRootDataAccess();
-        this.semesterAccess = dataProvider.getSemesterDataAccess();
+        this.rootDataAccess = dataProvider.getRootDataAccess();
+        this.dataAccess = dataProvider.getSemesterDataAccess();
     }
 
     @Override
     public List<Course> getCourses() throws TodayException {
-        return this.semesterAccess.getCourses(this);
+        return this.dataAccess.getCourses(this);
     }
 
     @Override
-    public int getNumber() throws TodayException {
-        return this.nr;
+    public int getSemesterNr() throws TodayException {
+        return this.semesterNr;
     }
 
     @Override
-    public void setNumber(int nr) throws TodayException {
-        this.nr = nr;
-        this.semesterAccess.setNumber(this, nr);
+    public void setSemesterNr(int number) throws TodayException {
+        this.semesterNr = number;
+        this.dataAccess.setNumber(this, number);
     }
 
     @Override
     public void addCourse(Course course) throws TodayException {
-        this.semesterAccess.addCourse(this, course);
+        this.dataAccess.addCourse(this, course);
     }
 
     @Override
     public void removeCourse(Course course) throws TodayException {
-        this.rootAccess.removeEntityInstance(course);
+        this.rootDataAccess.removeEntityInstance(course);
     }
 
     @Override

@@ -12,8 +12,8 @@ import com.mobila.project.today.model.Section;
 import java.util.List;
 
 class SectionImpl implements Section {
-    private final RootDataAccess rootAccess;
-    private final SectionDataAccess sectionAccess;
+    private final RootDataAccess rootDataAccess;
+    private final SectionDataAccess dataAccess;
 
     private final int ID;
     private String title;
@@ -23,13 +23,13 @@ class SectionImpl implements Section {
         this.title = title;
 
         OrganizerDataProvider dataProvider = OrganizerDataProvider.getInstance();
-        this.rootAccess = dataProvider.getRootDataAccess();
-        this.sectionAccess = dataProvider.getSectionDataAccess();
+        this.rootDataAccess = dataProvider.getRootDataAccess();
+        this.dataAccess = dataProvider.getSectionDataAccess();
     }
 
     @Override
     public Course getCourse() throws DataKeyNotFoundException {
-        return this.sectionAccess.getCourse(this);
+        return this.dataAccess.getCourse(this);
     }
 
     @Override
@@ -41,22 +41,22 @@ class SectionImpl implements Section {
     @Override
     public void setTitle(String title) throws DataKeyNotFoundException {
         this.title = title;
-        this.sectionAccess.setTitle(this, title);
+        this.dataAccess.setTitle(this, title);
     }
 
     @Override
     public List<Lecture> getLectures() throws DataKeyNotFoundException {
-        return this.sectionAccess.getLectures(this);
+        return this.dataAccess.getLectures(this);
     }
 
     @Override
     public void addLecture(Lecture lecture) throws DataKeyNotFoundException {
-        this.sectionAccess.addLecture(this, lecture);
+        this.dataAccess.addLecture(this, lecture);
     }
 
     @Override
     public void removeLecture(Identifiable lecture) throws DataKeyNotFoundException {
-        this.rootAccess.removeEntityInstance(lecture);
+        this.rootDataAccess.removeEntityInstance(lecture);
     }
 
     @Override

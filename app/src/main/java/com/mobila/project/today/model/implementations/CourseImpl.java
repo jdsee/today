@@ -13,8 +13,8 @@ import com.mobila.project.today.model.Task;
 import java.util.List;
 
 class CourseImpl implements Course {
-    private final RootDataAccess rootAccess;
-    private final CourseDataAccess courseAccess;
+    private final RootDataAccess rootDataAccess;
+    private final CourseDataAccess dataAccess;
 
     private final int ID;
     private String title;
@@ -24,13 +24,13 @@ class CourseImpl implements Course {
         this.title = title;
 
         OrganizerDataProvider dataProvider = OrganizerDataProvider.getInstance();
-        this.rootAccess = dataProvider.getRootDataAccess();
-        this.courseAccess = dataProvider.getCourseDataAccess();
+        this.rootDataAccess = dataProvider.getRootDataAccess();
+        this.dataAccess = dataProvider.getCourseDataAccess();
     }
 
     @Override
     public Semester getSemester() throws DataKeyNotFoundException {
-        return this.courseAccess.getSemester(this);
+        return this.dataAccess.getSemester(this);
     }
 
     @Override
@@ -41,38 +41,38 @@ class CourseImpl implements Course {
     @Override
     public void setTitle(String title) throws DataKeyNotFoundException {
         this.title = title;
-        this.courseAccess.setTitle(this, title);
+        this.dataAccess.setTitle(this, title);
     }
 
     @Override
     public List<Section> getSections() throws DataKeyNotFoundException {
-        return this.courseAccess.getSections(this);
+        return this.dataAccess.getSections(this);
     }
 
     @Override
     public void addSection(Section section) throws DataKeyNotFoundException {
-        this.courseAccess.addSection(this, section);
+        this.dataAccess.addSection(this, section);
     }
 
     @Override
     public void removeSection(Identifiable section) throws DataKeyNotFoundException {
-        this.rootAccess.removeEntityInstance(section);
+        this.rootDataAccess.removeEntityInstance(section);
     }
 
 
     @Override
     public List<Task> getTasks() throws DataKeyNotFoundException {
-        return this.courseAccess.getTasks(this);
+        return this.dataAccess.getTasks(this);
     }
 
     @Override
     public void addTask(Task task) throws DataKeyNotFoundException {
-        this.courseAccess.addTask(this, task);
+        this.dataAccess.addTask(this, task);
     }
 
     @Override
     public void removeTask(Identifiable task) throws DataKeyNotFoundException {
-        this.rootAccess.removeEntityInstance(task);
+        this.rootDataAccess.removeEntityInstance(task);
     }
 
     @Override

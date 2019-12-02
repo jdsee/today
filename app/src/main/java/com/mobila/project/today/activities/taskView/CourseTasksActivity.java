@@ -12,6 +12,7 @@ import com.mobila.project.today.activities.adapters.TaskAdapter;
 import com.mobila.project.today.model.Task;
 import com.mobila.project.today.model.implementations.TaskImpl;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class CourseTasksActivity extends AppCompatActivity {
     }
 
     private Task createExampleTask() {
-        return new TaskImpl();
+        return new TaskImpl(1, "", Date.valueOf("221100"));
     }
 
     public void onAddTaskClicked(View view) {

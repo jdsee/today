@@ -15,9 +15,9 @@ public interface Semester extends Identifiable {
      */
     List<Course> getCourses() throws TodayException;
 
-    int getNumber() throws TodayException;
+    int getSemesterNr() throws TodayException;
 
-    void setNumber(int nr) throws TodayException;
+    void setSemesterNr(int nr) throws TodayException;
 
     void addCourse(Course course) throws TodayException;
 

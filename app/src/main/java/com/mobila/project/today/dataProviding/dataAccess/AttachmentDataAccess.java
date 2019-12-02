@@ -13,7 +13,7 @@ public interface AttachmentDataAccess {
 
     String getTitle(Identifiable attachment) throws DataKeyNotFoundException;
 
-    void setTitle(Identifiable attachment) throws DataKeyNotFoundException;
+    void setTitle(Identifiable attachment, String title) throws DataKeyNotFoundException;
 
 
     File getContent(Identifiable attachment) throws DataKeyNotFoundException;

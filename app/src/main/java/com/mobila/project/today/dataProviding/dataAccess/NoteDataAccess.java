@@ -22,7 +22,7 @@ public interface NoteDataAccess {
 
     String getTitle(Identifiable note) throws DataKeyNotFoundException;
 
-    void setTitle(Identifiable note) throws  DataKeyNotFoundException;
+    void setTitle(Identifiable note, String title) throws  DataKeyNotFoundException;
 
 
     Spannable getContent(Identifiable note) throws DataKeyNotFoundException;
@@ -32,5 +32,5 @@ public interface NoteDataAccess {
 
     List<NoteReference> getReferences(Identifiable note) throws DataKeyNotFoundException;
 
-    void addReference(Identifiable note, Identifiable reference) throws DataKeyNotFoundException;
+    void addReference(Identifiable note, Identifiable reference, int row) throws DataKeyNotFoundException;
 }
