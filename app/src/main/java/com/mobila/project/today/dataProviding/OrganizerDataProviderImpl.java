@@ -71,7 +71,8 @@ class OrganizerDataProviderImpl implements OrganizerDataProvider {
             Identifiable contextID = (Identifiable) context;
             switch (context.getTypeIdentifier()) {
                 case Semester.SEMESTER_TYPE_IDENTIFIER:
-                    return (List<R>) semesterAccess.getCourses(contextID);
+                    List<Course> courses = semesterAccess.getCourses(contextID);
+                    return courses.get(0) instanceof Identifiable ? (List<R>) courses : null;
                 case Course.COURSE_TYPE_IDENTIFIER:
                     return (List<R>) courseAccess.getSections(contextID);
 
