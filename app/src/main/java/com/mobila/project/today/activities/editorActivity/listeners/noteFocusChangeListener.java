@@ -16,10 +16,10 @@ public class noteFocusChangeListener implements View.OnFocusChangeListener {
     public void onFocusChange(View v, boolean hasFocus) {
         if (hasFocus){
             activity.setFocusOnNoteContent();
-            activity.showAppropiateItems();
+            activity.showAppropriateMenu();
         } else {
             activity.removeFocusOnNoteContent();
-            activity.showAppropiateItems();
+            activity.showAppropriateMenu();
         }
     }
 }

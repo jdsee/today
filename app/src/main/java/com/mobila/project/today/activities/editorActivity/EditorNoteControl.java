@@ -109,7 +109,7 @@ class EditorNoteControl {
             default:
                 break;
         }
-        activity.closeMenus();
+        activity.closeFontOptionMenus();
     }
 
 

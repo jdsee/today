@@ -1,6 +1,5 @@
 package com.mobila.project.today.activities.editorActivity;
 
-import android.content.Context;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
