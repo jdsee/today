@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -17,9 +16,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -28,15 +25,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.mobila.project.today.R;
 import com.mobila.project.today.activities.adapters.TaskAdapter;
 import com.mobila.project.today.activities.editorActivity.listeners.EditorKeyboardEventListener;
+import com.mobila.project.today.activities.editorActivity.listeners.noteFocusChangeListener;
 import com.mobila.project.today.activities.editorActivity.listeners.TitleOnEditorActionListener;
 import com.mobila.project.today.model.Task;
-import com.mobila.project.today.model.implementations.TaskImpl;
 import com.mobila.project.today.modelMock.NoteMock;
-import com.mobila.project.today.modelMock.TaskMock;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -52,6 +47,8 @@ public class EditorActivity extends AppCompatActivity {
     private View fileContainer;
 
     private boolean keyBoardOpen;
+    private boolean focusOnNoteContent;
+
     private List<Task> tasks;
 
     @Override
@@ -75,7 +72,7 @@ public class EditorActivity extends AppCompatActivity {
         setTheme(R.style.Theme_MaterialComponents_Light_NoActionBar_Bridge);
         getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.lightGrey));
         getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR|SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+                View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
         getWindow().setStatusBarColor(Color.TRANSPARENT);
         setContentView(R.layout.activity_editor);
         setSupportActionBar(findViewById(R.id.editor_toolbar));
@@ -98,11 +95,12 @@ public class EditorActivity extends AppCompatActivity {
     }
 
     private void setupListeners() {
-        EditText headline = findViewById(R.id.editor_title);
-        //todo find out if still necessary with focus
-        headline.setOnEditorActionListener(new TitleOnEditorActionListener(this));
+        EditText headlineEditText = findViewById(R.id.editor_title);
+        headlineEditText.setOnEditorActionListener(new TitleOnEditorActionListener(this));
         KeyboardVisibilityEvent.setEventListener(
                 this, new EditorKeyboardEventListener(this));
+        EditText noteEditText = findViewById(R.id.editor_note);
+        noteEditText.setOnFocusChangeListener(new noteFocusChangeListener(this));
     }
 
     private void setupContent() {
@@ -123,6 +121,14 @@ public class EditorActivity extends AppCompatActivity {
     public void setKeyboardOpen(Boolean keyBoardOpen) {
         this.keyBoardOpen = keyBoardOpen;
         closeAttachments();
+    }
+
+    public void setFocusOnNoteContent() {
+        this.focusOnNoteContent = true;
+    }
+
+    public void removeFocusOnNoteContent() {
+        this.focusOnNoteContent = false;
     }
 
     /**
@@ -164,23 +170,23 @@ public class EditorActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
-    public void onFontStyleChooserClicked(View view){
+    public void onFontStyleChooserClicked(View view) {
         LinearLayout fontStyleOptions = findViewById(R.id.editor_font_styles);
         handleMenuClick(fontStyleOptions);
     }
 
-    public void onFontColourChooserClicked(View view){
+    public void onFontColourChooserClicked(View view) {
         LinearLayout fontColorOptions = findViewById(R.id.editor_color_chooser);
         handleMenuClick(fontColorOptions);
     }
 
-    public void onFontHighlighterChooserPressed(View view){
+    public void onFontHighlighterChooserPressed(View view) {
         LinearLayout fontHighlighterOptions = findViewById(R.id.font_highlighter_chooser);
         handleMenuClick(fontHighlighterOptions);
     }
 
-    private void handleMenuClick(LinearLayout menu){
-        if (menu.getVisibility() == View.GONE){
+    private void handleMenuClick(LinearLayout menu) {
+        if (menu.getVisibility() == View.GONE) {
             closeTasks(menu);
             closeMenus();
             menu.setVisibility(View.VISIBLE);
@@ -189,11 +195,11 @@ public class EditorActivity extends AppCompatActivity {
         }
     }
 
-    public void onStyleSetterClicked(View view){
+    public void onStyleSetterClicked(View view) {
         noteEditor.applyStyle(view);
     }
 
-    public void closeMenus(){
+    public void closeMenus() {
         findViewById(R.id.font_highlighter_chooser).setVisibility(View.GONE);
         findViewById(R.id.editor_color_chooser).setVisibility(View.GONE);
         findViewById(R.id.editor_font_styles).setVisibility(View.GONE);
@@ -252,7 +258,7 @@ public class EditorActivity extends AppCompatActivity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         if (this.keyBoardOpen) {
-            if (findViewById(R.id.recycler_view_files).getVisibility()==View.VISIBLE) {
+            if (findViewById(R.id.recycler_view_files).getVisibility() == View.VISIBLE) {
                 closeAttachments();
             }
         }
@@ -264,7 +270,7 @@ public class EditorActivity extends AppCompatActivity {
      * was pressed. If it was open, it gets closed and vise versa
      */
     public void onAttachmentsPressed(View view) {
-        if (findViewById(R.id.recycler_view_files).getVisibility()==View.VISIBLE) {
+        if (findViewById(R.id.recycler_view_files).getVisibility() == View.VISIBLE) {
             closeAttachments();
         } else if (this.note.getAttachmentCount() != 0) {
             openAttachments();
@@ -293,24 +299,23 @@ public class EditorActivity extends AppCompatActivity {
         findViewById(R.id.attachment_counter).setVisibility(View.GONE);
     }
 
-    public void displayFileNumber(){
+    public void displayFileNumber() {
         TextView attachmentCounter = findViewById(R.id.attachment_counter);
-        if (note.getAttachmentCount()==0){
+        if (note.getAttachmentCount() == 0) {
             attachmentCounter.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             attachmentCounter.setVisibility(View.VISIBLE);
         }
     }
 
-    public void updateFileNumber(){
+    public void updateFileNumber() {
         TextView attachmentCounter = findViewById(R.id.attachment_counter);
         int numberOfAttachments = note.getAttachmentCount();
         attachmentCounter.setText(
                 String.format(Locale.getDefault(), "%d", numberOfAttachments));
         if (numberOfAttachments == 0)
             closeAttachments();
-        if (findViewById(R.id.recycler_view_files).getVisibility()==View.GONE)
+        if (findViewById(R.id.recycler_view_files).getVisibility() == View.GONE)
             displayFileNumber();
     }
 
@@ -319,7 +324,7 @@ public class EditorActivity extends AppCompatActivity {
      */
     private void initAttachmentsView() {
         RecyclerView recyclerView = findViewById(R.id.recycler_view_files);
-        this.fileHolderAdapter = new EditorFileHolderAdapter( this, this.note);
+        this.fileHolderAdapter = new EditorFileHolderAdapter(this, this.note);
         recyclerView.setAdapter(this.fileHolderAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -331,27 +336,27 @@ public class EditorActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    public void openTasks(View view){
+    public void openTasks(View view) {
         closeMenus();
         displayCloseNoteButton();
         CoordinatorLayout noteView = findViewById(R.id.note_view);
         noteView.setVisibility(View.VISIBLE);
     }
 
-    public void closeTasks(View view){
+    public void closeTasks(View view) {
         displayNoteButton();
         CoordinatorLayout noteView = findViewById(R.id.note_view);
         noteView.setVisibility(View.GONE);
     }
 
-    private void displayNoteButton(){
+    private void displayNoteButton() {
         CoordinatorLayout taskButton = findViewById(R.id.note_action_button);
         taskButton.setVisibility(View.VISIBLE);
         CoordinatorLayout closeButton = findViewById(R.id.go_back_actionButton);
         closeButton.setVisibility(View.GONE);
     }
 
-    private void displayCloseNoteButton(){
+    private void displayCloseNoteButton() {
         CoordinatorLayout taskButton = findViewById(R.id.note_action_button);
         taskButton.setVisibility(View.GONE);
         CoordinatorLayout closeButton = findViewById(R.id.go_back_actionButton);
@@ -359,14 +364,22 @@ public class EditorActivity extends AppCompatActivity {
     }
 
     public void showAppropiateItems() {
-        LinearLayout editItems= findViewById(R.id.edit_items);
-        CoordinatorLayout attachmentItems = findViewById(R.id.attachment_items);
-        if (keyBoardOpen){
-            editItems.setVisibility(View.VISIBLE);
-            attachmentItems.setVisibility(View.GONE);
+        if (keyBoardOpen && focusOnNoteContent) {
+            showFontMenu();
         } else {
-            editItems.setVisibility(View.GONE);
-            attachmentItems.setVisibility(View.VISIBLE);
+            showAttachmentMenu();
         }
+    }
+
+
+    private void showFontMenu() {
+        findViewById(R.id.edit_items).setVisibility(View.VISIBLE);
+        findViewById(R.id.attachment_items).setVisibility(View.GONE);
+    }
+
+
+    private void showAttachmentMenu() {
+        findViewById(R.id.attachment_items).setVisibility(View.VISIBLE);
+        findViewById(R.id.edit_items).setVisibility(View.GONE);
     }
 }
