@@ -14,7 +14,6 @@ CREATE TABLE semesters
 CREATE TABLE courses
 	(courseID	INTEGER PRIMARY KEY,
 	name		VARCHAR(128) NOT NULL,
-	 lecturer	VARCHAR(64),
 	semesterID	INTEGER REFERENCES semesters ON DELETE CASCADE);
 
 CREATE TABLE tasks
