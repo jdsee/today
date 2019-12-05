@@ -32,6 +32,7 @@ CREATE TABLE lectures
 	(lectureID	INTEGER PRIMARY KEY,
 	roomNr		VARCHAR(32),
 	time		INTEGER,
+	lectureNr	INTEGER,
 	containedBy	INTEGER REFERENCES sections ON DELETE CASCADE);
 
 CREATE TABLE notes
