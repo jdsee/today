@@ -14,6 +14,7 @@ CREATE TABLE semesters
 CREATE TABLE courses
 	(courseID	INTEGER PRIMARY KEY,
 	name		VARCHAR(128) NOT NULL,
+	 lecturer	VARCHAR(64),
 	semesterID	INTEGER REFERENCES semesters ON DELETE CASCADE);
 
 CREATE TABLE tasks
@@ -24,14 +25,14 @@ CREATE TABLE tasks
 
 CREATE TABLE sections
 	(sectionID	INTEGER PRIMARY KEY,
-	name	VARCHAR(64),
+	name		VARCHAR(64),
+	lecturer	VARCHAR(64),
 	containedBy	INTEGER REFERENCES courses ON DELETE CASCADE);
 
 CREATE TABLE lectures
 	(lectureID	INTEGER PRIMARY KEY,
 	roomNr		VARCHAR(32),
 	time		INTEGER,
-	lecturer	VARCHAR(64),
 	containedBy	INTEGER REFERENCES sections ON DELETE CASCADE);
 
 CREATE TABLE notes
