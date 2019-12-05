@@ -29,7 +29,6 @@ CREATE TABLE sections
 
 CREATE TABLE lectures
 	(lectureID	INTEGER PRIMARY KEY,
-	lectureNr	INTEGER,
 	roomNr		VARCHAR(32),
 	time		INTEGER,
 	lecturer	VARCHAR(64),
@@ -51,5 +50,4 @@ CREATE TABLE noteReferences
 CREATE TABLE attachments
 	(attachmentID	INTEGER PRIMARY KEY,
 	content		BYTEA,
-	position	INTEGER,
 	lectureID	INTEGER REFERENCES lectures);
