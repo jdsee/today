@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import com.mobila.project.today.R;
 import com.mobila.project.today.activities.adapters.TaskAdapter;
@@ -16,8 +17,12 @@ import com.mobila.project.today.model.implementations.TaskImpl;
 import com.mobila.project.today.modelMock.CourseMock;
 import com.mobila.project.today.activities.adapters.CourseHolderAdapter;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 import static android.view.View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
@@ -27,7 +32,7 @@ public class TodayActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     RecyclerView.Adapter adapter;
     RecyclerView.LayoutManager layoutManager;
-    List<Task> tasks= new ArrayList<>();
+    List<Task> tasks = new ArrayList<>();
 
     CourseHolderAdapter courseHolderAdapter;
     List<CourseMock> courses = new ArrayList<>();
@@ -40,7 +45,7 @@ public class TodayActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).hide();
         getWindow().setStatusBarColor(Color.TRANSPARENT);
         getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR|SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+                View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
 
         courses.add(new CourseMock(1, "Mobile Anwendungen",
                 "Prof. Dr.-Ing Schwotzer", "WHC 442"));
@@ -66,6 +71,21 @@ public class TodayActivity extends AppCompatActivity {
 
         initCourseView();
         initTaskView();
+        setTimeDisplayed();
+    }
+
+    private void setTimeDisplayed() {
+        TextView dateDisplay = findViewById(R.id.day_display);
+        Calendar calender = Calendar.getInstance();
+        SimpleDateFormat day =
+                new SimpleDateFormat("EEEE", Locale.getDefault());
+        SimpleDateFormat date =
+                new SimpleDateFormat("d.M.yyyy", Locale.getDefault());
+        StringBuilder builder = new StringBuilder();
+        builder.append(day.format(calender.getTime()));
+        builder.append(System.getProperty("line.separator"));
+        builder.append(date.format(calender.getTime()));
+        dateDisplay.setText(builder);
     }
 
     private void initTaskView() {
