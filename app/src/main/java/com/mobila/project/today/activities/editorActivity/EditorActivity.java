@@ -26,8 +26,10 @@ import com.mobila.project.today.activities.adapters.TaskAdapter;
 import com.mobila.project.today.activities.editorActivity.listeners.EditorKeyboardEventListener;
 import com.mobila.project.today.activities.editorActivity.listeners.noteFocusChangeListener;
 import com.mobila.project.today.activities.editorActivity.listeners.TitleOnEditorActionListener;
+import com.mobila.project.today.control.NoteControl;
 import com.mobila.project.today.model.Task;
 import com.mobila.project.today.modelMock.NoteMock;
+import com.mobila.project.today.control.AttachmentControl;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 
@@ -35,12 +37,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-import static android.view.View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
-
 public class EditorActivity extends AppCompatActivity {
     private NoteMock note;
-    private EditorNoteControl noteEditor;
-    private EditorAttachmentControl attachments;
+    private NoteControl noteEditor;
+    private AttachmentControl attachments;
 
     private EditorFileHolderAdapter fileHolderAdapter;
     private View fileContainer;
@@ -82,7 +82,7 @@ public class EditorActivity extends AppCompatActivity {
         setTheme(R.style.Theme_MaterialComponents_Light_NoActionBar_Bridge);
         getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.lightGrey));
         getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+                View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
         getWindow().setStatusBarColor(Color.TRANSPARENT);
         setContentView(R.layout.activity_editor);
         setSupportActionBar(findViewById(R.id.editor_toolbar));
@@ -106,8 +106,8 @@ public class EditorActivity extends AppCompatActivity {
      * Method for initializing the Logic behind the Attachments and the Editor
      */
     private void setupControls() {
-        this.noteEditor = new EditorNoteControl(this, this.note);
-        this.attachments = new EditorAttachmentControl(this, note, fileHolderAdapter);
+        this.noteEditor = new NoteControl(this);
+        this.attachments = new AttachmentControl(this, note, fileHolderAdapter);
     }
 
     /**
@@ -254,6 +254,7 @@ public class EditorActivity extends AppCompatActivity {
      */
     public void onStyleSetterClicked(View icon) {
         noteEditor.applyStyle(icon);
+        closeFontOptionMenus();
     }
 
     /**
@@ -304,6 +305,7 @@ public class EditorActivity extends AppCompatActivity {
         //TODO Needs to avoid content provider all together after SQL db is established to make content provider obsolete
         super.onActivityResult(requestCode, resultCode, data);
         attachments.onActivityResult(requestCode, resultCode, data);
+        updateFileNumber();
     }
 
     /**
