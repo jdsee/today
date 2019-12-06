@@ -8,7 +8,7 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.mobila.project.today.R;
-import com.mobila.project.today.activities.dataStructureView.CourseListActivity;
+import com.mobila.project.today.activities.courseListView.CourseListActivity;
 import com.mobila.project.today.activities.editorActivity.EditorActivity;
 import com.mobila.project.today.activities.taskView.CourseTasksActivity;
 import com.mobila.project.today.modelMock.NoteMock;

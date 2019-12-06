@@ -1,38 +1,55 @@
 package com.mobila.project.today.model.implementations;
 
+import com.mobila.project.today.dataProviding.DataKeyNotFoundException;
+import com.mobila.project.today.dataProviding.OrganizerDataProvider;
+import com.mobila.project.today.dataProviding.dataAccess.TaskDataAccess;
 import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Task;
 
 import java.util.Date;
 
 public class TaskImpl implements Task {
-    @Override
-    public Course getCourse() {
-        return null;
+    private final TaskDataAccess dataAccess;
+
+    private final int ID;
+    private String content;
+    private Date deadline;
+
+    public TaskImpl(int ID, String content, Date deadline) {
+        this.ID = ID;
+        this.content = content;
+        this.deadline = deadline;
+
+        this.dataAccess = OrganizerDataProvider.getInstance().getTaskDataAccess();
     }
 
     @Override
-    public Date getDeadline() {
-        return new Date(12122019);
+    public Course getCourse() throws DataKeyNotFoundException {
+        return this.dataAccess.getCourse(this);
     }
 
     @Override
-    public void setDeadline(Date date) {
+    public Date getDeadline() throws DataKeyNotFoundException {
+        return this.deadline;
+    }
 
+    @Override
+    public void setDeadline(Date date) throws DataKeyNotFoundException {
+        this.dataAccess.setDeadline(this, date);
     }
 
     @Override
     public String getContent() {
-        return "example task";
+        return this.content;
     }
 
     @Override
-    public void setContent(String content) {
-
+    public void setContent(String content) throws DataKeyNotFoundException {
+        this.dataAccess.setContent(this, content);
     }
 
     @Override
     public int getID() {
-        return 0;
+        return this.ID;
     }
 }

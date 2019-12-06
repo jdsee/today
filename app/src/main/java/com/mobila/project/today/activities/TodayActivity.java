@@ -1,7 +1,6 @@
 package com.mobila.project.today.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,6 +15,7 @@ import com.mobila.project.today.model.implementations.TaskImpl;
 import com.mobila.project.today.modelMock.CourseMock;
 import com.mobila.project.today.activities.adapters.CourseHolderAdapter;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -57,11 +57,11 @@ public class TodayActivity extends AppCompatActivity {
         courses.add(new CourseMock(1, "Programmieren 3",
                 "Eine Hubrich", "WHC 624"));
 
-        tasks.add(new TaskImpl());
-        tasks.add(new TaskImpl());
-        tasks.add(new TaskImpl());
-        tasks.add(new TaskImpl());
-        tasks.add(new TaskImpl());
+        tasks.add(new TaskImpl(1,"", Date.valueOf("221100")));
+        tasks.add(new TaskImpl(1,"", Date.valueOf("221100")));
+        tasks.add(new TaskImpl(1,"", Date.valueOf("221100")));
+        tasks.add(new TaskImpl(1,"", Date.valueOf("221100")));
+        tasks.add(new TaskImpl(1,"", Date.valueOf("221100")));
 
 
         initCourseView();
@@ -72,7 +72,7 @@ public class TodayActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.rv_course_tasks);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        tasks.add(new TaskImpl());
+        tasks.add(new TaskImpl(1,"", Date.valueOf("221100")));
         adapter = new TaskAdapter(this, tasks);
         recyclerView.setAdapter(adapter);
     }

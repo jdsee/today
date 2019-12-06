@@ -8,8 +8,6 @@ import java.util.List;
  * Allows access to all data of the "Semester"-entity.
  */
 public interface Semester extends Identifiable {
-    public static final String SEMESTER_TYPE_IDENTIFIER = "semester";
-
     /**
      * Returns a list with all courses contained in this semester.
      *
@@ -17,7 +15,9 @@ public interface Semester extends Identifiable {
      */
     List<Course> getCourses() throws TodayException;
 
-    int getNumber() throws TodayException;
+    int getSemesterNr() throws TodayException;
+
+    void setSemesterNr(int nr) throws TodayException;
 
     void addCourse(Course course) throws TodayException;
 

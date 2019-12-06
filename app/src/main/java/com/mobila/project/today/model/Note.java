@@ -2,6 +2,8 @@ package com.mobila.project.today.model;
 
 import android.text.Spannable;
 
+import com.mobila.project.today.dataProviding.DataKeyNotFoundException;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -9,34 +11,26 @@ import java.util.List;
  *
  */
 public interface Note extends Identifiable {
+    String INTENT_EXTRA_CODE = "EXTRA_NOTE";
+
     /**
      * Returns the lecture containing this attachment.
      *
      * @return the lecture containing this attachment
      */
-    Lecture getLecture();
-
+    Lecture getLecture() throws DataKeyNotFoundException;
 
     String getTitle();
 
-    void setTitle(String title);
+    void setTitle(String title) throws DataKeyNotFoundException;
 
+    Spannable getContent() throws DataKeyNotFoundException;
 
-    Spannable getContent();
+    void setContent(Spannable content) throws DataKeyNotFoundException;
 
-    void setContent(Spannable content);
+    List<NoteReference> getReferences() throws DataKeyNotFoundException;
 
+    void addReference(Identifiable ref, int row) throws DataKeyNotFoundException;
 
-    List<Attachment> getAttachments();
-
-    void addAttachment(Attachment attachment);
-
-    void removeAttachment(Identifiable attachment);
-
-
-    List<NoteReference> getReferences();
-
-    void addReference(Identifiable ref, int row);
-
-    void removeReference(Identifiable ref);
+    void removeReference(Identifiable ref) throws DataKeyNotFoundException;
 }
