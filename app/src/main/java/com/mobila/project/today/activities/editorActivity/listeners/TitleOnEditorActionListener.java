@@ -18,7 +18,7 @@ public class TitleOnEditorActionListener implements TextView.OnEditorActionListe
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_NEXT) {
-            EditText editTextNote = activity.findViewById(R.id.editor_note);
+            EditText editTextNote = activity.findViewById(R.id.editor_content);
             editTextNote.requestFocus();
             return true;
         }

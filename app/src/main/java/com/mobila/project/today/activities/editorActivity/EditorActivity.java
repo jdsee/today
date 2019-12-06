@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Spannable;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -106,7 +107,7 @@ public class EditorActivity extends AppCompatActivity {
      * Method for initializing the Logic behind the Attachments and the Editor
      */
     private void setupControls() {
-        this.noteEditor = new NoteControl(this);
+        this.noteEditor = new NoteControl(this, findViewById(R.id.editor_content));
         this.attachments = new AttachmentControl(this, note, fileHolderAdapter);
     }
 
@@ -119,7 +120,7 @@ public class EditorActivity extends AppCompatActivity {
         headlineEditText.setOnEditorActionListener(new TitleOnEditorActionListener(this));
         KeyboardVisibilityEvent.setEventListener(
                 this, new EditorKeyboardEventListener(this));
-        EditText noteEditText = findViewById(R.id.editor_note);
+        EditText noteEditText = findViewById(R.id.editor_content);
         noteEditText.setOnFocusChangeListener(new noteFocusChangeListener(this));
     }
 
@@ -197,6 +198,8 @@ public class EditorActivity extends AppCompatActivity {
             assert imm != null;
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+        //save note
+        saveContent();
         //sliding animation to the left out of the activity
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
@@ -483,5 +486,18 @@ public class EditorActivity extends AppCompatActivity {
     private void showAttachmentMenu() {
         findViewById(R.id.attachment_items).setVisibility(View.VISIBLE);
         findViewById(R.id.edit_items).setVisibility(View.GONE);
+    }
+
+    /**
+     * Method for saving the content of the editor
+     */
+    private void saveContent(){
+        EditText titleEditor = findViewById(R.id.editor_title);
+        String title = titleEditor.getText().toString();
+        this.note.setTitle(title);
+
+        EditText contentEditor = findViewById(R.id.editor_content);
+        Spannable content = contentEditor.getText();
+        this.note.setContent(content);
     }
 }
