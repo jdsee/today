@@ -18,7 +18,7 @@ CREATE TABLE courses
 
 CREATE TABLE tasks
 	(taskID		INTEGER PRIMARY KEY,
-	deadline	INTEGER,
+	deadline	VARCHAR(16),
 	content		VARCHAR(128) NOT NULL,
 	relatedTo	INTEGER REFERENCES courses ON DELETE CASCADE);
 
@@ -31,7 +31,8 @@ CREATE TABLE sections
 CREATE TABLE lectures
 	(lectureID	INTEGER PRIMARY KEY,
 	roomNr		VARCHAR(32),
-	time		INTEGER,
+	startTime	VARCHAR(16),
+	endTime		VARCHAR(16),
 	lectureNr	INTEGER,
 	containedBy	INTEGER REFERENCES sections ON DELETE CASCADE);
 
