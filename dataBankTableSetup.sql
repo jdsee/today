@@ -3,8 +3,8 @@ DROP TABLE courses;
 DROP TABLE tasks;
 DROP TABLE sections;
 DROP TABLE lectures;
-DROP TABLE notes;
 DROP TABLE noteReferences;
+DROP TABLE notes;
 DROP TABLE attachments;
 
 CREATE TABLE semesters
