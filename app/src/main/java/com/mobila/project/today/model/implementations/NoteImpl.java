@@ -57,21 +57,6 @@ class NoteImpl implements Note {
     }
 
     @Override
-    public List<Attachment> getAttachments() throws DataKeyNotFoundException {
-        return this.dataAccess.getAttachments(this);
-    }
-
-    @Override
-    public void addAttachment(Attachment attachment) throws DataKeyNotFoundException {
-        this.dataAccess.addAttachment(this, attachment);
-    }
-
-    @Override
-    public void removeAttachment(Identifiable attachment) throws DataKeyNotFoundException {
-        this.rootDataAccess.removeEntityInstance(attachment);
-    }
-
-    @Override
     public List<NoteReference> getReferences() throws DataKeyNotFoundException {
         return this.dataAccess.getReferences(this);
     }

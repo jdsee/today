@@ -17,6 +17,7 @@ class SectionImpl implements Section {
 
     private final int ID;
     private String title;
+    private String lecturer;
 
     public SectionImpl(int ID, String title) {
         this.ID = ID;
@@ -57,6 +58,17 @@ class SectionImpl implements Section {
     @Override
     public void removeLecture(Identifiable lecture) throws DataKeyNotFoundException {
         this.rootDataAccess.removeEntityInstance(lecture);
+    }
+
+    @Override
+    public String getLecturer() throws DataKeyNotFoundException {
+        return this.dataAccess.getLecturer(this);
+    }
+
+    @Override
+    public void setLecturer(String lecturer) throws DataKeyNotFoundException {
+        this.lecturer = lecturer;
+        this.dataAccess.setLecturer(this, lecturer);
     }
 
     @Override

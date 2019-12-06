@@ -11,6 +11,8 @@ import java.util.List;
  *
  */
 public interface Note extends Identifiable {
+    String INTENT_EXTRA_CODE = "EXTRA_NOTE";
+
     /**
      * Returns the lecture containing this attachment.
      *
@@ -25,12 +27,6 @@ public interface Note extends Identifiable {
     Spannable getContent() throws DataKeyNotFoundException;
 
     void setContent(Spannable content) throws DataKeyNotFoundException;
-
-    List<Attachment> getAttachments() throws DataKeyNotFoundException;
-
-    void addAttachment(Attachment attachment) throws DataKeyNotFoundException;
-
-    void removeAttachment(Identifiable attachment) throws DataKeyNotFoundException;
 
     List<NoteReference> getReferences() throws DataKeyNotFoundException;
 

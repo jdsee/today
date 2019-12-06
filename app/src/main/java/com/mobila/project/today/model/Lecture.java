@@ -3,6 +3,7 @@ package com.mobila.project.today.model;
 import com.mobila.project.today.dataProviding.DataKeyNotFoundException;
 
 import java.util.Date;
+import java.util.List;
 
 public interface Lecture extends Identifiable {
     /**
@@ -14,23 +15,21 @@ public interface Lecture extends Identifiable {
 
     Note getNote() throws DataKeyNotFoundException;
 
+    List<Attachment> getAttachments() throws DataKeyNotFoundException;
+
+    void addAttachment(Attachment attachment) throws DataKeyNotFoundException;
+
+    void removeAttachment(Identifiable attachment) throws DataKeyNotFoundException;
+
     int getLectureNr() throws DataKeyNotFoundException;
 
     void setLectureNr(int number) throws DataKeyNotFoundException;
 
-    int getLecturePosition() throws DataKeyNotFoundException;
+    String getRoomNr() throws DataKeyNotFoundException;
 
-    void setLecturePosition(int position) throws DataKeyNotFoundException;
-
-    String getRoomNumber() throws DataKeyNotFoundException;
-
-    void setRoomNumber(String room) throws DataKeyNotFoundException;
+    void setRoomNr(String room) throws DataKeyNotFoundException;
 
     Date getDate() throws DataKeyNotFoundException;
 
     void setDate(Date date) throws DataKeyNotFoundException;
-
-    String getLecturer() throws DataKeyNotFoundException;
-
-    void setLecturer(String lecturer) throws DataKeyNotFoundException;
 }

@@ -8,22 +8,22 @@ import java.io.File;
 
 public interface AttachmentDataAccess {
 
-    Lecture getLecture(Identifiable attachment) throws DataKeyNotFoundException;
+    static AttachmentDataAccess createInstance() {
+        //TODO return implementation
+        return null;
+    }
 
+    Lecture getLecture(Identifiable attachment) throws DataKeyNotFoundException;
 
     String getTitle(Identifiable attachment) throws DataKeyNotFoundException;
 
     void setTitle(Identifiable attachment, String title) throws DataKeyNotFoundException;
 
-
     File getContent(Identifiable attachment) throws DataKeyNotFoundException;
 
     void setContent(Identifiable attachment, File file) throws DataKeyNotFoundException;
 
-
     int getPosition(Identifiable attachment) throws DataKeyNotFoundException;
 
     void setPosition(Identifiable attachment, int position) throws DataKeyNotFoundException;
-
-    //test
 }

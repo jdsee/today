@@ -12,6 +12,7 @@ import com.mobila.project.today.dataProviding.dataAccess.TaskDataAccess;
 class OrganizerDataProviderImpl implements OrganizerDataProvider {
     private static final OrganizerDataProviderImpl instance = new OrganizerDataProviderImpl();
 
+    //TODO set access instances final
     private RootDataAccess rootAccess;
     private SemesterDataAccess semesterAccess;
     private CourseDataAccess courseAccess;
@@ -19,13 +20,14 @@ class OrganizerDataProviderImpl implements OrganizerDataProvider {
     private LectureDataAccess lectureAccess;
     private TaskDataAccess taskAccess;
     private NoteDataAccess noteAccess;
-    private AttachmentDataAccess attachmentAccess;
+    private final AttachmentDataAccess attachmentAccess;
 
     static OrganizerDataProviderImpl getInstance() {
         return instance;
     }
 
     private OrganizerDataProviderImpl() {
+        attachmentAccess = AttachmentDataAccess.createInstance();
     }
 
     @Override

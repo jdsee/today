@@ -34,4 +34,8 @@ public interface Section extends Identifiable {
     void addLecture(Lecture lecture) throws DataKeyNotFoundException;
 
     void removeLecture(Identifiable lecture) throws DataKeyNotFoundException;
+
+    String getLecturer() throws DataKeyNotFoundException;
+
+    void setLecturer(String lecturer) throws DataKeyNotFoundException;
 }
