@@ -1,11 +1,11 @@
-DROP TABLE semesters;
-DROP TABLE courses;
-DROP TABLE tasks;
-DROP TABLE sections;
-DROP TABLE lectures;
 DROP TABLE noteReferences;
 DROP TABLE notes;
 DROP TABLE attachments;
+DROP TABLE lectures;
+DROP TABLE sections;
+DROP TABLE tasks;
+DROP TABLE courses;
+DROP TABLE semesters;
 
 CREATE TABLE semesters
 	(semesterID	INTEGER PRIMARY KEY,
