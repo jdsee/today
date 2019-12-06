@@ -46,10 +46,10 @@ CREATE TABLE notes
 CREATE TABLE noteReferences
 	(referenceID	INTEGER PRIMARY KEY,
 	row		INTEGER,
-	noteID		INTEGER REFERENCES notes);
+	noteID		INTEGER REFERENCES notes ON DELETE CASCADE);
 
 
 CREATE TABLE attachments
 	(attachmentID	INTEGER PRIMARY KEY,
 	content		BYTEA,
-	lectureID	INTEGER REFERENCES lectures);
+	lectureID	INTEGER REFERENCES lectures ON DELETE CASCADE);
