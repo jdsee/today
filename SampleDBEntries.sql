@@ -21,7 +21,7 @@ insert into tasks (taskID, deadline, content, relatedTo)
 	values (132, '20200427T173000Z', 'Abgabe Drei Gewinnt', 13);
 
 insert into sections (sectionID, name, containedBy) values (1301, 'Übung', 13);
-insert into sections (sectionID, name, containedBy) values (1302 'Vorlesung', 13);
+insert into sections (sectionID, name, containedBy) values (1302, 'Vorlesung', 13);
 
 insert into lectures (lectureID, lectureNr, roomNr, startTime, endTime, containedBy) 
 	values (130111, 1, 445, '20200325T133000Z', '20200325T153000Z', 13);
