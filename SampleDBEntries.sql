@@ -24,22 +24,22 @@ insert into sections (sectionID, name, containedBy) values (1301, 'Übung', 13);
 insert into sections (sectionID, name, containedBy) values (1302, 'Vorlesung', 13);
 
 insert into lectures (lectureID, lectureNr, roomNr, startTime, endTime, containedBy) 
-	values (130111, 1, 445, '20200325T133000Z', '20200325T153000Z', 13);
+	values (130111, 1, 445, '20200325T133000Z', '20200325T153000Z', 1301);
 insert into lectures (lectureID, lectureNr, roomNr, startTime, endTime, containedBy) 
-	values (130112, 2, 445, '20200401T133000Z', '20200401T153000Z', 13);
+	values (130112, 2, 445, '20200401T133000Z', '20200401T153000Z', 1301);
 insert into lectures (lectureID, lectureNr, roomNr, startTime, endTime, containedBy) 
-	values (130113, 3, 445, '20200408T133000Z', '20200408T153000Z', 13);
+	values (130113, 3, 445, '20200408T133000Z', '20200408T153000Z', 1301);
 insert into lectures (lectureID, lectureNr, roomNr, startTime, endTime, containedBy) 
-	values (130114, 4, 445, '20200415T133000Z', '20200415T153000Z', 13);
+	values (130114, 4, 445, '20200415T133000Z', '20200415T153000Z', 1301);
 
 insert into lectures (lectureID, lectureNr, roomNr, startTime, endTime, containedBy) 
-	values (130121, 1, 640, '20200326T133000Z', '20200326T153000Z', 13);
+	values (130121, 1, 640, '20200326T133000Z', '20200326T153000Z', 1302);
 insert into lectures (lectureID, lectureNr, roomNr, startTime, endTime, containedBy) 
-	values (130122, 2, 640, '20200402T133000Z', '20200402T153000Z', 13);
+	values (130122, 2, 640, '20200402T133000Z', '20200402T153000Z', 1302);
 insert into lectures (lectureID, lectureNr, roomNr, startTime, endTime, containedBy) 
-	values (130123, 3, 640, '20200409T133000Z', '20200409T153000Z', 13);
+	values (130123, 3, 640, '20200409T133000Z', '20200409T153000Z', 1302);
 insert into lectures (lectureID, lectureNr, roomNr, startTime, endTime, containedBy) 
-	values (130124, 4, 640, '20200416T133000Z', '20200416T153000Z', 13);
+	values (130124, 4, 640, '20200416T133000Z', '20200416T153000Z', 1302);
 
 insert into notes (noteID, title, content, lectureID)
 	values (1301211, "Einführungsveranstalltung", null, 130121);
