@@ -44,7 +44,7 @@ public class EditorActivity extends AppCompatActivity {
     private AttachmentControl attachments;
 
     private EditorFileHolderAdapter fileHolderAdapter;
-    private View fileContainer;
+    private RecyclerView fileContainer;
 
     private boolean keyBoardOpen;
     private boolean focusOnNoteContent;
@@ -88,7 +88,6 @@ public class EditorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_editor);
         setSupportActionBar(findViewById(R.id.editor_toolbar));
         getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.lightGrey));
-        this.fileContainer = findViewById(R.id.recycler_view_files);
         initAttachmentsView();
         initTaskView();
     }
@@ -340,7 +339,7 @@ public class EditorActivity extends AppCompatActivity {
      * @param view the view that calls this Method. Only needed for calling this Method via layout
      */
     public void onAttachmentsPressed(View view) {
-        if (findViewById(R.id.recycler_view_files).getVisibility() == View.VISIBLE) {
+        if (fileContainer.getVisibility() == View.VISIBLE) {
             closeAttachments();
         } else if (this.note.getAttachmentCount() != 0) {
             openAttachments();
@@ -395,7 +394,7 @@ public class EditorActivity extends AppCompatActivity {
                 String.format(Locale.getDefault(), "%d", numberOfAttachments));
         if (numberOfAttachments == 0)
             closeAttachments();
-        if (findViewById(R.id.recycler_view_files).getVisibility() == View.GONE)
+        if (this.fileContainer.getVisibility() == View.GONE)
             displayFileNumber();
     }
 
@@ -403,10 +402,10 @@ public class EditorActivity extends AppCompatActivity {
      * Method for initializing the attachments-view
      */
     private void initAttachmentsView() {
-        RecyclerView recyclerView = findViewById(R.id.recycler_view_files);
+        this.fileContainer = findViewById(R.id.recycler_view_files);
         this.fileHolderAdapter = new EditorFileHolderAdapter(this, this.note);
-        recyclerView.setAdapter(this.fileHolderAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        this.fileContainer.setAdapter(this.fileHolderAdapter);
+        this.fileContainer.setLayoutManager(new LinearLayoutManager(this));
     }
 
     /**
