@@ -1,5 +1,7 @@
 package com.mobila.project.today.model;
 
+import com.mobila.project.today.dataProviding.DataKeyNotFoundException;
+
 import java.util.List;
 
 /**
@@ -8,13 +10,12 @@ import java.util.List;
  * There are also course related notes stored in the @code{Course}.
  */
 public interface Course extends Identifiable {
-
     /**
      * Returns the semester containing this course.
      *
      * @return the semester containing this course
      */
-    Semester getSemester();
+    Semester getSemester() throws DataKeyNotFoundException;
 
     /**
      * Returns the title of this course.
@@ -28,41 +29,41 @@ public interface Course extends Identifiable {
      *
      * @param title title of this course
      */
-    void setTitle(String title);
+    void setTitle(String title) throws DataKeyNotFoundException;
 
     /**
      * Returns a list with all sections contained in this course.
      *
      * @return a list with all sections contained in this course
      */
-    List<Section> getSections();
+    List<Section> getSections() throws DataKeyNotFoundException;
 
     /**
      * Adds a section to this course.
      *
      * @param section section to add
      */
-    void addSection(Section section);
+    void addSection(Section section) throws DataKeyNotFoundException;
 
     /**
      * Removes a section of this course.
      */
-    void removeSection(Identifiable section);
+    void removeSection(Identifiable section) throws DataKeyNotFoundException;
 
     /**
      * Returns a list with all tasks contained in this course.
      *
      * @return a list with all tasks contained in this course
      */
-    List<Task> getTasks();
+    List<Task> getTasks() throws DataKeyNotFoundException;
 
     /**
      * Adds a task to this course.
      */
-    void addTask(Task task);
+    void addTask(Task task) throws DataKeyNotFoundException;
 
     /**
      * Removes a task contained in this course.
      */
-    void removeTask(Identifiable task);
+    void removeTask(Identifiable task) throws DataKeyNotFoundException;
 }

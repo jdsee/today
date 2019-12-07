@@ -1,5 +1,7 @@
 package com.mobila.project.today.model;
 
+import com.mobila.project.today.dataProviding.DataKeyNotFoundException;
+
 import java.util.List;
 
 /**
@@ -12,24 +14,28 @@ public interface Section extends Identifiable {
      *
      * @return the course containing this section
      */
-    Course getCourse();
+    Course getCourse() throws DataKeyNotFoundException;
 
     /**
      * Returns the title of this section.
      *
      * @return the title of this section
      */
-    String getTitle();
+    String getTitle() throws DataKeyNotFoundException;
 
     /**
      * Sets the title for this section.
      *
      */
-    void setTitle(String title);
+    void setTitle(String title) throws DataKeyNotFoundException;
 
-    List<Lecture> getLectures();
+    List<Lecture> getLectures() throws DataKeyNotFoundException;
 
-    void addLecture(Lecture lecture);
+    void addLecture(Lecture lecture) throws DataKeyNotFoundException;
 
-    void removeLecture(Identifiable lecture);
+    void removeLecture(Identifiable lecture) throws DataKeyNotFoundException;
+
+    String getLecturer() throws DataKeyNotFoundException;
+
+    void setLecturer(String lecturer) throws DataKeyNotFoundException;
 }

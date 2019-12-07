@@ -19,7 +19,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".activities.TodayActivity"></activity>
-        <activity android:name=".activities.dataStructureView.CourseListActivity" />
+        <activity android:name=".activities.courseListView.CourseListActivity" />
         <activity
             android:name=".activities.MainActivity"
             android:windowSoftInputMode="stateVisible|adjustResize">

@@ -1,53 +1,32 @@
 package com.mobila.project.today.dataProviding;
 
-import com.mobila.project.today.model.Attachment;
-import com.mobila.project.today.model.Identifiable;
-import com.mobila.project.today.model.Definable;
-import com.mobila.project.today.model.Lecture;
-import com.mobila.project.today.model.Note;
-import com.mobila.project.today.model.NoteReference;
-import com.mobila.project.today.model.Task;
-
-import java.util.Date;
-import java.util.List;
+import com.mobila.project.today.dataProviding.dataAccess.AttachmentDataAccess;
+import com.mobila.project.today.dataProviding.dataAccess.CourseDataAccess;
+import com.mobila.project.today.dataProviding.dataAccess.LectureDataAccess;
+import com.mobila.project.today.dataProviding.dataAccess.NoteDataAccess;
+import com.mobila.project.today.dataProviding.dataAccess.RootDataAccess;
+import com.mobila.project.today.dataProviding.dataAccess.SectionDataAccess;
+import com.mobila.project.today.dataProviding.dataAccess.SemesterDataAccess;
+import com.mobila.project.today.dataProviding.dataAccess.TaskDataAccess;
 
 public interface OrganizerDataProvider {
+    static OrganizerDataProvider getInstance() {
+        return OrganizerDataProviderImpl.getInstance();
+    }
 
-    //<T extends Definable, R extends Identifiable> R getParent(T context);
+    RootDataAccess getRootDataAccess();
 
-    <T extends Definable, R extends Identifiable> List<R> getChildren(T context);
+    SemesterDataAccess getSemesterDataAccess();
 
-    Note getNote(Identifiable lecture) throws DataKeyNotFoundException;
+    CourseDataAccess getCourseDataAccess();
 
-    void addNote(Identifiable lecture, Note note) throws DataKeyNotFoundException;
+    SectionDataAccess getSectionDataAccess();
 
-    List<Attachment> getAttachments(Identifiable note) throws DataKeyNotFoundException;
+    LectureDataAccess getLectureDataAccess();
 
-    void addAttachment(Identifiable note, Attachment attachment) throws DataKeyNotFoundException;
+    NoteDataAccess getNoteDataAccess();
 
-    List<Task> getAllTasks();
+    AttachmentDataAccess getAttachmentDataAccess();
 
-    void removeEntityInstance(Identifiable instance) throws DataKeyNotFoundException;
-
-    <T extends Definable> String getTitle(T context);
-
-    <T extends Definable> void setTitle(T context, String title);
-
-    <T extends Definable, R extends Identifiable> R getContent(T context);
-
-    <T extends Definable> Date getDate(T context);
-
-    <T extends Definable> void setDate(T context, Date date);
-
-    String getLectureRoom();
-
-    void setLectureRoom(String room);
-
-    String getLecturer();
-
-    void setLecturer(String lecturer);
-
-    List<NoteReference> getNoteReferences();
-
-    void addNoteReference(Note ref, int row);
+    TaskDataAccess getTaskDataAccess();
 }
