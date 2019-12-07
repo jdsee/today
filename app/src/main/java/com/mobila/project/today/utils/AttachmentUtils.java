@@ -10,7 +10,6 @@ import android.os.Environment;
 import android.provider.OpenableColumns;
 import android.webkit.MimeTypeMap;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.mobila.project.today.R;
@@ -29,7 +28,7 @@ public class AttachmentUtils {
      * @param uri the Uri pf the file in question
      * @return the name of the file
      */
-    public static String getFileName(AppCompatActivity context, Uri uri) {
+    public static String getFileName(Context context, Uri uri) {
         String result = null;
         if (Objects.requireNonNull(uri.getScheme()).equals("content")) {
             try (Cursor cursor = context.getContentResolver()
@@ -140,7 +139,7 @@ public class AttachmentUtils {
      * @param context The context from where the method gets called from
      * @return an file with the name IMAGE_ + (current date) + (current time).jpg
      */
-    public static File createImageFile(AppCompatActivity context) {
+    public static File createImageFile(Context context) {
         //File creation
         @SuppressLint("SimpleDateFormat")
         String timeStamp = new SimpleDateFormat(

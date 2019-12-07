@@ -1,21 +1,20 @@
-package com.mobila.project.today.activities.editorActivity;
+package com.mobila.project.today.activities.adapters;
 
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.mobila.project.today.activities.adapters.FileHolderAdapter;
 import com.mobila.project.today.modelMock.NoteMock;
 import com.mobila.project.today.utils.AttachmentUtils;
 
 import java.io.File;
 
-public class EditorFileHolderAdapter extends FileHolderAdapter {
+public class UpdatableFileHolderAdapter extends FileHolderAdapter {
 
     private NoteMock note;
-    private EditorActivity context;
+    private UpdatableAppCompatActivity context;
 
-    EditorFileHolderAdapter(EditorActivity context, NoteMock note) {
+    public UpdatableFileHolderAdapter(UpdatableAppCompatActivity context, NoteMock note) {
         super(context, note);
         this.note = note;
         this.context = context;
@@ -37,7 +36,7 @@ public class EditorFileHolderAdapter extends FileHolderAdapter {
         holder.button.setOnClickListener(v -> {
             note.removeAttachment(position);
             notifyDataSetChanged();
-            context.updateFileNumber();
+            context.update();
         });
     }
 

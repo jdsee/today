@@ -1,5 +1,6 @@
 package com.mobila.project.today.control;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
@@ -7,7 +8,6 @@ import android.provider.MediaStore;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
 import com.mobila.project.today.modelMock.NoteMock;
@@ -22,16 +22,16 @@ import static android.app.Activity.RESULT_OK;
 
 public class AttachmentControl {
 
-    private AppCompatActivity activity;
+    private Context activity;
     private NoteMock note;
     private FileHolderAdapter adapter;
 
-    private final int REQUEST_TAKE_PHOTO = 1;
-    private final int REQUEST_FILE_OPEN = 2;
+    public static final int REQUEST_TAKE_PHOTO = 1;
+    public static final int REQUEST_FILE_OPEN = 2;
 
     private String currentImagePath;
 
-    public AttachmentControl(AppCompatActivity activity,
+    public AttachmentControl(Context activity,
                       NoteMock note, @NonNull FileHolderAdapter adapter) {
         this.activity = activity;
         this.note = note;
@@ -41,7 +41,7 @@ public class AttachmentControl {
     /**
      * Method for taking a picture by opening a camera app
      */
-    public void takePicture() {
+    public Intent getTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         //ensuring there is a camera on the device
         if (takePictureIntent.resolveActivity(activity.getPackageManager()) != null) {
@@ -52,18 +52,19 @@ public class AttachmentControl {
             Uri photoURI = FileProvider.getUriForFile(activity,
                     "com.mobila.project.today.fileprovider", photoFile);
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-            activity.startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+            return takePictureIntent;
         }
+        throw new NullPointerException();
     }
 
     /**
      * Method for importing a file by opening a file explorer app
      */
-    public void importFile() {
+    public Intent getOpenFileIntent() {
         Intent openFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
         openFileIntent.setType("*/*");
         openFileIntent.addCategory(Intent.CATEGORY_OPENABLE);
-        activity.startActivityForResult(openFileIntent, REQUEST_FILE_OPEN);
+        return openFileIntent;
     }
 
     /**
