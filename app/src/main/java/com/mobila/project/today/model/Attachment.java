@@ -1,27 +1,28 @@
 package com.mobila.project.today.model;
 
+import com.mobila.project.today.dataProviding.DataKeyNotFoundException;
+import com.mobila.project.today.model.implementations.AttachmentImpl;
+
 import java.io.File;
 
-public interface Attachment<T> extends Identifiable {
+public interface Attachment extends Identifiable {
+
+    static Attachment createAttachment(int ID, String title) {
+        return new AttachmentImpl(ID, title);
+    }
+
     /**
      * Returns the lecture containing this attachment.
      *
      * @return the lecture containing this attachment
      */
-    Lecture getLecture();
-
+    Lecture getLecture() throws DataKeyNotFoundException;
 
     String getTitle();
 
-    void setTitle();
+    void setTitle(String title) throws DataKeyNotFoundException;
 
+    File getContent() throws DataKeyNotFoundException;
 
-    File getContent();
-
-    void setContent(File content);
-
-
-    int getPosition();
-
-    void setPosition();
+    void setContent(File content) throws DataKeyNotFoundException;
 }

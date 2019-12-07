@@ -9,11 +9,9 @@ import java.util.Date;
 public interface TaskDataAccess {
     Course getCourse(Identifiable section) throws DataKeyNotFoundException;
 
-
     Date getDeadline(Identifiable task) throws DataKeyNotFoundException;
 
-    void setDeatline(Identifiable task, Date date) throws DataKeyNotFoundException;
-
+    void setDeadline(Identifiable task, Date date) throws DataKeyNotFoundException;
 
     String getContent(Identifiable task) throws DataKeyNotFoundException;
 

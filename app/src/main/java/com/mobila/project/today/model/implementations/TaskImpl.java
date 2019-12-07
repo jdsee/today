@@ -3,16 +3,20 @@ package com.mobila.project.today.model.implementations;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.mobila.project.today.dataProviding.DataKeyNotFoundException;
+import com.mobila.project.today.dataProviding.OrganizerDataProvider;
+import com.mobila.project.today.dataProviding.dataAccess.TaskDataAccess;
 import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Task;
 
 import java.util.Date;
 
 public class TaskImpl implements Task, Parcelable {
-    public TaskImpl(){}
+    private final TaskDataAccess dataAccess;
 
-    private TaskImpl(Parcel in) {
-    }
+    private final int ID;
+    private String content;
+    private Date deadline;
 
     public static final Creator<TaskImpl> CREATOR = new Creator<TaskImpl>() {
         @Override
@@ -26,34 +30,50 @@ public class TaskImpl implements Task, Parcelable {
         }
     };
 
-    @Override
-    public Course getCourse() {
-        return null;
+    public TaskImpl(int id, String content, Date deadline) {
+        this.ID = id;
+        this.content = content;
+        this.deadline = deadline;
+
+        this.dataAccess = OrganizerDataProvider.getInstance().getTaskDataAccess();
+    }
+
+    private TaskImpl(Parcel in) {
+        this(
+                in.readInt(),
+                in.readString(),
+                new Date(in.readLong())
+        );
     }
 
     @Override
-    public Date getDeadline() {
-        return new Date(12122019);
+    public Course getCourse() throws DataKeyNotFoundException {
+        return this.dataAccess.getCourse(this);
     }
 
     @Override
-    public void setDeadline(Date date) {
+    public Date getDeadline() throws DataKeyNotFoundException {
+        return this.deadline;
+    }
 
+    @Override
+    public void setDeadline(Date date) throws DataKeyNotFoundException {
+        this.dataAccess.setDeadline(this, date);
     }
 
     @Override
     public String getContent() {
-        return "example task";
+        return this.content;
     }
 
     @Override
-    public void setContent(String content) {
-
+    public void setContent(String content) throws DataKeyNotFoundException {
+        this.dataAccess.setContent(this, content);
     }
 
     @Override
     public int getID() {
-        return 0;
+        return this.ID;
     }
 
     @Override
@@ -62,6 +82,9 @@ public class TaskImpl implements Task, Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeInt(this.ID);
+        out.writeString(this.content);
+        out.writeLong(this.deadline.getTime());
     }
 }

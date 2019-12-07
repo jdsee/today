@@ -1,4 +1,4 @@
-package com.mobila.project.today.activities.dataStructureView;
+package com.mobila.project.today.activities.courseListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
