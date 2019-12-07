@@ -1,4 +1,4 @@
-package com.mobila.project.today.activities.adapters;
+package com.mobila.project.today.activities;
 
 
 import androidx.appcompat.app.AppCompatActivity;

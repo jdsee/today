@@ -38,7 +38,6 @@ class LectureImpl implements Lecture {
         this.roomNr = roomNr;
     }
 
-
     @Override
     public Section getSection() throws DataKeyNotFoundException {
         return this.dataAccess.getSection(this);

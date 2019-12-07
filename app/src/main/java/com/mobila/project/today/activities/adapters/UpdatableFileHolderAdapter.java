@@ -4,6 +4,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.mobila.project.today.activities.UpdatableAppCompatActivity;
 import com.mobila.project.today.modelMock.NoteMock;
 import com.mobila.project.today.utils.AttachmentUtils;
 

@@ -23,7 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.mobila.project.today.R;
 import com.mobila.project.today.activities.adapters.TaskAdapter;
-import com.mobila.project.today.activities.adapters.UpdatableAppCompatActivity;
+import com.mobila.project.today.activities.UpdatableAppCompatActivity;
 import com.mobila.project.today.activities.adapters.UpdatableFileHolderAdapter;
 import com.mobila.project.today.activities.editorActivity.listeners.EditorKeyboardEventListener;
 import com.mobila.project.today.activities.editorActivity.listeners.TitleOnEditorActionListener;
