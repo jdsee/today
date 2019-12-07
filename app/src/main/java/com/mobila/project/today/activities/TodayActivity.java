@@ -16,11 +16,7 @@ import com.mobila.project.today.model.implementations.TaskImpl;
 import com.mobila.project.today.modelMock.CourseMock;
 import com.mobila.project.today.activities.adapters.CourseHolderAdapter;
 
-<<<<<<< HEAD
 import java.text.SimpleDateFormat;
-=======
-import java.sql.Date;
->>>>>>> develop
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -65,12 +61,9 @@ public class TodayActivity extends AppCompatActivity {
         courses.add(new CourseMock(1, "Programmieren 3",
                 "Eine Hubrich", "WHC 624"));
 
-        tasks.add(new TaskImpl(1,"", Date.valueOf("221100")));
-        tasks.add(new TaskImpl(1,"", Date.valueOf("221100")));
-        tasks.add(new TaskImpl(1,"", Date.valueOf("221100")));
-        tasks.add(new TaskImpl(1,"", Date.valueOf("221100")));
-        tasks.add(new TaskImpl(1,"", Date.valueOf("221100")));
-
+        tasks.add(new TaskImpl(1, "some Content", new java.util.Date()));
+        tasks.add(new TaskImpl(2, "some Random", new java.util.Date()));
+        tasks.add(new TaskImpl(3, "some mor Random", new Date()));
 
         initCourseView();
         initTaskView();
@@ -95,7 +88,6 @@ public class TodayActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.rv_course_tasks);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        tasks.add(new TaskImpl(1,"", Date.valueOf("221100")));
         adapter = new TaskAdapter(this, tasks);
         recyclerView.setAdapter(adapter);
     }
