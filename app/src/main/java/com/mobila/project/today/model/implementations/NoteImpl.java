@@ -14,7 +14,7 @@ import com.mobila.project.today.model.NoteReference;
 
 import java.util.List;
 
-class NoteImpl implements Note {
+public class NoteImpl implements Note {
     private final RootDataAccess rootDataAccess;
     private final NoteDataAccess dataAccess;
 

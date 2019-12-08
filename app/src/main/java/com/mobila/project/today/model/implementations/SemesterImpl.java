@@ -9,7 +9,7 @@ import com.mobila.project.today.model.Semester;
 
 import java.util.List;
 
-class SemesterImpl implements Semester {
+public class SemesterImpl implements Semester {
     private final RootDataAccess rootDataAccess;
     private final SemesterDataAccess dataAccess;
 

@@ -89,13 +89,13 @@ public class NoteControl {
         }
     }
 
-    private void setForegroundColorSpan(int id){
+    public void setForegroundColorSpan(int id){
         setSpan(new ForegroundColorSpan(
                         ContextCompat.getColor(context, id)),
                 Spannable.SPAN_INCLUSIVE_INCLUSIVE);
     }
 
-    private void setBackgroundColorSpan(int id){
+    public void setBackgroundColorSpan(int id){
         setSpan(new BackgroundColorSpan(
                         ContextCompat.getColor(context, id)),
                 Spannable.SPAN_INCLUSIVE_INCLUSIVE);

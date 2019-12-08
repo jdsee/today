@@ -16,45 +16,44 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/relativeLayout2"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="16dp"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/relativeLayout">
 
+
+        <ImageButton
+            android:id="@+id/go_back_semester"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="42dp"
+            android:background="@android:color/transparent"
+            android:onClick="goBackSemester"
+            app:srcCompat="@drawable/baseline_arrow_back_ios_24" />
+
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/semester_view"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_toEndOf="@+id/imageButton1"
             android:gravity="center_vertical"
             android:text="Semester 3"
             android:textSize="21sp" />
 
         <ImageButton
-            android:id="@+id/imageButton1"
-            android:layout_width="wrap_content"
+            android:id="@+id/go_foreward_semester"
+            android:layout_width="40dp"
             android:layout_height="match_parent"
-            android:layout_alignParentEnd="false"
-            android:layout_marginStart="50dp"
+            android:layout_marginEnd="16dp"
             android:background="@android:color/transparent"
-            app:srcCompat="@drawable/baseline_arrow_back_ios_24"/>
-
-        <ImageButton
-            android:id="@+id/imageButton2"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_toEndOf="@+id/textView2"
-            android:background="@android:color/transparent"
+            android:onClick="goForwardSemester"
             android:rotation="180"
             app:srcCompat="@drawable/baseline_arrow_back_ios_24" />
-    </RelativeLayout>
+    </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/relativeLayout"
