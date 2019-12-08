@@ -16,7 +16,6 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,13 +23,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.mobila.project.today.R;
 import com.mobila.project.today.activities.adapters.TaskAdapter;
+import com.mobila.project.today.activities.UpdatableAppCompatActivity;
+import com.mobila.project.today.activities.adapters.UpdatableFileHolderAdapter;
 import com.mobila.project.today.activities.editorActivity.listeners.EditorKeyboardEventListener;
-import com.mobila.project.today.activities.editorActivity.listeners.noteFocusChangeListener;
 import com.mobila.project.today.activities.editorActivity.listeners.TitleOnEditorActionListener;
+import com.mobila.project.today.activities.editorActivity.listeners.noteFocusChangeListener;
+import com.mobila.project.today.control.AttachmentControl;
 import com.mobila.project.today.control.NoteControl;
 import com.mobila.project.today.model.Task;
 import com.mobila.project.today.modelMock.NoteMock;
-import com.mobila.project.today.control.AttachmentControl;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 
@@ -38,12 +39,15 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-public class EditorActivity extends AppCompatActivity {
+import static com.mobila.project.today.control.AttachmentControl.REQUEST_FILE_OPEN;
+import static com.mobila.project.today.control.AttachmentControl.REQUEST_TAKE_PHOTO;
+
+public class EditorActivity extends UpdatableAppCompatActivity {
     private NoteMock note;
     private NoteControl noteEditor;
     private AttachmentControl attachments;
 
-    private EditorFileHolderAdapter fileHolderAdapter;
+    private UpdatableFileHolderAdapter fileHolderAdapter;
     private RecyclerView fileContainer;
 
     private boolean keyBoardOpen;
@@ -283,7 +287,7 @@ public class EditorActivity extends AppCompatActivity {
      * @param view the clicked camera-icon. Is only needed for using this method via the layout
      */
     public void onTakePhotoPickerPressed(View view) {
-        attachments.takePicture();
+        startActivityForResult(attachments.getTakePictureIntent(), REQUEST_TAKE_PHOTO);
     }
 
     /**
@@ -292,7 +296,7 @@ public class EditorActivity extends AppCompatActivity {
      * @param view the pressed file-icon. Is only needed for using this method via the layout
      */
     public void onFilePickerPressed(View view) {
-        attachments.importFile();
+        startActivityForResult(attachments.getOpenFileIntent(), REQUEST_FILE_OPEN);
     }
 
     /**
@@ -403,7 +407,7 @@ public class EditorActivity extends AppCompatActivity {
      */
     private void initAttachmentsView() {
         this.fileContainer = findViewById(R.id.recycler_view_files);
-        this.fileHolderAdapter = new EditorFileHolderAdapter(this, this.note);
+        this.fileHolderAdapter = new UpdatableFileHolderAdapter(this, this.note);
         this.fileContainer.setAdapter(this.fileHolderAdapter);
         this.fileContainer.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -498,5 +502,10 @@ public class EditorActivity extends AppCompatActivity {
         EditText contentEditor = findViewById(R.id.editor_content);
         Spannable content = contentEditor.getText();
         this.note.setContent(content);
+    }
+
+    @Override
+    public void update() {
+        updateFileNumber();
     }
 }

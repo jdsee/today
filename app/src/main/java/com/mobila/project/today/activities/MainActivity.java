@@ -16,7 +16,7 @@ import com.mobila.project.today.model.implementations.TaskImpl;
 import com.mobila.project.today.modelMock.NoteMock;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,9 +38,9 @@ public class MainActivity extends AppCompatActivity {
                 "Veranstalltung 3", "07.05.18");
 
         ArrayList<Task> tasks = new ArrayList<>();
-        tasks.add(new TaskImpl());
-        tasks.add(new TaskImpl());
-        tasks.add(new TaskImpl());
+        tasks.add(new TaskImpl(1, "some Content", new Date()));
+        tasks.add(new TaskImpl(2, "some Random", new Date()));
+        tasks.add(new TaskImpl(3, "some mor Random", new Date()));
 
         intent.putParcelableArrayListExtra(Task.INTENT_EXTRA_CODE, tasks);
         intent.putExtra(NoteMock.INTENT_EXTRA_CODE,  note);

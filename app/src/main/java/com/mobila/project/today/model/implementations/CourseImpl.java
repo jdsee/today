@@ -12,7 +12,7 @@ import com.mobila.project.today.model.Task;
 
 import java.util.List;
 
-class CourseImpl implements Course {
+public class CourseImpl implements Course {
     private final RootDataAccess rootDataAccess;
     private final CourseDataAccess dataAccess;
 

@@ -1,5 +1,6 @@
 package com.mobila.project.today.control;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
@@ -7,7 +8,6 @@ import android.provider.MediaStore;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
 import com.mobila.project.today.modelMock.NoteMock;
@@ -22,18 +22,18 @@ import static android.app.Activity.RESULT_OK;
 
 public class AttachmentControl {
 
-    private AppCompatActivity activity;
+    private Context context;
     private NoteMock note;
     private FileHolderAdapter adapter;
 
-    private final int REQUEST_TAKE_PHOTO = 1;
-    private final int REQUEST_FILE_OPEN = 2;
+    public static final int REQUEST_TAKE_PHOTO = 1;
+    public static final int REQUEST_FILE_OPEN = 2;
 
     private String currentImagePath;
 
-    public AttachmentControl(AppCompatActivity activity,
+    public AttachmentControl(Context context,
                       NoteMock note, @NonNull FileHolderAdapter adapter) {
-        this.activity = activity;
+        this.context = context;
         this.note = note;
         this.adapter = adapter;
     }
@@ -41,29 +41,30 @@ public class AttachmentControl {
     /**
      * Method for taking a picture by opening a camera app
      */
-    public void takePicture() {
+    public Intent getTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         //ensuring there is a camera on the device
-        if (takePictureIntent.resolveActivity(activity.getPackageManager()) != null) {
+        if (takePictureIntent.resolveActivity(context.getPackageManager()) != null) {
             //Create File for photo
-            File photoFile = AttachmentUtils.createImageFile(activity);
+            File photoFile = AttachmentUtils.createImageFile(context);
             this.currentImagePath = photoFile.getAbsolutePath();
             //check if file was created
-            Uri photoURI = FileProvider.getUriForFile(activity,
+            Uri photoURI = FileProvider.getUriForFile(context,
                     "com.mobila.project.today.fileprovider", photoFile);
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-            activity.startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+            return takePictureIntent;
         }
+        throw new NullPointerException();
     }
 
     /**
      * Method for importing a file by opening a file explorer app
      */
-    public void importFile() {
+    public Intent getOpenFileIntent() {
         Intent openFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
         openFileIntent.setType("*/*");
         openFileIntent.addCategory(Intent.CATEGORY_OPENABLE);
-        activity.startActivityForResult(openFileIntent, REQUEST_FILE_OPEN);
+        return openFileIntent;
     }
 
     /**
@@ -78,7 +79,7 @@ public class AttachmentControl {
             if (requestCode == REQUEST_TAKE_PHOTO && currentImagePath != null) {
                 File file = new File(currentImagePath);
                 this.note.addAttachment(file);
-                Toast.makeText(activity.getApplicationContext(),
+                Toast.makeText(context.getApplicationContext(),
                         "Image Saved", Toast.LENGTH_LONG).show();
                 this.currentImagePath = null;
             } else if (requestCode == REQUEST_FILE_OPEN && data != null) {
@@ -89,10 +90,10 @@ public class AttachmentControl {
                     if (sourceString != null) {
                         sourceFile = new File(sourceString);
                     }
-                    String filename = AttachmentUtils.getFileName(activity, fileUri);
+                    String filename = AttachmentUtils.getFileName(context, fileUri);
                     File destinationFile;
                     destinationFile =
-                            new File(activity.getExternalFilesDir(
+                            new File(context.getExternalFilesDir(
                                     Environment.DIRECTORY_DOCUMENTS), filename);
                     try {
                         if (sourceFile != null) {
@@ -101,13 +102,13 @@ public class AttachmentControl {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    Toast.makeText(activity.getApplicationContext(),
+                    Toast.makeText(context.getApplicationContext(),
                             "File Saved", Toast.LENGTH_LONG).show();
                     this.note.addAttachment(destinationFile);
-                } else Toast.makeText(activity.getApplicationContext(),
+                } else Toast.makeText(context.getApplicationContext(),
                         "File was lost", Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(activity.getApplicationContext(),
+                Toast.makeText(context.getApplicationContext(),
                         "Nothing was saved", Toast.LENGTH_LONG).show();
             }
             adapter.notifyDataSetChanged();

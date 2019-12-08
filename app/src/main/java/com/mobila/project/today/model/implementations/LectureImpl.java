@@ -13,7 +13,7 @@ import com.mobila.project.today.model.Section;
 import java.util.Date;
 import java.util.List;
 
-class LectureImpl implements Lecture {
+public class LectureImpl implements Lecture {
     private final RootDataAccess rootDataAccess;
     private final LectureDataAccess dataAccess;
 
@@ -37,7 +37,6 @@ class LectureImpl implements Lecture {
         this.date = date;
         this.roomNr = roomNr;
     }
-
 
     @Override
     public Section getSection() throws DataKeyNotFoundException {

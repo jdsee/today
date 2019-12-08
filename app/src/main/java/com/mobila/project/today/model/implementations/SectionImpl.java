@@ -11,7 +11,7 @@ import com.mobila.project.today.model.Section;
 
 import java.util.List;
 
-class SectionImpl implements Section {
+public class SectionImpl implements Section {
     private final RootDataAccess rootDataAccess;
     private final SectionDataAccess dataAccess;
 

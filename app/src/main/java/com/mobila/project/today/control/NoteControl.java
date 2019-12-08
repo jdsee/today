@@ -1,5 +1,6 @@
 package com.mobila.project.today.control;
 
+import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Parcelable;
 import android.text.Spannable;
@@ -10,7 +11,6 @@ import android.text.style.UnderlineSpan;
 import android.view.View;
 import android.widget.EditText;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.mobila.project.today.R;
@@ -18,11 +18,11 @@ import com.mobila.project.today.utils.CustomTabWidthSpan;
 
 public class NoteControl {
 
-    private AppCompatActivity activity;
+    private Context context;
     private EditText editorContent;
 
-    public NoteControl(AppCompatActivity activity, EditText editorContent) {
-        this.activity = activity;
+    public NoteControl(Context context, EditText editorContent) {
+        this.context = context;
         this.editorContent = editorContent;
     }
 
@@ -33,71 +33,45 @@ public class NoteControl {
         switch (view.getId()) {
             //Text-Color Options
             case R.id.font_color_yellow:
-                setSpan(new ForegroundColorSpan(
-                                ContextCompat.getColor(activity, R.color.textcolour_yellow)),
-                        Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                setForegroundColorSpan(R.color.textcolour_yellow);
                 break;
             case R.id.font_color_orange:
-                setSpan(new ForegroundColorSpan(
-                                ContextCompat.getColor(activity, R.color.textcolour_orange)),
-                        Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                setForegroundColorSpan(R.color.textcolour_orange);
                 break;
             case R.id.font_color_red:
-                setSpan(new ForegroundColorSpan(
-                                ContextCompat.getColor(activity, R.color.textcolour_red)),
-                        Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                setForegroundColorSpan(R.color.textcolour_red);
                 break;
             case R.id.font_color_purple:
-                setSpan(new ForegroundColorSpan(
-                                ContextCompat.getColor(activity, R.color.textcolour_purple)),
-                        Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                setForegroundColorSpan(R.color.textcolour_purple);
                 break;
             case R.id.font_color_blue:
-                setSpan(new ForegroundColorSpan(
-                                ContextCompat.getColor(activity, R.color.textcolour_blue)),
-                        Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                setForegroundColorSpan(R.color.textcolour_blue);
                 break;
             case R.id.font_color_green:
-                setSpan(new ForegroundColorSpan(
-                                ContextCompat.getColor(activity, R.color.textcolour_green)),
-                        Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                setForegroundColorSpan(R.color.textcolour_green);
                 break;
             case R.id.font_color_black:
-                setSpan(new ForegroundColorSpan(
-                                ContextCompat.getColor(activity, R.color.icon_black)),
-                        Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                setForegroundColorSpan(R.color.icon_black);
                 break;
 
             //Highlighter Options
             case R.id.font_highlighter_yellow:
-                setSpan(new BackgroundColorSpan(
-                                ContextCompat.getColor(activity, R.color.highlighter_yellow)),
-                        Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                setBackgroundColorSpan(R.color.highlighter_yellow);
                 break;
             case R.id.font_highlighter_green:
-                setSpan(new BackgroundColorSpan(
-                                ContextCompat.getColor(activity, R.color.highlighter_green)),
-                        Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                setBackgroundColorSpan(R.color.highlighter_green);
                 break;
             case R.id.font_highlighter_blue:
-                setSpan(new BackgroundColorSpan(
-                                ContextCompat.getColor(activity, R.color.highlighter_blue)),
-                        Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                setBackgroundColorSpan( R.color.highlighter_blue);
                 break;
             case R.id.font_highlighter_purple:
-                setSpan(new BackgroundColorSpan(
-                                ContextCompat.getColor(activity, R.color.highlighter_purple)),
-                        Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                setBackgroundColorSpan(R.color.highlighter_purple);
                 break;
             case R.id.font_highlighter_red:
-                setSpan(new BackgroundColorSpan(
-                                ContextCompat.getColor(activity, R.color.highlighter_red)),
-                        Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                setBackgroundColorSpan(R.color.highlighter_red);
                 break;
             case R.id.font_highlighter_remove:
-                setSpan(new BackgroundColorSpan(
-                                ContextCompat.getColor(activity, R.color.white)),
-                        Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                setBackgroundColorSpan(R.color.white);
                 break;
 
             //Style Options
@@ -113,6 +87,18 @@ public class NoteControl {
             default:
                 break;
         }
+    }
+
+    public void setForegroundColorSpan(int id){
+        setSpan(new ForegroundColorSpan(
+                        ContextCompat.getColor(context, id)),
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+    }
+
+    public void setBackgroundColorSpan(int id){
+        setSpan(new BackgroundColorSpan(
+                        ContextCompat.getColor(context, id)),
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE);
     }
 
 
