@@ -15,7 +15,7 @@ public interface Task extends Identifiable, Parcelable {
      */
     Course getCourse() throws DataKeyNotFoundException;
 
-    Date getDeadline() throws DataKeyNotFoundException;
+    Date getDeadline();
 
     void setDeadline(Date date) throws DataKeyNotFoundException;
 

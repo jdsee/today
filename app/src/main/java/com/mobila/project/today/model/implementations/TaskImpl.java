@@ -54,7 +54,7 @@ public class TaskImpl implements Task, Parcelable {
     }
 
     @Override
-    public Date getDeadline() throws DataKeyNotFoundException {
+    public Date getDeadline() {
         return this.deadline;
     }
 
