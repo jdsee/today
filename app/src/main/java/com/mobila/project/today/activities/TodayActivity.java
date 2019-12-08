@@ -95,12 +95,8 @@ public class TodayActivity extends AppCompatActivity {
     }
 
     private void initSemsterView() {
-        try {
-            currentSemester = semesters.get(semesters.size() - 1).getSemesterNr();
-            setSemester(currentSemester);
-        } catch (TodayException e) {
-            e.printStackTrace();
-        }
+        currentSemester = semesters.size() - 1;
+        setSemester( );
         showAppropiateSemesterButtons();
     }
 
@@ -117,45 +113,45 @@ public class TodayActivity extends AppCompatActivity {
     }
 
     public void goBackSemester(View view) {
-        if (currentSemester>1){
-            try {
-                currentSemester = semesters.get(currentSemester - 2).getSemesterNr();
-            } catch (TodayException ignored) { }
+        if (currentSemester > 0) {
+                currentSemester--;
         }
+        setSemester();
         showAppropiateSemesterButtons();
-        setSemester(currentSemester);
     }
 
     public void goForwardSemester(View view) {
-        if (currentSemester<semesters.size()){
-            try {
-                currentSemester = semesters.get(currentSemester).getSemesterNr();
-            } catch (TodayException ignored) { }
-        }else if (currentSemester==semesters.size()){
-            //TODO add Semester
+        if (currentSemester == semesters.size()-1) {
+            semesters.add(new SemesterImpl(42, semesters.size()));
+            currentSemester++;
         }
+        if (currentSemester < semesters.size()-1) {
+            currentSemester++;
+        }
+        setSemester();
         showAppropiateSemesterButtons();
-        setSemester(currentSemester);
     }
 
-    private void showAppropiateSemesterButtons(){
+    private void showAppropiateSemesterButtons() {
         ImageButton goForewardButton = findViewById(R.id.go_foreward_semester);
         ImageButton goBackwardsButton = findViewById(R.id.go_back_semester);
-        if (currentSemester==semesters.size()){
+        if (currentSemester == semesters.size()-1) {
             goForewardButton.setImageResource(R.drawable.baseline_add_24);
         } else {
             goForewardButton.setImageResource(R.drawable.baseline_arrow_back_ios_24);
         }
-        if (currentSemester==1){
+        if (currentSemester == 0) {
             goBackwardsButton.setImageResource(R.drawable.transparent_placeholder);
-        }
-        else{
+        } else {
             goBackwardsButton.setImageResource(R.drawable.baseline_arrow_back_ios_24);
         }
     }
 
-    private void setSemester(int number){
-        semesterView.setText(String.format(Locale.getDefault(),
-                "Semester %d", number));
+    private void setSemester() {
+        try {
+            semesterView.setText(String.format(Locale.getDefault(),
+                    "Semester %d", semesters.get(currentSemester).getSemesterNr()));
+        } catch (TodayException ignored) {
+        }
     }
 }
