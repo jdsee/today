@@ -1,4 +1,4 @@
-package com.mobila.project.today.activities.editorActivity.listeners;
+package com.mobila.project.today.activities.editorView.listeners;
 
 import android.app.Activity;
 import android.view.KeyEvent;

@@ -3,8 +3,6 @@ package com.mobila.project.today.model.implementations;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import androidx.annotation.NonNull;
-
 import com.mobila.project.today.dataProviding.DataKeyNotFoundException;
 import com.mobila.project.today.dataProviding.OrganizerDataProvider;
 import com.mobila.project.today.dataProviding.dataAccess.TaskDataAccess;

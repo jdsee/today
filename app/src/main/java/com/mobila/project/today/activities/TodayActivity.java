@@ -1,7 +1,6 @@
 package com.mobila.project.today.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,7 +11,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.mobila.project.today.R;
-import com.mobila.project.today.TodayException;
+import com.mobila.project.today.UncheckedTodayException;
 import com.mobila.project.today.activities.adapters.TaskAdapter;
 import com.mobila.project.today.model.Semester;
 import com.mobila.project.today.model.Task;
@@ -98,7 +97,7 @@ public class TodayActivity extends AppCompatActivity {
         try {
             currentSemester = semesters.get(semesters.size() - 1).getSemesterNr();
             setSemester(currentSemester);
-        } catch (TodayException e) {
+        } catch (UncheckedTodayException e) {
             e.printStackTrace();
         }
         showAppropiateSemesterButtons();
@@ -120,7 +119,7 @@ public class TodayActivity extends AppCompatActivity {
         if (currentSemester>1){
             try {
                 currentSemester = semesters.get(currentSemester - 2).getSemesterNr();
-            } catch (TodayException ignored) { }
+            } catch (UncheckedTodayException ignored) { }
         }
         showAppropiateSemesterButtons();
         setSemester(currentSemester);
@@ -130,7 +129,7 @@ public class TodayActivity extends AppCompatActivity {
         if (currentSemester<semesters.size()){
             try {
                 currentSemester = semesters.get(currentSemester).getSemesterNr();
-            } catch (TodayException ignored) { }
+            } catch (UncheckedTodayException ignored) { }
         }else if (currentSemester==semesters.size()){
             //TODO add Semester
         }

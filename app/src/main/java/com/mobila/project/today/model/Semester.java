@@ -1,6 +1,6 @@
 package com.mobila.project.today.model;
 
-import com.mobila.project.today.TodayException;
+import com.mobila.project.today.UncheckedTodayException;
 
 import java.util.List;
 
@@ -13,13 +13,13 @@ public interface Semester extends Identifiable {
      *
      * @return a list with all courses contained in this semester
      */
-    List<Course> getCourses() throws TodayException;
+    List<Course> getCourses() throws UncheckedTodayException;
 
-    int getSemesterNr() throws TodayException;
+    int getSemesterNr() throws UncheckedTodayException;
 
-    void setSemesterNr(int nr) throws TodayException;
+    void setSemesterNr(int nr) throws UncheckedTodayException;
 
-    void addCourse(Course course) throws TodayException;
+    void addCourse(Course course) throws UncheckedTodayException;
 
-    void removeCourse(Course course) throws TodayException;
+    void removeCourse(Course course) throws UncheckedTodayException;
 }

@@ -8,8 +8,8 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.mobila.project.today.R;
-import com.mobila.project.today.activities.courseListView.CourseListActivity;
-import com.mobila.project.today.activities.editorActivity.EditorActivity;
+import com.mobila.project.today.activities.courseView.CourseActivity;
+import com.mobila.project.today.activities.editorView.EditorActivity;
 import com.mobila.project.today.activities.taskView.CourseTasksActivity;
 import com.mobila.project.today.model.Task;
 import com.mobila.project.today.model.implementations.TaskImpl;
@@ -48,11 +48,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Opens CourseListActivity
+     * Opens CourseActivity
      * @param v View that performs this action
      */
     public void openCourseList(View v) {
-        Intent intent = new Intent(this, CourseListActivity.class);
+        Intent intent = new Intent(this, CourseActivity.class);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }

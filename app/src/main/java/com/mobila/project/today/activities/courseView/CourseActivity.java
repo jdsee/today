@@ -1,4 +1,4 @@
-package com.mobila.project.today.activities.courseListView;
+package com.mobila.project.today.activities.courseView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,7 +16,7 @@ import com.mobila.project.today.modelMock.TaskMock;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CourseListActivity extends AppCompatActivity {
+public class CourseActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     RecyclerView.Adapter adapter;
     RecyclerView.LayoutManager layoutManager;
@@ -35,10 +35,6 @@ public class CourseListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         courses = new ArrayList<>();
-        courses.add(createExampleCourse(1, "Kurs 1", "Dr. Damage"));
-        courses.add(createExampleCourse(2, "Kurs 2", "Prof. Punch"));
-        courses.add(createExampleCourse(3, "Kurs 3", "Mr. Mad"));
-        courses.add(createExampleCourse(4, "Kurs 4", "Snoop Dogg"));
 
         adapter = new CourseAdapter(this, courses);
         recyclerView.setAdapter(adapter);

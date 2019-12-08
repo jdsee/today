@@ -6,7 +6,6 @@ import com.mobila.project.today.dataProviding.DataKeyNotFoundException;
 import com.mobila.project.today.dataProviding.OrganizerDataProvider;
 import com.mobila.project.today.dataProviding.dataAccess.NoteDataAccess;
 import com.mobila.project.today.dataProviding.dataAccess.RootDataAccess;
-import com.mobila.project.today.model.Attachment;
 import com.mobila.project.today.model.Identifiable;
 import com.mobila.project.today.model.Lecture;
 import com.mobila.project.today.model.Note;

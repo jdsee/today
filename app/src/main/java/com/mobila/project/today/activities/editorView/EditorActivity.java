@@ -1,4 +1,4 @@
-package com.mobila.project.today.activities.editorActivity;
+package com.mobila.project.today.activities.editorView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -25,9 +25,9 @@ import com.mobila.project.today.R;
 import com.mobila.project.today.activities.adapters.TaskAdapter;
 import com.mobila.project.today.activities.UpdatableAppCompatActivity;
 import com.mobila.project.today.activities.adapters.UpdatableFileHolderAdapter;
-import com.mobila.project.today.activities.editorActivity.listeners.EditorKeyboardEventListener;
-import com.mobila.project.today.activities.editorActivity.listeners.TitleOnEditorActionListener;
-import com.mobila.project.today.activities.editorActivity.listeners.noteFocusChangeListener;
+import com.mobila.project.today.activities.editorView.listeners.EditorKeyboardEventListener;
+import com.mobila.project.today.activities.editorView.listeners.TitleOnEditorActionListener;
+import com.mobila.project.today.activities.editorView.listeners.noteFocusChangeListener;
 import com.mobila.project.today.control.AttachmentControl;
 import com.mobila.project.today.control.NoteControl;
 import com.mobila.project.today.model.Task;

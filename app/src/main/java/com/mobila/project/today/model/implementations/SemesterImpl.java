@@ -1,6 +1,6 @@
 package com.mobila.project.today.model.implementations;
 
-import com.mobila.project.today.TodayException;
+import com.mobila.project.today.UncheckedTodayException;
 import com.mobila.project.today.dataProviding.OrganizerDataProvider;
 import com.mobila.project.today.dataProviding.dataAccess.RootDataAccess;
 import com.mobila.project.today.dataProviding.dataAccess.SemesterDataAccess;
@@ -26,28 +26,28 @@ public class SemesterImpl implements Semester {
     }
 
     @Override
-    public List<Course> getCourses() throws TodayException {
+    public List<Course> getCourses() throws UncheckedTodayException {
         return this.dataAccess.getCourses(this);
     }
 
     @Override
-    public int getSemesterNr() throws TodayException {
+    public int getSemesterNr() throws UncheckedTodayException {
         return this.semesterNr;
     }
 
     @Override
-    public void setSemesterNr(int number) throws TodayException {
+    public void setSemesterNr(int number) throws UncheckedTodayException {
         this.semesterNr = number;
         this.dataAccess.setNumber(this, number);
     }
 
     @Override
-    public void addCourse(Course course) throws TodayException {
+    public void addCourse(Course course) throws UncheckedTodayException {
         this.dataAccess.addCourse(this, course);
     }
 
     @Override
-    public void removeCourse(Course course) throws TodayException {
+    public void removeCourse(Course course) throws UncheckedTodayException {
         this.rootDataAccess.removeEntityInstance(course);
     }
 

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activities.courseListView.CourseListActivity"
+    tools:context=".activities.courseView.CourseActivity"
     android:id="@+id/linear_layout">
 
     <Button

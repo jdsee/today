@@ -4,7 +4,6 @@ import android.text.Spannable;
 
 import com.mobila.project.today.dataProviding.DataKeyNotFoundException;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
