@@ -18,8 +18,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activities.TodayActivity"></activity>
-        <activity android:name=".activities.courseView.CourseActivity" />
+        <activity android:name=".activities.TodayActivity"/>
+        <activity android:name=".activities.courseContentView.CourseContentActivity" />
         <activity
             android:name=".activities.MainActivity"
             android:windowSoftInputMode="stateVisible|adjustResize">

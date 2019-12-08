@@ -5,7 +5,7 @@
     <string name="delete_note">delete note</string>
     <string name="app_bar_note">Note</string>
     <string name="open_editor">Editor</string>
-    <string name="open_course_list">Open Course List</string>
+    <string name="open_course_content">Open Course Content</string>
     <string name="hint_headline">Enter a Headline</string>
     <string name="hint_note" />
 

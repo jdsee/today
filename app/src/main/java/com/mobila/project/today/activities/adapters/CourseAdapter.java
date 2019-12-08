@@ -10,14 +10,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mobila.project.today.R;
-import com.mobila.project.today.modelMock.CourseMock;
+import com.mobila.project.today.model.Course;
 
 import java.util.List;
 
 public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder> {
-    private List<CourseMock> courses;
+    private List<Course> courses;
 
-    public CourseAdapter(Context context, List<CourseMock> courses) {
+    public CourseAdapter(Context context, List<Course> courses) {
         super();
         this.courses = courses;
     }
@@ -29,7 +29,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
         ViewHolder(@NonNull final View itemView) {
             super(itemView);
 
-            tvCourseName = itemView.findViewById(R.id.txt_course_name);
+            tvCourseName = itemView.findViewById(R.id.txt_section_name);
             tvLecturer = itemView.findViewById(R.id.txt_lecturer);
 
             itemView.setOnClickListener(view -> {});
@@ -39,7 +39,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
     @NonNull
     @Override
     public CourseAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent,
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.listitem_section, parent,
                 false);
         return new ViewHolder(v);
     }
@@ -48,8 +48,8 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
     public void onBindViewHolder(@NonNull CourseAdapter.ViewHolder holder, int position) {
         holder.itemView.setTag(courses.get(position));
 
-        holder.tvCourseName.setText(courses.get(position).getName());
-        holder.tvLecturer.setText(courses.get(position).getLecturer());
+        holder.tvCourseName.setText(courses.get(position).getTitle());
+        //holder.tvLecturer.setText(courses.get(position).getLecturer());
     }
 
     @Override

@@ -16,14 +16,12 @@ import com.mobila.project.today.activities.adapters.TaskAdapter;
 import com.mobila.project.today.model.Semester;
 import com.mobila.project.today.model.Task;
 import com.mobila.project.today.model.implementations.SemesterImpl;
-import com.mobila.project.today.model.implementations.TaskImpl;
 import com.mobila.project.today.modelMock.CourseMock;
 import com.mobila.project.today.activities.adapters.CourseHolderAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -65,9 +63,7 @@ public class TodayActivity extends AppCompatActivity {
         courses.add(new CourseMock(7, "Programmieren 3",
                 "Eine Hubrich", "WHC 624"));
 
-        tasks.add(new TaskImpl(8, "some Content", new java.util.Date()));
-        tasks.add(new TaskImpl(9, "some Random", new java.util.Date()));
-        tasks.add(new TaskImpl(10, "some mor Random", new Date()));
+        this.tasks = ExampleCollection.getExampleTasks();
 
         semesters.add(new SemesterImpl(11, 1));
         semesters.add(new SemesterImpl(11, 2));
@@ -106,7 +102,7 @@ public class TodayActivity extends AppCompatActivity {
     private void initTaskView() {
         RecyclerView recyclerView = findViewById(R.id.rv_course_tasks);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new TaskAdapter(this, tasks));
+        recyclerView.setAdapter(new TaskAdapter(this, this.tasks));
     }
 
     private void initCourseView() {

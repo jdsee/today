@@ -1,5 +1,7 @@
 package com.mobila.project.today.model.implementations;
 
+import android.os.Parcel;
+
 import com.mobila.project.today.dataProviding.DataKeyNotFoundException;
 import com.mobila.project.today.dataProviding.OrganizerDataProvider;
 import com.mobila.project.today.dataProviding.dataAccess.CourseDataAccess;
@@ -18,10 +20,33 @@ public class CourseImpl implements Course {
 
     private final int ID;
     private String title;
+    private List<Task> tasks;
+    private List<Section> sections;
+
+    public static final Creator<Course> CREATOR = new Creator<Course>() {
+        @Override
+        public Course createFromParcel(Parcel source) {
+            return new CourseImpl(source);
+        }
+
+        @Override
+        public Course[] newArray(int size) {
+            return new Course[size];
+        }
+    };
+
+    private CourseImpl(Parcel in) {
+        this(
+                in.readInt(),
+                in.readString()
+        );
+    }
 
     public CourseImpl(int ID, String title) {
         this.ID = ID;
         this.title = title;
+        this.tasks = null;
+        this.sections = null;
 
         OrganizerDataProvider dataProvider = OrganizerDataProvider.getInstance();
         this.rootDataAccess = dataProvider.getRootDataAccess();
@@ -46,11 +71,14 @@ public class CourseImpl implements Course {
 
     @Override
     public List<Section> getSections() throws DataKeyNotFoundException {
-        return this.dataAccess.getSections(this);
+        if (this.sections == null)
+            this. sections = this.dataAccess.getSections(this);
+        return this.sections;
     }
 
     @Override
     public void addSection(Section section) throws DataKeyNotFoundException {
+        //TODO do null check on members before accesing the DB
         this.dataAccess.addSection(this, section);
     }
 
@@ -78,5 +106,16 @@ public class CourseImpl implements Course {
     @Override
     public int getID() {
         return this.ID;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.ID);
+        dest.writeString(this.title);
     }
 }

@@ -1,6 +1,9 @@
 package com.mobila.project.today.model;
 
+import android.os.Parcelable;
+
 import com.mobila.project.today.dataProviding.DataKeyNotFoundException;
+import com.mobila.project.today.model.implementations.CourseImpl;
 
 import java.util.List;
 
@@ -9,7 +12,12 @@ import java.util.List;
  * The main content are the sections, which store all relevant data for taking notes.
  * There are also course related notes stored in the @code{Course}.
  */
-public interface Course extends Identifiable {
+public interface Course extends Identifiable, Parcelable {
+    String INTENT_EXTRA_CODE = "EXTRA_COURSE";
+
+    static Course createCourse(int id, String title){
+        return new CourseImpl(id, title);
+    }
     /**
      * Returns the semester containing this course.
      *
