@@ -18,12 +18,16 @@ public class TaskImpl implements Task {
     private String content;
     private Date deadline;
 
-    public TaskImpl(int id, String content, Date deadline) {
+    public TaskImpl(int id, String content, Date deadline, TaskDataAccess dataAccess) {
         this.ID = id;
         this.content = content;
         this.deadline = deadline;
 
-        this.dataAccess = OrganizerDataProvider.getInstance().getTaskDataAccess();
+        this.dataAccess = dataAccess;
+    }
+
+    public TaskImpl(int id, String content, Date deadline) {
+        this(id, content, deadline, OrganizerDataProvider.getInstance().getTaskDataAccess());
     }
 
     public static final Creator<Task> CREATOR = new Creator<Task>() {
@@ -99,6 +103,7 @@ public class TaskImpl implements Task {
                 Objects.equals(dataAccess, task.dataAccess) &&
                 Objects.equals(content, task.content) &&
                 Objects.equals(deadline, task.deadline);
+        //TODO when DataAccess is implemented: change inspection so that dataAccess must be nonNull
     }
 
     @Override
