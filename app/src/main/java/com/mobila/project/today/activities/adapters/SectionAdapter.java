@@ -41,6 +41,13 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.ViewHold
             this.tvSectionName = itemView.findViewById(R.id.txt_section_name);
             this.tvLecturer = itemView.findViewById(R.id.txt_lecturer);
             this.rvLectures = itemView.findViewById(R.id.rv_lecture_list);
+
+            this.rlSectionItem.setOnClickListener(v -> {
+                if (rvLectures.getVisibility() == View.GONE)
+                    rvLectures.setVisibility(View.VISIBLE);
+                else
+                    rvLectures.setVisibility(View.GONE);
+            });
         }
     }
 
@@ -64,14 +71,6 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.ViewHold
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rvLectures.getContext(),
                 layoutManager.getOrientation());
         rvLectures.addItemDecoration(dividerItemDecoration);
-
-        holder.rlSectionItem.setOnClickListener(v -> {
-                    if (rvLectures.getVisibility() == View.GONE)
-                        rvLectures.setVisibility(View.VISIBLE);
-                    else
-                        rvLectures.setVisibility(View.GONE);
-                }
-        );
     }
 
     @Override

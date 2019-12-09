@@ -69,9 +69,9 @@ public class CourseImpl implements Course {
         this.dataAccess.setTitle(this, title);
     }
 
-    private void checkSectionsNotNull(){
+    private void checkSectionsNotNull() {
         if (this.sections == null)
-            this. sections = this.dataAccess.getSections(this);
+            this.sections = this.dataAccess.getSections(this);
     }
 
     @Override
@@ -97,7 +97,7 @@ public class CourseImpl implements Course {
 
     private void checkTasksNotNull() {
         if (this.tasks == null)
-            this. tasks = dataAccess.getTasks(this);
+            this.tasks = dataAccess.getTasks(this);
     }
 
     @Override
