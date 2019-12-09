@@ -20,8 +20,6 @@ import com.mobila.project.today.model.Task;
 import java.util.List;
 
 public class CourseContentActivity extends AppCompatActivity {
-    private RecyclerView.LayoutManager layoutManager;
-
     private Course course;
     private List<Task> tasks;
     private List<Section> sections;
@@ -32,7 +30,6 @@ public class CourseContentActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_content);
-        this.layoutManager = new LinearLayoutManager(this);
 
         this.course = this.getIntent().getParcelableExtra(Course.INTENT_EXTRA_CODE);
 
@@ -44,26 +41,26 @@ public class CourseContentActivity extends AppCompatActivity {
         this.initTaskView();
 
         /*TODO this.course.getSections*/
-        this.sections =
+        this.sections = ExampleCollection.getExampleSections();
+        this.initSectionView();
 
     }
 
     private void initTaskView() {
         RecyclerView recyclerView = findViewById(R.id.rv_course_tasks);
-        recyclerView.setLayoutManager(this.layoutManager);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         this.taskAdapter = new TaskAdapter(this, this.tasks);
         recyclerView.setAdapter(this.taskAdapter);
     }
 
     private void initSectionView(){
         RecyclerView recyclerView = findViewById(R.id.rv_section_list);
-        //recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         this.sectionAdapter = new SectionAdapter(this, this.sections);
         recyclerView.setAdapter(this.sectionAdapter);
     }
 
-    public void onAddCourseClicked(View view) {
-        this.adapter.notifyDataSetChanged();
+    public void onAddSectionClicked(View view) {
+        //TODO add Section when button clicked
     }
 }

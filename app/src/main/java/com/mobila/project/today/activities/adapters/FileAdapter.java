@@ -19,12 +19,12 @@ import com.mobila.project.today.utils.AttachmentUtils;
 
 import java.io.File;
 
-public class FileHolderAdapter extends RecyclerView.Adapter<FileHolderAdapter.ViewHolder> {
+public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
 
     private NoteMock note;
     private Context context;
 
-    public FileHolderAdapter(Context context, NoteMock note) {
+    public FileAdapter(Context context, NoteMock note) {
         this.note = note;
         this.context = context;
     }
@@ -76,6 +76,4 @@ public class FileHolderAdapter extends RecyclerView.Adapter<FileHolderAdapter.Vi
             button = itemView.findViewById(R.id.button_remove_file);
         }
     }
-
-
 }

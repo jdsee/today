@@ -24,7 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.mobila.project.today.R;
 import com.mobila.project.today.activities.adapters.TaskAdapter;
 import com.mobila.project.today.activities.UpdatableAppCompatActivity;
-import com.mobila.project.today.activities.adapters.UpdatableFileHolderAdapter;
+import com.mobila.project.today.activities.adapters.UpdatableFileAdapter;
 import com.mobila.project.today.activities.editorView.listeners.EditorKeyboardEventListener;
 import com.mobila.project.today.activities.editorView.listeners.TitleOnEditorActionListener;
 import com.mobila.project.today.activities.editorView.listeners.noteFocusChangeListener;
@@ -47,7 +47,7 @@ public class EditorActivity extends UpdatableAppCompatActivity {
     private NoteControl noteEditor;
     private AttachmentControl attachments;
 
-    private UpdatableFileHolderAdapter fileHolderAdapter;
+    private UpdatableFileAdapter fileHolderAdapter;
     private RecyclerView fileContainer;
 
     private boolean keyBoardOpen;
@@ -407,7 +407,7 @@ public class EditorActivity extends UpdatableAppCompatActivity {
      */
     private void initAttachmentsView() {
         this.fileContainer = findViewById(R.id.recycler_view_files);
-        this.fileHolderAdapter = new UpdatableFileHolderAdapter(this, this.note);
+        this.fileHolderAdapter = new UpdatableFileAdapter(this, this.note);
         this.fileContainer.setAdapter(this.fileHolderAdapter);
         this.fileContainer.setLayoutManager(new LinearLayoutManager(this));
     }

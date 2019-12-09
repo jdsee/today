@@ -18,10 +18,13 @@ public class SectionImpl implements Section {
     private final int ID;
     private String title;
     private String lecturer;
+    private List<Lecture> lectures;
 
-    public SectionImpl(int ID, String title) {
+    public SectionImpl(int ID, String title, String lecturer) {
         this.ID = ID;
         this.title = title;
+        this.lecturer = lecturer;
+        this.lectures = null;
 
         OrganizerDataProvider dataProvider = OrganizerDataProvider.getInstance();
         this.rootDataAccess = dataProvider.getRootDataAccess();
@@ -47,11 +50,14 @@ public class SectionImpl implements Section {
 
     @Override
     public List<Lecture> getLectures() throws DataKeyNotFoundException {
-        return this.dataAccess.getLectures(this);
+        if (this.lectures == null)
+            this.lectures = this.dataAccess.getLectures(this);
+        return this.lectures;
     }
 
     @Override
     public void addLecture(Lecture lecture) throws DataKeyNotFoundException {
+        //TODO do null check on members before accessing the db
         this.dataAccess.addLecture(this, lecture);
     }
 
@@ -62,7 +68,7 @@ public class SectionImpl implements Section {
 
     @Override
     public String getLecturer() throws DataKeyNotFoundException {
-        return this.dataAccess.getLecturer(this);
+        return this.lecturer;
     }
 
     @Override

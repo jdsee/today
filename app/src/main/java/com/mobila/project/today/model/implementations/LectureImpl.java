@@ -65,7 +65,7 @@ public class LectureImpl implements Lecture {
 
     @Override
     public int getLectureNr() throws DataKeyNotFoundException {
-        return this.dataAccess.getLectureNumber(this);
+        return this.lectureNr;
     }
 
     @Override
@@ -76,7 +76,7 @@ public class LectureImpl implements Lecture {
 
     @Override
     public String getRoomNr() throws DataKeyNotFoundException {
-        return this.dataAccess.getRoomNumber(this);
+        return this.roomNr;
     }
 
     @Override
@@ -87,7 +87,7 @@ public class LectureImpl implements Lecture {
 
     @Override
     public Date getDate() throws DataKeyNotFoundException {
-        return this.dataAccess.getDate(this);
+        return this.date;
     }
 
     @Override

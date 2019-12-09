@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 
 import com.mobila.project.today.modelMock.NoteMock;
-import com.mobila.project.today.activities.adapters.FileHolderAdapter;
+import com.mobila.project.today.activities.adapters.FileAdapter;
 import com.mobila.project.today.utils.AttachmentUtils;
 
 import java.io.File;
@@ -24,7 +24,7 @@ public class AttachmentControl {
 
     private Context context;
     private NoteMock note;
-    private FileHolderAdapter adapter;
+    private FileAdapter adapter;
 
     public static final int REQUEST_TAKE_PHOTO = 1;
     public static final int REQUEST_FILE_OPEN = 2;
@@ -32,7 +32,7 @@ public class AttachmentControl {
     private String currentImagePath;
 
     public AttachmentControl(Context context,
-                      NoteMock note, @NonNull FileHolderAdapter adapter) {
+                      NoteMock note, @NonNull FileAdapter adapter) {
         this.context = context;
         this.note = note;
         this.adapter = adapter;

@@ -69,37 +69,55 @@ public class CourseImpl implements Course {
         this.dataAccess.setTitle(this, title);
     }
 
-    @Override
-    public List<Section> getSections() throws DataKeyNotFoundException {
+    private void checkSectionsNotNull(){
         if (this.sections == null)
             this. sections = this.dataAccess.getSections(this);
+    }
+
+    @Override
+    public List<Section> getSections() throws DataKeyNotFoundException {
+        this.checkSectionsNotNull();
         return this.sections;
     }
 
     @Override
     public void addSection(Section section) throws DataKeyNotFoundException {
-        //TODO do null check on members before accesing the DB
+        this.checkSectionsNotNull();
+        this.sections.add(section);
         this.dataAccess.addSection(this, section);
     }
 
     @Override
     public void removeSection(Identifiable section) throws DataKeyNotFoundException {
+        this.checkSectionsNotNull();
+        this.sections.remove(section);
         this.rootDataAccess.removeEntityInstance(section);
     }
 
 
+    private void checkTasksNotNull() {
+        if (this.tasks == null)
+            this. tasks = dataAccess.getTasks(this);
+    }
+
     @Override
     public List<Task> getTasks() throws DataKeyNotFoundException {
-        return this.dataAccess.getTasks(this);
+        this.checkTasksNotNull();
+        this.dataAccess.getTasks(this);
+        return this.tasks;
     }
 
     @Override
     public void addTask(Task task) throws DataKeyNotFoundException {
+        this.checkTasksNotNull();
+        this.tasks.add(task);
         this.dataAccess.addTask(this, task);
     }
 
     @Override
     public void removeTask(Identifiable task) throws DataKeyNotFoundException {
+        this.checkTasksNotNull();
+        this.tasks.remove(task);
         this.rootDataAccess.removeEntityInstance(task);
     }
 

@@ -10,12 +10,12 @@ import com.mobila.project.today.utils.AttachmentUtils;
 
 import java.io.File;
 
-public class UpdatableFileHolderAdapter extends FileHolderAdapter {
+public class UpdatableFileAdapter extends FileAdapter {
 
     private NoteMock note;
     private UpdatableAppCompatActivity context;
 
-    public UpdatableFileHolderAdapter(UpdatableAppCompatActivity context, NoteMock note) {
+    public UpdatableFileAdapter(UpdatableAppCompatActivity context, NoteMock note) {
         super(context, note);
         this.note = note;
         this.context = context;

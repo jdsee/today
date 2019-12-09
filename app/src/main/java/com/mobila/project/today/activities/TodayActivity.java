@@ -17,7 +17,7 @@ import com.mobila.project.today.model.Semester;
 import com.mobila.project.today.model.Task;
 import com.mobila.project.today.model.implementations.SemesterImpl;
 import com.mobila.project.today.modelMock.CourseMock;
-import com.mobila.project.today.activities.adapters.CourseHolderAdapter;
+import com.mobila.project.today.activities.adapters.CourseAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -107,7 +107,7 @@ public class TodayActivity extends AppCompatActivity {
 
     private void initCourseView() {
         RecyclerView courseRecyclerView = findViewById(R.id.recycler_view_courses);
-        courseRecyclerView.setAdapter(new CourseHolderAdapter(courses));
+        courseRecyclerView.setAdapter(new CourseAdapter(courses));
         courseRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
