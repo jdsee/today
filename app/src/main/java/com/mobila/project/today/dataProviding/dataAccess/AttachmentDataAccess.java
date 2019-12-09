@@ -8,7 +8,7 @@ import java.io.File;
 
 public interface AttachmentDataAccess {
 
-    static AttachmentDataAccess createInstance() {
+    static AttachmentDataAccess getInstance() {
         //TODO return implementation
         return null;
     }

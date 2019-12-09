@@ -1,7 +1,6 @@
 package com.mobila.project.today.model.implementations;
 
 import android.os.Parcel;
-import android.os.Parcelable;
 
 import com.mobila.project.today.dataProviding.DataKeyNotFoundException;
 import com.mobila.project.today.dataProviding.OrganizerDataProvider;
@@ -10,15 +9,24 @@ import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Task;
 
 import java.util.Date;
+import java.util.Objects;
 
-public class TaskImpl implements Task, Parcelable {
+public class TaskImpl implements Task {
     private final TaskDataAccess dataAccess;
 
     private final int ID;
     private String content;
     private Date deadline;
 
-    public static final Creator<TaskImpl> CREATOR = new Creator<TaskImpl>() {
+    public TaskImpl(int id, String content, Date deadline) {
+        this.ID = id;
+        this.content = content;
+        this.deadline = deadline;
+
+        this.dataAccess = OrganizerDataProvider.getInstance().getTaskDataAccess();
+    }
+
+    public static final Creator<Task> CREATOR = new Creator<Task>() {
         @Override
         public TaskImpl createFromParcel(Parcel source) {
             return new TaskImpl(source);
@@ -30,20 +38,24 @@ public class TaskImpl implements Task, Parcelable {
         }
     };
 
-    public TaskImpl(int id, String content, Date deadline) {
-        this.ID = id;
-        this.content = content;
-        this.deadline = deadline;
-
-        this.dataAccess = OrganizerDataProvider.getInstance().getTaskDataAccess();
-    }
-
     private TaskImpl(Parcel in) {
         this(
                 in.readInt(),
                 in.readString(),
                 new Date(in.readLong())
         );
+    }
+
+    @Override
+    public int describeContents() {
+        return hashCode();
+    }
+
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeInt(this.ID);
+        out.writeString(this.content);
+        out.writeLong(this.deadline.getTime());
     }
 
     @Override
@@ -59,6 +71,7 @@ public class TaskImpl implements Task, Parcelable {
     @Override
     public void setDeadline(Date date) throws DataKeyNotFoundException {
         this.dataAccess.setDeadline(this, date);
+        this.deadline = date;
     }
 
     @Override
@@ -69,6 +82,7 @@ public class TaskImpl implements Task, Parcelable {
     @Override
     public void setContent(String content) throws DataKeyNotFoundException {
         this.dataAccess.setContent(this, content);
+        this.content = content;
     }
 
     @Override
@@ -77,14 +91,18 @@ public class TaskImpl implements Task, Parcelable {
     }
 
     @Override
-    public int describeContents() {
-        return hashCode();
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TaskImpl task = (TaskImpl) o;
+        return ID == task.ID &&
+                Objects.equals(dataAccess, task.dataAccess) &&
+                Objects.equals(content, task.content) &&
+                Objects.equals(deadline, task.deadline);
     }
 
     @Override
-    public void writeToParcel(Parcel out, int flags) {
-        out.writeInt(this.ID);
-        out.writeString(this.content);
-        out.writeLong(this.deadline.getTime());
+    public int hashCode() {
+        return Objects.hash(dataAccess, ID, content, deadline);
     }
 }

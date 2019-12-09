@@ -44,26 +44,34 @@ public class SectionImpl implements Section {
 
     @Override
     public void setTitle(String title) throws DataKeyNotFoundException {
-        this.title = title;
         this.dataAccess.setTitle(this, title);
+        this.title = title;
+    }
+
+    private void initLectures() {
+        this.lectures = this.dataAccess.getLectures(this);
     }
 
     @Override
     public List<Lecture> getLectures() throws DataKeyNotFoundException {
         if (this.lectures == null)
-            this.lectures = this.dataAccess.getLectures(this);
+            this.initLectures();
         return this.lectures;
     }
 
     @Override
     public void addLecture(Lecture lecture) throws DataKeyNotFoundException {
-        //TODO do null check on members before accessing the db
         this.dataAccess.addLecture(this, lecture);
+        if (this.lectures == null)
+            this.initLectures();
+        else this.lectures.add(lecture);
     }
 
     @Override
     public void removeLecture(Identifiable lecture) throws DataKeyNotFoundException {
         this.rootDataAccess.removeEntityInstance(lecture);
+        if (this.lectures != null)
+            this.lectures.remove(lecture);
     }
 
     @Override
@@ -73,8 +81,8 @@ public class SectionImpl implements Section {
 
     @Override
     public void setLecturer(String lecturer) throws DataKeyNotFoundException {
-        this.lecturer = lecturer;
         this.dataAccess.setLecturer(this, lecturer);
+        this.lecturer = lecturer;
     }
 
     @Override

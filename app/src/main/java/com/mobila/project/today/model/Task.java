@@ -2,11 +2,13 @@ package com.mobila.project.today.model;
 
 import android.os.Parcelable;
 import com.mobila.project.today.dataProviding.DataKeyNotFoundException;
+import com.mobila.project.today.model.implementations.TaskImpl;
 
 import java.util.Date;
 
 public interface Task extends Identifiable, Parcelable {
     String INTENT_EXTRA_CODE = "EXTRA_TASK";
+    Creator<Task> CREATOR= TaskImpl.CREATOR;
 
     /**
      * Returns the course containing this task.

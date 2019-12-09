@@ -15,19 +15,16 @@ public class SemesterImpl implements Semester {
 
     private final int ID;
     private int semesterNr;
+    private List<Course> courses;
 
     public SemesterImpl(int ID, int semesterNr) {
         this.ID = ID;
         this.semesterNr = semesterNr;
+        this.courses = null;
 
         OrganizerDataProvider dataProvider = OrganizerDataProvider.getInstance();
         this.rootDataAccess = dataProvider.getRootDataAccess();
         this.dataAccess = dataProvider.getSemesterDataAccess();
-    }
-
-    @Override
-    public List<Course> getCourses() throws UncheckedTodayException {
-        return this.dataAccess.getCourses(this);
     }
 
     @Override
@@ -41,14 +38,30 @@ public class SemesterImpl implements Semester {
         this.dataAccess.setNumber(this, number);
     }
 
+    private void initCourses() {
+        this.courses = this.dataAccess.getCourses(this);
+    }
+
+    @Override
+    public List<Course> getCourses() throws UncheckedTodayException {
+        if (this.courses == null)
+            this.initCourses();
+        return this.courses;
+    }
+
     @Override
     public void addCourse(Course course) throws UncheckedTodayException {
         this.dataAccess.addCourse(this, course);
+        if (this.courses == null)
+            this.initCourses();
+        else this.courses.add(course);
     }
 
     @Override
     public void removeCourse(Course course) throws UncheckedTodayException {
         this.rootDataAccess.removeEntityInstance(course);
+        if (this.courses!=null)
+            this.courses.remove(course);
     }
 
     @Override

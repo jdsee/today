@@ -13,10 +13,12 @@ public class AttachmentImpl implements Attachment {
 
     private final int ID;
     private String title;
+    private File content;
 
     public AttachmentImpl(int ID, String title) {
         this.ID = ID;
         this.title = title;
+        this.content = null;
 
         this.dataAccess = OrganizerDataProvider.getInstance().getAttachmentDataAccess();
     }
@@ -39,12 +41,15 @@ public class AttachmentImpl implements Attachment {
 
     @Override
     public File getContent() throws DataKeyNotFoundException {
-        return this.dataAccess.getContent(this);
+        if (this.content == null)
+            this.content = this.dataAccess.getContent(this);
+        return this.content;
     }
 
     @Override
     public void setContent(File content) throws DataKeyNotFoundException {
         this.dataAccess.setContent(this, content);
+        this.content = content;
     }
 
     @Override
