@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.mobila.project.today.R;
 import com.mobila.project.today.UncheckedTodayException;
 import com.mobila.project.today.activities.adapters.TaskAdapter;
+import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Semester;
 import com.mobila.project.today.model.Task;
 import com.mobila.project.today.model.implementations.SemesterImpl;
@@ -30,9 +31,9 @@ import static android.view.View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
 
 public class TodayActivity extends AppCompatActivity {
 
-    private List<Task> tasks = new ArrayList<>();
-    private List<CourseMock> courses = new ArrayList<>();
-    private List<Semester> semesters = new ArrayList<>();
+    private List<Task> tasks;
+    private List<Course> courses;
+    private List<Semester> semesters;
 
     TextView semesterView;
     int currentSemester;
@@ -48,26 +49,9 @@ public class TodayActivity extends AppCompatActivity {
                 View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
         this.semesterView = findViewById(R.id.semester_view);
 
-        courses.add(new CourseMock(1, "Mobile Anwendungen",
-                "Prof. Dr.-Ing Schwotzer", "WHC 442"));
-        courses.add(new CourseMock(2, "Software Engeneering",
-                "Dr. Peter Habdichlieb", "TAC 832"));
-        courses.add(new CourseMock(3, "Programmieren 3",
-                "Eine Hubrich", "WHC 624"));
-        courses.add(new CourseMock(4, "Mobile Anwendungen",
-                "Prof. Dr.-Ing Schwotzer", "WHC 442"));
-        courses.add(new CourseMock(5, "Software Engeneering",
-                "Dr. Peter Habdichlieb", "TAC 832"));
-        courses.add(new CourseMock(6, "Programmieren 3",
-                "Eine Hubrich", "WHC 624"));
-        courses.add(new CourseMock(7, "Programmieren 3",
-                "Eine Hubrich", "WHC 624"));
-
+        this.courses = ExampleCollection.getExampleCourse();
         this.tasks = ExampleCollection.getExampleTasks();
-
-        semesters.add(new SemesterImpl(11, 1));
-        semesters.add(new SemesterImpl(11, 2));
-        semesters.add(new SemesterImpl(11, 3));
+        this.semesters = ExampleCollection.getExampleSemesters();
 
         initCourseView();
         initTaskView();
@@ -107,7 +91,7 @@ public class TodayActivity extends AppCompatActivity {
 
     private void initCourseView() {
         RecyclerView courseRecyclerView = findViewById(R.id.recycler_view_courses);
-        courseRecyclerView.setAdapter(new CourseAdapter(courses));
+        courseRecyclerView.setAdapter(new CourseAdapter(this, this.courses));
         courseRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
