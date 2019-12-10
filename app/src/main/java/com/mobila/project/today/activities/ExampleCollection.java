@@ -5,7 +5,6 @@ import com.mobila.project.today.model.Lecture;
 import com.mobila.project.today.model.Section;
 import com.mobila.project.today.model.Semester;
 import com.mobila.project.today.model.Task;
-import com.mobila.project.today.model.implementations.CourseImpl;
 import com.mobila.project.today.model.implementations.LectureImpl;
 import com.mobila.project.today.model.implementations.SectionImpl;
 import com.mobila.project.today.model.implementations.SemesterImpl;
@@ -41,12 +40,12 @@ public class ExampleCollection {
 
     public static List<Course> getExampleCourse() {
         List<Course> courses = new ArrayList<>();
-        courses.add(new CourseImpl(1, "Mobile Anwendungen"));
-        courses.add(new CourseImpl(2, "Software Engeneering"));
-        courses.add(new CourseImpl(3, "Mathematik 1"));
-        courses.add(new CourseImpl(4, "Netzwerke"));
-        courses.add(new CourseImpl(5, "Theoretische Grundlagen der Informatik"));
-        courses.add(new CourseImpl(6, "Soziale Netzwerke"));
+        courses.add(new Course(1, "Mobile Anwendungen"));
+        courses.add(new Course(2, "Software Engeneering"));
+        courses.add(new Course(3, "Mathematik 1"));
+        courses.add(new Course(4, "Netzwerke"));
+        courses.add(new Course(5, "Theoretische Grundlagen der Informatik"));
+        courses.add(new Course(6, "Soziale Netzwerke"));
         return courses;
     }
 

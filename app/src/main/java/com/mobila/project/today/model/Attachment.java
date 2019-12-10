@@ -38,6 +38,14 @@ public class Attachment implements Identifiable, Parcelable {
         }
     };
 
+    public Attachment(File content) {
+        this(
+                12345, //TODO !!!! ID-Generator
+                content
+        );
+    }
+
+
     @Override
     public int describeContents() {
         return 0;

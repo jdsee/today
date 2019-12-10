@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public void openCourseContent(View v) {
         Intent intent = new Intent(this, CourseContentActivity.class);
-        Course course = Course.createCourse(1234, "Mobile Anwendungen");
+        Course course = new Course(1234, "Mobile Anwendungen");
         intent.putExtra(Course.INTENT_EXTRA_CODE, course);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);

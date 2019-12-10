@@ -4,7 +4,7 @@ import com.mobila.project.today.dataProviding.DataKeyNotFoundException;
 
 import java.util.Date;
 import java.util.List;
-
+//TODO implement parcelable
 public interface Lecture extends Identifiable {
     /**
      * Returns the section containing this lecture.

@@ -16,7 +16,7 @@ import java.util.List;
  * There are also course related notes stored in the @code{Course}.
  */
 public class Course implements Identifiable, Parcelable {
-    String INTENT_EXTRA_CODE = "EXTRA_COURSE";
+    public static final String INTENT_EXTRA_CODE = "EXTRA_COURSE";
 
     private final RootDataAccess rootDataAccess;
     private final CourseDataAccess dataAccess;
