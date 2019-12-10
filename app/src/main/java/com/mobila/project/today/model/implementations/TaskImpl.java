@@ -69,6 +69,8 @@ public class TaskImpl implements Task {
 
     @Override
     public Date getDeadline() {
+        if (this.deadline == null)
+            this.deadline = this.dataAccess.getDeadline(this);
         return this.deadline;
     }
 
@@ -80,6 +82,9 @@ public class TaskImpl implements Task {
 
     @Override
     public String getContent() {
+        //TODO: should the db be accessed here in any situation? constructor with content ensures actuallity -> set will update any changes to member
+        if (this.content == null)
+            this.content = this.dataAccess.getContent(this);
         return this.content;
     }
 

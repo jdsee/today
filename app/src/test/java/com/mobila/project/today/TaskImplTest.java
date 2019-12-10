@@ -61,7 +61,12 @@ public class TaskImplTest {
                 .setContent(this.task, changedContent);
         content = this.task.getContent();
         assertEquals(null, content);
-        Mockito.verify(this.dataAccessMock, Mockito.times(0))
+        Mockito.verify(this.dataAccessMock, Mockito.times(1))
                 .getContent(this.task);
+
+        Task nullContentTask = new TaskImpl(1234, null, null, this.dataAccessMock);
+        content = nullContentTask.getContent();
+        assertNull(content);
+        Mockito.verify(this.dataAccessMock, Mockito.times(1)).getContent(nullContentTask);
     }
 }
