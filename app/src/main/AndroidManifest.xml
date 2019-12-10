@@ -18,8 +18,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activities.TodayActivity"></activity>
-        <activity android:name=".activities.courseListView.CourseListActivity" />
+        <activity android:name=".activities.TodayActivity"/>
+        <activity android:name=".activities.courseContentView.CourseContentActivity" />
         <activity
             android:name=".activities.MainActivity"
             android:windowSoftInputMode="stateVisible|adjustResize">
@@ -33,7 +33,7 @@
             android:name=".activities.taskView.CourseTasksActivity"
             android:parentActivityName=".activities.MainActivity" />
         <activity
-            android:name=".activities.editorActivity.EditorActivity"
+            android:name=".activities.editorView.EditorActivity"
             android:parentActivityName=".activities.MainActivity"
             android:windowSoftInputMode="stateVisible|adjustResize">
             <intent-filter>

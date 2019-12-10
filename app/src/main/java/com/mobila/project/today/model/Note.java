@@ -2,35 +2,71 @@ package com.mobila.project.today.model;
 
 import android.text.Spannable;
 
-import com.mobila.project.today.dataProviding.DataKeyNotFoundException;
+import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
+import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
+import com.mobila.project.today.model.dataProviding.dataAccess.NoteDataAccess;
+import com.mobila.project.today.model.dataProviding.dataAccess.RootDataAccess;
 
-import java.io.Serializable;
 import java.util.List;
 
-/**
- *
- */
-public interface Note extends Identifiable {
-    String INTENT_EXTRA_CODE = "EXTRA_NOTE";
+public class Note implements Identifiable {
+    public static final String INTENT_EXTRA_CODE = "EXTRA_NOTE";
+
+    private final RootDataAccess rootDataAccess;
+    private final NoteDataAccess noteDataAccess;
+
+    private final int ID;
+    private String title;
+
+
+    public Note(int ID, String title) {
+        this.ID = ID;
+        this.title = title;
+
+        OrganizerDataProvider dataProvider = OrganizerDataProvider.getInstance();
+        this.rootDataAccess = dataProvider.getRootDataAccess();
+        this.noteDataAccess = dataProvider.getNoteDataAccess();
+    }
 
     /**
      * Returns the lecture containing this attachment.
      *
      * @return the lecture containing this attachment
      */
-    Lecture getLecture() throws DataKeyNotFoundException;
+    public Lecture getLecture() throws DataKeyNotFoundException {
+        return this.noteDataAccess.getLecture(this);
+    }
 
-    String getTitle();
+    public String getTitle() {
+        return this.title;
+    }
 
-    void setTitle(String title) throws DataKeyNotFoundException;
+    public void setTitle(String title) throws DataKeyNotFoundException {
+        this.title = title;
+        this.noteDataAccess.setTitle(this, title);
+    }
 
-    Spannable getContent() throws DataKeyNotFoundException;
+    public Spannable getContent() throws DataKeyNotFoundException {
+        return this.noteDataAccess.getContent(this);
+    }
 
-    void setContent(Spannable content) throws DataKeyNotFoundException;
+    public void setContent(Spannable content) throws DataKeyNotFoundException {
+        this.noteDataAccess.setContent(this, content);
+    }
 
-    List<NoteReference> getReferences() throws DataKeyNotFoundException;
+    public List<NoteReference> getReferences() throws DataKeyNotFoundException {
+        return this.noteDataAccess.getReferences(this);
+    }
 
-    void addReference(Identifiable ref, int row) throws DataKeyNotFoundException;
+    public void addReference(Identifiable ref, int row) throws DataKeyNotFoundException {
+        this.noteDataAccess.addReference(this, ref, row);
+    }
 
-    void removeReference(Identifiable ref) throws DataKeyNotFoundException;
+    public void removeReference(Identifiable ref) throws DataKeyNotFoundException {
+        this.rootDataAccess.removeEntityInstance(ref);
+    }
+    @Override
+    public int getID() {
+        return this.ID;
+    }
 }

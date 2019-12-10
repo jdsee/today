@@ -14,16 +14,16 @@
         android:layout_marginBottom="16dp"
         android:onClick="openEditor"
         android:text="@string/open_editor"
-        app:layout_constraintBottom_toTopOf="@+id/btn_open_course_list"
+        app:layout_constraintBottom_toTopOf="@+id/btn_open_course_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/btn_open_course_list"
+        android:id="@+id/btn_open_course_content"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:onClick="openCourseList"
-        android:text="@string/open_course_list"
+        android:onClick="openCourseContent"
+        android:text="@string/open_course_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -40,7 +40,7 @@
         android:text="@string/open_course_tasks"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_open_course_list" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_open_course_content" />
 
     <Button
         android:id="@+id/btn_open_today"

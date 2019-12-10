@@ -1,11 +1,11 @@
 <resources>
     <string name="app_name">today</string>
-    <string name="share">share note</string>
+    <string name="share">share lecture</string>
     <string name="settings">app settings</string>
-    <string name="delete_note">delete note</string>
+    <string name="delete_note">delete lecture</string>
     <string name="app_bar_note">Note</string>
     <string name="open_editor">Editor</string>
-    <string name="open_course_list">Open Course List</string>
+    <string name="open_course_content">Open Course Content</string>
     <string name="hint_headline">Enter a Headline</string>
     <string name="hint_note" />
 

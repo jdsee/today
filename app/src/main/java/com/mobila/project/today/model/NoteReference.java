@@ -1,9 +1,39 @@
 package com.mobila.project.today.model;
 
-public interface NoteReference extends Identifiable {
-    Note getReference();
+public class NoteReference implements Identifiable {
+    private final int ID;
+    private Note reference;
+    private Note source;
+    private int row;
 
-    Note getSource();
+    public NoteReference(int id, Note reference, Note source, int row) {
+        this.ID = id;
+        this.reference = reference;
+        this.source = source;
+        this.row = row;
+    }
 
-    int getRow();
+    public NoteReference(Note reference, Note source, int row) {
+        this(
+                1234, //TODO replace with DataKeyGenerator
+                reference, source, row
+        );
+    }
+
+    Note getReference() {
+        return this.reference;
+    }
+
+    Note getSource() {
+        return this.source;
+    }
+
+    int getRow() {
+        return this.row;
+    }
+
+    @Override
+    public int getID() {
+        return this.ID;
+    }
 }

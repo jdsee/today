@@ -8,11 +8,11 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.mobila.project.today.R;
-import com.mobila.project.today.activities.courseListView.CourseListActivity;
-import com.mobila.project.today.activities.editorActivity.EditorActivity;
+import com.mobila.project.today.activities.courseContentView.CourseContentActivity;
+import com.mobila.project.today.activities.editorView.EditorActivity;
 import com.mobila.project.today.activities.taskView.CourseTasksActivity;
+import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Task;
-import com.mobila.project.today.model.implementations.TaskImpl;
 import com.mobila.project.today.modelMock.NoteMock;
 
 import java.util.ArrayList;
@@ -38,9 +38,9 @@ public class MainActivity extends AppCompatActivity {
                 "Veranstalltung 3", "07.05.18");
 
         ArrayList<Task> tasks = new ArrayList<>();
-        tasks.add(new TaskImpl(1, "some Content", new Date()));
-        tasks.add(new TaskImpl(2, "some Random", new Date()));
-        tasks.add(new TaskImpl(3, "some mor Random", new Date()));
+        tasks.add(new Task(1, "some Content", new Date()));
+        tasks.add(new Task(2, "some Random", new Date()));
+        tasks.add(new Task(3, "some mor Random", new Date()));
 
         intent.putParcelableArrayListExtra(Task.INTENT_EXTRA_CODE, tasks);
         intent.putExtra(NoteMock.INTENT_EXTRA_CODE,  note);
@@ -48,11 +48,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Opens CourseListActivity
+     * Opens CourseContentActivity
      * @param v View that performs this action
      */
-    public void openCourseList(View v) {
-        Intent intent = new Intent(this, CourseListActivity.class);
+    public void openCourseContent(View v) {
+        Intent intent = new Intent(this, CourseContentActivity.class);
+        Course course = new Course(1234, "Mobile Anwendungen");
+        intent.putExtra(Course.INTENT_EXTRA_CODE, course);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }

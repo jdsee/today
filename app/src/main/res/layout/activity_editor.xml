@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.editorActivity.EditorActivity">
+    tools:context=".activities.editorView.EditorActivity">
 
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -156,7 +156,7 @@
                 android:id="@+id/editor_content"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:autofillHints="note"
+                android:autofillHints="lecture"
                 android:background="@null"
                 android:gravity="start|top"
                 android:hint="@string/hint_note"

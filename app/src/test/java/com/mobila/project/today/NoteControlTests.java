@@ -7,6 +7,7 @@ import android.widget.EditText;
 import com.mobila.project.today.control.NoteControl;
 
 import org.junit.Test;
+import org.mockito.Mockito;
 
 public class NoteControlTests {
     @Test

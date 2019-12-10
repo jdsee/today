@@ -10,8 +10,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 
-import com.mobila.project.today.modelMock.NoteMock;
-import com.mobila.project.today.activities.adapters.FileHolderAdapter;
+import com.mobila.project.today.model.Attachment;
+import com.mobila.project.today.activities.adapters.FileAdapter;
+import com.mobila.project.today.model.Lecture;
 import com.mobila.project.today.utils.AttachmentUtils;
 
 import java.io.File;
@@ -23,8 +24,8 @@ import static android.app.Activity.RESULT_OK;
 public class AttachmentControl {
 
     private Context context;
-    private NoteMock note;
-    private FileHolderAdapter adapter;
+    private Lecture lecture;
+    private FileAdapter adapter;
 
     public static final int REQUEST_TAKE_PHOTO = 1;
     public static final int REQUEST_FILE_OPEN = 2;
@@ -32,9 +33,9 @@ public class AttachmentControl {
     private String currentImagePath;
 
     public AttachmentControl(Context context,
-                      NoteMock note, @NonNull FileHolderAdapter adapter) {
+                             Lecture lecture, @NonNull FileAdapter adapter) {
         this.context = context;
-        this.note = note;
+        this.lecture = lecture;
         this.adapter = adapter;
     }
 
@@ -78,7 +79,7 @@ public class AttachmentControl {
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_TAKE_PHOTO && currentImagePath != null) {
                 File file = new File(currentImagePath);
-                this.note.addAttachment(file);
+                this.lecture.addAttachment(new Attachment(file));
                 Toast.makeText(context.getApplicationContext(),
                         "Image Saved", Toast.LENGTH_LONG).show();
                 this.currentImagePath = null;
@@ -104,7 +105,7 @@ public class AttachmentControl {
                     }
                     Toast.makeText(context.getApplicationContext(),
                             "File Saved", Toast.LENGTH_LONG).show();
-                    this.note.addAttachment(destinationFile);
+                    this.lecture.addAttachment(new Attachment(destinationFile));
                 } else Toast.makeText(context.getApplicationContext(),
                         "File was lost", Toast.LENGTH_LONG).show();
             } else {

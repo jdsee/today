@@ -1,6 +1,9 @@
 package com.mobila.project.today.model;
 
-import com.mobila.project.today.dataProviding.DataKeyNotFoundException;
+import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
+import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
+import com.mobila.project.today.model.dataProviding.dataAccess.RootDataAccess;
+import com.mobila.project.today.model.dataProviding.dataAccess.SectionDataAccess;
 
 import java.util.List;
 
@@ -8,34 +11,90 @@ import java.util.List;
  * Allows access to all data contained in the "Section"-entity.
  * The main content are the sections, which store all relevant data for taking notes.
  */
-public interface Section extends Identifiable {
+public class Section implements Identifiable {
+    private final RootDataAccess rootDataAccess;
+    private final SectionDataAccess dataAccess;
+
+    private final int ID;
+    private String title;
+    private String lecturer;
+    private List<Lecture> lectures;
+
+    public Section(int ID, String title, String lecturer) {
+        this.ID = ID;
+        this.title = title;
+        this.lecturer = lecturer;
+        this.lectures = null;
+
+        OrganizerDataProvider dataProvider = OrganizerDataProvider.getInstance();
+        this.rootDataAccess = dataProvider.getRootDataAccess();
+        this.dataAccess = dataProvider.getSectionDataAccess();
+    }
+
     /**
      * Returns the course containing this section.
      *
      * @return the course containing this section
      */
-    Course getCourse() throws DataKeyNotFoundException;
+    public Course getCourse() throws DataKeyNotFoundException {
+        return this.dataAccess.getCourse(this);
+    }
 
     /**
      * Returns the title of this section.
      *
      * @return the title of this section
      */
-    String getTitle() throws DataKeyNotFoundException;
+    public String getTitle() throws DataKeyNotFoundException {
+        return this.title;
+    }
 
     /**
      * Sets the title for this section.
-     *
      */
-    void setTitle(String title) throws DataKeyNotFoundException;
+    public void setTitle(String title) throws DataKeyNotFoundException {
+        this.dataAccess.setTitle(this, title);
+        this.title = title;
+    }
 
-    List<Lecture> getLectures() throws DataKeyNotFoundException;
+    private void initLectures() {
+        this.lectures = this.dataAccess.getLectures(this);
+    }
 
-    void addLecture(Lecture lecture) throws DataKeyNotFoundException;
+    public List<Lecture> getLectures() throws DataKeyNotFoundException {
+        if (this.lectures == null)
+            this.initLectures();
+        return this.lectures;
+    }
 
-    void removeLecture(Identifiable lecture) throws DataKeyNotFoundException;
 
-    String getLecturer() throws DataKeyNotFoundException;
+    public void addLecture(Lecture lecture) throws DataKeyNotFoundException {
+        this.dataAccess.addLecture(this, lecture);
+        if (this.lectures == null)
+            this.initLectures();
+        else this.lectures.add(lecture);
+    }
 
-    void setLecturer(String lecturer) throws DataKeyNotFoundException;
+
+    public void removeLecture(Identifiable lecture) throws DataKeyNotFoundException {
+        this.rootDataAccess.removeEntityInstance(lecture);
+        if (this.lectures != null)
+            this.lectures.remove(lecture);
+    }
+
+
+    public String getLecturer() throws DataKeyNotFoundException {
+        return this.lecturer;
+    }
+
+
+    public void setLecturer(String lecturer) throws DataKeyNotFoundException {
+        this.dataAccess.setLecturer(this, lecturer);
+        this.lecturer = lecturer;
+    }
+
+    @Override
+    public int getID() {
+        return this.ID;
+    }
 }

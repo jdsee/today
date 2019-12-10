@@ -1,14 +1,59 @@
 package com.mobila.project.today.model;
 
-import com.mobila.project.today.dataProviding.DataKeyNotFoundException;
-import com.mobila.project.today.model.implementations.AttachmentImpl;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
+import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
+import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
+import com.mobila.project.today.model.dataProviding.dataAccess.AttachmentDataAccess;
 
 import java.io.File;
 
-public interface Attachment extends Identifiable {
+public class Attachment implements Identifiable, Parcelable {
 
-    static Attachment createAttachment(int ID, String title) {
-        return new AttachmentImpl(ID, title);
+    private final AttachmentDataAccess dataAccess;
+
+    private final int ID;
+    private File content;
+
+    public Attachment(int ID, @NonNull File content) {
+        this.ID = ID;
+        this.content = content;
+
+        this.dataAccess = OrganizerDataProvider.getInstance().getAttachmentDataAccess();
+    }
+
+    public static final Creator<Attachment> CREATOR = new Creator<Attachment>() {
+        @Override
+        public Attachment createFromParcel(Parcel source) {
+            return null;
+            //TODO
+        }
+
+        @Override
+        public Attachment[] newArray(int size) {
+            return new Attachment[0];
+        }
+    };
+
+    public Attachment(File content) {
+        this(
+                12345, //TODO !!!! ID-Generator
+                content
+        );
+    }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
     }
 
     /**
@@ -16,13 +61,23 @@ public interface Attachment extends Identifiable {
      *
      * @return the lecture containing this attachment
      */
-    Lecture getLecture() throws DataKeyNotFoundException;
+    public Lecture getLecture() throws DataKeyNotFoundException {
+        return this.dataAccess.getLecture(this);
+    }
 
-    String getTitle();
+    public File getContent() throws DataKeyNotFoundException {
+        if (this.content == null)
+            this.content = this.dataAccess.getContent(this);
+        return this.content;
+    }
 
-    void setTitle(String title) throws DataKeyNotFoundException;
+    public void setContent(File content) throws DataKeyNotFoundException {
+        this.dataAccess.setContent(this, content);
+        this.content = content;
+    }
 
-    File getContent() throws DataKeyNotFoundException;
-
-    void setContent(File content) throws DataKeyNotFoundException;
+    @Override
+    public int getID() {
+        return this.ID;
+    }
 }
