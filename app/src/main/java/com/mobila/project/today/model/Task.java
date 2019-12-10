@@ -24,4 +24,6 @@ public interface Task extends Identifiable, Parcelable {
     String getContent();
 
     void setContent(String content) throws DataKeyNotFoundException;
+
+    boolean equals(Object o);
 }
