@@ -3,10 +3,10 @@ package com.mobila.project.today.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.mobila.project.today.dataProviding.DataKeyNotFoundException;
-import com.mobila.project.today.dataProviding.OrganizerDataProvider;
-import com.mobila.project.today.dataProviding.dataAccess.CourseDataAccess;
-import com.mobila.project.today.dataProviding.dataAccess.RootDataAccess;
+import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
+import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
+import com.mobila.project.today.model.dataProviding.dataAccess.CourseDataAccess;
+import com.mobila.project.today.model.dataProviding.dataAccess.RootDataAccess;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
-package com.mobila.project.today.dataProviding.dataAccess;
+package com.mobila.project.today.model.dataProviding.dataAccess;
 
-import com.mobila.project.today.dataProviding.DataKeyNotFoundException;
+import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
 import com.mobila.project.today.model.Identifiable;
 import com.mobila.project.today.model.Semester;
 import com.mobila.project.today.model.Task;

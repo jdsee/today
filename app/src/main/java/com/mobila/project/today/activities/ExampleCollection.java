@@ -1,14 +1,11 @@
 package com.mobila.project.today.activities;
 
 import com.mobila.project.today.model.Course;
-import com.mobila.project.today.model.Lecture;
 import com.mobila.project.today.model.Section;
 import com.mobila.project.today.model.Semester;
 import com.mobila.project.today.model.Task;
-import com.mobila.project.today.model.implementations.LectureImpl;
+import com.mobila.project.today.model.Lecture;
 import com.mobila.project.today.model.implementations.SectionImpl;
-import com.mobila.project.today.model.implementations.SemesterImpl;
-import com.mobila.project.today.model.implementations.TaskImpl;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,9 +14,9 @@ import java.util.List;
 public class ExampleCollection {
     public static List<Task> getExampleTasks() {
         List<Task> tasks = new ArrayList<>();
-        tasks.add(new TaskImpl(8, "some Content", new java.util.Date()));
-        tasks.add(new TaskImpl(9, "some Random", new java.util.Date()));
-        tasks.add(new TaskImpl(10, "some mor Random", new Date()));
+        tasks.add(new Task(8, "some Content", new java.util.Date()));
+        tasks.add(new Task(9, "some Random", new java.util.Date()));
+        tasks.add(new Task(10, "some mor Random", new Date()));
         return tasks;
     }
 
@@ -30,11 +27,11 @@ public class ExampleCollection {
         return sections;
     }
 
-    public static List<Lecture> getExampleLectures() {
-        List<Lecture> lectures = new ArrayList<>();
-        lectures.add(new LectureImpl(456, 1, new Date(), "WH C666"));
-        lectures.add(new LectureImpl(4536, 2, new Date(), "WH C445"));
-        lectures.add(new LectureImpl(4526, 3, new Date(), "WH C624"));
+    public static List<com.mobila.project.today.model.Lecture> getExampleLectures() {
+        List<com.mobila.project.today.model.Lecture> lectures = new ArrayList<>();
+        lectures.add(new Lecture(456, 1, new Date(), "WH C666"));
+        lectures.add(new Lecture(4536, 2, new Date(), "WH C445"));
+        lectures.add(new Lecture(4526, 3, new Date(), "WH C624"));
         return lectures;
     }
 
@@ -51,9 +48,9 @@ public class ExampleCollection {
 
     public static List<Semester> getExampleSemesters() {
         List<Semester> semesters = new ArrayList<>();
-        semesters.add(new SemesterImpl(11, 1));
-        semesters.add(new SemesterImpl(11, 2));
-        semesters.add(new SemesterImpl(11, 3));
+        semesters.add(new Semester(11, 1));
+        semesters.add(new Semester(11, 2));
+        semesters.add(new Semester(11, 3));
         return semesters;
     }
 }

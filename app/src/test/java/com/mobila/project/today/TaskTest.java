@@ -2,9 +2,8 @@ package com.mobila.project.today;
 
 import android.os.Parcel;
 
-import com.mobila.project.today.dataProviding.dataAccess.TaskDataAccess;
+import com.mobila.project.today.model.dataProviding.dataAccess.TaskDataAccess;
 import com.mobila.project.today.model.Task;
-import com.mobila.project.today.model.implementations.TaskImpl;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +13,7 @@ import java.util.Date;
 
 import static org.junit.Assert.*;
 
-public class TaskImplTest {
+public class TaskTest {
     private Task task;
     private String testContent;
     private Date testDate;
@@ -28,7 +27,7 @@ public class TaskImplTest {
 
         this.testContent = "get your shit done";
         this.testDate = new Date();
-        this.task = new TaskImpl(1234, this.testContent, this.testDate, this.dataAccessMock);
+        this.task = new Task(1234, this.testContent, this.testDate, this.dataAccessMock);
     }
 
     @Test
@@ -64,7 +63,7 @@ public class TaskImplTest {
         Mockito.verify(this.dataAccessMock, Mockito.times(1))
                 .getContent(this.task);
 
-        Task nullContentTask = new TaskImpl(1234, null, null, this.dataAccessMock);
+        Task nullContentTask = new Task(1234, null, null, this.dataAccessMock);
         content = nullContentTask.getContent();
         assertNull(content);
         Mockito.verify(this.dataAccessMock, Mockito.times(1)).getContent(nullContentTask);

@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.mobila.project.today.R;
 import com.mobila.project.today.activities.adapters.TaskAdapter;
 import com.mobila.project.today.model.Task;
-import com.mobila.project.today.model.implementations.TaskImpl;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -42,7 +41,7 @@ public class CourseTasksActivity extends AppCompatActivity {
     }
 
     private Task createExampleTask() {
-        return new TaskImpl(1, "", new Date());
+        return new Task(1, "", new Date());
     }
 
     public void onAddTaskClicked(View view) {

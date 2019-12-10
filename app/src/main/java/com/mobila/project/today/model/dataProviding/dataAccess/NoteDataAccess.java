@@ -1,8 +1,8 @@
-package com.mobila.project.today.dataProviding.dataAccess;
+package com.mobila.project.today.model.dataProviding.dataAccess;
 
 import android.text.Spannable;
 
-import com.mobila.project.today.dataProviding.DataKeyNotFoundException;
+import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
 import com.mobila.project.today.model.Identifiable;
 import com.mobila.project.today.model.Lecture;
 import com.mobila.project.today.model.NoteReference;

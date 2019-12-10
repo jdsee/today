@@ -31,7 +31,7 @@ import com.mobila.project.today.activities.editorView.listeners.noteFocusChangeL
 import com.mobila.project.today.control.AttachmentControl;
 import com.mobila.project.today.control.NoteControl;
 import com.mobila.project.today.model.Task;
-import com.mobila.project.today.model.implementations.LectureImpl;
+import com.mobila.project.today.model.Lecture;
 import com.mobila.project.today.modelMock.NoteMock;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
@@ -112,7 +112,7 @@ public class EditorActivity extends UpdatableAppCompatActivity {
      */
     private void setupControls() {
         this.noteEditor = new NoteControl(this, findViewById(R.id.editor_content));
-        this.attachments = new AttachmentControl(this, new LectureImpl(1234,1)/*this.note.getLecture()*/, fileHolderAdapter);
+        this.attachments = new AttachmentControl(this, new Lecture(1234,1)/*this.note.getLecture()*/, fileHolderAdapter);
     }
 
     /**

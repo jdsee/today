@@ -11,9 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 
 import com.mobila.project.today.model.Attachment;
-import com.mobila.project.today.model.Lecture;
-import com.mobila.project.today.modelMock.NoteMock;
 import com.mobila.project.today.activities.adapters.FileAdapter;
+import com.mobila.project.today.model.Lecture;
 import com.mobila.project.today.utils.AttachmentUtils;
 
 import java.io.File;

@@ -5,9 +5,9 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
-import com.mobila.project.today.dataProviding.DataKeyNotFoundException;
-import com.mobila.project.today.dataProviding.OrganizerDataProvider;
-import com.mobila.project.today.dataProviding.dataAccess.AttachmentDataAccess;
+import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
+import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
+import com.mobila.project.today.model.dataProviding.dataAccess.AttachmentDataAccess;
 
 import java.io.File;
 

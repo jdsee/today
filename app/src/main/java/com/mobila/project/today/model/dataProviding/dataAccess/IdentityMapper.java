@@ -1,4 +1,4 @@
-package com.mobila.project.today.dataProviding.dataAccess;
+package com.mobila.project.today.model.dataProviding.dataAccess;
 
 import androidx.annotation.NonNull;
 

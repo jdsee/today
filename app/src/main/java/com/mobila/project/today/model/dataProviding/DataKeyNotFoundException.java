@@ -1,4 +1,4 @@
-package com.mobila.project.today.dataProviding;
+package com.mobila.project.today.model.dataProviding;
 
 import com.mobila.project.today.UncheckedTodayException;
 

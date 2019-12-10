@@ -1,35 +1,123 @@
 package com.mobila.project.today.model;
 
-import com.mobila.project.today.dataProviding.DataKeyNotFoundException;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
+import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
+import com.mobila.project.today.model.dataProviding.dataAccess.LectureDataAccess;
+import com.mobila.project.today.model.dataProviding.dataAccess.RootDataAccess;
 
 import java.util.Date;
 import java.util.List;
-//TODO implement parcelable
-public interface Lecture extends Identifiable {
+
+public class Lecture implements Identifiable, Parcelable {
+    private final RootDataAccess rootDataAccess;
+    private final LectureDataAccess dataAccess;
+
+    private final int ID;
+    private int lectureNr;
+    private Date date;
+    private String roomNr;
+
+    public Lecture(int ID, int lectureNr) {
+        this.ID = ID;
+        this.lectureNr = lectureNr;
+        this.roomNr = roomNr;
+
+        OrganizerDataProvider dataProvider = OrganizerDataProvider.getInstance();
+        this.rootDataAccess = dataProvider.getRootDataAccess();
+        this.dataAccess = dataProvider.getLectureDataAccess();
+    }
+
+    public Lecture(int ID, int lectureNr, Date date, String roomNr) {
+        this(ID, lectureNr);
+        this.date = date;
+        this.roomNr = roomNr;
+    }
+
+    public static final Creator<Lecture> CREATOR = new Creator<Lecture>() {
+        @Override
+        public Lecture createFromParcel(Parcel source) {
+            return null;
+            //TODO implement parcel
+        }
+
+        @Override
+        public Lecture[] newArray(int size) {
+            return new Lecture[0];
+        }
+    };
+
+    public Lecture(Parcel in) {
+        this(123, 1);
+        //TODO implement parcel
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+    }
+
     /**
      * Returns the section containing this lecture.
      *
      * @return the section containing this lecture
      */
-    Section getSection() throws DataKeyNotFoundException;
+    public Section getSection() throws DataKeyNotFoundException {
+        return this.dataAccess.getSection(this);
+    }
 
-    Note getNote() throws DataKeyNotFoundException;
+    public Note getNote() throws DataKeyNotFoundException {
+        return this.dataAccess.getNote(this);
+    }
 
-    List<Attachment> getAttachments() throws DataKeyNotFoundException;
+    public List<Attachment> getAttachments() throws DataKeyNotFoundException {
+        return this.dataAccess.getAttachments(this);
+    }
 
-    void addAttachment(Attachment attachment) throws DataKeyNotFoundException;
+    public void addAttachment(Attachment attachment) throws DataKeyNotFoundException {
+        this.dataAccess.addAttachment(this, attachment);
+    }
 
-    void removeAttachment(Identifiable attachment) throws DataKeyNotFoundException;
+    public void removeAttachment(Identifiable attachment) throws DataKeyNotFoundException {
+        this.rootDataAccess.removeEntityInstance(attachment);
+    }
 
-    int getLectureNr() throws DataKeyNotFoundException;
+    public int getLectureNr() throws DataKeyNotFoundException {
+        return this.lectureNr;
+    }
 
-    void setLectureNr(int number) throws DataKeyNotFoundException;
+    public void setLectureNr(int number) throws DataKeyNotFoundException {
+        this.lectureNr = number;
+        this.dataAccess.setLectureNumber(this, number);
+    }
 
-    String getRoomNr() throws DataKeyNotFoundException;
+    public String getRoomNr() throws DataKeyNotFoundException {
+        return this.roomNr;
+    }
 
-    void setRoomNr(String room) throws DataKeyNotFoundException;
+    public void setRoomNr(String roomNr) throws DataKeyNotFoundException {
+        this.roomNr = roomNr;
+        this.dataAccess.setRoomNumber(this, roomNr);
+    }
 
-    Date getDate() throws DataKeyNotFoundException;
+    public Date getDate() throws DataKeyNotFoundException {
+        return this.date;
+    }
 
-    void setDate(Date date) throws DataKeyNotFoundException;
+    public void setDate(Date date) throws DataKeyNotFoundException {
+        this.date = date;
+        this.dataAccess.setDate(this, date);
+    }
+
+    @Override
+    public int getID() {
+        return this.ID;
+    }
 }

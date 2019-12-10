@@ -16,7 +16,6 @@ import com.mobila.project.today.activities.adapters.TaskAdapter;
 import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Semester;
 import com.mobila.project.today.model.Task;
-import com.mobila.project.today.model.implementations.SemesterImpl;
 import com.mobila.project.today.modelMock.CourseMock;
 import com.mobila.project.today.activities.adapters.CourseAdapter;
 
@@ -101,7 +100,7 @@ public class TodayActivity extends AppCompatActivity {
 
     public void goForwardSemester(View view) {
         if (currentSemester == semesters.size() - 1) {
-            semesters.add(new SemesterImpl(42, semesters.size()));
+            semesters.add(new Semester(42, semesters.size()));
             currentSemester++;
         }
         if (currentSemester < semesters.size() - 1) {
