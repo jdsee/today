@@ -27,7 +27,8 @@ class OrganizerDataProviderImpl implements OrganizerDataProvider {
     }
 
     private OrganizerDataProviderImpl() {
-        attachmentAccess = AttachmentDataAccess.getInstance();
+        this.attachmentAccess = AttachmentDataAccess.getInstance();
+
     }
 
     @Override

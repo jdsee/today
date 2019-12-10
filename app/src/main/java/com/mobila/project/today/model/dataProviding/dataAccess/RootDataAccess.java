@@ -8,7 +8,6 @@ import com.mobila.project.today.model.Task;
 import java.util.List;
 
 public interface RootDataAccess {
-
     List<Semester> getAllSemesters();
 
     List<Task> getAllTasks();

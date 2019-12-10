@@ -36,12 +36,12 @@ public class CourseContentActivity extends AppCompatActivity {
         ActionBar ab = this.getSupportActionBar();
         ab.setTitle(this.course.getTitle());
 
-        /*TODO this.course.getTasks*/
         this.tasks = ExampleCollection.getExampleTasks();
+        //TODO this.tasks = this.course.getTasks();
         this.initTaskView();
 
-        /*TODO this.course.getSections*/
         this.sections = ExampleCollection.getExampleSections();
+        //TODO this.sections = this.course.getSections();
         this.initSectionView();
 
     }
@@ -53,7 +53,7 @@ public class CourseContentActivity extends AppCompatActivity {
         recyclerView.setAdapter(this.taskAdapter);
     }
 
-    private void initSectionView(){
+    private void initSectionView() {
         RecyclerView recyclerView = findViewById(R.id.rv_section_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         this.sectionAdapter = new SectionAdapter(this, this.sections);
