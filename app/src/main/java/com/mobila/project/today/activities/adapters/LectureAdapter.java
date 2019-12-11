@@ -9,8 +9,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mobila.project.today.R;
+import com.mobila.project.today.model.Lecture;
 
 import java.util.List;
+import java.util.Locale;
 
 public class LectureAdapter extends RecyclerView.Adapter<LectureAdapter.ViewHolder> {
     private static final String LECTURE_TITLE = "Veranstaltung";
@@ -44,7 +46,8 @@ public class LectureAdapter extends RecyclerView.Adapter<LectureAdapter.ViewHold
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             Lecture lecture = this.lectures.get(position);
-            holder.tvLectureTitle.setText(LECTURE_TITLE + " " + lecture.getLectureNr());
+            holder.tvLectureTitle.setText(String.format(
+                    Locale.getDefault(), "%s %d", LECTURE_TITLE, lecture.getLectureNr()));
             holder.tvRoomNr.setText(lecture.getRoomNr());
             holder.tvTime.setText(lecture.getDate().toString());
         }

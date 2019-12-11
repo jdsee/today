@@ -12,6 +12,7 @@ import java.util.List;
  * The main content are the sections, which store all relevant data for taking notes.
  */
 public class Section implements Identifiable {
+    public static final String INTENT_EXTRA_CODE = "EXTRA_SECTION";
     private final RootDataAccess rootDataAccess;
     private final SectionDataAccess dataAccess;
 

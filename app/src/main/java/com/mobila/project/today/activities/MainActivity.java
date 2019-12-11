@@ -2,7 +2,6 @@ package com.mobila.project.today.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.SpannableString;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,11 +11,7 @@ import com.mobila.project.today.activities.courseContentView.CourseContentActivi
 import com.mobila.project.today.activities.editorView.EditorActivity;
 import com.mobila.project.today.activities.taskView.CourseTasksActivity;
 import com.mobila.project.today.model.Course;
-import com.mobila.project.today.model.Task;
-import com.mobila.project.today.modelMock.NoteMock;
-
-import java.util.ArrayList;
-import java.util.Date;
+import com.mobila.project.today.model.Lecture;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,17 +28,7 @@ public class MainActivity extends AppCompatActivity {
     public void openEditor(View v) {
         Intent intent = new Intent(this, EditorActivity.class);
         //temporary inits
-        NoteMock note = new NoteMock(3, "Headline", new SpannableString("Inhalt"),
-                2, "Mobile Anwendungen", "Übung",
-                "Veranstalltung 3", "07.05.18");
-
-        ArrayList<Task> tasks = new ArrayList<>();
-        tasks.add(new Task(1, "some Content", new Date()));
-        tasks.add(new Task(2, "some Random", new Date()));
-        tasks.add(new Task(3, "some mor Random", new Date()));
-
-        intent.putParcelableArrayListExtra(Task.INTENT_EXTRA_CODE, tasks);
-        intent.putExtra(NoteMock.INTENT_EXTRA_CODE,  note);
+        intent.putExtra(Lecture.INTENT_EXTRA_CODE,  ExampleCollection.getExampleLecture());
         startActivity(intent);
     }
 

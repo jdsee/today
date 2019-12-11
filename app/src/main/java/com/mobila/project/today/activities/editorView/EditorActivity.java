@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.text.Spannable;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -16,23 +15,26 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mobila.project.today.R;
+import com.mobila.project.today.activities.ExampleCollection;
+import com.mobila.project.today.activities.adapters.FileAdapter;
 import com.mobila.project.today.activities.adapters.TaskAdapter;
-import com.mobila.project.today.activities.UpdatableAppCompatActivity;
-import com.mobila.project.today.activities.adapters.UpdatableFileAdapter;
 import com.mobila.project.today.activities.editorView.listeners.EditorKeyboardEventListener;
 import com.mobila.project.today.activities.editorView.listeners.TitleOnEditorActionListener;
 import com.mobila.project.today.activities.editorView.listeners.noteFocusChangeListener;
 import com.mobila.project.today.control.AttachmentControl;
 import com.mobila.project.today.control.NoteControl;
-import com.mobila.project.today.model.Task;
+import com.mobila.project.today.model.Attachment;
+import com.mobila.project.today.model.Note;
+import com.mobila.project.today.model.Section;
 import com.mobila.project.today.model.Lecture;
-import com.mobila.project.today.modelMock.NoteMock;
+import com.mobila.project.today.model.Task;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 
@@ -43,22 +45,28 @@ import java.util.Objects;
 import static com.mobila.project.today.control.AttachmentControl.REQUEST_FILE_OPEN;
 import static com.mobila.project.today.control.AttachmentControl.REQUEST_TAKE_PHOTO;
 
-public class EditorActivity extends UpdatableAppCompatActivity {
-    private NoteMock note;
-    private NoteControl noteEditor;
-    private AttachmentControl attachments;
+public class EditorActivity extends AppCompatActivity {
 
-    private UpdatableFileAdapter fileHolderAdapter;
+    private Lecture lecture;
+    private Section section;
+    private List<Task> tasks;
+    private List<Attachment> attachments;
+
+    private EditText contentEditText;
+    private EditText titleEditText;
+
+    private NoteControl noteEditor;
+    private AttachmentControl attachmentControl;
+
     private RecyclerView fileContainer;
 
     private boolean keyBoardOpen;
     private boolean focusOnNoteContent;
 
-    private List<Task> tasks;
 
     /**
      * Method for creating this activity.
-     * It is responsible for retrieving information of the bundle and setting up all views, content
+     * It is responsible for retrieving information of the bundle and setting up all views, contentEditText
      * and and listeners
      *
      * @param savedInstanceState The bundle that has at least a note attached to it
@@ -70,10 +78,20 @@ public class EditorActivity extends UpdatableAppCompatActivity {
         //set view
         super.onCreate(savedInstanceState);
         //get Note from Intent
-        this.note = getIntent().getParcelableExtra(NoteMock.INTENT_EXTRA_CODE);
-        this.tasks = getIntent().getParcelableArrayListExtra(Task.INTENT_EXTRA_CODE);
+
+        this.lecture = getIntent().getParcelableExtra(Lecture.INTENT_EXTRA_CODE);
+
+        //TODO replace with Objects from Lecture
+        this.section = ExampleCollection.getExampleSection();
+        this.tasks = ExampleCollection.getExampleTasks();
+        this.attachments = ExampleCollection.getExampleAttachments();
+
 
         setupViews();
+
+        this.contentEditText = findViewById(R.id.editor_content);
+        this.titleEditText = findViewById(R.id.editor_title);
+
         hideCameraIfNotAvailable();
         setupContent();
         setupListeners();
@@ -85,14 +103,8 @@ public class EditorActivity extends UpdatableAppCompatActivity {
      * the attachment-view and the task-view
      */
     private void setupViews() {
-        setTheme(R.style.Theme_MaterialComponents_Light_NoActionBar_Bridge);
-        getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.lightGrey));
-        getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
-        getWindow().setStatusBarColor(Color.TRANSPARENT);
         setContentView(R.layout.activity_editor);
         setSupportActionBar(findViewById(R.id.editor_toolbar));
-        getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.lightGrey));
         initAttachmentsView();
         initTaskView();
     }
@@ -111,8 +123,8 @@ public class EditorActivity extends UpdatableAppCompatActivity {
      * Method for initializing the Logic behind the Attachments and the Editor
      */
     private void setupControls() {
-        this.noteEditor = new NoteControl(this, findViewById(R.id.editor_content));
-        this.attachments = new AttachmentControl(this, new Lecture(1234,1)/*this.note.getLecture()*/, fileHolderAdapter);
+        this.noteEditor = new NoteControl(this, this.contentEditText);
+        this.attachmentControl = new AttachmentControl(this, this.lecture);
     }
 
     /**
@@ -120,25 +132,22 @@ public class EditorActivity extends UpdatableAppCompatActivity {
      * This is needed for showing the appropriate views depending on the users actions.
      */
     private void setupListeners() {
-        EditText headlineEditText = findViewById(R.id.editor_title);
-        headlineEditText.setOnEditorActionListener(new TitleOnEditorActionListener(this));
+        this.titleEditText.setOnEditorActionListener(new TitleOnEditorActionListener(this));
         KeyboardVisibilityEvent.setEventListener(
                 this, new EditorKeyboardEventListener(this));
-        EditText noteEditText = findViewById(R.id.editor_content);
-        noteEditText.setOnFocusChangeListener(new noteFocusChangeListener(this));
+        this.contentEditText.setOnFocusChangeListener(new noteFocusChangeListener(this));
     }
 
     /**
      * Method for setting up and displaying the note.
-     * This is where the Title and the content of the note get connected with their respective view
+     * This is where the Title and the contentEditText of the note get connected with their respective view
      */
     private void setupContent() {
         //Todo Title just needs to be preset if no other has been set
-        EditText headline = findViewById(R.id.editor_title);
-        headline.setHint(note.getSection());
+        this.titleEditText.setHint("Lecture " + this.lecture.getLectureNr());
         TextView textView = findViewById(R.id.editor_subtitle);
         textView.setText(String.format(
-                "%s  -  %s %s", note.getDate(), note.getCourse(), note.getCategory()));
+                "%s  -  %s", lecture.getDate(), this.section.getTitle()));
         Objects.requireNonNull(getSupportActionBar()).setTitle("");
     }
 
@@ -274,7 +283,7 @@ public class EditorActivity extends UpdatableAppCompatActivity {
     }
 
     /**
-     * Method for inserting a Tab in the note-content
+     * Method for inserting a Tab in the note-contentEditText
      *
      * @param view the clicked tab-icon. Is only needed for using this method via the layout
      */
@@ -288,7 +297,10 @@ public class EditorActivity extends UpdatableAppCompatActivity {
      * @param view the clicked camera-icon. Is only needed for using this method via the layout
      */
     public void onTakePhotoPickerPressed(View view) {
-        startActivityForResult(attachments.getTakePictureIntent(), REQUEST_TAKE_PHOTO);
+        //TODO make it work wih real Objects
+        /*
+        startActivityForResult(attachmentControl.getTakePictureIntent(), REQUEST_TAKE_PHOTO);
+         */
     }
 
     /**
@@ -297,11 +309,14 @@ public class EditorActivity extends UpdatableAppCompatActivity {
      * @param view the pressed file-icon. Is only needed for using this method via the layout
      */
     public void onFilePickerPressed(View view) {
-        startActivityForResult(attachments.getOpenFileIntent(), REQUEST_FILE_OPEN);
+        //TODO make it work with real Objects
+        /*
+        startActivityForResult(attachmentControl.getOpenFileIntent(), REQUEST_FILE_OPEN);
+         */
     }
 
     /**
-     * Method for resolving the content of a received intent
+     * Method for resolving the contentEditText of a received intent
      *
      * @param requestCode the code of the request that asked for a result
      * @param resultCode the code that contains information about the success of the request
@@ -309,9 +324,9 @@ public class EditorActivity extends UpdatableAppCompatActivity {
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //TODO Needs to avoid content provider all together after SQL db is established to make content provider obsolete
+        //TODO Needs to avoid contentEditText provider all together after SQL db is established to make contentEditText provider obsolete
         super.onActivityResult(requestCode, resultCode, data);
-        attachments.onActivityResult(requestCode, resultCode, data);
+        attachmentControl.onActivityResult(requestCode, resultCode, data);
         updateFileNumber();
     }
 
@@ -344,12 +359,16 @@ public class EditorActivity extends UpdatableAppCompatActivity {
      * @param view the view that calls this Method. Only needed for calling this Method via layout
      */
     public void onAttachmentsPressed(View view) {
+        //TODO make Attachments work with real Attachments
+        /*
         if (fileContainer.getVisibility() == View.VISIBLE) {
             closeAttachments();
-        } else if (this.note.getAttachmentCount() != 0) {
+        } else if (lecture.getAttachments().size() != 0) {
             openAttachments();
         } else Toast.makeText(
-                this, "Your attachments go here", Toast.LENGTH_SHORT).show();
+                this, "Your attachmentControl go here", Toast.LENGTH_SHORT).show();
+
+         */
     }
 
     /**
@@ -361,7 +380,7 @@ public class EditorActivity extends UpdatableAppCompatActivity {
     }
 
     /**
-     * Method for opening the attachments-view
+     * Method for opening the attachmentControl-view
      */
     public void openAttachments() {
         fileContainer.setVisibility(View.VISIBLE);
@@ -382,7 +401,7 @@ public class EditorActivity extends UpdatableAppCompatActivity {
      */
     public void displayFileNumber() {
         TextView attachmentCounter = findViewById(R.id.attachment_counter);
-        if (note.getAttachmentCount() == 0) {
+        if (attachments.size() == 0) {
             attachmentCounter.setVisibility(View.GONE);
         } else {
             attachmentCounter.setVisibility(View.VISIBLE);
@@ -390,11 +409,11 @@ public class EditorActivity extends UpdatableAppCompatActivity {
     }
 
     /**
-     * Method for synchronising the file-counter with the saved attachments
+     * Method for synchronising the file-counter with the saved attachmentControl
      */
     public void updateFileNumber() {
         TextView attachmentCounter = findViewById(R.id.attachment_counter);
-        int numberOfAttachments = note.getAttachmentCount();
+        int numberOfAttachments = attachments.size();
         attachmentCounter.setText(
                 String.format(Locale.getDefault(), "%d", numberOfAttachments));
         if (numberOfAttachments == 0)
@@ -404,12 +423,12 @@ public class EditorActivity extends UpdatableAppCompatActivity {
     }
 
     /**
-     * Method for initializing the attachments-view
+     * Method for initializing the attachmentControl-view
      */
     private void initAttachmentsView() {
         this.fileContainer = findViewById(R.id.recycler_view_files);
-        this.fileHolderAdapter = new UpdatableFileAdapter(this, this.note);
-        this.fileContainer.setAdapter(this.fileHolderAdapter);
+        FileAdapter fileHolderAdapter = new FileAdapter(this, this.lecture);
+        this.fileContainer.setAdapter(fileHolderAdapter);
         this.fileContainer.setLayoutManager(new LinearLayoutManager(this));
     }
 
@@ -418,7 +437,8 @@ public class EditorActivity extends UpdatableAppCompatActivity {
      */
     private void initTaskView() {
         RecyclerView recyclerView = findViewById(R.id.rv_course_tasks);
-        TaskAdapter taskAdapter = new TaskAdapter(this, tasks);
+        TaskAdapter taskAdapter =
+                new TaskAdapter(this, tasks);
         recyclerView.setAdapter(taskAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -466,7 +486,7 @@ public class EditorActivity extends UpdatableAppCompatActivity {
 
     /**
      * Method for showing the relevant menu for the view in focus.
-     * The font-options should be only shown if the note-content is in focus and the keyboard open
+     * The font-options should be only shown if the note-contentEditText is in focus and the keyboard open
      */
     public void showAppropriateMenu() {
         if (keyBoardOpen && focusOnNoteContent) {
@@ -493,20 +513,17 @@ public class EditorActivity extends UpdatableAppCompatActivity {
     }
 
     /**
-     * Method for saving the content of the editor
+     * Method for saving the contentEditText of the editor
      */
     private void saveContent(){
-        EditText titleEditor = findViewById(R.id.editor_title);
-        String title = titleEditor.getText().toString();
-        this.note.setTitle(title);
+        //TODO make note save itself onClose etc...
+        /*
+        String title = this.titleEditText.getText().toString();
+        note.setTitle(title);
 
-        EditText contentEditor = findViewById(R.id.editor_content);
-        Spannable content = contentEditor.getText();
-        this.note.setContent(content);
-    }
+        Spannable content = this.contentEditText.getText();
+        note.setContent(content);
 
-    @Override
-    public void update() {
-        updateFileNumber();
+         */
     }
 }
