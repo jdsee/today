@@ -2,6 +2,7 @@ package com.mobila.project.today.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
 import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
 import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.TaskDataAccess;
@@ -30,11 +31,11 @@ public class Task implements Identifiable, Parcelable {
     }
 
     public static final Creator<Task> CREATOR = new Creator<Task>() {
-            public Task createFromParcel(Parcel source) {
+        public Task createFromParcel(Parcel source) {
             return new Task(source);
         }
 
-            public Task[] newArray(int size) {
+        public Task[] newArray(int size) {
             return new Task[size];
         }
     };
@@ -43,8 +44,7 @@ public class Task implements Identifiable, Parcelable {
         this(
                 in.readInt(),
                 in.readString(),
-                new Date(in.readLong())
-        );
+                new Date(in.readLong()));
     }
 
     public int describeContents() {
@@ -89,17 +89,18 @@ public class Task implements Identifiable, Parcelable {
         this.content = content;
     }
 
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || this.getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return ID == task.ID &&
-                Objects.equals(dataAccess, task.dataAccess) &&
-                Objects.equals(content, task.content) &&
-                Objects.equals(deadline, task.deadline);
+        return this.ID == task.ID &&
+                Objects.equals(this.content, task.content) &&
+                Objects.equals(this.deadline, task.deadline);
         //TODO when DataAccess is implemented: change inspection so that dataAccess must be nonNull
     }
 
+    @Override
     public int hashCode() {
         return Objects.hash(dataAccess, ID, content, deadline);
     }

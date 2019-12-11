@@ -5,30 +5,33 @@ import androidx.annotation.NonNull;
 import com.mobila.project.today.model.Identifiable;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 class IdentityMapper<T extends Identifiable> {
-    private final Map<Integer, T> map = new HashMap<>();
+    private final Map<Integer, List<T>> map = new HashMap<>();
 
-    public Identifiable get(int id) {
-        return this.map.get(id);
+    public List<T> get(@NonNull Identifiable key) {
+        Objects.requireNonNull(key);
+        return this.map.get(key.getID());
     }
 
-    public void add(@NonNull T obj) {
-        int key = obj.getID();
-        if (this.map.containsKey(key))
-            this.map.put(key, obj);
+    public void add(@NonNull Identifiable key,@NonNull List<T> values) {
+        Objects.requireNonNull(key);
+        Objects.requireNonNull(values);
+        int id = key.getID();
+        if (this.map.containsKey(id))
+            this.map.put(id, values);
     }
 
-    public void overwrite(@NonNull T obj) {
-        this.map.put(obj.getID(), obj);
+    public void overwrite(@NonNull Identifiable key, @NonNull List<T> values) {
+        Objects.requireNonNull(key);
+        Objects.requireNonNull(values);
+        this.map.put(key.getID(), values);
     }
 
     public void remove(T obj) {
         this.map.remove(obj.getID());
-    }
-
-    public void remove(int key) {
-        this.map.remove(key);
     }
 }
