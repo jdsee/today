@@ -7,13 +7,11 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 
 import com.mobila.project.today.model.Attachment;
-import com.mobila.project.today.activities.adapters.FileAdapter;
 import com.mobila.project.today.model.Lecture;
-import com.mobila.project.today.utils.AttachmentUtils;
+import com.mobila.project.today.control.utils.AttachmentUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,7 +23,6 @@ public class AttachmentControl {
 
     private Context context;
     private Lecture lecture;
-    private FileAdapter adapter;
 
     public static final int REQUEST_TAKE_PHOTO = 1;
     public static final int REQUEST_FILE_OPEN = 2;
@@ -33,10 +30,9 @@ public class AttachmentControl {
     private String currentImagePath;
 
     public AttachmentControl(Context context,
-                             Lecture lecture, @NonNull FileAdapter adapter) {
+                             Lecture lecture) {
         this.context = context;
         this.lecture = lecture;
-        this.adapter = adapter;
     }
 
     /**
@@ -112,7 +108,6 @@ public class AttachmentControl {
                 Toast.makeText(context.getApplicationContext(),
                         "Nothing was saved", Toast.LENGTH_LONG).show();
             }
-            adapter.notifyDataSetChanged();
         }
     }
 }

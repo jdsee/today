@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 public class Lecture implements Identifiable, Parcelable {
+    public static final String INTENT_EXTRA_CODE = "EXTRA_LECTURE";
     private final RootDataAccess rootDataAccess;
     private final LectureDataAccess dataAccess;
 
@@ -23,7 +24,6 @@ public class Lecture implements Identifiable, Parcelable {
     public Lecture(int ID, int lectureNr) {
         this.ID = ID;
         this.lectureNr = lectureNr;
-        this.roomNr = roomNr;
 
         OrganizerDataProvider dataProvider = OrganizerDataProvider.getInstance();
         this.rootDataAccess = dataProvider.getRootDataAccess();
@@ -39,19 +39,17 @@ public class Lecture implements Identifiable, Parcelable {
     public static final Creator<Lecture> CREATOR = new Creator<Lecture>() {
         @Override
         public Lecture createFromParcel(Parcel source) {
-            return null;
-            //TODO implement parcel
+            return new Lecture(source);
         }
 
         @Override
         public Lecture[] newArray(int size) {
-            return new Lecture[0];
+            return new Lecture[size];
         }
     };
 
     public Lecture(Parcel in) {
-        this(123, 1);
-        //TODO implement parcel
+        this(in.readInt(), in.readInt(), new Date(in.readLong()), in.readString());
     }
 
     @Override
@@ -61,7 +59,10 @@ public class Lecture implements Identifiable, Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-
+        dest.writeInt(this.ID);
+        dest.writeInt(this.lectureNr);
+        dest.writeLong(date.getTime());
+        dest.writeString(this.roomNr);
     }
 
     /**

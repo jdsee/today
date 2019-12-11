@@ -1,11 +1,14 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/lightGrey</item>
+        <item name="colorPrimaryDark">@color/lightGrey</item>
+        <item name="colorAccent">@color/icon_black</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:navigationBarColor">@color/lightGrey</item>
     </style>
 
     <style name="BottomNavigationView" parent="@style/TextAppearance.AppCompat.Caption">
@@ -16,9 +19,24 @@
         <item name="android:textSize">10sp</item>
     </style>
 
-    <style name="NoActionBar" parent="AppTheme">
+    <style name="NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/lightGrey</item>
+        <item name="colorPrimaryDark">@color/lightGrey</item>
+        <item name="colorAccent">@color/icon_black</item>
+        <item name="android:windowLightStatusBar">true</item>
         <item name="windowActionBar">false</item>
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:navigationBarColor">@color/lightGrey</item>
     </style>
 
+    <style name="NoActionBarWhiteNavigationBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/standardBackground</item>
+        <item name="colorPrimaryDark">@color/standardBackground</item>
+        <item name="colorAccent">@color/icon_black</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:navigationBarColor">@color/standardBackground</item>
+    </style>
 
 </resources>

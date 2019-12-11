@@ -14,18 +14,18 @@ import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mobila.project.today.R;
-import com.mobila.project.today.modelMock.NoteMock;
-import com.mobila.project.today.utils.AttachmentUtils;
+import com.mobila.project.today.model.Lecture;
+import com.mobila.project.today.control.utils.AttachmentUtils;
 
 import java.io.File;
 
 public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
 
-    private NoteMock note;
+    private Lecture lecture;
     private Context context;
 
-    public FileAdapter(Context context, NoteMock note) {
-        this.note = note;
+    public FileAdapter(Context context, Lecture lecture) {
+        this.lecture = lecture;
         this.context = context;
     }
 
@@ -39,7 +39,7 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        final File attachment = note.getAttachment(position);
+        final File attachment = lecture.getAttachments().get(position).getContent();
         //Set name and icon of file
         holder.fileName.setText(attachment.getName());
         holder.fileImage.setImageDrawable(AttachmentUtils.getDrawable(context, attachment));
@@ -47,18 +47,18 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
         holder.fileHolder.setOnClickListener(v -> {
             Toast.makeText(context, AttachmentUtils.getMimeType(context, attachment),
                     Toast.LENGTH_LONG).show();
-            AttachmentUtils.openFile(note.getAttachment(position));
+            AttachmentUtils.openFile(lecture.getAttachments().get(position).getContent());
         });
 
         holder.button.setOnClickListener(v -> {
-            note.removeAttachment(position);
+            lecture.removeAttachment(lecture.getAttachments().get(position));
             notifyDataSetChanged();
         });
     }
 
     @Override
     public int getItemCount() {
-        return note.getAttachmentCount();
+        return lecture.getAttachments().size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
