@@ -30,6 +30,7 @@ import com.mobila.project.today.activities.editorView.listeners.TitleOnEditorAct
 import com.mobila.project.today.activities.editorView.listeners.noteFocusChangeListener;
 import com.mobila.project.today.control.AttachmentControl;
 import com.mobila.project.today.control.NoteControl;
+import com.mobila.project.today.control.utils.DateUtils;
 import com.mobila.project.today.model.Attachment;
 import com.mobila.project.today.model.Note;
 import com.mobila.project.today.model.Section;
@@ -38,6 +39,7 @@ import com.mobila.project.today.model.Task;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -146,8 +148,10 @@ public class EditorActivity extends AppCompatActivity {
         //Todo Title just needs to be preset if no other has been set
         this.titleEditText.setHint("Lecture " + this.lecture.getLectureNr());
         TextView textView = findViewById(R.id.editor_subtitle);
+        SimpleDateFormat lectureDate =
+                new SimpleDateFormat(DateUtils.DAY_DATE_FORMAT, Locale.getDefault());
         textView.setText(String.format(
-                "%s  -  %s", lecture.getDate(), this.section.getTitle()));
+                "%s  -  %s", lectureDate.format(lecture.getDate()), this.section.getTitle()));
         Objects.requireNonNull(getSupportActionBar()).setTitle("");
     }
 

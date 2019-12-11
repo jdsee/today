@@ -4,14 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.mobila.project.today.R;
+import com.mobila.project.today.UncheckedTodayException;
 import com.mobila.project.today.activities.adapters.TaskAdapter;
+import com.mobila.project.today.control.utils.DateUtils;
 import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Semester;
 import com.mobila.project.today.model.Task;
@@ -51,9 +52,9 @@ public class TodayActivity extends AppCompatActivity {
         TextView dateDisplay = findViewById(R.id.day_display);
         Calendar calender = Calendar.getInstance();
         SimpleDateFormat day =
-                new SimpleDateFormat("EEEE", Locale.getDefault());
+                new SimpleDateFormat(DateUtils.DAY_WEEKDAY_FORMAT, Locale.getDefault());
         SimpleDateFormat date =
-                new SimpleDateFormat("d.M.yyyy", Locale.getDefault());
+                new SimpleDateFormat(DateUtils.DAY_DATE_FORMAT, Locale.getDefault());
         StringBuilder builder = new StringBuilder();
         builder.append(day.format(calender.getTime()));
         builder.append(System.getProperty("line.separator"));

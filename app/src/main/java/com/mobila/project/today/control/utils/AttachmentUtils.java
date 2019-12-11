@@ -19,8 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
-public class AttachmentUtils {
-    private AttachmentUtils(){}
+public interface AttachmentUtils {
 
     /**
      * Method for obtaining the name of a file
@@ -28,7 +27,7 @@ public class AttachmentUtils {
      * @param uri the Uri pf the file in question
      * @return the name of the file
      */
-    public static String getFileName(Context context, Uri uri) {
+    static String getFileName(Context context, Uri uri) {
         String result = null;
         if (Objects.requireNonNull(uri.getScheme()).equals("content")) {
             try (Cursor cursor = context.getContentResolver()
@@ -55,7 +54,7 @@ public class AttachmentUtils {
      * @param file the file in question
      * @return the Mime-Type of the file
      */
-    public static String getMimeType(Context context, File file) {
+    static String getMimeType(Context context, File file) {
         Uri uri = Uri.fromFile(file);
         String mimeType;
         if (Objects.requireNonNull(uri.getScheme()).equals(ContentResolver.SCHEME_CONTENT)) {
@@ -76,7 +75,7 @@ public class AttachmentUtils {
      * @param mimeType the Mime-Type of the file in question
      * @return a Drawable containing a symbolic icon
      */
-    public static Drawable getDrawable(Context context, String mimeType) {
+    static Drawable getDrawable(Context context, String mimeType) {
         switch (mimeType) {
             case "application/pdf":
                 return ContextCompat.getDrawable(context, R.drawable.file_format_pdf);
@@ -129,7 +128,7 @@ public class AttachmentUtils {
      * @param file the file for which the icon is searched for
      * @return a symbolic icon
      */
-    public static Drawable getDrawable(Context context, File file) {
+    static Drawable getDrawable(Context context, File file) {
         String mimeType = getMimeType(context, file);
         return getDrawable(context, mimeType);
     }
@@ -139,7 +138,7 @@ public class AttachmentUtils {
      * @param context The context from where the method gets called from
      * @return an file with the name IMAGE_ + (current date) + (current time).jpg
      */
-    public static File createImageFile(Context context) {
+    static File createImageFile(Context context) {
         //File creation
         @SuppressLint("SimpleDateFormat")
         String timeStamp = new SimpleDateFormat(
@@ -153,7 +152,7 @@ public class AttachmentUtils {
      * Method for opening a file
      * @param file the file that should be opened
      */
-    public static void openFile(File file){
+    static void openFile(File file){
         //TODO after Establishing SQLite Database
 //        Intent intent = new Intent(Intent.ACTION_VIEW);
 //        intent.setDataAndType(Uri.fromFile(file), "*/*");
