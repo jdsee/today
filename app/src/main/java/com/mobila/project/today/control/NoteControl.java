@@ -14,7 +14,7 @@ import android.widget.EditText;
 import androidx.core.content.ContextCompat;
 
 import com.mobila.project.today.R;
-import com.mobila.project.today.utils.CustomTabWidthSpan;
+import com.mobila.project.today.control.utils.CustomTabWidthSpan;
 
 public class NoteControl {
 

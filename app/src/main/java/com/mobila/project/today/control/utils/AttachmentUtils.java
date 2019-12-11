@@ -1,4 +1,4 @@
-package com.mobila.project.today.utils;
+package com.mobila.project.today.control.utils;
 
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;

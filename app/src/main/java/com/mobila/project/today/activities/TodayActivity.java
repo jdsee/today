@@ -11,7 +11,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.mobila.project.today.R;
-import com.mobila.project.today.UncheckedTodayException;
 import com.mobila.project.today.activities.adapters.TaskAdapter;
 import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Semester;
@@ -22,9 +21,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
-
-import static android.view.View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
 
 public class TodayActivity extends AppCompatActivity {
 
@@ -39,14 +35,9 @@ public class TodayActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_today);
-        getWindow().setNavigationBarColor(Color.WHITE);
-        Objects.requireNonNull(getSupportActionBar()).hide();
-        getWindow().setStatusBarColor(Color.TRANSPARENT);
-        getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
         this.semesterView = findViewById(R.id.semester_view);
 
-        this.courses = ExampleCollection.getExampleCourse();
+        this.courses = ExampleCollection.getExampleCourses();
         this.tasks = ExampleCollection.getExampleTasks();
         this.semesters = ExampleCollection.getExampleSemesters();
 
