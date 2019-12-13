@@ -6,11 +6,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import com.mobila.project.today.R;
-import com.mobila.project.today.activities.ExampleCollection;
+import com.mobila.project.today.model.dataProviding.SampleDataProvider;
 import com.mobila.project.today.activities.adapters.SectionAdapter;
 import com.mobila.project.today.activities.adapters.TaskAdapter;
 import com.mobila.project.today.model.Course;
@@ -36,11 +35,11 @@ public class CourseContentActivity extends AppCompatActivity {
         ActionBar ab = this.getSupportActionBar();
         ab.setTitle(this.course.getTitle());
 
-        this.tasks = ExampleCollection.getExampleTasks();
+        this.tasks = SampleDataProvider.getExampleTasks();
         //TODO this.tasks = this.course.getTasks();
         this.initTaskView();
 
-        this.sections = ExampleCollection.getExampleSections();
+        this.sections = SampleDataProvider.getExampleSections();
         //TODO this.sections = this.course.getSections();
         this.initSectionView();
 

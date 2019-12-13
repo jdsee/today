@@ -3,7 +3,6 @@ package com.mobila.project.today.activities.editorView;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuInflater;
 import android.view.View;
@@ -13,16 +12,14 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mobila.project.today.R;
-import com.mobila.project.today.activities.ExampleCollection;
+import com.mobila.project.today.model.dataProviding.SampleDataProvider;
 import com.mobila.project.today.activities.adapters.FileAdapter;
 import com.mobila.project.today.activities.adapters.TaskAdapter;
 import com.mobila.project.today.activities.editorView.listeners.EditorKeyboardEventListener;
@@ -32,7 +29,6 @@ import com.mobila.project.today.control.AttachmentControl;
 import com.mobila.project.today.control.NoteControl;
 import com.mobila.project.today.control.utils.DateUtils;
 import com.mobila.project.today.model.Attachment;
-import com.mobila.project.today.model.Note;
 import com.mobila.project.today.model.Section;
 import com.mobila.project.today.model.Lecture;
 import com.mobila.project.today.model.Task;
@@ -43,9 +39,6 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-
-import static com.mobila.project.today.control.AttachmentControl.REQUEST_FILE_OPEN;
-import static com.mobila.project.today.control.AttachmentControl.REQUEST_TAKE_PHOTO;
 
 public class EditorActivity extends AppCompatActivity {
 
@@ -84,9 +77,9 @@ public class EditorActivity extends AppCompatActivity {
         this.lecture = getIntent().getParcelableExtra(Lecture.INTENT_EXTRA_CODE);
 
         //TODO replace with Objects from Lecture
-        this.section = ExampleCollection.getExampleSection();
-        this.tasks = ExampleCollection.getExampleTasks();
-        this.attachments = ExampleCollection.getExampleAttachments();
+        this.section = SampleDataProvider.getExampleSection();
+        this.tasks = SampleDataProvider.getExampleTasks();
+        this.attachments = SampleDataProvider.getExampleAttachments();
 
 
         setupViews();

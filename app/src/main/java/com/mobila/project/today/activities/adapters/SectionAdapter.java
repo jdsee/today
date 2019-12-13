@@ -1,7 +1,6 @@
 package com.mobila.project.today.activities.adapters;
 
 import android.content.Context;
-import android.opengl.Visibility;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mobila.project.today.R;
-import com.mobila.project.today.activities.ExampleCollection;
+import com.mobila.project.today.model.dataProviding.SampleDataProvider;
 import com.mobila.project.today.model.Section;
 
 import java.util.List;
@@ -67,7 +66,7 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.ViewHold
         RecyclerView rvLectures = holder.rvLectures;
         LinearLayoutManager layoutManager = new LinearLayoutManager(this.context);
         rvLectures.setLayoutManager(layoutManager);
-        rvLectures.setAdapter(new LectureAdapter(ExampleCollection.getExampleLectures()));
+        rvLectures.setAdapter(new LectureAdapter(SampleDataProvider.getExampleLectures()));
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rvLectures.getContext(),
                 layoutManager.getOrientation());
         rvLectures.addItemDecoration(dividerItemDecoration);

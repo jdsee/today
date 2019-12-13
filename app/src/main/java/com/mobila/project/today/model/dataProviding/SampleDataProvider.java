@@ -1,4 +1,4 @@
-package com.mobila.project.today.activities;
+package com.mobila.project.today.model.dataProviding;
 
 import com.mobila.project.today.model.Attachment;
 import com.mobila.project.today.model.Course;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ExampleCollection {
+public class SampleDataProvider {
     public static List<Task> getExampleTasks() {
         List<Task> tasks = new ArrayList<>();
         tasks.add(new Task(8, "some Content", new java.util.Date()));
@@ -59,8 +59,8 @@ public class ExampleCollection {
     public static List<Semester> getExampleSemesters() {
         List<Semester> semesters = new ArrayList<>();
         semesters.add(new Semester(11, 1));
-        semesters.add(new Semester(11, 2));
-        semesters.add(new Semester(11, 3));
+        semesters.add(new Semester(22, 2));
+        semesters.add(new Semester(33, 3));
         return semesters;
     }
 

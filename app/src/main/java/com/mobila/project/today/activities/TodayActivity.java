@@ -17,6 +17,7 @@ import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Semester;
 import com.mobila.project.today.model.Task;
 import com.mobila.project.today.activities.adapters.CourseAdapter;
+import com.mobila.project.today.model.dataProviding.SampleDataProvider;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -38,9 +39,9 @@ public class TodayActivity extends AppCompatActivity {
         setContentView(R.layout.activity_today);
         this.semesterView = findViewById(R.id.semester_view);
 
-        this.courses = ExampleCollection.getExampleCourses();
-        this.tasks = ExampleCollection.getExampleTasks();
-        this.semesters = ExampleCollection.getExampleSemesters();
+        this.courses = SampleDataProvider.getExampleCourses();
+        this.tasks = SampleDataProvider.getExampleTasks();
+        this.semesters = SampleDataProvider.getExampleSemesters();
 
         initCourseView();
         initTaskView();

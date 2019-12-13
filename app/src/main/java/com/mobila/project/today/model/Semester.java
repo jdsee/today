@@ -1,11 +1,15 @@
 package com.mobila.project.today.model;
 
+import android.content.ContentValues;
+
 import com.mobila.project.today.UncheckedTodayException;
 import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.RootDataAccess;
 import com.mobila.project.today.model.dataProviding.dataAccess.SemesterDataAccess;
+import com.mobila.project.today.model.dataProviding.dataAccess.databank.SemesterTable;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Allows access to all data of the "Semester"-entity.
@@ -18,8 +22,8 @@ public class Semester implements Identifiable {
     private int semesterNr;
     private List<Course> courses;
 
-    public Semester(int ID, int semesterNr) {
-        this.ID = ID;
+    public Semester(int id, int semesterNr) {
+        this.ID = id;
         this.semesterNr = semesterNr;
         this.courses = null;
 
@@ -27,6 +31,11 @@ public class Semester implements Identifiable {
         this.rootDataAccess = dataProvider.getRootDataAccess();
         this.semesterDataAccess = dataProvider.getSemesterDataAccess();
     }
+
+    /*public Semester(int semesterNr) {
+        int id = UUID.randomUUID().toString();
+        this(id, semesterNr);
+    }*/
 
     public int getSemesterNr() throws UncheckedTodayException {
         return this.semesterNr;
@@ -68,5 +77,12 @@ public class Semester implements Identifiable {
     @Override
     public int getID() {
         return this.ID;
+    }
+
+    public ContentValues toValues() {
+        ContentValues values = new ContentValues();
+        values.put(SemesterTable.COLUMN_ID, this.ID);
+        values.put(SemesterTable.COLUMN_NR, this.semesterNr);
+        return values;
     }
 }

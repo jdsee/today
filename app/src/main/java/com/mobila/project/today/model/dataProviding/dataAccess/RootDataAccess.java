@@ -8,7 +8,13 @@ import com.mobila.project.today.model.Task;
 import java.util.List;
 
 public interface RootDataAccess {
+    void open();
+
+    void close();
+
     List<Semester> getAllSemesters();
+
+    void addSemester(Semester semester);
 
     List<Task> getAllTasks();
 
