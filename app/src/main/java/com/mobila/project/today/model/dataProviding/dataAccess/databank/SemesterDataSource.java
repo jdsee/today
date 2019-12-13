@@ -51,7 +51,7 @@ public class SemesterDataSource {
                 null, null, null, null, SemesterTable.TABLE_NAME);
         while (cursor.moveToNext()) {
             Semester semester = new Semester(
-                    cursor.getInt(cursor.getColumnIndex(SemesterTable.COLUMN_ID)),
+                    cursor.getString(cursor.getColumnIndex(SemesterTable.COLUMN_ID)),
                     cursor.getInt(cursor.getColumnIndex(SemesterTable.COLUMN_NR))
             );
             semesters.add(semester);

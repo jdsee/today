@@ -41,7 +41,7 @@ public class CourseTasksActivity extends AppCompatActivity {
     }
 
     private Task createExampleTask() {
-        return new Task(1, "", new Date());
+        return new Task("1", "", new Date());
     }
 
     public void onAddTaskClicked(View view) {

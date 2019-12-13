@@ -5,6 +5,7 @@ import android.os.Parcel;
 import com.mobila.project.today.model.dataProviding.dataAccess.TaskDataAccess;
 import com.mobila.project.today.model.Task;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -25,9 +26,9 @@ public class TaskTest {
         Mockito.when(this.dataAccessMock.getContent(this.task)).thenReturn(this.testContent);
         Mockito.when(this.dataAccessMock.getDeadline(this.task)).thenReturn(this.testDate);
 
-        this.testContent = "get your shit done";
+        this.testContent = "content";
         this.testDate = new Date();
-        this.task = new Task(1234, this.testContent, this.testDate, this.dataAccessMock);
+        this.task = new Task("1234", this.testContent, this.testDate, this.dataAccessMock);
     }
 
     @Test
@@ -63,7 +64,7 @@ public class TaskTest {
         Mockito.verify(this.dataAccessMock, Mockito.times(1))
                 .getContent(this.task);
 
-        Task nullContentTask = new Task(1234, null, null, this.dataAccessMock);
+        Task nullContentTask = new Task("1234", null, null, this.dataAccessMock);
         content = nullContentTask.getContent();
         assertNull(content);
         Mockito.verify(this.dataAccessMock, Mockito.times(1)).getContent(nullContentTask);

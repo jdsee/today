@@ -15,11 +15,11 @@ public class Note implements Identifiable {
     private final RootDataAccess rootDataAccess;
     private final NoteDataAccess noteDataAccess;
 
-    private final int ID;
+    private final String ID;
     private String title;
 
 
-    public Note(int ID, String title) {
+    public Note(String ID, String title) {
         this.ID = ID;
         this.title = title;
 
@@ -66,7 +66,7 @@ public class Note implements Identifiable {
         this.rootDataAccess.removeEntityInstance(ref);
     }
     @Override
-    public int getID() {
+    public String getID() {
         return this.ID;
     }
 }

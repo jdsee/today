@@ -1,12 +1,14 @@
 package com.mobila.project.today.model;
 
+import java.util.UUID;
+
 public class NoteReference implements Identifiable {
-    private final int ID;
+    private final String ID;
     private Note reference;
     private Note source;
     private int row;
 
-    public NoteReference(int id, Note reference, Note source, int row) {
+    public NoteReference(String id, Note reference, Note source, int row) {
         this.ID = id;
         this.reference = reference;
         this.source = source;
@@ -15,7 +17,7 @@ public class NoteReference implements Identifiable {
 
     public NoteReference(Note reference, Note source, int row) {
         this(
-                1234, //TODO replace with DataKeyGenerator
+                UUID.randomUUID().toString(),
                 reference, source, row
         );
     }
@@ -33,7 +35,7 @@ public class NoteReference implements Identifiable {
     }
 
     @Override
-    public int getID() {
+    public String getID() {
         return this.ID;
     }
 }

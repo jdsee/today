@@ -10,18 +10,19 @@ import com.mobila.project.today.model.dataProviding.dataAccess.RootDataAccess;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 public class Lecture implements Identifiable, Parcelable {
     public static final String INTENT_EXTRA_CODE = "EXTRA_LECTURE";
     private final RootDataAccess rootDataAccess;
     private final LectureDataAccess dataAccess;
 
-    private final int ID;
+    private final String ID;
     private int lectureNr;
     private Date date;
     private String roomNr;
 
-    public Lecture(int ID, int lectureNr) {
+    public Lecture(String ID, int lectureNr) {
         this.ID = ID;
         this.lectureNr = lectureNr;
 
@@ -30,10 +31,17 @@ public class Lecture implements Identifiable, Parcelable {
         this.dataAccess = dataProvider.getLectureDataAccess();
     }
 
-    public Lecture(int ID, int lectureNr, Date date, String roomNr) {
-        this(ID, lectureNr);
+    public Lecture(String id, int lectureNr, Date date, String roomNr) {
+        this(id, lectureNr);
         this.date = date;
         this.roomNr = roomNr;
+    }
+
+    public Lecture() {
+        this(
+                UUID.randomUUID().toString(),
+                0
+        );
     }
 
     public static final Creator<Lecture> CREATOR = new Creator<Lecture>() {
@@ -49,7 +57,7 @@ public class Lecture implements Identifiable, Parcelable {
     };
 
     public Lecture(Parcel in) {
-        this(in.readInt(), in.readInt(), new Date(in.readLong()), in.readString());
+        this(in.readString(), in.readInt(), new Date(in.readLong()), in.readString());
     }
 
     @Override
@@ -59,7 +67,7 @@ public class Lecture implements Identifiable, Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.ID);
+        dest.writeString(this.ID);
         dest.writeInt(this.lectureNr);
         dest.writeLong(date.getTime());
         dest.writeString(this.roomNr);
@@ -118,7 +126,7 @@ public class Lecture implements Identifiable, Parcelable {
     }
 
     @Override
-    public int getID() {
+    public String getID() {
         return this.ID;
     }
 }

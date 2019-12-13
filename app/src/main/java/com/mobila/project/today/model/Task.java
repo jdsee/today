@@ -14,11 +14,11 @@ public class Task implements Identifiable, Parcelable {
     public static final String INTENT_EXTRA_CODE = "EXTRA_TASK";
     private final TaskDataAccess dataAccess;
 
-    private final int ID;
+    private final String ID;
     private String content;
     private Date deadline;
 
-    public Task(int id, String content, Date deadline, TaskDataAccess dataAccess) {
+    public Task(String id, String content, Date deadline, TaskDataAccess dataAccess) {
         this.ID = id;
         this.content = content;
         this.deadline = deadline;
@@ -26,7 +26,7 @@ public class Task implements Identifiable, Parcelable {
         this.dataAccess = dataAccess;
     }
 
-    public Task(int id, String content, Date deadline) {
+    public Task(String id, String content, Date deadline) {
         this(id, content, deadline, OrganizerDataProvider.getInstance().getTaskDataAccess());
     }
 
@@ -42,7 +42,7 @@ public class Task implements Identifiable, Parcelable {
 
     private Task(Parcel in) {
         this(
-                in.readInt(),
+                in.readString(),
                 in.readString(),
                 new Date(in.readLong()));
     }
@@ -52,7 +52,7 @@ public class Task implements Identifiable, Parcelable {
     }
 
     public void writeToParcel(Parcel out, int flags) {
-        out.writeInt(this.ID);
+        out.writeString(this.ID);
         out.writeString(this.content);
         out.writeLong(this.deadline.getTime());
     }
@@ -106,7 +106,7 @@ public class Task implements Identifiable, Parcelable {
     }
 
     @Override
-    public int getID() {
+    public String getID() {
         return this.ID;
     }
 }

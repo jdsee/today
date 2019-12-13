@@ -6,5 +6,5 @@ public interface Identifiable {
      *
      * @return the individual ID of this object
      */
-    int getID();
+    String getID();
 }

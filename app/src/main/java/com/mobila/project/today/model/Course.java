@@ -21,7 +21,7 @@ public class Course implements Identifiable, Parcelable {
     private final RootDataAccess rootDataAccess;
     private final CourseDataAccess dataAccess;
 
-    private final int ID;
+    private final String ID;
     private String title;
     private List<Task> tasks;
     private List<Section> sections;
@@ -40,12 +40,23 @@ public class Course implements Identifiable, Parcelable {
 
     private Course(Parcel in) {
         this(
-                in.readInt(),
+                in.readString(),
                 in.readString()
         );
     }
 
-    public Course(int ID, String title) {
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.ID);
+        dest.writeString(this.title);
+    }
+
+    public Course(String ID, String title) {
         this.ID = ID;
         this.title = title;
         this.tasks = null;
@@ -155,18 +166,7 @@ public class Course implements Identifiable, Parcelable {
     }
 
     @Override
-    public int getID() {
+    public String getID() {
         return this.ID;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.ID);
-        dest.writeString(this.title);
     }
 }

@@ -16,12 +16,12 @@ public class Section implements Identifiable {
     private final RootDataAccess rootDataAccess;
     private final SectionDataAccess dataAccess;
 
-    private final int ID;
+    private final String ID;
     private String title;
     private String lecturer;
     private List<Lecture> lectures;
 
-    public Section(int ID, String title, String lecturer) {
+    public Section(String ID, String title, String lecturer) {
         this.ID = ID;
         this.title = title;
         this.lecturer = lecturer;
@@ -95,7 +95,7 @@ public class Section implements Identifiable {
     }
 
     @Override
-    public int getID() {
+    public String getID() {
         return this.ID;
     }
 }

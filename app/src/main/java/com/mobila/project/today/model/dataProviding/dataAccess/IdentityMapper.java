@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Objects;
 
 class IdentityMapper<T extends Identifiable> {
-    private final Map<Integer, List<T>> map = new HashMap<>();
+    private final Map<String, List<T>> map = new HashMap<>();
 
     public List<T> get(@NonNull Identifiable key) {
         Objects.requireNonNull(key);
@@ -20,7 +20,7 @@ class IdentityMapper<T extends Identifiable> {
     public void add(@NonNull Identifiable key,@NonNull List<T> values) {
         Objects.requireNonNull(key);
         Objects.requireNonNull(values);
-        int id = key.getID();
+        String id = key.getID();
         if (this.map.containsKey(id))
             this.map.put(id, values);
     }

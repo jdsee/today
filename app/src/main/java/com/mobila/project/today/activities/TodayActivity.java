@@ -91,7 +91,7 @@ public class TodayActivity extends AppCompatActivity {
 
     public void goForwardSemester(View view) {
         if (currentSemester == semesters.size() - 1) {
-            semesters.add(new Semester(42, semesters.size()));
+            semesters.add(new Semester("42" , semesters.size()));
             currentSemester++;
         }
         if (currentSemester < semesters.size() - 1) {

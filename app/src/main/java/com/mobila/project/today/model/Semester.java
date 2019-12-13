@@ -18,11 +18,11 @@ public class Semester implements Identifiable {
     private final RootDataAccess rootDataAccess;
     private final SemesterDataAccess semesterDataAccess;
 
-    private final int ID;
+    private final String ID;
     private int semesterNr;
     private List<Course> courses;
 
-    public Semester(int id, int semesterNr) {
+    public Semester(String id, int semesterNr) {
         this.ID = id;
         this.semesterNr = semesterNr;
         this.courses = null;
@@ -75,7 +75,7 @@ public class Semester implements Identifiable {
     }
 
     @Override
-    public int getID() {
+    public String getID() {
         return this.ID;
     }
 

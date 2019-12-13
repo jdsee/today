@@ -10,15 +10,16 @@ import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.AttachmentDataAccess;
 
 import java.io.File;
+import java.util.UUID;
 
 public class Attachment implements Identifiable, Parcelable {
 
     private final AttachmentDataAccess dataAccess;
 
-    private final int ID;
+    private final String ID;
     private File content;
 
-    public Attachment(int ID, @NonNull File content) {
+    public Attachment(String ID, @NonNull File content) {
         this.ID = ID;
         this.content = content;
 
@@ -40,7 +41,7 @@ public class Attachment implements Identifiable, Parcelable {
 
     public Attachment(File content) {
         this(
-                12345, //TODO !!!! ID-Generator
+                UUID.randomUUID().toString(),
                 content
         );
     }
@@ -77,7 +78,7 @@ public class Attachment implements Identifiable, Parcelable {
     }
 
     @Override
-    public int getID() {
+    public String getID() {
         return this.ID;
     }
 }
