@@ -5,7 +5,6 @@ import android.os.Parcel;
 import com.mobila.project.today.model.dataProviding.dataAccess.TaskDataAccess;
 import com.mobila.project.today.model.Task;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;

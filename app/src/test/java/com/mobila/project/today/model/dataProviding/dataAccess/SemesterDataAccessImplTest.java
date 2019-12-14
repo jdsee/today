@@ -38,6 +38,7 @@ public class SemesterDataAccessImplTest {
     public void getCourses() {
         //given
         Mockito.when(this.courseCacheMock.get(this.semesterMock)).thenReturn(this.courseMocks);
+
     }
 
 

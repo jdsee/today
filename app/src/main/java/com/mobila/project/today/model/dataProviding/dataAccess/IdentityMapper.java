@@ -17,12 +17,13 @@ class IdentityMapper<T extends Identifiable> {
         return this.map.get(key.getID());
     }
 
-    public void add(@NonNull Identifiable key,@NonNull List<T> values) {
+    public void add(@NonNull Identifiable key, @NonNull List<T> values) {
         Objects.requireNonNull(key);
         Objects.requireNonNull(values);
         String id = key.getID();
         if (this.map.containsKey(id))
-            this.map.put(id, values);
+            throw new KeyAlreadyAssignedException();
+        this.map.put(id, values);
     }
 
     public void overwrite(@NonNull Identifiable key, @NonNull List<T> values) {
@@ -31,7 +32,13 @@ class IdentityMapper<T extends Identifiable> {
         this.map.put(key.getID(), values);
     }
 
-    public void remove(T obj) {
-        this.map.remove(obj.getID());
+    /**
+     * Removes the entry assigned to the specified key.
+     * Nothing happens if there is no value assigned to the specified key or it is null.
+     *
+     * @param key the key whose entry should be removed
+     */
+    public void remove(Identifiable key) {
+        this.map.remove(key.getID());
     }
 }
