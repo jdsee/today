@@ -48,7 +48,7 @@ public class SemesterDataSource {
     public List<Semester> getAllSemesters() {
         List<Semester> semesters = new ArrayList<>();
         Cursor cursor = this.database.query(SemesterTable.TABLE_NAME, SemesterTable.ALL_COLUMNS,
-                null, null, null, null, SemesterTable.TABLE_NAME);
+                null, null, null, null, SemesterTable.COLUMN_NR);
         while (cursor.moveToNext()) {
             Semester semester = new Semester(
                     cursor.getString(cursor.getColumnIndex(SemesterTable.COLUMN_ID)),
@@ -74,5 +74,15 @@ public class SemesterDataSource {
             }
         } else
             Log.d(TAG, "Data already inserted to db");
+    }
+
+    public void saveSemesters(List<Semester> semesters) {
+        for (Semester semester : semesters) {
+            try {
+                createSemester(semester);
+            } catch (SQLiteException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

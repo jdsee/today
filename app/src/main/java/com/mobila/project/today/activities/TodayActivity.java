@@ -18,8 +18,10 @@ import com.mobila.project.today.model.Semester;
 import com.mobila.project.today.model.Task;
 import com.mobila.project.today.activities.adapters.CourseAdapter;
 import com.mobila.project.today.model.dataProviding.SampleDataProvider;
+import com.mobila.project.today.model.dataProviding.dataAccess.databank.SemesterDataSource;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -33,6 +35,8 @@ public class TodayActivity extends AppCompatActivity {
     TextView semesterView;
     int currentSemester;
 
+    private SemesterDataSource semesterDataSource;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,10 +47,29 @@ public class TodayActivity extends AppCompatActivity {
         this.tasks = SampleDataProvider.getExampleTasks();
         this.semesters = SampleDataProvider.getExampleSemesters();
 
+
+        this.semesterDataSource = new SemesterDataSource(this);
+        this.semesters = semesterDataSource.getAllSemesters();
+
+
         initCourseView();
         initTaskView();
         initSemsterView();
         setTimeDisplayed();
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        this.semesterDataSource.saveSemesters(this.semesters);
+        this.semesterDataSource.close();
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        this.semesterDataSource.open();
+        this.semesters = semesterDataSource.getAllSemesters();
     }
 
     private void setTimeDisplayed() {
@@ -64,8 +87,10 @@ public class TodayActivity extends AppCompatActivity {
     }
 
     private void initSemsterView() {
-        currentSemester = semesters.size() - 1;
-        this.setSemester();
+        if (semesters.size()!= 0) {
+            currentSemester = semesters.size() - 1;
+            this.setSemester();
+        }
         showAppropiateSemesterButtons();
     }
 
@@ -90,8 +115,15 @@ public class TodayActivity extends AppCompatActivity {
     }
 
     public void goForwardSemester(View view) {
-        if (currentSemester == semesters.size() - 1) {
-            semesters.add(new Semester("42" , semesters.size()));
+        if (this.semesters.isEmpty()){
+            semesters = new ArrayList<>();
+            this.currentSemester=0;
+            semesters.add(new Semester(
+                    String.valueOf(currentSemester+1), currentSemester+1));
+        }
+        else if (currentSemester == semesters.size() - 1) {
+            semesters.add(new Semester(
+                    String.valueOf(semesters.size()+1), semesters.size()+1));
             currentSemester++;
         }
         if (currentSemester < semesters.size() - 1) {
@@ -113,6 +145,10 @@ public class TodayActivity extends AppCompatActivity {
             goBackwardsButton.setImageResource(R.drawable.transparent_placeholder);
         } else {
             goBackwardsButton.setImageResource(R.drawable.baseline_arrow_back_ios_24);
+        }
+        if (currentSemester==0&&semesters.size()==0){
+            goBackwardsButton.setImageResource(R.drawable.transparent_placeholder);
+            goForewardButton.setImageResource(R.drawable.baseline_add_24);
         }
     }
 
