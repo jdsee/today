@@ -1,14 +1,22 @@
 package com.mobila.project.today.model.dataProviding.dataAccess;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
 import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
 import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Identifiable;
+import com.mobila.project.today.model.dataProviding.dataAccess.databank.CourseTable;
 
 import java.util.List;
 
 class SemesterDataAccessImpl implements SemesterDataAccess {
     private static SemesterDataAccess instance;
     private IdentityMapper<Course> courseCache;
+    private SQLiteDatabase database;
+    private SQLiteOpenHelper dbHelper;
+    private List<Course> courses;
 
     private SemesterDataAccessImpl() {
         this.courseCache = new IdentityMapper<>();
@@ -40,8 +48,18 @@ class SemesterDataAccessImpl implements SemesterDataAccess {
      * @return a list of courses corresponding to the specified semester
      */
     private List<Course> getCourseFromDB(Identifiable semester) throws DataKeyNotFoundException {
-        //TODO access data bank to get courses associated to the speciied identifiable
-        return null;
+        Cursor cursor = this.database.query(CourseTable.TABLE_NAME, CourseTable.ALL_COLUMNS,
+                "WHERE relatedTo=?s", new String[]{semester.getID()},
+                null, null, CourseTable.TABLE_NAME);
+        while (cursor.moveToNext()) {
+            Course course = new Course(
+                    cursor.getString(cursor.getColumnIndex(CourseTable.COLUMN_ID)),
+                    cursor.getString(cursor.getColumnIndex(CourseTable.COLUMN_TITLE))
+            );
+            this.courses.add(course);
+        }
+        cursor.close();
+        return this.courses;
     }
 
     @Override

@@ -62,7 +62,7 @@ public class EditorActivity extends AppCompatActivity {
     /**
      * Method for creating this activity.
      * It is responsible for retrieving information of the bundle and setting up all views, contentEditText
-     * and and listeners
+     * and listeners
      *
      * @param savedInstanceState The bundle that has at least a note attached to it
      */
