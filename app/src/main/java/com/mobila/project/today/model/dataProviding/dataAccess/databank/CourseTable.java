@@ -12,4 +12,5 @@ public class CourseTable {
                     COLUMN_TITLE + " VARCHAR);";
     public static final String SQL_DELETE =
             "DROP TABLE " + TABLE_NAME;
+    public static final String COLUMN_RELATED_TO = "relatedTo";
 }

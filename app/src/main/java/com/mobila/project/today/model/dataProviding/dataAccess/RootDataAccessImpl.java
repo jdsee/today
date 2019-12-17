@@ -49,7 +49,7 @@ class RootDataAccessImpl implements RootDataAccess {
     @Override
     public List<Semester> getAllSemesters() {
         Cursor cursor = this.database.query(SemesterTable.TABLE_NAME, SemesterTable.ALL_COLUMNS,
-                null, null, null, null, SemesterTable.TABLE_NAME);
+                null, null, null, null, SemesterTable.COLUMN_NR);
         while (cursor.moveToNext()) {
             Semester semester = new Semester(
                     cursor.getString(cursor.getColumnIndex(SemesterTable.COLUMN_ID)),
