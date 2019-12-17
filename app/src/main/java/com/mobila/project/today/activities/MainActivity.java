@@ -34,9 +34,10 @@ public class MainActivity extends AppCompatActivity {
         this.semesterDataSource = new SemesterDataSource(this);
         this.semesterDataSource.open();
         Log.d(TAG, "Database aquired");
+    }
 
-        List<Semester> semesters = SampleDataProvider.getExampleSemesters();
-        this.semesterDataSource.seedDB(semesters);
+    public void loadSampleSemesters(View view){
+        this.semesterDataSource.seedDB(SampleDataProvider.getExampleSemesters());
     }
 
     @Override
