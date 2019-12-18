@@ -11,8 +11,6 @@ import android.text.style.UnderlineSpan;
 import android.view.View;
 import android.widget.EditText;
 
-import androidx.core.content.ContextCompat;
-
 import com.mobila.project.today.R;
 import com.mobila.project.today.control.utils.CustomTabWidthSpan;
 
@@ -89,16 +87,12 @@ public class NoteControl {
         }
     }
 
-    public void setForegroundColorSpan(int id){
-        setSpan(new ForegroundColorSpan(
-                        ContextCompat.getColor(context, id)),
-                Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+    private void setForegroundColorSpan(int id){
+        setSpan(new ForegroundColorSpan(context.getColor(id)), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
     }
 
-    public void setBackgroundColorSpan(int id){
-        setSpan(new BackgroundColorSpan(
-                        ContextCompat.getColor(context, id)),
-                Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+    private void setBackgroundColorSpan(int id){
+        setSpan(new BackgroundColorSpan(context.getColor(id)), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
     }
 
 
@@ -107,11 +101,10 @@ public class NoteControl {
      *
      * @param parcelable The style that should be applied
      */
-    private void setSpan(Parcelable parcelable, int type) {
+    public void setSpan(Parcelable parcelable, int type) {
         int startSelection = this.editorContent.getSelectionStart();
         int endSelection = this.editorContent.getSelectionEnd();
-        this.editorContent.getText().setSpan(
-                parcelable, startSelection, endSelection, type);
+        this.editorContent.getText().setSpan(parcelable, startSelection, endSelection, type);
         this.editorContent.setSelection(endSelection);
     }
 
