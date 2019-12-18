@@ -20,6 +20,8 @@ import static com.mobila.project.today.model.dataProviding.dataAccess.databank.S
 class SemesterDataAccessImpl implements SemesterDataAccess {
     private static SemesterDataAccess instance;
 
+    private static final String NO_COURSES_FOR_SEM_MSG = "no courses related to given semester";
+
     private IdentityMapper<Course> courseCache;
     private SQLiteDatabase database;
     private SQLiteOpenHelper dbHelper;
@@ -71,6 +73,7 @@ class SemesterDataAccessImpl implements SemesterDataAccess {
 
     /**
      * Accesses data bank to get courses associated to the specified identifiable.
+     * <p>
      * Before calling this method, the caller should check if there is a matching list of courses
      * in the courseCache-IdentityMapper. Also the caller is required to add the list returned
      * by this method to the courseCache.
@@ -80,18 +83,23 @@ class SemesterDataAccessImpl implements SemesterDataAccess {
      * @throws DataKeyNotFoundException if the key associated to the specified semester is not existent in db
      */
     private List<Course> getCoursesFromDB(Identifiable semester) throws DataKeyNotFoundException {
+        Log.d(TAG, "requesting courses from data base");
         Cursor cursor = this.database.query(CourseTable.TABLE_NAME, CourseTable.ALL_COLUMNS,
                 "WHERE " + CourseTable.COLUMN_RELATED_TO + "=?s", new String[]{semester.getID()},
                 null, null, null);
-        Log.d(TAG, "getting courses from data base");
+        if (!cursor.moveToNext()) {
+            DataKeyNotFoundException t = new DataKeyNotFoundException(DataKeyNotFoundException.NO_ENTRY_MSG);
+            Log.d(TAG, DataKeyNotFoundException.NO_ENTRY_MSG + ": " + NO_COURSES_FOR_SEM_MSG, t);
+            throw t;
+        }
         List<Course> courses = new LinkedList<>();
-        while (cursor.moveToNext()) {
+        do {
             Course course = new Course(
                     cursor.getString(cursor.getColumnIndex(CourseTable.COLUMN_ID)),
                     cursor.getString(cursor.getColumnIndex(CourseTable.COLUMN_TITLE))
             );
             courses.add(course);
-        }
+        } while (cursor.moveToNext());
         cursor.close();
         return courses;
     }
@@ -106,9 +114,16 @@ class SemesterDataAccessImpl implements SemesterDataAccess {
      */
     @Override
     public void addCourse(Identifiable semester, Course course) throws DataKeyNotFoundException {
-        List<Course> courses = this.courseCache.get(semester);
-        if (courses == null)
-            courses.add(course);
+        this.courseCache.addElement(semester, course);
+        this.addCourseToDB(course);
+    }
+
+    /**
+     * Accesses database to add the specified course to the course table.
+     *
+     * @param course the course that is to be added
+     */
+    private void addCourseToDB(Course course) {
         ContentValues values = new ContentValues();
         values.put(CourseTable.COLUMN_ID, course.getID());
         values.put(CourseTable.COLUMN_TITLE, course.getTitle());
@@ -126,17 +141,16 @@ class SemesterDataAccessImpl implements SemesterDataAccess {
      */
     @Override
     public void removeCourse(Identifiable semester, Course course) {
-        List<Course> courses = this.courseCache.get(semester);
-        if (courses == null)
-            courses.remove(course);
+        this.courseCache.removeElement(semester, course);
         this.database.delete(CourseTable.TABLE_NAME,
                 "WHERE " + CourseTable.COLUMN_ID + "=?s", new String[]{course.getID()});
     }
 
     /**
      * Sets the semesterNumber to the specified semester.
+     *
      * @param semester the semester whose nr is to be set
-     * @param nr the semesterNumber
+     * @param nr       the semesterNumber
      * @throws DataKeyNotFoundException if the key associated to the specified semester is not existent in db
      */
     @Override

@@ -13,26 +13,47 @@ import static org.mockito.ArgumentMatchers.nullable;
 public class MockSQLiteDatabase {
     private SQLiteDatabase mockedDatabase;
     private Cursor mockedCursor;
+    private boolean cursorMoveToNext;
 
-    public SQLiteDatabase getMockedDatabase(){
+    public SQLiteDatabase getMockedDatabase() {
         return this.mockedDatabase;
     }
 
     public MockSQLiteDatabase() {
         this.mockedDatabase = Mockito.mock(SQLiteDatabase.class);
         this.mockedCursor = Mockito.mock(Cursor.class);
+        this.cursorMoveToNext = true;
         this.setupMock();
+    }
+
+    /**
+     * The database will by default simulate to contain at least one entry by returning a cursor
+     * object that returns true one time when moveToNext() is called.
+     * <p>
+     * This method will change that behaviour so that moveToNext() returns false.
+     * <p>
+     * That makes it possible to simulate an empty course, e.g. no findings for the call on the db.
+     *
+     * @return the modified MockSQLiteDatabase-object
+     */
+    public MockSQLiteDatabase setTableEmpty() {
+        this.cursorMoveToNext = false;
+        this.setupCursor();
+        return this;
     }
 
     private void setupMock() {
         this.setupCursor();
         this.setupQuery();
         this.setupInsert();
-        this.setupRemove();
+        //this.setupRemove();
     }
 
     private void setupCursor() {
-        Mockito.when(this.mockedCursor.moveToNext()).thenReturn(false);
+        Mockito.when(this.mockedCursor.moveToNext()).thenAnswer(answer -> {
+            this.cursorMoveToNext = !this.cursorMoveToNext;
+            return !this.cursorMoveToNext;
+        });
     }
 
     private void setupQuery() {
@@ -54,11 +75,12 @@ public class MockSQLiteDatabase {
                 any(ContentValues.class)
         )).thenReturn(0L);
     }
-    private void setupRemove() {
+
+    /*private void setupRemove() {
         Mockito.when(this.mockedDatabase.delete(
                 anyString(),
                 anyString(),
                 any(String[].class)
         ));
-    }
+    }*/
 }
