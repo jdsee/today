@@ -6,21 +6,15 @@ import android.database.sqlite.SQLiteDatabase;
 import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Semester;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.CourseTable;
-import com.mobila.project.today.model.dataProviding.dataAccess.databank.DBHelper;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentMatcher;
-import org.mockito.ArgumentMatchers;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyCollection;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.nullable;
 
@@ -49,19 +43,7 @@ public class SemesterDataAccessImplTest {
 
         this.courseCacheMock = Mockito.mock(IdentityMapper.class);
 
-        Cursor cursorMock = Mockito.mock(Cursor.class);
-        Mockito.when(cursorMock.moveToNext()).thenReturn(false);
-
-        this.databaseMock = Mockito.mock(SQLiteDatabase.class);
-        Mockito.when(this.databaseMock.query(
-                anyString(),
-                any(String[].class),
-                nullable(String.class),
-                any(String[].class),
-                nullable(String.class),
-                nullable(String.class),
-                nullable(String.class)
-        )).thenReturn(cursorMock);
+        this.databaseMock = new MockSQLiteDatabase().getMockedDatabase();
 
         this.dataAccess = new SemesterDataAccessImpl(courseCacheMock, databaseMock);
     }
@@ -91,4 +73,8 @@ public class SemesterDataAccessImplTest {
         Mockito.verifyZeroInteractions(databaseMock);
     }
 
+    @Test
+    public void removeCourseWhenCourseCacheIsEmpty_Test(){
+
+    }
 }

@@ -56,8 +56,8 @@ class SemesterDataAccessImpl implements SemesterDataAccess {
      * Accesses the data base and returns a list of courses corresponding to the specified semester
      *
      * @param semester semester containing the foreign key of the enquired courses
-     * @return list of courses corrsesponding to the specified semester
-     * @throws DataKeyNotFoundException if the key contained by the specified semester is not existent in db
+     * @return list of courses corresponding to the specified semester
+     * @throws DataKeyNotFoundException if the key associated to the specified semester is not existent in db
      */
     @Override
     public List<Course> getCourses(Identifiable semester) throws DataKeyNotFoundException {
@@ -77,6 +77,7 @@ class SemesterDataAccessImpl implements SemesterDataAccess {
      *
      * @param semester the corresponding semester
      * @return a list of courses corresponding to the specified semester
+     * @throws DataKeyNotFoundException if the key associated to the specified semester is not existent in db
      */
     private List<Course> getCoursesFromDB(Identifiable semester) throws DataKeyNotFoundException {
         Cursor cursor = this.database.query(CourseTable.TABLE_NAME, CourseTable.ALL_COLUMNS,
@@ -95,6 +96,14 @@ class SemesterDataAccessImpl implements SemesterDataAccess {
         return courses;
     }
 
+    /**
+     * Adds the specified course, referenced to the specified semester, to the database.
+     * If the courseCache related to this semester already exists it will be added there too.
+     *
+     * @param semester the semester corresponding to the specified course
+     * @param course   the course that is to be added
+     * @throws DataKeyNotFoundException if the key associated to the specified semester is not existent in db
+     */
     @Override
     public void addCourse(Identifiable semester, Course course) throws DataKeyNotFoundException {
         List<Course> courses = this.courseCache.get(semester);
@@ -106,6 +115,15 @@ class SemesterDataAccessImpl implements SemesterDataAccess {
         this.database.insert(CourseTable.TABLE_NAME, null, values);
     }
 
+    /**
+     * Removes the specified course, to the database from the database.
+     * If the courseCache related to this semester already exists it will be removed there too.
+     * <p>
+     * If the key associated to the specified course does not exists, nothing happens
+     *
+     * @param semester the semester corresponding to the specified course
+     * @param course   the course that is to be removed
+     */
     @Override
     public void removeCourse(Identifiable semester, Course course) {
         List<Course> courses = this.courseCache.get(semester);
@@ -115,6 +133,12 @@ class SemesterDataAccessImpl implements SemesterDataAccess {
                 "WHERE " + CourseTable.COLUMN_ID + "=?s", new String[]{course.getID()});
     }
 
+    /**
+     * Sets the semesterNumber to the specified semester.
+     * @param semester the semester whose nr is to be set
+     * @param nr the semesterNumber
+     * @throws DataKeyNotFoundException if the key associated to the specified semester is not existent in db
+     */
     @Override
     public void setNumber(Identifiable semester, int nr) throws DataKeyNotFoundException {
         ContentValues values = new ContentValues();
