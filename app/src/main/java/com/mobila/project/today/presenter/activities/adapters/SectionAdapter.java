@@ -1,4 +1,4 @@
-package com.mobila.project.today.activities.adapters;
+package com.mobila.project.today.presenter.activities.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -33,7 +33,7 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.ViewHold
         TextView tvSectionName;
         TextView tvLecturer;
 
-        public ViewHolder(@NonNull View itemView) {
+        ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             this.rlSectionItem = itemView.findViewById(R.id.rl_section_item);

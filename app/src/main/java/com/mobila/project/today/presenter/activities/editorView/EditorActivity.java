@@ -1,4 +1,4 @@
-package com.mobila.project.today.activities.editorView;
+package com.mobila.project.today.presenter.activities.editorView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,11 +20,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.mobila.project.today.R;
 import com.mobila.project.today.model.dataProviding.SampleDataProvider;
-import com.mobila.project.today.activities.adapters.FileAdapter;
-import com.mobila.project.today.activities.adapters.TaskAdapter;
-import com.mobila.project.today.activities.editorView.listeners.EditorKeyboardEventListener;
-import com.mobila.project.today.activities.editorView.listeners.TitleOnEditorActionListener;
-import com.mobila.project.today.activities.editorView.listeners.noteFocusChangeListener;
+import com.mobila.project.today.presenter.activities.adapters.FileAdapter;
+import com.mobila.project.today.presenter.activities.adapters.TaskAdapter;
+import com.mobila.project.today.presenter.activities.editorView.listeners.EditorKeyboardEventListener;
+import com.mobila.project.today.presenter.activities.editorView.listeners.TitleOnEditorActionListener;
+import com.mobila.project.today.presenter.activities.editorView.listeners.noteFocusChangeListener;
 import com.mobila.project.today.control.AttachmentControl;
 import com.mobila.project.today.control.NoteControl;
 import com.mobila.project.today.control.utils.DateUtils;

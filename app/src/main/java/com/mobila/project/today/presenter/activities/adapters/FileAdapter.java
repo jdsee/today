@@ -1,4 +1,4 @@
-package com.mobila.project.today.activities.adapters;
+package com.mobila.project.today.presenter.activities.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -61,12 +61,12 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
         return lecture.getAttachments().size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
 
-        public ImageView fileImage;
-        public TextView fileName;
-        public RelativeLayout fileHolder;
-        public AppCompatImageButton button;
+        ImageView fileImage;
+        TextView fileName;
+        RelativeLayout fileHolder;
+        AppCompatImageButton button;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);

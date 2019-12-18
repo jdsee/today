@@ -1,4 +1,4 @@
-package com.mobila.project.today.activities.adapters;
+package com.mobila.project.today.presenter.activities.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +18,7 @@ public class LectureAdapter extends RecyclerView.Adapter<LectureAdapter.ViewHold
     private static final String LECTURE_TITLE = "Veranstaltung";
     private List<Lecture> lectures;
 
-    public LectureAdapter(List<Lecture> lectures) {
+    LectureAdapter(List<Lecture> lectures) {
             this.lectures = lectures;
         }
 
@@ -26,7 +26,7 @@ public class LectureAdapter extends RecyclerView.Adapter<LectureAdapter.ViewHold
             TextView tvLectureTitle;
             TextView tvRoomNr;
             TextView tvTime;
-            public ViewHolder(@NonNull View itemView) {
+            ViewHolder(@NonNull View itemView) {
                 super(itemView);
 
                 this.tvLectureTitle = itemView.findViewById(R.id.txt_lecture_title);

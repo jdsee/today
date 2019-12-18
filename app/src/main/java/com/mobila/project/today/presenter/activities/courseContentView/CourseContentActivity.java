@@ -1,4 +1,4 @@
-package com.mobila.project.today.activities.courseContentView;
+package com.mobila.project.today.presenter.activities.courseContentView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,8 +10,8 @@ import android.view.View;
 
 import com.mobila.project.today.R;
 import com.mobila.project.today.model.dataProviding.SampleDataProvider;
-import com.mobila.project.today.activities.adapters.SectionAdapter;
-import com.mobila.project.today.activities.adapters.TaskAdapter;
+import com.mobila.project.today.presenter.activities.adapters.SectionAdapter;
+import com.mobila.project.today.presenter.activities.adapters.TaskAdapter;
 import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Section;
 import com.mobila.project.today.model.Task;

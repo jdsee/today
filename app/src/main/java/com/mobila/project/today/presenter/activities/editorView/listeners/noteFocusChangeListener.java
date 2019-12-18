@@ -1,8 +1,8 @@
-package com.mobila.project.today.activities.editorView.listeners;
+package com.mobila.project.today.presenter.activities.editorView.listeners;
 
 import android.view.View;
 
-import com.mobila.project.today.activities.editorView.EditorActivity;
+import com.mobila.project.today.presenter.activities.editorView.EditorActivity;
 
 public class noteFocusChangeListener implements View.OnFocusChangeListener {
 

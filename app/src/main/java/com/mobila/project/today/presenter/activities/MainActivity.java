@@ -1,25 +1,20 @@
-package com.mobila.project.today.activities;
+package com.mobila.project.today.presenter.activities;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.mobila.project.today.R;
-import com.mobila.project.today.activities.courseContentView.CourseContentActivity;
-import com.mobila.project.today.activities.editorView.EditorActivity;
-import com.mobila.project.today.activities.taskView.CourseTasksActivity;
+import com.mobila.project.today.presenter.activities.courseContentView.CourseContentActivity;
+import com.mobila.project.today.presenter.activities.editorView.EditorActivity;
+import com.mobila.project.today.presenter.activities.taskView.CourseTasksActivity;
 import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Lecture;
-import com.mobila.project.today.model.Semester;
 import com.mobila.project.today.model.dataProviding.SampleDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.SemesterDataSource;
-
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getName();

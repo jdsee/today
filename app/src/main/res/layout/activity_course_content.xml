@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="4dp"
-    tools:context=".activities.courseContentView.CourseContentActivity">
+    tools:context=".presenter.activities.courseContentView.CourseContentActivity">
 
     <RelativeLayout
         android:id="@+id/relativeLayout"
@@ -32,5 +32,5 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_section_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></androidx.recyclerview.widget.RecyclerView>
+        android:layout_height="match_parent"/>
 </LinearLayout>

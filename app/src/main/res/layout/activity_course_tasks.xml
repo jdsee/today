@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.taskView.CourseTasksActivity">
+    tools:context=".presenter.activities.taskView.CourseTasksActivity">
 
     <Button
         android:id="@+id/btn_add_task"

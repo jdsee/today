@@ -1,4 +1,4 @@
-package com.mobila.project.today.activities.taskView;
+package com.mobila.project.today.presenter.activities.taskView;
 
 import android.os.Bundle;
 import android.view.View;
@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mobila.project.today.R;
-import com.mobila.project.today.activities.adapters.TaskAdapter;
+import com.mobila.project.today.presenter.activities.adapters.TaskAdapter;
 import com.mobila.project.today.model.Task;
 
 import java.util.ArrayList;

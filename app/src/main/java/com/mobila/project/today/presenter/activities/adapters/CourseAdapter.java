@@ -1,4 +1,4 @@
-package com.mobila.project.today.activities.adapters;
+package com.mobila.project.today.presenter.activities.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mobila.project.today.R;
-import com.mobila.project.today.activities.courseContentView.CourseContentActivity;
+import com.mobila.project.today.presenter.activities.courseContentView.CourseContentActivity;
 import com.mobila.project.today.model.Course;
 
 import java.util.List;

@@ -1,24 +1,28 @@
-package com.mobila.project.today.activities;
+package com.mobila.project.today.presenter.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.mobila.project.today.R;
 import com.mobila.project.today.UncheckedTodayException;
-import com.mobila.project.today.activities.adapters.TaskAdapter;
+import com.mobila.project.today.presenter.activities.adapters.TaskAdapter;
 import com.mobila.project.today.control.utils.DateUtils;
 import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Semester;
 import com.mobila.project.today.model.Task;
-import com.mobila.project.today.activities.adapters.CourseAdapter;
+import com.mobila.project.today.presenter.activities.adapters.CourseAdapter;
 import com.mobila.project.today.model.dataProviding.SampleDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.SemesterDataSource;
+import com.mobila.project.today.presenter.fragments.ConfirmationDialogFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -26,7 +30,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class TodayActivity extends AppCompatActivity {
+public class TodayActivity extends AppCompatActivity implements ConfirmationDialogFragment.OnConfirmationListener {
 
     private List<Task> tasks;
     private List<Course> courses;
@@ -157,6 +161,37 @@ public class TodayActivity extends AppCompatActivity {
             semesterView.setText(String.format(Locale.getDefault(),
                     "Semester %d", semesters.get(currentSemester).getSemesterNr()));
         } catch (UncheckedTodayException ignored) {
+        }
+    }
+
+    public void onSemesterOptionsPressed(View view) {
+        PopupMenu popupMenu = new PopupMenu(this, view);
+        Menu menu = popupMenu.getMenu();
+        popupMenu.getMenuInflater().inflate(R.menu.today_semester_options, menu);
+        popupMenu.show();
+    }
+
+    public void onDeleteSemesterClicked(MenuItem item) {
+        ConfirmationDialogFragment confirmationDialog = new ConfirmationDialogFragment();
+
+        Bundle bundle = new Bundle();
+        bundle.putString(ConfirmationDialogFragment.DIALOG_MESSAGE,
+                "Do your really want to delete the Semester?");
+        bundle.putString(ConfirmationDialogFragment.DIALOG_CONFIRMING, "Delete");
+        bundle.putString(ConfirmationDialogFragment.DIALOG_DECLINING, "Cancel");
+        confirmationDialog.setArguments(bundle);
+        confirmationDialog.setOnConfirmationListener(this);
+        confirmationDialog.show(getSupportFragmentManager(), "Confirmation Dialog");
+    }
+
+    @Override
+    public void onConfirmation(Boolean confirmed) {
+        if(!semesters.isEmpty() && confirmed) {
+            //Todo semester needs to be removed from db
+            semesters.remove(currentSemester);
+            currentSemester--;
+            this.setSemester();
+            showAppropiateSemesterButtons();
         }
     }
 }
