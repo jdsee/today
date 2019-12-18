@@ -1,4 +1,4 @@
-package com.mobila.project.today.presenter.activities;
+package com.mobila.project.today.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,9 +8,9 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.mobila.project.today.R;
-import com.mobila.project.today.presenter.activities.courseContentView.CourseContentActivity;
-import com.mobila.project.today.presenter.activities.editorView.EditorActivity;
-import com.mobila.project.today.presenter.activities.taskView.CourseTasksActivity;
+import com.mobila.project.today.activities.courseContentView.CourseContentActivity;
+import com.mobila.project.today.activities.editorView.EditorActivity;
+import com.mobila.project.today.activities.taskView.CourseTasksActivity;
 import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Lecture;
 import com.mobila.project.today.model.dataProviding.SampleDataProvider;

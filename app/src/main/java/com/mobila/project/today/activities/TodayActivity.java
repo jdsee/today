@@ -1,4 +1,4 @@
-package com.mobila.project.today.presenter.activities;
+package com.mobila.project.today.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,15 +14,15 @@ import android.widget.TextView;
 
 import com.mobila.project.today.R;
 import com.mobila.project.today.UncheckedTodayException;
-import com.mobila.project.today.presenter.activities.adapters.TaskAdapter;
+import com.mobila.project.today.activities.adapters.TaskAdapter;
 import com.mobila.project.today.control.utils.DateUtils;
 import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Semester;
 import com.mobila.project.today.model.Task;
-import com.mobila.project.today.presenter.activities.adapters.CourseAdapter;
+import com.mobila.project.today.activities.adapters.CourseAdapter;
 import com.mobila.project.today.model.dataProviding.SampleDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.SemesterDataSource;
-import com.mobila.project.today.presenter.fragments.ConfirmationDialogFragment;
+import com.mobila.project.today.activities.fragments.ConfirmationDialogFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
