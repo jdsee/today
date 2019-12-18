@@ -22,6 +22,7 @@ import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyCollection;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.nullable;
 
 public class SemesterDataAccessImplTest {
 
@@ -55,11 +56,11 @@ public class SemesterDataAccessImplTest {
         Mockito.when(this.databaseMock.query(
                 anyString(),
                 any(String[].class),
-                anyString(),
+                nullable(String.class),
                 any(String[].class),
-                anyString(),
-                anyString(),
-                anyString()
+                nullable(String.class),
+                nullable(String.class),
+                nullable(String.class)
         )).thenReturn(cursorMock);
 
         this.dataAccess = new SemesterDataAccessImpl(courseCacheMock, databaseMock);
@@ -89,6 +90,5 @@ public class SemesterDataAccessImplTest {
         Mockito.verify(this.courseCacheMock, Mockito.times(1)).get(this.semesterMock);
         Mockito.verifyZeroInteractions(databaseMock);
     }
-
 
 }
