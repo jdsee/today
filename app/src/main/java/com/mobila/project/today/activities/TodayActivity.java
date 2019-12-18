@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.mobila.project.today.R;
 import com.mobila.project.today.UncheckedTodayException;
 import com.mobila.project.today.activities.adapters.TaskAdapter;
+import com.mobila.project.today.activities.fragments.AddCourseDialogFragment;
 import com.mobila.project.today.control.utils.DateUtils;
 import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Semester;
@@ -30,7 +31,9 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class TodayActivity extends AppCompatActivity implements ConfirmationDialogFragment.OnConfirmationListener {
+public class TodayActivity extends AppCompatActivity
+        implements ConfirmationDialogFragment.OnConfirmationListener,
+        AddCourseDialogFragment.OnEnterListener {
 
     private List<Task> tasks;
     private List<Course> courses;
@@ -38,6 +41,8 @@ public class TodayActivity extends AppCompatActivity implements ConfirmationDial
 
     TextView semesterView;
     int currentSemester;
+
+    CourseAdapter courseAdapter;
 
     private SemesterDataSource semesterDataSource;
 
@@ -106,7 +111,8 @@ public class TodayActivity extends AppCompatActivity implements ConfirmationDial
 
     private void initCourseView() {
         RecyclerView courseRecyclerView = findViewById(R.id.recycler_view_courses);
-        courseRecyclerView.setAdapter(new CourseAdapter(this, this.courses));
+        this.courseAdapter = new CourseAdapter(this, this.courses);
+        courseRecyclerView.setAdapter(courseAdapter);
         courseRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
@@ -157,10 +163,13 @@ public class TodayActivity extends AppCompatActivity implements ConfirmationDial
     }
 
     private void setSemester() {
-        try {
-            semesterView.setText(String.format(Locale.getDefault(),
-                    "Semester %d", semesters.get(currentSemester).getSemesterNr()));
-        } catch (UncheckedTodayException ignored) {
+        if(!semesters.isEmpty()) {
+            try {
+                semesterView.setText(String.format(Locale.getDefault(),
+                        "Semester %d", semesters.get(currentSemester).getSemesterNr()));
+            } catch (UncheckedTodayException ignored) { }
+        } else {
+            semesterView.setText(String.format(Locale.getDefault(),"Semester"));
         }
     }
 
@@ -173,7 +182,6 @@ public class TodayActivity extends AppCompatActivity implements ConfirmationDial
 
     public void onDeleteSemesterClicked(MenuItem item) {
         ConfirmationDialogFragment confirmationDialog = new ConfirmationDialogFragment();
-
         Bundle bundle = new Bundle();
         bundle.putString(ConfirmationDialogFragment.DIALOG_MESSAGE,
                 "Do your really want to delete the Semester?");
@@ -189,9 +197,31 @@ public class TodayActivity extends AppCompatActivity implements ConfirmationDial
         if(!semesters.isEmpty() && confirmed) {
             //Todo semester needs to be removed from db
             semesters.remove(currentSemester);
-            currentSemester--;
+            if (currentSemester>0) {
+                currentSemester--;
+            }
             this.setSemester();
             showAppropiateSemesterButtons();
+        }
+    }
+
+    public void addCourse(View view) {
+        AddCourseDialogFragment addCourseDialog = new AddCourseDialogFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(AddCourseDialogFragment.DIALOG_MESSAGE,
+                "Enter the name of the Course:");
+        bundle.putString(AddCourseDialogFragment.DIALOG_CONFIRMING, "add");
+        bundle.putString(AddCourseDialogFragment.DIALOG_DECLINING, "cancel");
+        addCourseDialog.setArguments(bundle);
+        addCourseDialog.setOnEnterListener(this);
+        addCourseDialog.show(getSupportFragmentManager(), "Add Course Dialog");
+    }
+
+    @Override
+    public void onConfirmation(Boolean confirmation, Course course) {
+        if (confirmation){
+            this.courses.add(course);
+            this.courseAdapter.notifyDataSetChanged();
         }
     }
 }

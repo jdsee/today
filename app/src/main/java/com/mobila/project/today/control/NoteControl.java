@@ -87,10 +87,18 @@ public class NoteControl {
         }
     }
 
+    /**
+     * Method for applying a colour to the selected text
+     * @param id the id of the colour that should be applied
+     */
     private void setForegroundColorSpan(int id){
         setSpan(new ForegroundColorSpan(context.getColor(id)), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
     }
 
+    /**
+     * Method for applying a colour to the background of the selected text
+     * @param id the id of the colour that should be applied
+     */
     private void setBackgroundColorSpan(int id){
         setSpan(new BackgroundColorSpan(context.getColor(id)), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
     }
