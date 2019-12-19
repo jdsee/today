@@ -28,6 +28,7 @@ class OrganizerDataProviderImpl implements OrganizerDataProvider {
 
     private OrganizerDataProviderImpl() {
         this.attachmentAccess = AttachmentDataAccess.getInstance();
+        this.rootAccess = RootDataAccess.getInstance();
 
     }
 

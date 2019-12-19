@@ -16,14 +16,15 @@ import com.mobila.project.today.R;
 import com.mobila.project.today.UncheckedTodayException;
 import com.mobila.project.today.activities.adapters.TaskAdapter;
 import com.mobila.project.today.activities.fragments.AddCourseDialogFragment;
+import com.mobila.project.today.activities.fragments.GeneralConfirmationDialogFragment;
 import com.mobila.project.today.control.utils.DateUtils;
 import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Semester;
 import com.mobila.project.today.model.Task;
 import com.mobila.project.today.activities.adapters.CourseAdapter;
+import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
 import com.mobila.project.today.model.dataProviding.SampleDataProvider;
-import com.mobila.project.today.model.dataProviding.dataAccess.databank.SemesterDataSource;
-import com.mobila.project.today.activities.fragments.ConfirmationDialogFragment;
+import com.mobila.project.today.model.dataProviding.dataAccess.RootDataAccess;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,8 +33,10 @@ import java.util.List;
 import java.util.Locale;
 
 public class TodayActivity extends AppCompatActivity
-        implements ConfirmationDialogFragment.OnConfirmationListener,
+        implements GeneralConfirmationDialogFragment.OnConfirmationListener,
         AddCourseDialogFragment.OnEnterListener {
+
+    private static Bundle DELETE_SEMESTER_DIALOG_BUNDLE;
 
     private List<Task> tasks;
     private List<Course> courses;
@@ -44,7 +47,7 @@ public class TodayActivity extends AppCompatActivity
 
     CourseAdapter courseAdapter;
 
-    private SemesterDataSource semesterDataSource;
+    private RootDataAccess rootDataAccess;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +60,8 @@ public class TodayActivity extends AppCompatActivity
         this.semesters = SampleDataProvider.getExampleSemesters();
 
 
-        this.semesterDataSource = new SemesterDataSource(this);
-        this.semesters = semesterDataSource.getAllSemesters();
+        this.rootDataAccess = OrganizerDataProvider.getInstance().getRootDataAccess();
+        this.semesters = rootDataAccess.getAllSemesters();
 
 
         initCourseView();
@@ -68,17 +71,15 @@ public class TodayActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onPause(){
+    protected void onPause() {
         super.onPause();
-        this.semesterDataSource.saveSemesters(this.semesters);
-        this.semesterDataSource.close();
+        this.rootDataAccess.close();
     }
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
-        this.semesterDataSource.open();
-        this.semesters = semesterDataSource.getAllSemesters();
+        this.semesters = rootDataAccess.getAllSemesters();
     }
 
     private void setTimeDisplayed() {
@@ -96,7 +97,7 @@ public class TodayActivity extends AppCompatActivity
     }
 
     private void initSemsterView() {
-        if (semesters.size()!= 0) {
+        if (semesters.size() != 0) {
             currentSemester = semesters.size() - 1;
             this.setSemester();
         }
@@ -125,15 +126,14 @@ public class TodayActivity extends AppCompatActivity
     }
 
     public void goForwardSemester(View view) {
-        if (this.semesters.isEmpty()){
+        if (this.semesters.isEmpty()) {
             semesters = new ArrayList<>();
-            this.currentSemester=0;
+            this.currentSemester = 0;
             semesters.add(new Semester(
-                    String.valueOf(currentSemester+1), currentSemester+1));
-        }
-        else if (currentSemester == semesters.size() - 1) {
+                    String.valueOf(currentSemester + 1), currentSemester + 1));
+        } else if (currentSemester == semesters.size() - 1) {
             semesters.add(new Semester(
-                    String.valueOf(semesters.size()+1), semesters.size()+1));
+                    String.valueOf(semesters.size() + 1), semesters.size() + 1));
             currentSemester++;
         }
         if (currentSemester < semesters.size() - 1) {
@@ -156,20 +156,21 @@ public class TodayActivity extends AppCompatActivity
         } else {
             goBackwardsButton.setImageResource(R.drawable.baseline_arrow_back_ios_24);
         }
-        if (currentSemester==0&&semesters.size()==0){
+        if (currentSemester == 0 && semesters.size() == 0) {
             goBackwardsButton.setImageResource(R.drawable.transparent_placeholder);
             goForewardButton.setImageResource(R.drawable.baseline_add_24);
         }
     }
 
     private void setSemester() {
-        if(!semesters.isEmpty()) {
+        if (!semesters.isEmpty()) {
             try {
                 semesterView.setText(String.format(Locale.getDefault(),
                         "Semester %d", semesters.get(currentSemester).getSemesterNr()));
-            } catch (UncheckedTodayException ignored) { }
+            } catch (UncheckedTodayException ignored) {
+            }
         } else {
-            semesterView.setText(String.format(Locale.getDefault(),"Semester"));
+            semesterView.setText(String.format(Locale.getDefault(), "Semester"));
         }
     }
 
@@ -181,23 +182,27 @@ public class TodayActivity extends AppCompatActivity
     }
 
     public void onDeleteSemesterClicked(MenuItem item) {
-        ConfirmationDialogFragment confirmationDialog = new ConfirmationDialogFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString(ConfirmationDialogFragment.DIALOG_MESSAGE,
-                "Do your really want to delete the Semester?");
-        bundle.putString(ConfirmationDialogFragment.DIALOG_CONFIRMING, "Delete");
-        bundle.putString(ConfirmationDialogFragment.DIALOG_DECLINING, "Cancel");
-        confirmationDialog.setArguments(bundle);
+        GeneralConfirmationDialogFragment confirmationDialog = new GeneralConfirmationDialogFragment();
+        if (DELETE_SEMESTER_DIALOG_BUNDLE == null) {
+            Bundle bundle = new Bundle();
+            bundle.putString(GeneralConfirmationDialogFragment.DIALOG_MESSAGE_EXTRA,
+                    "Do your really want to delete the Semester?");
+            bundle.putString(GeneralConfirmationDialogFragment.DIALOG_CONFIRMING_EXTRA, "Delete");
+            bundle.putString(GeneralConfirmationDialogFragment.DIALOG_DECLINING_EXTRA, "Cancel");
+            DELETE_SEMESTER_DIALOG_BUNDLE = bundle;
+        }
+        confirmationDialog.setArguments(DELETE_SEMESTER_DIALOG_BUNDLE);
         confirmationDialog.setOnConfirmationListener(this);
         confirmationDialog.show(getSupportFragmentManager(), "Confirmation Dialog");
     }
 
     @Override
-    public void onConfirmation(Boolean confirmed) {
-        if(!semesters.isEmpty() && confirmed) {
+    public void onConfirmation(Bundle bundle) {
+        boolean confirmed = bundle.getBoolean(GeneralConfirmationDialogFragment.RESPONSE_CONFIRMED_EXTRA);
+        if (!semesters.isEmpty() && confirmed) {
             //Todo semester needs to be removed from db
             semesters.remove(currentSemester);
-            if (currentSemester>0) {
+            if (currentSemester > 0) {
                 currentSemester--;
             }
             this.setSemester();
@@ -221,7 +226,7 @@ public class TodayActivity extends AppCompatActivity
 
     @Override
     public void onConfirmation(Boolean confirmation, Course course) {
-        if (confirmation){
+        if (confirmation) {
             this.courses.add(course);
             this.courseAdapter.notifyDataSetChanged();
         }

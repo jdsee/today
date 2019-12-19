@@ -11,6 +11,7 @@ import com.mobila.project.today.model.Identifiable;
 import com.mobila.project.today.model.Semester;
 import com.mobila.project.today.model.Task;
 import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
+import com.mobila.project.today.model.dataProviding.SampleDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.DBHelper;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.SemesterTable;
 
@@ -19,20 +20,26 @@ import java.util.LinkedList;
 import java.util.List;
 
 class RootDataAccessImpl implements RootDataAccess {
+    public static RootDataAccess instance;
     public static final String TAG = RootDataAccessImpl.class.getName();
 
-    private Context context;
     private SQLiteDatabase database;
     private SQLiteOpenHelper dbHelper;
     private List<Semester> semesters;
 
-    public RootDataAccessImpl(Context context) {
-        this(context, null);
+    static RootDataAccess getInstance() {
+        if (instance == null)
+            instance = new RootDataAccessImpl();
+        return instance;
     }
 
-    RootDataAccessImpl(Context context, SQLiteDatabase database) {
-        this.context = context;
+    public RootDataAccessImpl() {
+        this(null);
+    }
+
+    RootDataAccessImpl(SQLiteDatabase database) {
         this.database = database;
+        this.dbHelper = new DBHelper(null);
         this.semesters = null;
     }
 
@@ -52,9 +59,11 @@ class RootDataAccessImpl implements RootDataAccess {
 
     @Override
     public List<Semester> getAllSemesters() {
-        if (this.semesters == null)
+        return SampleDataProvider.getExampleSemesters();
+        /*if (this.semesters == null) {
             this.semesters = this.getAllSemestersFromDB();
-        return this.semesters;
+        }
+        return this.semesters;*/
     }
 
     private List<Semester> getAllSemestersFromDB() {

@@ -16,8 +16,8 @@ import java.util.UUID;
  * Allows access to all data of the "Semester"-entity.
  */
 public class Semester implements Identifiable {
-    private final RootDataAccess rootDataAccess;
-    private final SemesterDataAccess semesterDataAccess;
+    private static RootDataAccess rootDataAccess;
+    private static SemesterDataAccess semesterDataAccess;
 
     private final String ID;
     private int semesterNr;
@@ -29,8 +29,8 @@ public class Semester implements Identifiable {
         this.courses = null;
 
         OrganizerDataProvider dataProvider = OrganizerDataProvider.getInstance();
-        this.rootDataAccess = dataProvider.getRootDataAccess();
-        this.semesterDataAccess = dataProvider.getSemesterDataAccess();
+        rootDataAccess = dataProvider.getRootDataAccess();
+        semesterDataAccess = dataProvider.getSemesterDataAccess();
     }
 
     /*public Semester(int semesterNr) {
@@ -44,11 +44,11 @@ public class Semester implements Identifiable {
 
     public void setSemesterNr(int number) throws UncheckedTodayException {
         this.semesterNr = number;
-        this.semesterDataAccess.setNumber(this, number);
+        semesterDataAccess.setNumber(this, number);
     }
 
     private void initCourses() {
-        this.courses = this.semesterDataAccess.getCourses(this);
+        this.courses = semesterDataAccess.getCourses(this);
     }
 
     /**
@@ -63,15 +63,15 @@ public class Semester implements Identifiable {
     }
 
     public void addCourse(Course course) throws UncheckedTodayException {
-        this.semesterDataAccess.addCourse(this, course);
+        semesterDataAccess.addCourse(this, course);
         if (this.courses == null)
             this.initCourses();
         else this.courses.add(course);
     }
 
     public void removeCourse(Course course) throws UncheckedTodayException {
-        this.rootDataAccess.removeEntityInstance(course);
-        if (this.courses!=null)
+        rootDataAccess.removeEntityInstance(course);
+        if (this.courses != null)
             this.courses.remove(course);
     }
 

@@ -8,6 +8,10 @@ import com.mobila.project.today.model.Task;
 import java.util.List;
 
 public interface RootDataAccess {
+    static RootDataAccess getInstance() {
+        return RootDataAccessImpl.getInstance();
+    }
+
     void open();
 
     void close();

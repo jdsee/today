@@ -28,24 +28,32 @@ class SemesterDataAccessImpl implements SemesterDataAccess {
     private SQLiteDatabase database;
     private SQLiteOpenHelper dbHelper;
 
-    private SemesterDataAccessImpl(Context context) {
+    private SemesterDataAccessImpl() {
         this(
                 new IdentityMapper<>(),
                 null
         );
-        this.dbHelper = new DBHelper(context, CourseTable.TABLE_NAME);
-        //TODO How to access more tables than one??? do we need another SQLiteDatabase object?
+        this.dbHelper = new DBHelper(null);
     }
 
+    //TODO decide when to open the db connection
+
+    /**
+     * Supposed for TESTING REASONS ONLY.
+     * Do not use this constructor for normal instantiating,
+     * it is only supposed to be used for dependency injection -> mockInjection
+     *
+     * @param courseCache the IdentityMapper dependency
+     * @param database    the SQLiteDatabase dependency
+     */
     SemesterDataAccessImpl(IdentityMapper<Course> courseCache, SQLiteDatabase database) {
         this.courseCache = courseCache;
         this.database = database;
     }
 
-    public static final SemesterDataAccess getInstance(Context context) {
-        //TODO how to react to the context here? -> DependencyInjection?
+    public static SemesterDataAccess getInstance() {
         if (instance == null)
-            instance = new SemesterDataAccessImpl(context);
+            instance = new SemesterDataAccessImpl();
         return instance;
     }
 

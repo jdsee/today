@@ -9,16 +9,16 @@ import androidx.annotation.Nullable;
 public class DBHelper extends SQLiteOpenHelper {
     public static final String DB_FILE_NAME = "today.db";
     public static final int DB_VERSION = 1;
-    private final String table;
 
-    public DBHelper(@Nullable Context context, String table) {
+    public DBHelper(@Nullable Context context) {
         super(context, DB_FILE_NAME, null, DB_VERSION);
-        this.table = table;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(this.table);
+        db.execSQL(SemesterTable.SQL_CREATE);
+        db.execSQL(CourseTable.SQL_CREATE);
+        //TODO create dbs
     }
 
     @Override
