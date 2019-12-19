@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="4dp"
-    tools:context=".presenter.activities.courseContentView.CourseContentActivity">
+    tools:context=".activities.courseContentView.CourseContentActivity">
 
     <RelativeLayout
         android:id="@+id/relativeLayout"

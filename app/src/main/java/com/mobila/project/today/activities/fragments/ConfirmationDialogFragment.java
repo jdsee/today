@@ -1,4 +1,4 @@
-package com.mobila.project.today.presenter.fragments;
+package com.mobila.project.today.activities.fragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
