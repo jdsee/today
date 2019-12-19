@@ -23,7 +23,7 @@ public class SemesterDataSource {
 
     public SemesterDataSource(Context context) {
         this.context = context;
-        this.dbHelper = new DBHelper(context);
+        this.dbHelper = new DBHelper(context, SemesterTable.TABLE_NAME);
         this.database = this.dbHelper.getWritableDatabase();
     }
 

@@ -1,6 +1,7 @@
 package com.mobila.project.today.model.dataProviding.dataAccess;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -10,6 +11,7 @@ import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
 import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Identifiable;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.CourseTable;
+import com.mobila.project.today.model.dataProviding.dataAccess.databank.DBHelper;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.SemesterTable;
 
 import java.util.LinkedList;
@@ -26,11 +28,13 @@ class SemesterDataAccessImpl implements SemesterDataAccess {
     private SQLiteDatabase database;
     private SQLiteOpenHelper dbHelper;
 
-    private SemesterDataAccessImpl() {
+    private SemesterDataAccessImpl(Context context) {
         this(
                 new IdentityMapper<>(),
                 null
         );
+        this.dbHelper = new DBHelper(context, CourseTable.TABLE_NAME);
+        //TODO How to access more tables than one??? do we need another SQLiteDatabase object?
     }
 
     SemesterDataAccessImpl(IdentityMapper<Course> courseCache, SQLiteDatabase database) {
@@ -38,9 +42,10 @@ class SemesterDataAccessImpl implements SemesterDataAccess {
         this.database = database;
     }
 
-    public static final SemesterDataAccess getInstance() {
+    public static final SemesterDataAccess getInstance(Context context) {
+        //TODO how to react to the context here? -> DependencyInjection?
         if (instance == null)
-            instance = new SemesterDataAccessImpl();
+            instance = new SemesterDataAccessImpl(context);
         return instance;
     }
 

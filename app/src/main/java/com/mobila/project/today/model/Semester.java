@@ -9,6 +9,7 @@ import com.mobila.project.today.model.dataProviding.dataAccess.SemesterDataAcces
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.SemesterTable;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -84,5 +85,22 @@ public class Semester implements Identifiable {
         values.put(SemesterTable.COLUMN_ID, this.ID);
         values.put(SemesterTable.COLUMN_NR, this.semesterNr);
         return values;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Semester semester = (Semester) o;
+        return semesterNr == semester.semesterNr &&
+                Objects.equals(rootDataAccess, semester.rootDataAccess) &&
+                Objects.equals(semesterDataAccess, semester.semesterDataAccess) &&
+                ID.equals(semester.ID) &&
+                Objects.equals(courses, semester.courses);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(rootDataAccess, semesterDataAccess, ID, semesterNr, courses);
     }
 }

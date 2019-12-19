@@ -15,6 +15,7 @@ import com.mobila.project.today.model.dataProviding.dataAccess.databank.DBHelper
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.SemesterTable;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 class RootDataAccessImpl implements RootDataAccess {
@@ -25,11 +26,14 @@ class RootDataAccessImpl implements RootDataAccess {
     private SQLiteOpenHelper dbHelper;
     private List<Semester> semesters;
 
-    private RootDataAccessImpl(Context context) {
+    public RootDataAccessImpl(Context context) {
+        this(context, null);
+    }
+
+    RootDataAccessImpl(Context context, SQLiteDatabase database) {
         this.context = context;
-        this.dbHelper = new DBHelper(context);
-        this.database = this.dbHelper.getWritableDatabase();
-        this.semesters = new ArrayList<>();
+        this.database = database;
+        this.semesters = null;
     }
 
     @Override
@@ -48,24 +52,32 @@ class RootDataAccessImpl implements RootDataAccess {
 
     @Override
     public List<Semester> getAllSemesters() {
+        if (this.semesters == null)
+            this.semesters = this.getAllSemestersFromDB();
+        return this.semesters;
+    }
+
+    private List<Semester> getAllSemestersFromDB() {
         Cursor cursor = this.database.query(SemesterTable.TABLE_NAME, SemesterTable.ALL_COLUMNS,
                 null, null, null, null, SemesterTable.COLUMN_NR);
+        List<Semester> semesters = new LinkedList<>();
         while (cursor.moveToNext()) {
             Semester semester = new Semester(
                     cursor.getString(cursor.getColumnIndex(SemesterTable.COLUMN_ID)),
                     cursor.getInt(cursor.getColumnIndex(SemesterTable.COLUMN_NR))
             );
-            this.semesters.add(semester);
+            semesters.add(semester);
         }
         cursor.close();
-        return this.semesters;
+        return semesters;
     }
 
     @Override
     public void addSemester(Semester semester) {
         ContentValues values = semester.toValues();
         this.database.insert(SemesterTable.TABLE_NAME, null, values);
-        this.semesters.add(semester);
+        if (this.semesters != null)
+            this.semesters.add(semester);
     }
 
     @Override

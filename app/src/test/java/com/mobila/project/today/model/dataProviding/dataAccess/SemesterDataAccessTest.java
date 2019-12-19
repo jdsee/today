@@ -59,7 +59,7 @@ public class SemesterDataAccessTest {
 
 
     private void setValueToCourseCache() {
-        Mockito.when(this.courseCacheMock.get(any(Semester.class))).thenReturn(this.courseMocks);
+        Mockito.when(this.courseCacheMock.get(semesterMock)).thenReturn(this.courseMocks);
     }
 
     private void setCourseCacheEmpty() {

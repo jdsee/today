@@ -38,18 +38,23 @@ public class MockSQLiteDatabase {
      */
     public MockSQLiteDatabase setTableEmpty() {
         this.cursorMoveToNext = false;
-        this.setupCursor();
+        this.setupDefaultCursor();
+        return this;
+    }
+
+    public MockSQLiteDatabase setMockedCursor(Cursor mockedCursor) {
+        this.mockedCursor = mockedCursor;
         return this;
     }
 
     private void setupMock() {
-        this.setupCursor();
+        this.setupDefaultCursor();
         this.setupQuery();
         this.setupInsert();
         //this.setupRemove();
     }
 
-    private void setupCursor() {
+    private void setupDefaultCursor() {
         Mockito.when(this.mockedCursor.moveToNext()).thenAnswer(answer -> {
             this.cursorMoveToNext = !this.cursorMoveToNext;
             return !this.cursorMoveToNext;
@@ -75,6 +80,7 @@ public class MockSQLiteDatabase {
                 any(ContentValues.class)
         )).thenReturn(0L);
     }
+
 
     /*private void setupRemove() {
         Mockito.when(this.mockedDatabase.delete(
