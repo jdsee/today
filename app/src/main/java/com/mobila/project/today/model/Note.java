@@ -8,6 +8,7 @@ import com.mobila.project.today.model.dataProviding.dataAccess.NoteDataAccess;
 import com.mobila.project.today.model.dataProviding.dataAccess.RootDataAccess;
 
 import java.util.List;
+import java.util.UUID;
 
 public class Note implements Identifiable {
     public static final String INTENT_EXTRA_CODE = "EXTRA_NOTE";
@@ -26,6 +27,13 @@ public class Note implements Identifiable {
         OrganizerDataProvider dataProvider = OrganizerDataProvider.getInstance();
         this.rootDataAccess = dataProvider.getRootDataAccess();
         this.noteDataAccess = dataProvider.getNoteDataAccess();
+    }
+
+    public Note(String title) {
+        this(
+                UUID.randomUUID().toString(),
+                title
+        );
     }
 
     /**
