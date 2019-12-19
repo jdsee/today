@@ -4,11 +4,12 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
 public class ConfirmationDialogFragment extends DialogFragment {
 
-    public static String DIALOG_MESSAGE = "EXTRA_DIALOG-MESSAGE";
+    public static String DIALOG_MESSAGE = "EXTRA_DIALOG_MESSAGE";
     public static String DIALOG_CONFIRMING = "EXTRA_DIALOG_CONFIRMATION";
     public static String DIALOG_DECLINING = "EXTRA_DIALOG_DECLINING";
 
@@ -16,9 +17,10 @@ public class ConfirmationDialogFragment extends DialogFragment {
 
     public ConfirmationDialogFragment(){}
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
-        Bundle bundle = getArguments();
+        Bundle bundle = this.getArguments();
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(bundle.getString(DIALOG_MESSAGE));
         builder.setPositiveButton(bundle.getString(DIALOG_CONFIRMING),

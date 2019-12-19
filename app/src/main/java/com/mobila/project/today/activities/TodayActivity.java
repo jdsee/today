@@ -208,10 +208,12 @@ public class TodayActivity extends AppCompatActivity
     public void addCourse(View view) {
         AddCourseDialogFragment addCourseDialog = new AddCourseDialogFragment();
         Bundle bundle = new Bundle();
+
         bundle.putString(AddCourseDialogFragment.DIALOG_MESSAGE,
                 "Enter the name of the Course:");
         bundle.putString(AddCourseDialogFragment.DIALOG_CONFIRMING, "add");
         bundle.putString(AddCourseDialogFragment.DIALOG_DECLINING, "cancel");
+
         addCourseDialog.setArguments(bundle);
         addCourseDialog.setOnEnterListener(this);
         addCourseDialog.show(getSupportFragmentManager(), "Add Course Dialog");

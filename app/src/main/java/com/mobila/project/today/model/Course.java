@@ -9,6 +9,7 @@ import com.mobila.project.today.model.dataProviding.dataAccess.CourseDataAccess;
 import com.mobila.project.today.model.dataProviding.dataAccess.RootDataAccess;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Allows access to all data contained in the "Course"-entity.
@@ -25,6 +26,24 @@ public class Course implements Identifiable, Parcelable {
     private String title;
     private List<Task> tasks;
     private List<Section> sections;
+
+    public Course(String ID, String title) {
+        this.ID = ID;
+        this.title = title;
+        this.tasks = null;
+        this.sections = null;
+
+        OrganizerDataProvider dataProvider = OrganizerDataProvider.getInstance();
+        this.rootDataAccess = dataProvider.getRootDataAccess();
+        this.dataAccess = dataProvider.getCourseDataAccess();
+    }
+
+    public Course(String title) {
+        this(
+                UUID.randomUUID().toString(),
+                title
+        );
+    }
 
     public static final Creator<Course> CREATOR = new Creator<Course>() {
         @Override
@@ -56,16 +75,6 @@ public class Course implements Identifiable, Parcelable {
         dest.writeString(this.title);
     }
 
-    public Course(String ID, String title) {
-        this.ID = ID;
-        this.title = title;
-        this.tasks = null;
-        this.sections = null;
-
-        OrganizerDataProvider dataProvider = OrganizerDataProvider.getInstance();
-        this.rootDataAccess = dataProvider.getRootDataAccess();
-        this.dataAccess = dataProvider.getCourseDataAccess();
-    }
 
     /**
      * Returns the semester containing this course.
