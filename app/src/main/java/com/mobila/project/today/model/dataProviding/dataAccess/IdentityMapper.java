@@ -26,6 +26,32 @@ class IdentityMapper<T extends Identifiable> {
         this.map.put(id, values);
     }
 
+    /**
+     * Adds the specified course to the corresponding entry if it exists.
+     * Nothing happens if there is no entry assigned to the specified key.
+     * <p>
+     * Nothing happens if the element already exists in the entry related to the specified key.
+     * <p>
+     * Note that no entry will be created if there was'nt one existing before calling this method.
+     * In this case, call the add()-method and pass a list containing the specified element if
+     * you want to create an entry for it.
+     *
+     * @param key     the key related to element
+     * @param element the element that is to be added
+     */
+    public void addElement(Identifiable key, T element) {
+        List<T> elements = this.map.get(key);
+        if (elements != null && !elements.contains(element))
+            elements.add(element);
+    }
+
+    /**
+     * Overwrites the entry related to the specified key with the the specified values.
+     * Nothing happens if no entry exists for the specified key.
+     *
+     * @param key    the key related to the values
+     * @param values the values to be added
+     */
     public void overwrite(@NonNull Identifiable key, @NonNull List<T> values) {
         Objects.requireNonNull(key);
         Objects.requireNonNull(values);
@@ -40,5 +66,18 @@ class IdentityMapper<T extends Identifiable> {
      */
     public void remove(Identifiable key) {
         this.map.remove(key.getID());
+    }
+
+    /**
+     * Removes the specified element in the corresponding entry if it exists.
+     * Nothing happens if there is no entry assigned to the specified key.
+     *
+     * @param key     the key related to element
+     * @param element the element that is to be removed
+     */
+    public void removeElement(Identifiable key, T element) {
+        List<T> elements = this.map.get(key);
+        if (elements != null)
+            elements.remove(element);
     }
 }
