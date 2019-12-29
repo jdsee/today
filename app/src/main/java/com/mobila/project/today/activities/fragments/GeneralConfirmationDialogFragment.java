@@ -17,31 +17,44 @@ public class GeneralConfirmationDialogFragment extends DialogFragment {
 
     private OnConfirmationListener callback;
 
-    public GeneralConfirmationDialogFragment() {
-    }
+    /**
+     * Default Constructor for compiler
+     */
+    public GeneralConfirmationDialogFragment() { }
 
+    /**
+     * Method that gets initialized if the fragment gets created
+     * @param savedInstanceState a bundle containing saved information
+     * @return a dialog ready to be shown
+     */
     @NonNull
     @Override
     public final Dialog onCreateDialog(Bundle savedInstanceState) {
         Bundle entryBundle = this.getArguments();
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        builder = this.addInitialMessageToBuilder(entryBundle, builder);
-
-        builder = this.getOptionalDialogAddendum(entryBundle, builder);
-
-        builder = this.addButtonsToBuilder(entryBundle, builder);
+        this.addMessageToBuilder(entryBundle, builder);
+        this.getOptionalDialogAddendum(entryBundle, builder);
+        this.addButtonsToBuilder(entryBundle, builder);
 
         return builder.create();
     }
 
-    private AlertDialog.Builder addInitialMessageToBuilder(Bundle bundle, AlertDialog.Builder builder) {
+    /**
+     * Adding a message to the dialog is done here
+     * @param bundle the bundle containing the message
+     * @param builder the builder of the dialog
+     */
+    private void addMessageToBuilder(Bundle bundle, AlertDialog.Builder builder) {
         builder.setMessage(bundle.getString(DIALOG_MESSAGE_EXTRA));
-        return builder;
     }
 
-    AlertDialog.Builder getOptionalDialogAddendum(Bundle bundle, AlertDialog.Builder builder) {
-        return builder;
+    /**
+     * Method intended to be overwritten in case additional information has to be displayed
+     * @param bundle
+     * @param builder
+     */
+    void getOptionalDialogAddendum(Bundle bundle, AlertDialog.Builder builder) {
     }
 
     @NonNull
@@ -49,20 +62,19 @@ public class GeneralConfirmationDialogFragment extends DialogFragment {
         return new Bundle();
     }
 
-    private AlertDialog.Builder addButtonsToBuilder(Bundle entryBundle, AlertDialog.Builder builder) {
+    private void addButtonsToBuilder(Bundle entryBundle, AlertDialog.Builder builder) {
         Bundle resultBundle = this.getConfirmationResultBundle();
 
         builder.setPositiveButton(entryBundle.getString(DIALOG_CONFIRMING_EXTRA),
                 (dialog, which) -> {
                     resultBundle.putBoolean(RESPONSE_CONFIRMED_EXTRA, true);
-                    callback.onConfirmation(resultBundle);
+                    this.callback.onConfirmation(resultBundle);
                 });
         builder.setNegativeButton(entryBundle.getString(DIALOG_DECLINING_EXTRA),
                 (dialog, which) -> {
                     resultBundle.putBoolean(RESPONSE_CONFIRMED_EXTRA, false);
-                    callback.onConfirmation(resultBundle);
+                    this.callback.onConfirmation(resultBundle);
                 });
-        return builder;
     }
 
     public void setOnConfirmationListener(OnConfirmationListener callback) {
