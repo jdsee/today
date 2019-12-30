@@ -23,4 +23,8 @@ public interface CourseDataAccess {
     String getTitle(Identifiable course) throws DataKeyNotFoundException;
 
     void setTitle(Identifiable course, String title) throws DataKeyNotFoundException;
+
+    void removeSection(Identifiable section);
+
+    void removeTask(Identifiable task);
 }

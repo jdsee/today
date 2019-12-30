@@ -1,21 +1,18 @@
 package com.mobila.project.today.model.dataProviding.dataAccess;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.mobila.project.today.model.Identifiable;
 import com.mobila.project.today.model.Semester;
 import com.mobila.project.today.model.Task;
-import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
-import com.mobila.project.today.model.dataProviding.SampleDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.DBHelper;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.SemesterTable;
+import com.mobila.project.today.model.dataProviding.dataAccess.databank.TaskTable;
 
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -59,11 +56,11 @@ class RootDataAccessImpl implements RootDataAccess {
 
     @Override
     public List<Semester> getAllSemesters() {
-        return SampleDataProvider.getExampleSemesters();
-        /*if (this.semesters == null) {
+        //return SampleDataProvider.getExampleSemesters();
+        if (this.semesters == null) {
             this.semesters = this.getAllSemestersFromDB();
         }
-        return this.semesters;*/
+        return this.semesters;
     }
 
     private List<Semester> getAllSemestersFromDB() {
@@ -91,11 +88,20 @@ class RootDataAccessImpl implements RootDataAccess {
 
     @Override
     public List<Task> getAllTasks() {
-        return null;
-    }
+        Cursor cursor = this.database.query(TaskTable.TABLE_NAME, TaskTable.ALL_COLUMNS, null,
+                null, null, null, TaskTable.COLUMN_RELATED_TO);
+        List<Task> tasks = new LinkedList<>();
+        while (cursor.moveToNext()) {
+            Task task = new Task(
+                    cursor.getString(cursor.getColumnIndex(TaskTable.COLUMN_ID)),
+                    cursor.getString(cursor.getColumnIndex(TaskTable.COLUMN_CONTENT)),
+                    new Date(cursor.getInt(cursor.getColumnIndex(TaskTable.COLUMN_DEADLINE)))
+            );
+        }
 
-    @Override
-    public void removeEntityInstance(Identifiable instance) throws DataKeyNotFoundException {
+        // for now the tasks won't be cached in an IdentityMapper
+        // one solution to make that possible could be an added getCourse() method in Task
 
+        return tasks;
     }
 }

@@ -95,7 +95,7 @@ public class Lecture implements Identifiable, Parcelable {
     }
 
     public void removeAttachment(Identifiable attachment) throws DataKeyNotFoundException {
-        this.rootDataAccess.removeEntityInstance(attachment);
+        this.dataAccess.removeAttachment(attachment);
     }
 
     public int getLectureNr() throws DataKeyNotFoundException {

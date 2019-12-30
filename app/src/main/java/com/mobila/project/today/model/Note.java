@@ -70,8 +70,8 @@ public class Note implements Identifiable {
         this.noteDataAccess.addReference(this, ref, row);
     }
 
-    public void removeReference(Identifiable ref) throws DataKeyNotFoundException {
-        this.rootDataAccess.removeEntityInstance(ref);
+    public void removeReference(Identifiable reference) throws DataKeyNotFoundException {
+        this.noteDataAccess.removeReference(reference);
     }
     @Override
     public String getID() {

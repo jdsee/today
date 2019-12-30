@@ -78,7 +78,7 @@ public class Section implements Identifiable {
 
 
     public void removeLecture(Identifiable lecture) throws DataKeyNotFoundException {
-        this.rootDataAccess.removeEntityInstance(lecture);
+        this.dataAccess.removeLecture(lecture);
         if (this.lectures != null)
             this.lectures.remove(lecture);
     }

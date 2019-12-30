@@ -18,6 +18,9 @@ public class Task implements Identifiable, Parcelable {
     private String content;
     private Date deadline;
 
+    //TODO considering a relatedTo-Member for easy access to the parent course
+    // -> useful in rootDataAccess
+
     public Task(String id, String content, Date deadline, TaskDataAccess dataAccess) {
         this.ID = id;
         this.content = content;

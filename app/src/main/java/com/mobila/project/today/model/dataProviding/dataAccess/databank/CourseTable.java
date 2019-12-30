@@ -8,7 +8,7 @@ public class CourseTable {
 
     public static final String SQL_CREATE =
             "CREATE TABLE " + TABLE_NAME + "(" +
-                    COLUMN_ID + " STRING PRIMARY KEY," +
+                    COLUMN_ID + " VARCHAR PRIMARY KEY," +
                     COLUMN_TITLE + " VARCHAR);";
     public static final String SQL_DELETE =
             "DROP TABLE " + TABLE_NAME;

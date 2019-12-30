@@ -24,4 +24,6 @@ public interface NoteDataAccess {
     List<NoteReference> getReferences(Identifiable note) throws DataKeyNotFoundException;
 
     void addReference(Identifiable note, Identifiable reference, int row) throws DataKeyNotFoundException;
+
+    void removeReference(Identifiable reference);
 }

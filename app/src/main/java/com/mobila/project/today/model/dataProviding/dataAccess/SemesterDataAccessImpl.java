@@ -126,20 +126,24 @@ class SemesterDataAccessImpl implements SemesterDataAccess {
      * @throws DataKeyNotFoundException if the key associated to the specified semester is not existent in db
      */
     @Override
+    //TODO probably DataKeyNotFoundException makes no sense here
+    //-> id of semester is not approved within this call
     public void addCourse(Identifiable semester, Course course) throws DataKeyNotFoundException {
         this.courseCache.addElement(semester, course);
-        this.addCourseToDB(course);
+        this.addCourseToDB(semester, course);
     }
 
     /**
      * Accesses database to add the specified course to the course table.
      *
-     * @param course the course that is to be added
+     * @param semester the semester corresponding to the specified course
+     * @param course   the course that is to be added
      */
-    private void addCourseToDB(Course course) {
+    private void addCourseToDB(Identifiable semester, Course course) {
         ContentValues values = new ContentValues();
         values.put(CourseTable.COLUMN_ID, course.getID());
         values.put(CourseTable.COLUMN_TITLE, course.getTitle());
+        values.put(CourseTable.COLUMN_RELATED_TO, semester.getID());
         this.database.insert(CourseTable.TABLE_NAME, null, values);
     }
 

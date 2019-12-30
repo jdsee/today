@@ -1,5 +1,6 @@
 package com.mobila.project.today.model.dataProviding.dataAccess;
 
+import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
 import com.mobila.project.today.model.Identifiable;
 import com.mobila.project.today.model.Semester;
@@ -21,6 +22,4 @@ public interface RootDataAccess {
     void addSemester(Semester semester);
 
     List<Task> getAllTasks();
-
-    void removeEntityInstance(Identifiable instance) throws DataKeyNotFoundException;
 }

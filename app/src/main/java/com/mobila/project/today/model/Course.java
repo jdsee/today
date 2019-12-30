@@ -136,7 +136,7 @@ public class Course implements Identifiable, Parcelable {
     public void removeSection(Identifiable section) throws DataKeyNotFoundException {
         this.checkSectionsNotNull();
         this.sections.remove(section);
-        this.rootDataAccess.removeEntityInstance(section);
+        this.dataAccess.removeSection(section);
     }
 
 
@@ -171,7 +171,7 @@ public class Course implements Identifiable, Parcelable {
     public void removeTask(Identifiable task) throws DataKeyNotFoundException {
         this.checkTasksNotNull();
         this.tasks.remove(task);
-        this.rootDataAccess.removeEntityInstance(task);
+        this.dataAccess.removeTask(task);
     }
 
     @Override

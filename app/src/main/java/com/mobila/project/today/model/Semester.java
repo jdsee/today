@@ -70,7 +70,7 @@ public class Semester implements Identifiable {
     }
 
     public void removeCourse(Course course) throws UncheckedTodayException {
-        rootDataAccess.removeEntityInstance(course);
+        this.semesterDataAccess.removeCourse(this, course);
         if (this.courses != null)
             this.courses.remove(course);
     }

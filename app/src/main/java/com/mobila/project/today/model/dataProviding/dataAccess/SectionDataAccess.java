@@ -21,4 +21,6 @@ public interface SectionDataAccess {
     String getLecturer(Identifiable lecture) throws DataKeyNotFoundException;
 
     void setLecturer(Identifiable lecture, String lecturer) throws DataKeyNotFoundException;
+
+    void removeLecture(Identifiable lecture);
 }
