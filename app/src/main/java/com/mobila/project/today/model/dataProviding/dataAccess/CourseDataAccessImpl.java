@@ -161,12 +161,7 @@ class CourseDataAccessImpl implements CourseDataAccess {
         this.database.insert(TaskTable.TABLE_NAME, null, values);
         Log.d(TAG, "Inserted task(id:" + task.getID() + ") to database");
     }
-
-    @Override
-    public String getTitle(Identifiable course) throws DataKeyNotFoundException {
-        return null;
-    }
-
+    
     @Override
     public void setTitle(Identifiable course, String title) throws DataKeyNotFoundException {
         ContentValues values = new ContentValues();
@@ -176,12 +171,18 @@ class CourseDataAccessImpl implements CourseDataAccess {
     }
 
     @Override
-    public void removeSection(Identifiable section) {
-
+    public void removeSection(Identifiable course, Section section) {
+        this.database.delete(SectionTable.TABLE_NAME,
+                "WHERE " + SectionTable.COLUMN_ID +
+                        "=?s", new String[]{section.getID()});
+        this.sectionCache.removeElement(course, section);
     }
 
     @Override
-    public void removeTask(Identifiable task) {
-
+    public void removeTask(Identifiable course, Task task) {
+        this.database.delete(TaskTable.TABLE_NAME,
+                "WHERE " + TaskTable.COLUMN_ID +
+                        "=?s", new String[]{task.getID()});
+        this.taskCache.removeElement(course, task);
     }
 }

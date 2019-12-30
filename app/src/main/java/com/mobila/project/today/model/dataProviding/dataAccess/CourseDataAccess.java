@@ -10,6 +10,10 @@ import java.util.List;
 
 public interface CourseDataAccess {
 
+    static CourseDataAccess getInstance() {
+        return CourseDataAccessImpl.getInstance();
+    }
+
     Semester getSemester(Identifiable course) throws DataKeyNotFoundException;
 
     List<Section> getSections(Identifiable course) throws DataKeyNotFoundException;
@@ -20,11 +24,9 @@ public interface CourseDataAccess {
 
     void addTask(Identifiable course, Task task) throws DataKeyNotFoundException;
 
-    String getTitle(Identifiable course) throws DataKeyNotFoundException;
-
     void setTitle(Identifiable course, String title) throws DataKeyNotFoundException;
 
-    void removeSection(Identifiable section);
+    void removeSection(Identifiable course, Section section);
 
-    void removeTask(Identifiable task);
+    void removeTask(Identifiable course, Task task);
 }

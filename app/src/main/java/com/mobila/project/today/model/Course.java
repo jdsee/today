@@ -133,10 +133,10 @@ public class Course implements Identifiable, Parcelable {
     /**
      * Removes a section of this course.
      */
-    public void removeSection(Identifiable section) throws DataKeyNotFoundException {
+    public void removeSection(Section section) throws DataKeyNotFoundException {
         this.checkSectionsNotNull();
         this.sections.remove(section);
-        this.dataAccess.removeSection(section);
+        this.dataAccess.removeSection(this, section);
     }
 
 
@@ -168,10 +168,10 @@ public class Course implements Identifiable, Parcelable {
     /**
      * Removes a task contained in this course.
      */
-    public void removeTask(Identifiable task) throws DataKeyNotFoundException {
+    public void removeTask(Task task) throws DataKeyNotFoundException {
         this.checkTasksNotNull();
         this.tasks.remove(task);
-        this.dataAccess.removeTask(task);
+        this.dataAccess.removeTask(this, task);
     }
 
     @Override

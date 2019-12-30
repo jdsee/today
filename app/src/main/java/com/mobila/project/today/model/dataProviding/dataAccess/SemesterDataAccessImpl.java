@@ -51,11 +51,11 @@ class SemesterDataAccessImpl implements SemesterDataAccess {
         this.database = database;
     }
 
-    public static SemesterDataAccess getInstance() {
-        if (instance == null)
-            instance = new SemesterDataAccessImpl();
-        return instance;
-    }
+        public static SemesterDataAccess getInstance() {
+            if (instance == null)
+                instance = new SemesterDataAccessImpl();
+            return instance;
+        }
 
     @Override
     public void open() {
@@ -158,9 +158,9 @@ class SemesterDataAccessImpl implements SemesterDataAccess {
      */
     @Override
     public void removeCourse(Identifiable semester, Course course) {
-        this.courseCache.removeElement(semester, course);
         this.database.delete(CourseTable.TABLE_NAME,
                 "WHERE " + CourseTable.COLUMN_ID + "=?s", new String[]{course.getID()});
+        this.courseCache.removeElement(semester, course);
     }
 
     /**
