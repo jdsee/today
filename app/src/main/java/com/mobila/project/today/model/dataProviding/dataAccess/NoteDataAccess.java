@@ -11,10 +11,6 @@ import java.util.List;
 
 public interface NoteDataAccess {
 
-    Lecture getLecture(Identifiable note) throws DataKeyNotFoundException;
-
-    String getTitle(Identifiable note) throws DataKeyNotFoundException;
-
     void setTitle(Identifiable note, String title) throws DataKeyNotFoundException;
 
     Spannable getContent(Identifiable note) throws DataKeyNotFoundException;

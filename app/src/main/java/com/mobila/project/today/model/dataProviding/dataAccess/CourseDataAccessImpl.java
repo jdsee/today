@@ -30,7 +30,7 @@ class CourseDataAccessImpl implements CourseDataAccess {
     private SQLiteDatabase database;
     private final DBHelper dbHelper;
 
-    public CourseDataAccessImpl() {
+    private CourseDataAccessImpl() {
         this.dbHelper = new DBHelper(null);
         this.sectionCache = new IdentityMapper<>();
         this.taskCache = new IdentityMapper<>();
@@ -70,7 +70,7 @@ class CourseDataAccessImpl implements CourseDataAccess {
     private List<Section> getSectionsFromDB(Identifiable course) {
         Log.d(TAG, "requesting from database: sections related to course(id:" + course.getID() + ")");
         Cursor cursor = this.database.query(SectionTable.TABLE_NAME, SectionTable.ALL_COLUMNS,
-                "WHERE " + SectionTable.COLUMN_RELATED_TO + "=?s", new String[]{course.getID()},
+                SectionTable.COLUMN_RELATED_TO + "=?s", new String[]{course.getID()},
                 null, null, null);
         if (!cursor.moveToNext()) {
             DataKeyNotFoundException t = new DataKeyNotFoundException(DataKeyNotFoundException.NO_ENTRY_MSG);
@@ -125,7 +125,7 @@ class CourseDataAccessImpl implements CourseDataAccess {
     private List<Task> getTasksFromDB(Identifiable course) {
         Log.d(TAG, "requesting from database: tasks related to course(id:" + course.getID() + ")");
         Cursor cursor = this.database.query(TaskTable.TABLE_NAME, TaskTable.ALL_COLUMNS,
-                "WHERE " + TaskTable.COLUMN_RELATED_TO + "=?s", new String[]{course.getID()},
+                TaskTable.COLUMN_RELATED_TO + "=?s", new String[]{course.getID()},
                 null, null, null);
         if (!cursor.moveToNext()) {
             DataKeyNotFoundException t = new DataKeyNotFoundException(DataKeyNotFoundException.NO_ENTRY_MSG);
@@ -161,7 +161,7 @@ class CourseDataAccessImpl implements CourseDataAccess {
         this.database.insert(TaskTable.TABLE_NAME, null, values);
         Log.d(TAG, "Inserted task(id:" + task.getID() + ") to database");
     }
-    
+
     @Override
     public void setTitle(Identifiable course, String title) throws DataKeyNotFoundException {
         ContentValues values = new ContentValues();

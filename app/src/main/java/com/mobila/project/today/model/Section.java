@@ -38,7 +38,8 @@ public class Section implements Identifiable {
      * @return the course containing this section
      */
     public Course getCourse() throws DataKeyNotFoundException {
-        return this.dataAccess.getCourse(this);
+        //TODO this method is probably useless
+     return null;
     }
 
     /**
@@ -77,8 +78,8 @@ public class Section implements Identifiable {
     }
 
 
-    public void removeLecture(Identifiable lecture) throws DataKeyNotFoundException {
-        this.dataAccess.removeLecture(lecture);
+    public void removeLecture(Lecture lecture) throws DataKeyNotFoundException {
+        this.dataAccess.removeLecture(this, lecture);
         if (this.lectures != null)
             this.lectures.remove(lecture);
     }

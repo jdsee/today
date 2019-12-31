@@ -66,12 +66,11 @@ public class Task implements Identifiable, Parcelable {
      * @return the course containing this task
      */
     public Course getCourse() throws DataKeyNotFoundException {
-        return this.dataAccess.getCourse(this);
+        //TODO add attribute to class and add the corresponding parameter in constructor
+        return null;
     }
 
     public Date getDeadline() {
-        if (this.deadline == null)
-            this.deadline = this.dataAccess.getDeadline(this);
         return this.deadline;
     }
 
@@ -81,9 +80,6 @@ public class Task implements Identifiable, Parcelable {
     }
 
     public String getContent() {
-        //TODO: should the db be accessed here in any situation? constructor with content ensures actuallity -> set will update any changes to member
-        if (this.content == null)
-            this.content = this.dataAccess.getContent(this);
         return this.content;
     }
 

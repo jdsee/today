@@ -97,6 +97,7 @@ class RootDataAccessImpl implements RootDataAccess {
                     cursor.getString(cursor.getColumnIndex(TaskTable.COLUMN_CONTENT)),
                     new Date(cursor.getInt(cursor.getColumnIndex(TaskTable.COLUMN_DEADLINE)))
             );
+            tasks.add(task);
         }
 
         // for now the tasks won't be cached in an IdentityMapper

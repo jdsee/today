@@ -40,6 +40,7 @@ public class Course implements Identifiable, Parcelable {
 
     public Course(String title) {
         this(
+                //TODO hide UUID behind interface
                 UUID.randomUUID().toString(),
                 title
         );

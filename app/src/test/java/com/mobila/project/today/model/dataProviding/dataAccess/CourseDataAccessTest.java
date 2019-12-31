@@ -1,10 +1,8 @@
-package today.test;
+package com.mobila.project.today.model.dataProviding.dataAccess;
 
 import android.database.sqlite.SQLiteDatabase;
 
 import com.mobila.project.today.model.Course;
-import com.mobila.project.today.model.dataProviding.dataAccess.CourseDataAccess;
-import com.mobila.project.today.model.dataProviding.dataAccess.MockSQLiteDatabase;
 
 import org.junit.Before;
 import org.junit.Test;

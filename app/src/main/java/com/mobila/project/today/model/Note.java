@@ -42,7 +42,8 @@ public class Note implements Identifiable {
      * @return the lecture containing this attachment
      */
     public Lecture getLecture() throws DataKeyNotFoundException {
-        return this.noteDataAccess.getLecture(this);
+        //TODO return lecture or remove method
+        return null;
     }
 
     public String getTitle() {

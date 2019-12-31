@@ -22,25 +22,21 @@ public class Lecture implements Identifiable, Parcelable {
     private Date date;
     private String roomNr;
 
-    public Lecture(String ID, int lectureNr) {
-        this.ID = ID;
+    public Lecture(String id, int lectureNr, Date date, String roomNr) {
+        this.ID = id;
         this.lectureNr = lectureNr;
 
         OrganizerDataProvider dataProvider = OrganizerDataProvider.getInstance();
         this.rootDataAccess = dataProvider.getRootDataAccess();
         this.dataAccess = dataProvider.getLectureDataAccess();
-    }
-
-    public Lecture(String id, int lectureNr, Date date, String roomNr) {
-        this(id, lectureNr);
         this.date = date;
         this.roomNr = roomNr;
     }
 
-    public Lecture() {
+    public Lecture(int lectureNr, Date date, String roomNr) {
         this(
                 UUID.randomUUID().toString(),
-                0
+                lectureNr, date, roomNr
         );
     }
 
@@ -56,7 +52,7 @@ public class Lecture implements Identifiable, Parcelable {
         }
     };
 
-    public Lecture(Parcel in) {
+    private Lecture(Parcel in) {
         this(in.readString(), in.readInt(), new Date(in.readLong()), in.readString());
     }
 
