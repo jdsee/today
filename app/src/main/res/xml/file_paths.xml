@@ -2,5 +2,5 @@
 <paths>
     <external-path
         name="my_images"
-        path="Android/data/com.mobila.project.today/files/Pictures" />
+        path="Android/data/today/files/Pictures" />
 </paths>

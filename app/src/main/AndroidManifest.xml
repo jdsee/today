@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.mobila.project.today">
+    package="today">
 
     <uses-feature
         android:name="android.hardware.camera2"
@@ -87,7 +87,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.mobila.project.today.fileprovider"
+            android:authorities="today.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

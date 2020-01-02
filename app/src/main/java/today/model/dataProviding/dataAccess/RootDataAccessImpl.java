@@ -1,0 +1,107 @@
+package today.model.dataProviding.dataAccess;
+
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.DatabaseUtils;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
+import today.model.Semester;
+import today.model.Task;
+import today.model.dataProviding.dataAccess.databank.DBHelper;
+import today.model.dataProviding.dataAccess.databank.SemesterTable;
+import today.model.dataProviding.dataAccess.databank.TaskTable;
+
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+
+class RootDataAccessImpl implements RootDataAccess {
+    public static RootDataAccess instance;
+    public static final String TAG = RootDataAccessImpl.class.getName();
+
+    private SQLiteDatabase database;
+    private SQLiteOpenHelper dbHelper;
+    private List<Semester> semesters;
+
+    static RootDataAccess getInstance() {
+        if (instance == null)
+            instance = new RootDataAccessImpl();
+        return instance;
+    }
+
+    public RootDataAccessImpl() {
+        this(null);
+    }
+
+    RootDataAccessImpl(SQLiteDatabase database) {
+        this.database = database;
+        this.dbHelper = new DBHelper(null);
+        this.semesters = null;
+    }
+
+    @Override
+    public void open() {
+        this.database = this.dbHelper.getWritableDatabase();
+    }
+
+    @Override
+    public void close() {
+        dbHelper.close();
+    }
+
+    public long getDataItemsCount() {
+        return DatabaseUtils.queryNumEntries(this.database, SemesterTable.TABLE_NAME);
+    }
+
+    @Override
+    public List<Semester> getAllSemesters() {
+        //return SampleDataProvider.getExampleSemesters();
+        if (this.semesters == null) {
+            this.semesters = this.getAllSemestersFromDB();
+        }
+        return this.semesters;
+    }
+
+    private List<Semester> getAllSemestersFromDB() {
+        Cursor cursor = this.database.query(SemesterTable.TABLE_NAME, SemesterTable.ALL_COLUMNS,
+                null, null, null, null, SemesterTable.COLUMN_NR);
+        List<Semester> semesters = new LinkedList<>();
+        while (cursor.moveToNext()) {
+            Semester semester = new Semester(
+                    cursor.getString(cursor.getColumnIndex(SemesterTable.COLUMN_ID)),
+                    cursor.getInt(cursor.getColumnIndex(SemesterTable.COLUMN_NR))
+            );
+            semesters.add(semester);
+        }
+        cursor.close();
+        return semesters;
+    }
+
+    @Override
+    public void addSemester(Semester semester) {
+        ContentValues values = semester.toValues();
+        this.database.insert(SemesterTable.TABLE_NAME, null, values);
+        if (this.semesters != null)
+            this.semesters.add(semester);
+    }
+
+    @Override
+    public List<Task> getAllTasks() {
+        Cursor cursor = this.database.query(TaskTable.TABLE_NAME, TaskTable.ALL_COLUMNS, null,
+                null, null, null, TaskTable.COLUMN_REALATED_TO);
+        List<Task> tasks = new LinkedList<>();
+        while(cursor.moveToNext()) {
+            Task task = new Task(
+                    cursor.getString(cursor.getColumnIndex(TaskTable.COLUMN_ID)),
+                    cursor.getString(cursor.getColumnIndex(TaskTable.COLUMN_CONTENT)),
+                    new Date(cursor.getInt(cursor.getColumnIndex(TaskTable.COLUMN_DEADLINE)))
+            );
+        }
+
+        // for now the tasks won't be cached in an IdentityMapper
+        // one solution to make that possible could be an added getCourse() method in Task
+
+        return tasks;
+    }
+}
