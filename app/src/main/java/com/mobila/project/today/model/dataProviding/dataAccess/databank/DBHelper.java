@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 
 public class DBHelper extends SQLiteOpenHelper {
-    public static final String DB_FILE_NAME = "com.mobila.project.today.db";
+    public static final String DB_FILE_NAME = "today.db";
     public static final int DB_VERSION = 1;
 
     public DBHelper(@Nullable Context context) {

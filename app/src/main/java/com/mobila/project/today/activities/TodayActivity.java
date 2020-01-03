@@ -15,8 +15,9 @@ import android.widget.TextView;
 import com.mobila.project.today.R;
 import com.mobila.project.today.UncheckedTodayException;
 import com.mobila.project.today.activities.adapters.TaskAdapter;
-import com.mobila.project.today.activities.fragments.AddCourseDialogFragment;
 import com.mobila.project.today.activities.fragments.GeneralConfirmationDialogFragment;
+import com.mobila.project.today.activities.fragments.OneEditTextDialogFragment;
+import com.mobila.project.today.activities.fragments.SimpleConfirmationDialogFragment;
 import com.mobila.project.today.control.utils.DateUtils;
 import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Semester;
@@ -33,8 +34,8 @@ import java.util.List;
 import java.util.Locale;
 
 public class TodayActivity extends AppCompatActivity
-        implements GeneralConfirmationDialogFragment.OnConfirmationListener,
-        AddCourseDialogFragment.OnEnterListener {
+        implements SimpleConfirmationDialogFragment.SimpleDialogListener,
+        OneEditTextDialogFragment.OneEditTextDialogListener {
 
     private static Bundle DELETE_SEMESTER_DIALOG_BUNDLE;
 
@@ -61,13 +62,13 @@ public class TodayActivity extends AppCompatActivity
 
 
         this.rootDataAccess = OrganizerDataProvider.getInstance().getRootDataAccess();
-        this.rootDataAccess.open();
+        this.rootDataAccess.open(this);
         this.semesters = rootDataAccess.getAllSemesters();
 
 
         initCourseView();
         initTaskView();
-        initSemsterView();
+        initSemesterView();
         setTimeDisplayed();
     }
 
@@ -97,12 +98,12 @@ public class TodayActivity extends AppCompatActivity
         dateDisplay.setText(builder);
     }
 
-    private void initSemsterView() {
+    private void initSemesterView() {
         if (semesters.size() != 0) {
             currentSemester = semesters.size() - 1;
             this.setSemester();
         }
-        showAppropiateSemesterButtons();
+        showAppropriateSemesterButtons();
     }
 
     private void initTaskView() {
@@ -123,34 +124,34 @@ public class TodayActivity extends AppCompatActivity
             currentSemester--;
         }
         this.setSemester();
-        showAppropiateSemesterButtons();
+        showAppropriateSemesterButtons();
     }
 
     public void goForwardSemester(View view) {
         if (this.semesters.isEmpty()) {
             semesters = new ArrayList<>();
             this.currentSemester = 0;
-            semesters.add(new Semester(
+            rootDataAccess.addSemester(new Semester(
                     String.valueOf(currentSemester + 1), currentSemester + 1));
         } else if (currentSemester == semesters.size() - 1) {
-            semesters.add(new Semester(
-                    String.valueOf(semesters.size() + 1), semesters.size() + 1));
+            rootDataAccess.addSemester(new Semester(
+                    String.valueOf(currentSemester + 1), currentSemester + 1));
             currentSemester++;
         }
         if (currentSemester < semesters.size() - 1) {
             currentSemester++;
         }
         this.setSemester();
-        showAppropiateSemesterButtons();
+        showAppropriateSemesterButtons();
     }
 
-    private void showAppropiateSemesterButtons() {
-        ImageButton goForewardButton = findViewById(R.id.go_foreward_semester);
+    private void showAppropriateSemesterButtons() {
+        ImageButton goForwardButton = findViewById(R.id.go_foreward_semester);
         ImageButton goBackwardsButton = findViewById(R.id.go_back_semester);
         if (currentSemester == semesters.size() - 1) {
-            goForewardButton.setImageResource(R.drawable.baseline_add_24);
+            goForwardButton.setImageResource(R.drawable.baseline_add_24);
         } else {
-            goForewardButton.setImageResource(R.drawable.baseline_arrow_back_ios_24);
+            goForwardButton.setImageResource(R.drawable.baseline_arrow_back_ios_24);
         }
         if (currentSemester == 0) {
             goBackwardsButton.setImageResource(R.drawable.transparent_placeholder);
@@ -159,7 +160,7 @@ public class TodayActivity extends AppCompatActivity
         }
         if (currentSemester == 0 && semesters.size() == 0) {
             goBackwardsButton.setImageResource(R.drawable.transparent_placeholder);
-            goForewardButton.setImageResource(R.drawable.baseline_add_24);
+            goForwardButton.setImageResource(R.drawable.baseline_add_24);
         }
     }
 
@@ -183,53 +184,60 @@ public class TodayActivity extends AppCompatActivity
     }
 
     public void onDeleteSemesterClicked(MenuItem item) {
-        GeneralConfirmationDialogFragment confirmationDialog = new GeneralConfirmationDialogFragment();
+        SimpleConfirmationDialogFragment confirmationDialog
+                = new SimpleConfirmationDialogFragment();
         if (DELETE_SEMESTER_DIALOG_BUNDLE == null) {
             Bundle bundle = new Bundle();
-            bundle.putString(GeneralConfirmationDialogFragment.DIALOG_MESSAGE_EXTRA,
-                    "Do your really want to delete the Semester?");
-            bundle.putString(GeneralConfirmationDialogFragment.DIALOG_CONFIRMING_EXTRA, "Delete");
-            bundle.putString(GeneralConfirmationDialogFragment.DIALOG_DECLINING_EXTRA, "Cancel");
+            bundle.putString(SimpleConfirmationDialogFragment.DIALOG_MESSAGE_EXTRA,
+                    "Do your really want to delete this Semester?");
+            bundle.putString(SimpleConfirmationDialogFragment.DIALOG_CONFIRMING_EXTRA, "Delete");
+            bundle.putString(SimpleConfirmationDialogFragment.DIALOG_DECLINING_EXTRA, "Cancel");
             DELETE_SEMESTER_DIALOG_BUNDLE = bundle;
         }
         confirmationDialog.setArguments(DELETE_SEMESTER_DIALOG_BUNDLE);
-        confirmationDialog.setOnConfirmationListener(this);
+        confirmationDialog.setSimpleDialogListener(this);
         confirmationDialog.show(getSupportFragmentManager(), "Confirmation Dialog");
     }
 
-    @Override
-    public void onConfirmation(Bundle bundle) {
-        boolean confirmed = bundle.getBoolean(GeneralConfirmationDialogFragment.RESPONSE_CONFIRMED_EXTRA);
-        if (!semesters.isEmpty() && confirmed) {
-            //Todo semester needs to be removed from db
-            semesters.remove(currentSemester);
-            if (currentSemester > 0) {
-                currentSemester--;
-            }
-            this.setSemester();
-            showAppropiateSemesterButtons();
-        }
-    }
-
     public void addCourse(View view) {
-        AddCourseDialogFragment addCourseDialog = new AddCourseDialogFragment();
+        OneEditTextDialogFragment addCourseDialog = new OneEditTextDialogFragment();
         Bundle bundle = new Bundle();
 
-        bundle.putString(AddCourseDialogFragment.DIALOG_MESSAGE,
+        bundle.putString(OneEditTextDialogFragment.DIALOG_MESSAGE_EXTRA,
                 "Enter the name of the Course:");
-        bundle.putString(AddCourseDialogFragment.DIALOG_CONFIRMING, "add");
-        bundle.putString(AddCourseDialogFragment.DIALOG_DECLINING, "cancel");
+        bundle.putString(OneEditTextDialogFragment.DIALOG_CONFIRMING_EXTRA, "add");
+        bundle.putString(OneEditTextDialogFragment.DIALOG_DECLINING_EXTRA, "cancel");
 
         addCourseDialog.setArguments(bundle);
-        addCourseDialog.setOnEnterListener(this);
+        addCourseDialog.setOneEditTextDialogListener(this);
         addCourseDialog.show(getSupportFragmentManager(), "Add Course Dialog");
     }
 
     @Override
-    public void onConfirmation(Boolean confirmation, Course course) {
-        if (confirmation) {
+    public void onSimpleDialogConfirmation(Bundle bundle,
+                                           GeneralConfirmationDialogFragment dialog){
+        boolean confirmed =
+                bundle.getBoolean(SimpleConfirmationDialogFragment.RESPONSE_CONFIRMED_EXTRA);
+        if (!semesters.isEmpty() && confirmed) {
+            //Todo semester needs to be removed from db
+            this.rootDataAccess.removeSemester(semesters.get(currentSemester));
+            if (currentSemester > 0) {
+                currentSemester--;
+            }
+            this.setSemester();
+            showAppropriateSemesterButtons();
+        }
+    }
+
+    @Override
+    public void onAddCourseConfirmation(Bundle resultBundle,
+                                        GeneralConfirmationDialogFragment dialog) {
+        boolean confirmed =
+                resultBundle.getBoolean(OneEditTextDialogFragment.RESPONSE_CONFIRMED_EXTRA);
+        if (confirmed){
+            String courseName = resultBundle.getString(OneEditTextDialogFragment.CONFIRMED_STRING);
+            Course course = new Course(courseName);
             this.courses.add(course);
-            this.courseAdapter.notifyDataSetChanged();
         }
     }
 }

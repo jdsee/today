@@ -10,6 +10,7 @@ public class SemesterTable {
             "CREATE TABLE " + TABLE_NAME + "(" +
                     COLUMN_ID + " STRING PRIMARY KEY, " +
                     COLUMN_NR + " INTEGER);";
+
     public static final String SQL_DELETE =
             "DROP TABLE " + TABLE_NAME;
 }

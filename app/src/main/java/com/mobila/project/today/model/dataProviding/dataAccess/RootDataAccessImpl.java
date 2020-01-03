@@ -1,6 +1,7 @@
 package com.mobila.project.today.model.dataProviding.dataAccess;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
@@ -36,12 +37,13 @@ class RootDataAccessImpl implements RootDataAccess {
 
     RootDataAccessImpl(SQLiteDatabase database) {
         this.database = database;
-        this.dbHelper = new DBHelper(null);
+        this.dbHelper = null;
         this.semesters = null;
     }
 
     @Override
-    public void open() {
+    public void open(Context context) {
+        this.dbHelper = new DBHelper(context);
         this.database = this.dbHelper.getWritableDatabase();
     }
 
@@ -87,11 +89,18 @@ class RootDataAccessImpl implements RootDataAccess {
     }
 
     @Override
+    public void removeSemester(Semester semester) {
+        this.semesters.remove(semester);
+        this.database.delete(SemesterTable.TABLE_NAME,
+                SemesterTable.COLUMN_ID + " = " + semester.getID(), null);
+    }
+
+    @Override
     public List<Task> getAllTasks() {
         Cursor cursor = this.database.query(TaskTable.TABLE_NAME, TaskTable.ALL_COLUMNS, null,
                 null, null, null, TaskTable.COLUMN_REALATED_TO);
         List<Task> tasks = new LinkedList<>();
-        while(cursor.moveToNext()) {
+        while (cursor.moveToNext()) {
             Task task = new Task(
                     cursor.getString(cursor.getColumnIndex(TaskTable.COLUMN_ID)),
                     cursor.getString(cursor.getColumnIndex(TaskTable.COLUMN_CONTENT)),

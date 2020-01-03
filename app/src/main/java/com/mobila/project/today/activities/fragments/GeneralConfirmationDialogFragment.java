@@ -7,69 +7,83 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
-public class GeneralConfirmationDialogFragment extends DialogFragment {
+import java.util.Objects;
 
+public abstract class GeneralConfirmationDialogFragment extends DialogFragment {
     public static final String DIALOG_MESSAGE_EXTRA = "EXTRA_DIALOG_MESSAGE";
     public static final String DIALOG_CONFIRMING_EXTRA = "EXTRA_DIALOG_CONFIRMATION";
     public static final String DIALOG_DECLINING_EXTRA = "EXTRA_DIALOG_DECLINING";
 
     public static final String RESPONSE_CONFIRMED_EXTRA = "EXTRA_DIALOG_RESPONSE";
 
-    private OnConfirmationListener callback;
-
-    public GeneralConfirmationDialogFragment() {
-    }
-
+    /**
+     * Method that gets initialized if the fragment gets created
+     *
+     * @param savedInstanceState a bundle containing saved information
+     * @return a dialog ready to be shown
+     */
     @NonNull
     @Override
     public final Dialog onCreateDialog(Bundle savedInstanceState) {
+
         Bundle entryBundle = this.getArguments();
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        builder = this.addInitialMessageToBuilder(entryBundle, builder);
-
-        builder = this.getOptionalDialogAddendum(entryBundle, builder);
-
-        builder = this.addButtonsToBuilder(entryBundle, builder);
-
+        this.addMessageToBuilder(Objects.requireNonNull(entryBundle), builder);
+        this.getOptionalDialogAddendum(entryBundle, builder);
+        this.addButtonsToBuilder(entryBundle, builder);
         return builder.create();
     }
 
-    private AlertDialog.Builder addInitialMessageToBuilder(Bundle bundle, AlertDialog.Builder builder) {
+    /**
+     * Adding a message to the dialog is done here
+     *
+     * @param bundle  the bundle containing the message
+     * @param builder the builder of the dialog
+     */
+    private void addMessageToBuilder(Bundle bundle, AlertDialog.Builder builder) {
         builder.setMessage(bundle.getString(DIALOG_MESSAGE_EXTRA));
-        return builder;
     }
 
-    AlertDialog.Builder getOptionalDialogAddendum(Bundle bundle, AlertDialog.Builder builder) {
-        return builder;
-    }
+    /**
+     * Method intended to be overwritten in case additional information has to be displayed
+     *
+     * @param bundle  the bundle containing all information intended for the dialog
+     * @param builder the builder of the dialog
+     */
+    abstract void getOptionalDialogAddendum(Bundle bundle, AlertDialog.Builder builder);
 
-    @NonNull
-    Bundle getConfirmationResultBundle() {
-        return new Bundle();
-    }
-
-    private AlertDialog.Builder addButtonsToBuilder(Bundle entryBundle, AlertDialog.Builder builder) {
-        Bundle resultBundle = this.getConfirmationResultBundle();
-
+    /**
+     * Adding buttons and their functionality is done here
+     *
+     * @param entryBundle the bundle containing the messages written on the buttons
+     * @param builder     the builder of the dialog
+     */
+    private void addButtonsToBuilder(Bundle entryBundle, AlertDialog.Builder builder) {
+        Bundle resultBundle = new Bundle();
         builder.setPositiveButton(entryBundle.getString(DIALOG_CONFIRMING_EXTRA),
                 (dialog, which) -> {
                     resultBundle.putBoolean(RESPONSE_CONFIRMED_EXTRA, true);
-                    callback.onConfirmation(resultBundle);
+                    onConfirmation(resultBundle, this);
                 });
         builder.setNegativeButton(entryBundle.getString(DIALOG_DECLINING_EXTRA),
                 (dialog, which) -> {
                     resultBundle.putBoolean(RESPONSE_CONFIRMED_EXTRA, false);
-                    callback.onConfirmation(resultBundle);
+                    onCancellation(resultBundle, this);
                 });
-        return builder;
     }
 
-    public void setOnConfirmationListener(OnConfirmationListener callback) {
-        this.callback = callback;
-    }
+    /**
+     * Reacting on positive feedback is done here. It is recommended to define an single-method
+     * interface that is called by this method and implemented by the class that creates the dialog.
+     * The calling class should register itself as a subscriber and the single-method should be
+     * called in this and the following method.
+     */
+    abstract void onConfirmation(Bundle resultBundle, GeneralConfirmationDialogFragment dialog);
 
-    public interface OnConfirmationListener {
-        void onConfirmation(Bundle bundle);
-    }
+    /**
+     * Reacting on negative feedback is done here. If nothing should be done, leave the body empty.
+     * Else, see documentation of onConfirmation().
+     */
+    abstract void onCancellation(Bundle resultBundle, GeneralConfirmationDialogFragment dialog);
 }
