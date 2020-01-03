@@ -31,7 +31,7 @@ class RootDataAccessImpl implements RootDataAccess {
         return instance;
     }
 
-    public RootDataAccessImpl() {
+    private RootDataAccessImpl() {
         this(null);
     }
 
@@ -98,7 +98,7 @@ class RootDataAccessImpl implements RootDataAccess {
     @Override
     public List<Task> getAllTasks() {
         Cursor cursor = this.database.query(TaskTable.TABLE_NAME, TaskTable.ALL_COLUMNS, null,
-                null, null, null, TaskTable.COLUMN_REALATED_TO);
+                null, null, null, TaskTable.COLUMN_RELATED_TO);
         List<Task> tasks = new LinkedList<>();
         while (cursor.moveToNext()) {
             Task task = new Task(

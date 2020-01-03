@@ -29,6 +29,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
     public CourseAdapter(Context context, Semester semester) {
         this.courses = semester.getCourses();
         this.context = context;
+        this.semester = semester;
     }
 
     @NonNull
@@ -48,7 +49,10 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
                     this.context.startActivity(intent);
                 }
         );
-        holder.button.setOnClickListener(v -> semester.removeCourse(courses.get(position)));
+        holder.button.setOnClickListener(v -> {
+            semester.removeCourse(courses.get(position));
+            notifyDataSetChanged();
+        });
     }
 
     @Override

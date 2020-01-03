@@ -154,7 +154,7 @@ class SemesterDataAccessImpl implements SemesterDataAccess {
     public void removeCourse(Identifiable semester, Course course) {
         this.courseCache.removeElement(semester, course);
         this.database.delete(CourseTable.TABLE_NAME,
-                "WHERE " + CourseTable.COLUMN_ID + "=?s", new String[]{course.getID()});
+                CourseTable.COLUMN_ID + " = '" + course.getID() + "' ", null);
     }
 
     /**
