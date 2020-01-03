@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.mobila.project.today.model.Semester;
 import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
 import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Identifiable;
@@ -124,7 +125,7 @@ class SemesterDataAccessImpl implements SemesterDataAccess {
     @Override
     public void addCourse(Identifiable semester, Course course) throws DataKeyNotFoundException {
         this.courseCache.addElement(semester, course);
-        this.addCourseToDB(course);
+        this.addCourseToDB(course, semester);
     }
 
     /**
@@ -132,10 +133,11 @@ class SemesterDataAccessImpl implements SemesterDataAccess {
      *
      * @param course the course that is to be added
      */
-    private void addCourseToDB(Course course) {
+    private void addCourseToDB(Course course, Identifiable semester) {
         ContentValues values = new ContentValues();
         values.put(CourseTable.COLUMN_ID, course.getID());
         values.put(CourseTable.COLUMN_TITLE, course.getTitle());
+        values.put(CourseTable.COLUMN_RELATED_TO, semester.getID());
         this.database.insert(CourseTable.TABLE_NAME, null, values);
     }
 

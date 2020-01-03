@@ -29,7 +29,6 @@ import com.mobila.project.today.model.dataProviding.dataAccess.RootDataAccess;
 import com.mobila.project.today.model.dataProviding.dataAccess.SemesterDataAccess;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -41,7 +40,6 @@ public class TodayActivity extends AppCompatActivity
     private static Bundle DELETE_SEMESTER_DIALOG_BUNDLE;
 
     private List<Task> tasks;
-    private List<Course> courses;
     private List<Semester> semesters;
 
     TextView semesterView;
@@ -50,7 +48,6 @@ public class TodayActivity extends AppCompatActivity
     CourseAdapter courseAdapter;
 
     private RootDataAccess rootDataAccess;
-    private SemesterDataAccess semesterDataAccess;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,13 +55,12 @@ public class TodayActivity extends AppCompatActivity
         setContentView(R.layout.activity_today);
         this.semesterView = findViewById(R.id.semester_view);
 
-        this.courses = SampleDataProvider.getExampleCourses();
         this.tasks = SampleDataProvider.getExampleTasks();
 
         this.rootDataAccess = OrganizerDataProvider.getInstance().getRootDataAccess();
-        this.semesterDataAccess = OrganizerDataProvider.getInstance().getSemesterDataAccess();
+        SemesterDataAccess semesterDataAccess = OrganizerDataProvider.getInstance().getSemesterDataAccess();
         this.rootDataAccess.open(this);
-        this.semesterDataAccess.open(this);
+        semesterDataAccess.open(this);
         this.semesters = rootDataAccess.getAllSemesters();
 
         initTaskView();
@@ -115,11 +111,9 @@ public class TodayActivity extends AppCompatActivity
 
     private void initCourseView() {
         RecyclerView courseRecyclerView = findViewById(R.id.recycler_view_courses);
-        if(!semesters.isEmpty()&&!semesters.get(currentSemester).getCourses().isEmpty()) {
-            this.courseAdapter = new CourseAdapter(this, semesters.get(currentSemester));
-            courseRecyclerView.setAdapter(courseAdapter);
-            courseRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        }
+        this.courseAdapter = new CourseAdapter(this, semesters.get(currentSemester));
+        courseRecyclerView.setAdapter(courseAdapter);
+        courseRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     public void goBackSemester(View view) {
@@ -128,6 +122,7 @@ public class TodayActivity extends AppCompatActivity
         }
         this.setSemester();
         showAppropriateSemesterButtons();
+        initCourseView();
     }
 
     public void goForwardSemester(View view) {
@@ -144,6 +139,7 @@ public class TodayActivity extends AppCompatActivity
         }
         this.setSemester();
         showAppropriateSemesterButtons();
+        initCourseView();
     }
 
     private void showAppropriateSemesterButtons() {
@@ -212,11 +208,12 @@ public class TodayActivity extends AppCompatActivity
         addCourseDialog.setArguments(bundle);
         addCourseDialog.setOneEditTextDialogListener(this);
         addCourseDialog.show(getSupportFragmentManager(), "Add Course Dialog");
+        initCourseView();
     }
 
     @Override
     public void onSimpleDialogConfirmation(Bundle bundle,
-                                           GeneralConfirmationDialogFragment dialog){
+                                           GeneralConfirmationDialogFragment dialog) {
         boolean confirmed =
                 bundle.getBoolean(SimpleConfirmationDialogFragment.RESPONSE_CONFIRMED_EXTRA);
         if (!semesters.isEmpty() && confirmed) {
@@ -234,17 +231,17 @@ public class TodayActivity extends AppCompatActivity
                                         GeneralConfirmationDialogFragment dialog) {
         boolean confirmed =
                 resultBundle.getBoolean(OneEditTextDialogFragment.RESPONSE_CONFIRMED_EXTRA);
-        if (confirmed){
+        if (confirmed) {
             String courseName = resultBundle.getString(OneEditTextDialogFragment.CONFIRMED_STRING);
             Course course = new Course(courseName);
-            this.courses.add(course);
+            semesters.get(currentSemester).addCourse(course);
         }
     }
 
-    private int getMaxSemester(){
-        int max=0;
-        for (Semester semester:semesters){
-            if (semester.getSemesterNr()>max)max=semester.getSemesterNr();
+    private int getMaxSemester() {
+        int max = 0;
+        for (Semester semester : semesters) {
+            if (semester.getSemesterNr() > max) max = semester.getSemesterNr();
         }
         return max;
     }

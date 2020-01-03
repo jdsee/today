@@ -40,7 +40,7 @@ public class Course implements Identifiable, Parcelable {
 
     public Course(String title) {
         this(
-                UUID.randomUUID().toString(),
+                KeyGenerator.getUniqueKey(),
                 title
         );
     }
