@@ -1,6 +1,7 @@
 package com.mobila.project.today.model.dataProviding.dataAccess;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -50,14 +51,15 @@ class SemesterDataAccessImpl implements SemesterDataAccess {
         this.database = database;
     }
 
-    public static SemesterDataAccess getInstance() {
+    static SemesterDataAccess getInstance() {
         if (instance == null)
             instance = new SemesterDataAccessImpl();
         return instance;
     }
 
     @Override
-    public void open() {
+    public void open(Context context) {
+        this.dbHelper = new DBHelper(context);
         this.database = this.dbHelper.getWritableDatabase();
     }
 
@@ -97,21 +99,16 @@ class SemesterDataAccessImpl implements SemesterDataAccess {
     private List<Course> getCoursesFromDB(Identifiable semester) throws DataKeyNotFoundException {
         Log.d(TAG, "requesting courses from data base");
         Cursor cursor = this.database.query(CourseTable.TABLE_NAME, CourseTable.ALL_COLUMNS,
-                "WHERE " + CourseTable.COLUMN_RELATED_TO + "=?s", new String[]{semester.getID()},
+                CourseTable.COLUMN_RELATED_TO + " = '" + semester.getID() +"'", null,
                 null, null, null);
-        if (!cursor.moveToNext()) {
-            DataKeyNotFoundException t = new DataKeyNotFoundException(DataKeyNotFoundException.NO_ENTRY_MSG);
-            Log.d(TAG, DataKeyNotFoundException.NO_ENTRY_MSG + ": " + NO_COURSES_FOR_SEM_MSG, t);
-            throw t;
-        }
         List<Course> courses = new LinkedList<>();
-        do {
+        while (cursor.moveToNext()) {
             Course course = new Course(
                     cursor.getString(cursor.getColumnIndex(CourseTable.COLUMN_ID)),
                     cursor.getString(cursor.getColumnIndex(CourseTable.COLUMN_TITLE))
             );
             courses.add(course);
-        } while (cursor.moveToNext());
+        }
         cursor.close();
         return courses;
     }

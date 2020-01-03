@@ -73,7 +73,7 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
             fileImage = itemView.findViewById(R.id.file_icon);
             fileName = itemView.findViewById(R.id.file_title);
             fileHolder = itemView.findViewById(R.id.parent_file_holder);
-            button = itemView.findViewById(R.id.button_remove_file);
+            button = itemView.findViewById(R.id.button_remove_course);
         }
     }
 }

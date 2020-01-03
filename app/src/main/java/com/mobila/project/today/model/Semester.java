@@ -8,6 +8,7 @@ import com.mobila.project.today.model.dataProviding.dataAccess.RootDataAccess;
 import com.mobila.project.today.model.dataProviding.dataAccess.SemesterDataAccess;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.SemesterTable;
 
+import java.security.Key;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,6 +23,10 @@ public class Semester implements Identifiable {
     private int semesterNr;
     private List<Course> courses;
 
+    public Semester(int semesterNr){
+        this(KeyGenerator.getUniqueKey(), semesterNr);
+    }
+
     public Semester(String id, int semesterNr) {
         this.ID = id;
         this.semesterNr = semesterNr;
@@ -31,11 +36,6 @@ public class Semester implements Identifiable {
         rootDataAccess = dataProvider.getRootDataAccess();
         semesterDataAccess = dataProvider.getSemesterDataAccess();
     }
-
-    /*public Semester(int semesterNr) {
-        int id = UUID.randomUUID().toString();
-        this(id, semesterNr);
-    }*/
 
     public int getSemesterNr() throws UncheckedTodayException {
         return this.semesterNr;

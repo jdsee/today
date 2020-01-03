@@ -26,6 +26,7 @@ import com.mobila.project.today.activities.adapters.CourseAdapter;
 import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
 import com.mobila.project.today.model.dataProviding.SampleDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.RootDataAccess;
+import com.mobila.project.today.model.dataProviding.dataAccess.SemesterDataAccess;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -49,6 +50,7 @@ public class TodayActivity extends AppCompatActivity
     CourseAdapter courseAdapter;
 
     private RootDataAccess rootDataAccess;
+    private SemesterDataAccess semesterDataAccess;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,17 +60,16 @@ public class TodayActivity extends AppCompatActivity
 
         this.courses = SampleDataProvider.getExampleCourses();
         this.tasks = SampleDataProvider.getExampleTasks();
-        this.semesters = SampleDataProvider.getExampleSemesters();
-
 
         this.rootDataAccess = OrganizerDataProvider.getInstance().getRootDataAccess();
+        this.semesterDataAccess = OrganizerDataProvider.getInstance().getSemesterDataAccess();
         this.rootDataAccess.open(this);
+        this.semesterDataAccess.open(this);
         this.semesters = rootDataAccess.getAllSemesters();
 
-
-        initCourseView();
         initTaskView();
         initSemesterView();
+        initCourseView();
         setTimeDisplayed();
     }
 
@@ -114,9 +115,11 @@ public class TodayActivity extends AppCompatActivity
 
     private void initCourseView() {
         RecyclerView courseRecyclerView = findViewById(R.id.recycler_view_courses);
-        this.courseAdapter = new CourseAdapter(this, this.courses);
-        courseRecyclerView.setAdapter(courseAdapter);
-        courseRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        if(!semesters.isEmpty()&&!semesters.get(currentSemester).getCourses().isEmpty()) {
+            this.courseAdapter = new CourseAdapter(this, semesters.get(currentSemester));
+            courseRecyclerView.setAdapter(courseAdapter);
+            courseRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        }
     }
 
     public void goBackSemester(View view) {
@@ -129,13 +132,11 @@ public class TodayActivity extends AppCompatActivity
 
     public void goForwardSemester(View view) {
         if (this.semesters.isEmpty()) {
-            semesters = new ArrayList<>();
             this.currentSemester = 0;
-            rootDataAccess.addSemester(new Semester(
-                    String.valueOf(currentSemester + 1), currentSemester + 1));
+            rootDataAccess.addSemester(new Semester(getMaxSemester() + 1));
+            initSemesterView();
         } else if (currentSemester == semesters.size() - 1) {
-            rootDataAccess.addSemester(new Semester(
-                    String.valueOf(currentSemester + 1), currentSemester + 1));
+            rootDataAccess.addSemester(new Semester(getMaxSemester() + 1));
             currentSemester++;
         }
         if (currentSemester < semesters.size() - 1) {
@@ -219,7 +220,6 @@ public class TodayActivity extends AppCompatActivity
         boolean confirmed =
                 bundle.getBoolean(SimpleConfirmationDialogFragment.RESPONSE_CONFIRMED_EXTRA);
         if (!semesters.isEmpty() && confirmed) {
-            //Todo semester needs to be removed from db
             this.rootDataAccess.removeSemester(semesters.get(currentSemester));
             if (currentSemester > 0) {
                 currentSemester--;
@@ -239,5 +239,13 @@ public class TodayActivity extends AppCompatActivity
             Course course = new Course(courseName);
             this.courses.add(course);
         }
+    }
+
+    private int getMaxSemester(){
+        int max=0;
+        for (Semester semester:semesters){
+            if (semester.getSemesterNr()>max)max=semester.getSemesterNr();
+        }
+        return max;
     }
 }

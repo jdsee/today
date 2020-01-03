@@ -18,7 +18,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 class RootDataAccessImpl implements RootDataAccess {
-    public static RootDataAccess instance;
+    private static RootDataAccess instance;
     public static final String TAG = RootDataAccessImpl.class.getName();
 
     private SQLiteDatabase database;
@@ -92,7 +92,7 @@ class RootDataAccessImpl implements RootDataAccess {
     public void removeSemester(Semester semester) {
         this.semesters.remove(semester);
         this.database.delete(SemesterTable.TABLE_NAME,
-                SemesterTable.COLUMN_ID + " = " + semester.getID(), null);
+                SemesterTable.COLUMN_ID + " = '" + semester.getID()+"'", null);
     }
 
     @Override
@@ -107,6 +107,7 @@ class RootDataAccessImpl implements RootDataAccess {
                     new Date(cursor.getInt(cursor.getColumnIndex(TaskTable.COLUMN_DEADLINE)))
             );
         }
+        cursor.close();
 
         // for now the tasks won't be cached in an IdentityMapper
         // one solution to make that possible could be an added getCourse() method in Task

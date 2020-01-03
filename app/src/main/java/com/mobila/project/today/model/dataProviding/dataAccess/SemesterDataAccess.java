@@ -1,5 +1,7 @@
 package com.mobila.project.today.model.dataProviding.dataAccess;
 
+import android.content.Context;
+
 import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
 import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Identifiable;
@@ -7,7 +9,9 @@ import com.mobila.project.today.model.Identifiable;
 import java.util.List;
 
 public interface SemesterDataAccess {
-    void open();
+    static SemesterDataAccess getInstance(){return SemesterDataAccessImpl.getInstance();}
+
+    void open(Context context);
 
     void close();
 
