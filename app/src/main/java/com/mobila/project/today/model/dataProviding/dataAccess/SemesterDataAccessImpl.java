@@ -22,8 +22,6 @@ class SemesterDataAccessImpl implements SemesterDataAccess {
 
     private static SemesterDataAccess instance;
 
-    private static final String NO_COURSES_FOR_SEM_MSG = "no courses related to given semester";
-
     private IdentityMapper<Course> courseCache;
     private SQLiteDatabase database;
     private SQLiteOpenHelper dbHelper;
@@ -65,7 +63,7 @@ class SemesterDataAccessImpl implements SemesterDataAccess {
 
     @Override
     public void close() {
-        dbHelper.close();
+        this.dbHelper.close();
     }
 
     /**
@@ -99,14 +97,13 @@ class SemesterDataAccessImpl implements SemesterDataAccess {
     private List<Course> getCoursesFromDB(Identifiable semester) throws DataKeyNotFoundException {
         Log.d(TAG, "requesting courses from data base");
         Cursor cursor = this.database.query(CourseTable.TABLE_NAME, CourseTable.ALL_COLUMNS,
-                CourseTable.COLUMN_RELATED_TO + " = '" + semester.getID() +"'", null,
-                null, null, null);
+                CourseTable.COLUMN_RELATED_TO + " = '" + semester.getID() + "'",
+                null, null, null, null);
         List<Course> courses = new LinkedList<>();
         while (cursor.moveToNext()) {
             Course course = new Course(
                     cursor.getString(cursor.getColumnIndex(CourseTable.COLUMN_ID)),
-                    cursor.getString(cursor.getColumnIndex(CourseTable.COLUMN_TITLE))
-            );
+                    cursor.getString(cursor.getColumnIndex(CourseTable.COLUMN_TITLE)));
             courses.add(course);
         }
         cursor.close();

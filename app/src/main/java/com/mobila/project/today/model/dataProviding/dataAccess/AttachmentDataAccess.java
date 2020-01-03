@@ -1,5 +1,7 @@
 package com.mobila.project.today.model.dataProviding.dataAccess;
 
+import android.content.Context;
+
 import com.mobila.project.today.model.Lecture;
 import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
 import com.mobila.project.today.model.Identifiable;
@@ -9,9 +11,12 @@ import java.io.File;
 public interface AttachmentDataAccess {
 
     static AttachmentDataAccess getInstance() {
-        //TODO return implementation
-        return null;
+        return AttachmentDataAccessImpl.getInstance();
     }
+
+    void open(Context context);
+
+    void close();
 
     Lecture getLecture(Identifiable attachment) throws DataKeyNotFoundException;
 
