@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.mobila.project.today.model.Semester;
 import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
 import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Identifiable;
@@ -18,9 +17,9 @@ import com.mobila.project.today.model.dataProviding.dataAccess.databank.Semester
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.mobila.project.today.model.dataProviding.dataAccess.databank.SemesterDataSource.TAG;
-
 class SemesterDataAccessImpl implements SemesterDataAccess {
+    public static final String TAG = SemesterDataAccessImpl.class.getName();
+
     private static SemesterDataAccess instance;
 
     private static final String NO_COURSES_FOR_SEM_MSG = "no courses related to given semester";

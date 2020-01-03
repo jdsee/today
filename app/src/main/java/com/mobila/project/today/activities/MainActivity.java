@@ -2,7 +2,6 @@ package com.mobila.project.today.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,37 +13,14 @@ import com.mobila.project.today.activities.taskView.CourseTasksActivity;
 import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Lecture;
 import com.mobila.project.today.model.dataProviding.SampleDataProvider;
-import com.mobila.project.today.model.dataProviding.dataAccess.databank.SemesterDataSource;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getName();
-
-    private SemesterDataSource semesterDataSource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        this.semesterDataSource = new SemesterDataSource(this);
-        this.semesterDataSource.open();
-        Log.d(TAG, "Database aquired");
-    }
-
-    public void loadSampleSemesters(View view){
-        this.semesterDataSource.seedDB(SampleDataProvider.getExampleSemesters());
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        this.semesterDataSource.close();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        this.semesterDataSource.open();
     }
 
     /**
