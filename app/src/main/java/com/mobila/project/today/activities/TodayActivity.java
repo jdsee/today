@@ -96,10 +96,8 @@ public class TodayActivity extends AppCompatActivity
     }
 
     private void initSemesterView() {
-        if (semesters.size() != 0) {
-            currentSemester = semesters.size() - 1;
-            this.setSemester();
-        }
+        currentSemester = semesters.size() != 0 ? semesters.size() - 1 : 0;
+        this.setSemester();
         showAppropriateSemesterButtons();
     }
 
@@ -111,9 +109,11 @@ public class TodayActivity extends AppCompatActivity
 
     private void initCourseView() {
         RecyclerView courseRecyclerView = findViewById(R.id.recycler_view_courses);
-        this.courseAdapter = new CourseAdapter(this, semesters.get(currentSemester));
-        courseRecyclerView.setAdapter(courseAdapter);
-        courseRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        if (this.semesters != null) {
+            this.courseAdapter = new CourseAdapter(this, semesters.get(currentSemester));
+            courseRecyclerView.setAdapter(courseAdapter);
+            courseRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        }
     }
 
     public void goBackSemester(View view) {
@@ -208,7 +208,6 @@ public class TodayActivity extends AppCompatActivity
         addCourseDialog.setArguments(bundle);
         addCourseDialog.setOneEditTextDialogListener(this);
         addCourseDialog.show(getSupportFragmentManager(), "Add Course Dialog");
-        initCourseView();
     }
 
     @Override
@@ -236,6 +235,7 @@ public class TodayActivity extends AppCompatActivity
             Course course = new Course(courseName);
             semesters.get(currentSemester).addCourse(course);
         }
+        initCourseView();
     }
 
     private int getMaxSemester() {

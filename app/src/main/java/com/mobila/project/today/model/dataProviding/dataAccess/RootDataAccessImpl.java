@@ -58,7 +58,6 @@ class RootDataAccessImpl implements RootDataAccess {
 
     @Override
     public List<Semester> getAllSemesters() {
-        //return SampleDataProvider.getExampleSemesters();
         if (this.semesters == null) {
             this.semesters = this.getAllSemestersFromDB();
         }

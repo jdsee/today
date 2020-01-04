@@ -58,7 +58,7 @@ class SectionDataAccessImpl implements SectionDataAccess {
         Cursor cursor = this.database.query(
                 LectureTable.TABLE_NAME,
                 LectureTable.ALL_COLUMNS,
-                LectureTable.COLUMN_RELATED_TO + "=?s",
+                LectureTable.COLUMN_RELATED_TO + "=?",
                 new String[]{course.getID()}, null, null, null);
         if (!cursor.moveToNext()) {
             DataKeyNotFoundException t = new DataKeyNotFoundException(DataKeyNotFoundException.NO_ENTRY_MSG);

@@ -82,22 +82,17 @@ class CourseDataAccessImpl implements CourseDataAccess {
     private List<Section> getSectionsFromDB(Identifiable course) {
         Log.d(TAG, "requesting from database: sections related to course(id:" + course.getID() + ")");
         Cursor cursor = this.database.query(SectionTable.TABLE_NAME, SectionTable.ALL_COLUMNS,
-                SectionTable.COLUMN_RELATED_TO + "=?s", new String[]{course.getID()},
+                SectionTable.COLUMN_RELATED_TO + "=?", new String[]{course.getID()},
                 null, null, null);
-        if (!cursor.moveToNext()) {
-            DataKeyNotFoundException t = new DataKeyNotFoundException(DataKeyNotFoundException.NO_ENTRY_MSG);
-            Log.d(TAG, DataKeyNotFoundException.NO_ENTRY_MSG + ": " + NO_SECTIONS_FOR_COURSE_MSG, t);
-            throw t;
-        }
         List<Section> sections = new LinkedList<>();
-        do {
+        while (cursor.moveToNext()){
             Section section = new Section(
                     cursor.getString(cursor.getColumnIndex(SectionTable.COLUMN_ID)),
                     cursor.getString(cursor.getColumnIndex(SectionTable.COLUMN_TITLE)),
                     cursor.getString(cursor.getColumnIndex(SectionTable.COLUMN_LECTURER))
             );
             sections.add(section);
-        } while (cursor.moveToNext());
+        };
         cursor.close();
         return sections;
     }
@@ -180,22 +175,22 @@ class CourseDataAccessImpl implements CourseDataAccess {
         ContentValues values = new ContentValues();
         values.put(CourseTable.COLUMN_TITLE, title);
         this.database.update(CourseTable.TABLE_NAME, values,
-                "WHERE " + CourseTable.COLUMN_ID + "=?s", new String[]{course.getID()});
+                CourseTable.COLUMN_ID + "=?", new String[]{course.getID()});
     }
 
     @Override
     public void removeSection(Identifiable course, Section section) {
         this.database.delete(SectionTable.TABLE_NAME,
-                "WHERE " + SectionTable.COLUMN_ID +
-                        "=?s", new String[]{section.getID()});
+                SectionTable.COLUMN_ID +
+                        "=?", new String[]{section.getID()});
         this.sectionCache.removeElement(course, section);
     }
 
     @Override
     public void removeTask(Identifiable course, Task task) {
         this.database.delete(TaskTable.TABLE_NAME,
-                "WHERE " + TaskTable.COLUMN_ID +
-                        "=?s", new String[]{task.getID()});
+                TaskTable.COLUMN_ID +
+                        "=?", new String[]{task.getID()});
         this.taskCache.removeElement(course, task);
     }
 }

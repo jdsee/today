@@ -30,7 +30,7 @@ class NoteDataAccessImpl implements NoteDataAccess {
         ContentValues values = new ContentValues();
         values.put(NoteTable.COLUMN_TITLE, title);
         this.database.update(NoteTable.TABLE_NAME, values,
-                NoteTable.COLUMN_ID + "=?s", new String[]{note.getID()});
+                NoteTable.COLUMN_ID + "=?", new String[]{note.getID()});
     }
 
     @Override
@@ -38,7 +38,7 @@ class NoteDataAccessImpl implements NoteDataAccess {
         Cursor cursor = this.database.query(
                 NoteTable.TABLE_NAME,
                 new String[]{NoteTable.COLUMN_CONTENT},
-                NoteTable.COLUMN_ID + "=?s",
+                NoteTable.COLUMN_ID + "=?",
                 new String[]{note.getID()},
                 null, null, null
         );
@@ -66,7 +66,7 @@ class NoteDataAccessImpl implements NoteDataAccess {
         Cursor cursor = this.database.query(
                 NoteReferenceTable.TABLE_NAME,
                 null,
-                NoteReferenceTable.COLUMN_NOTE_ID + "=?s",
+                NoteReferenceTable.COLUMN_NOTE_ID + "=",
                 new String[]{note.getID()},
                 null, null, null
         );

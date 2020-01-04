@@ -97,11 +97,7 @@ class SemesterDataAccessImpl implements SemesterDataAccess {
     private List<Course> getCoursesFromDB(Identifiable semester) throws DataKeyNotFoundException {
         Log.d(TAG, "requesting courses from data base");
         Cursor cursor = this.database.query(CourseTable.TABLE_NAME, CourseTable.ALL_COLUMNS,
-                /*
-                CourseTable.COLUMN_RELATED_TO + " = '" + semester.getID() + "'",
-                null, null, null, null);
-                 */
-                CourseTable.COLUMN_RELATED_TO + "=?s", new String[]{semester.getID()},
+                CourseTable.COLUMN_RELATED_TO + "=?", new String[]{semester.getID()},
                 null, null, null);
         List<Course> courses = new LinkedList<>();
         while (cursor.moveToNext()) {
@@ -156,8 +152,8 @@ class SemesterDataAccessImpl implements SemesterDataAccess {
     @Override
     public void removeCourse(Identifiable semester, Course course) {
         this.database.delete(CourseTable.TABLE_NAME,
-        //CourseTable.COLUMN_ID + " = '" + course.getID() + "' ", null);
-        CourseTable.COLUMN_ID + "=?s", new String[]{course.getID()});
+        CourseTable.COLUMN_ID + " = '" + course.getID() + "' ", null);
+        //CourseTable.COLUMN_ID + "=?s", new String[]{course.getID()});
         this.courseCache.removeElement(semester, course);
     }
 

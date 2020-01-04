@@ -58,6 +58,6 @@ class TaskDataAccessImpl implements TaskDataAccess {
 
     private void updateTaskInDB(Identifiable task, ContentValues values) {
         this.database.update(TaskTable.TABLE_NAME, values,
-                TaskTable.COLUMN_ID + "=?s", new String[]{task.getID()});
+                TaskTable.COLUMN_ID + "=?", new String[]{task.getID()});
     }
 }
