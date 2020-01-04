@@ -9,7 +9,6 @@ import com.mobila.project.today.model.dataProviding.dataAccess.CourseDataAccess;
 import com.mobila.project.today.model.dataProviding.dataAccess.RootDataAccess;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Allows access to all data contained in the "Course"-entity.
@@ -133,10 +132,10 @@ public class Course implements Identifiable, Parcelable {
     /**
      * Removes a section of this course.
      */
-    public void removeSection(Identifiable section) throws DataKeyNotFoundException {
+    public void removeSection(Section section) throws DataKeyNotFoundException {
         this.checkSectionsNotNull();
         this.sections.remove(section);
-        //this.rootDataAccess.removeEntityInstance(section);
+        this.dataAccess.removeSection(this, section);
     }
 
 
@@ -168,10 +167,10 @@ public class Course implements Identifiable, Parcelable {
     /**
      * Removes a task contained in this course.
      */
-    public void removeTask(Identifiable task) throws DataKeyNotFoundException {
+    public void removeTask(Task task) throws DataKeyNotFoundException {
         this.checkTasksNotNull();
         this.tasks.remove(task);
-        //this.rootDataAccess.removeEntityInstance(task);
+        this.dataAccess.removeTask(this, task);
     }
 
     @Override

@@ -39,7 +39,7 @@ CREATE TABLE lectures
 CREATE TABLE notes
 (noteID		VARCHAR PRIMARY KEY,
  title 		VARCHAR(64),
- content		BYTEA,
+ content    TEXT,
  relatedTo	INTEGER REFERENCES lectures ON DELETE CASCADE);
 
 CREATE TABLE noteReferences

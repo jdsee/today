@@ -30,4 +30,6 @@ public interface LectureDataAccess {
     Date getDate(Identifiable lecture) throws DataKeyNotFoundException;
 
     void setDate(Identifiable lecture, Date date) throws DataKeyNotFoundException;
+
+    void removeAttachment(Identifiable attachment);
 }

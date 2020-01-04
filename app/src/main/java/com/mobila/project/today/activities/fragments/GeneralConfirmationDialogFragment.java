@@ -71,6 +71,7 @@ public abstract class GeneralConfirmationDialogFragment extends DialogFragment {
                     resultBundle.putBoolean(RESPONSE_CONFIRMED_EXTRA, false);
                     onCancellation(resultBundle, this);
                 });
+
     }
 
     /**

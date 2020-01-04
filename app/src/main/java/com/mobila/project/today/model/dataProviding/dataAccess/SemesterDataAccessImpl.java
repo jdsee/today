@@ -97,8 +97,12 @@ class SemesterDataAccessImpl implements SemesterDataAccess {
     private List<Course> getCoursesFromDB(Identifiable semester) throws DataKeyNotFoundException {
         Log.d(TAG, "requesting courses from data base");
         Cursor cursor = this.database.query(CourseTable.TABLE_NAME, CourseTable.ALL_COLUMNS,
+                /*
                 CourseTable.COLUMN_RELATED_TO + " = '" + semester.getID() + "'",
                 null, null, null, null);
+                 */
+                CourseTable.COLUMN_RELATED_TO + "=?s", new String[]{semester.getID()},
+                null, null, null);
         List<Course> courses = new LinkedList<>();
         while (cursor.moveToNext()) {
             Course course = new Course(
@@ -119,17 +123,20 @@ class SemesterDataAccessImpl implements SemesterDataAccess {
      * @throws DataKeyNotFoundException if the key associated to the specified semester is not existent in db
      */
     @Override
+    //TODO probably DataKeyNotFoundException makes no sense here
+    //-> id of semester is not approved within this call
     public void addCourse(Identifiable semester, Course course) throws DataKeyNotFoundException {
         this.courseCache.addElement(semester, course);
-        this.addCourseToDB(course, semester);
+        this.addCourseToDB(semester, course);
     }
 
     /**
      * Accesses database to add the specified course to the course table.
      *
-     * @param course the course that is to be added
+     * @param semester the semester corresponding to the specified course
+     * @param course   the course that is to be added
      */
-    private void addCourseToDB(Course course, Identifiable semester) {
+    private void addCourseToDB(Identifiable semester, Course course) {
         ContentValues values = new ContentValues();
         values.put(CourseTable.COLUMN_ID, course.getID());
         values.put(CourseTable.COLUMN_TITLE, course.getTitle());
@@ -148,9 +155,10 @@ class SemesterDataAccessImpl implements SemesterDataAccess {
      */
     @Override
     public void removeCourse(Identifiable semester, Course course) {
-        this.courseCache.removeElement(semester, course);
         this.database.delete(CourseTable.TABLE_NAME,
-                CourseTable.COLUMN_ID + " = '" + course.getID() + "' ", null);
+        //CourseTable.COLUMN_ID + " = '" + course.getID() + "' ", null);
+        CourseTable.COLUMN_ID + "=?s", new String[]{course.getID()});
+        this.courseCache.removeElement(semester, course);
     }
 
     /**
@@ -165,6 +173,6 @@ class SemesterDataAccessImpl implements SemesterDataAccess {
         ContentValues values = new ContentValues();
         values.put(SemesterTable.COLUMN_NR, nr);
         this.database.update(SemesterTable.TABLE_NAME, values,
-                "WHERE " + SemesterTable.COLUMN_NR + "=?s", new String[]{String.valueOf(nr)});
+                SemesterTable.COLUMN_NR + "=?s", new String[]{String.valueOf(nr)});
     }
 }

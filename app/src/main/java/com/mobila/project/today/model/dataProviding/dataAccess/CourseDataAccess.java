@@ -11,7 +11,9 @@ import com.mobila.project.today.model.Task;
 import java.util.List;
 
 public interface CourseDataAccess {
-    static CourseDataAccess getInstance(){return CourseDataAccessImpl.getInstance();}
+    static CourseDataAccess getInstance() {
+        return CourseDataAccessImpl.getInstance();
+    }
 
     void open(Context context);
 
@@ -27,7 +29,9 @@ public interface CourseDataAccess {
 
     void addTask(Identifiable course, Task task) throws DataKeyNotFoundException;
 
-    String getTitle(Identifiable course) throws DataKeyNotFoundException;
-
     void setTitle(Identifiable course, String title) throws DataKeyNotFoundException;
+
+    void removeSection(Identifiable course, Section section);
+
+    void removeTask(Identifiable course, Task task);
 }

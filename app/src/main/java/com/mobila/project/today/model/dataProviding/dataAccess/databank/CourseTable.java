@@ -13,6 +13,8 @@ public class CourseTable {
                     COLUMN_TITLE + " VARCHAR, " +
                     COLUMN_RELATED_TO + " STRING);";
 
+    //TODO on delete cascade
+
     public static final String SQL_DELETE =
             "DROP TABLE " + TABLE_NAME;
 

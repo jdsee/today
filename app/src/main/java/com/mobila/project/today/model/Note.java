@@ -42,7 +42,8 @@ public class Note implements Identifiable {
      * @return the lecture containing this attachment
      */
     public Lecture getLecture() throws DataKeyNotFoundException {
-        return this.noteDataAccess.getLecture(this);
+        //TODO return lecture or remove method
+        return null;
     }
 
     public String getTitle() {
@@ -66,12 +67,12 @@ public class Note implements Identifiable {
         return this.noteDataAccess.getReferences(this);
     }
 
-    public void addReference(Identifiable ref, int row) throws DataKeyNotFoundException {
-        this.noteDataAccess.addReference(this, ref, row);
+    public void addReference(Identifiable reference, int row) throws DataKeyNotFoundException {
+        this.noteDataAccess.addReference(this, reference, row);
     }
 
-    public void removeReference(Identifiable ref) throws DataKeyNotFoundException {
-        //this.rootDataAccess.removeEntityInstance(ref);
+    public void removeReference(Identifiable reference) throws DataKeyNotFoundException {
+        this.noteDataAccess.removeReference(reference);
     }
     @Override
     public String getID() {

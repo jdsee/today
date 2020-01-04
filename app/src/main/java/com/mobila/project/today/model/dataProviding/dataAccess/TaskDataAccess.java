@@ -10,16 +10,11 @@ import java.util.Date;
 
 public interface TaskDataAccess {
 
-
-    static TaskDataAccess getInstance(){return TaskDataAccessImpl.getInstance();}
-
-    Course getCourse(Identifiable section) throws DataKeyNotFoundException;
-
-    Date getDeadline(Identifiable task) throws DataKeyNotFoundException;
+    static TaskDataAccess getInstance() {
+        return TaskDataAccessImpl.getInstance();
+    }
 
     void setDeadline(Identifiable task, Date date) throws DataKeyNotFoundException;
-
-    String getContent(Identifiable task) throws DataKeyNotFoundException;
 
     void setContent(Identifiable task, String content) throws DataKeyNotFoundException;
 

@@ -8,7 +8,6 @@ import com.mobila.project.today.model.dataProviding.dataAccess.RootDataAccess;
 import com.mobila.project.today.model.dataProviding.dataAccess.SemesterDataAccess;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.SemesterTable;
 
-import java.security.Key;
 import java.util.List;
 import java.util.Objects;
 
@@ -69,6 +68,7 @@ public class Semester implements Identifiable {
     }
 
     public void removeCourse(Course course) throws UncheckedTodayException {
+        semesterDataAccess.removeCourse(this, course);
         if (this.courses != null)
             this.courses.remove(course);
         semesterDataAccess.removeCourse(this, course);
@@ -92,8 +92,6 @@ public class Semester implements Identifiable {
         if (o == null || getClass() != o.getClass()) return false;
         Semester semester = (Semester) o;
         return semesterNr == semester.semesterNr &&
-                Objects.equals(rootDataAccess, semester.rootDataAccess) &&
-                Objects.equals(semesterDataAccess, semester.semesterDataAccess) &&
                 ID.equals(semester.ID) &&
                 Objects.equals(courses, semester.courses);
     }
