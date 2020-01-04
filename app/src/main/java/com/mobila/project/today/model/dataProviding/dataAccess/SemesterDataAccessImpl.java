@@ -1,10 +1,8 @@
 package com.mobila.project.today.model.dataProviding.dataAccess;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
@@ -12,7 +10,6 @@ import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Identifiable;
 import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.CourseTable;
-import com.mobila.project.today.model.dataProviding.dataAccess.databank.DBHelper;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.SemesterTable;
 
 import java.util.LinkedList;
@@ -25,17 +22,13 @@ class SemesterDataAccessImpl implements SemesterDataAccess {
 
     private IdentityMapper<Course> courseCache;
     private SQLiteDatabase database;
-    private SQLiteOpenHelper dbHelper;
 
     private SemesterDataAccessImpl() {
         this(
                 new IdentityMapper<>(),
                 OrganizerDataProvider.getInstance().getDatabase()
         );
-        this.dbHelper = new DBHelper(null);
     }
-
-    //TODO decide when to open the db connection
 
     /**
      * Supposed for TESTING REASONS ONLY.
@@ -54,17 +47,6 @@ class SemesterDataAccessImpl implements SemesterDataAccess {
         if (instance == null)
             instance = new SemesterDataAccessImpl();
         return instance;
-    }
-
-    @Override
-    public void open(Context context) {
-        this.dbHelper = new DBHelper(context);
-        this.database = this.dbHelper.getWritableDatabase();
-    }
-
-    @Override
-    public void close() {
-        this.dbHelper.close();
     }
 
     /**

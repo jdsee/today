@@ -17,7 +17,7 @@ import com.mobila.project.today.model.dataProviding.dataAccess.TaskDataAccess;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.DBHelper;
 
 class OrganizerDataProviderImpl implements OrganizerDataProvider {
-    private static final OrganizerDataProviderImpl instance = new OrganizerDataProviderImpl();
+    private static OrganizerDataProviderImpl instance;
 
     //TODO set access instances final
     private RootDataAccess rootAccess;
@@ -27,21 +27,23 @@ class OrganizerDataProviderImpl implements OrganizerDataProvider {
     private LectureDataAccess lectureAccess;
     private TaskDataAccess taskAccess;
     private NoteDataAccess noteAccess;
-    private final AttachmentDataAccess attachmentAccess;
+    private AttachmentDataAccess attachmentAccess;
 
     private DBHelper dbHelper;
     private SQLiteDatabase database;
 
     static OrganizerDataProviderImpl getInstance() {
+        if (instance == null)
+            instance = new OrganizerDataProviderImpl();
         return instance;
     }
 
     private OrganizerDataProviderImpl() {
-        this.attachmentAccess = AttachmentDataAccess.getInstance();
+        /*this.attachmentAccess = AttachmentDataAccess.getInstance();
         this.rootAccess = RootDataAccess.getInstance();
         this.semesterAccess = SemesterDataAccess.getInstance();
         this.courseAccess = CourseDataAccess.getInstance();
-        this.sectionAccess = SectionDataAccess.getInstance();
+        this.sectionAccess = SectionDataAccess.getInstance();*/
     }
 
     @Override
@@ -63,22 +65,22 @@ class OrganizerDataProviderImpl implements OrganizerDataProvider {
 
     @Override
     public RootDataAccess getRootDataAccess() {
-        return this.rootAccess;
+        return RootDataAccess.getInstance();
     }
 
     @Override
     public SemesterDataAccess getSemesterDataAccess() {
-        return this.semesterAccess;
+        return SemesterDataAccess.getInstance();
     }
 
     @Override
     public CourseDataAccess getCourseDataAccess() {
-        return this.courseAccess;
+        return CourseDataAccess.getInstance();
     }
 
     @Override
     public SectionDataAccess getSectionDataAccess() {
-        return this.sectionAccess;
+        return SectionDataAccess.getInstance();
     }
 
     @Override
@@ -93,11 +95,11 @@ class OrganizerDataProviderImpl implements OrganizerDataProvider {
 
     @Override
     public AttachmentDataAccess getAttachmentDataAccess() {
-        return this.attachmentAccess;
+        return AttachmentDataAccess.getInstance();
     }
 
     @Override
     public TaskDataAccess getTaskDataAccess() {
-        return taskAccess;
+        return TaskDataAccess.getInstance();
     }
 }

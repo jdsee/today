@@ -14,10 +14,6 @@ public interface AttachmentDataAccess {
         return AttachmentDataAccessImpl.getInstance();
     }
 
-    void open(Context context);
-
-    void close();
-
     Lecture getLecture(Identifiable attachment) throws DataKeyNotFoundException;
 
     String getTitle(Identifiable attachment) throws DataKeyNotFoundException;

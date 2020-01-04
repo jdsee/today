@@ -12,6 +12,7 @@ import com.mobila.project.today.model.Section;
 import com.mobila.project.today.model.Semester;
 import com.mobila.project.today.model.Task;
 import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
+import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.DBHelper;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.CourseTable;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.SectionTable;
@@ -30,33 +31,17 @@ class CourseDataAccessImpl implements CourseDataAccess {
     private IdentityMapper<Section> sectionCache;
     private IdentityMapper<Task> taskCache;
     private SQLiteDatabase database;
-    private DBHelper dbHelper;
 
     private CourseDataAccessImpl() {
         this.sectionCache = new IdentityMapper<>();
         this.taskCache = new IdentityMapper<>();
+        this.database = OrganizerDataProvider.getInstance().getDatabase();
     }
 
     public static CourseDataAccess getInstance() {
         if (instance == null)
             instance = new CourseDataAccessImpl();
         return instance;
-    }
-
-    @Override
-    public void open(Context context) {
-        this.dbHelper = new DBHelper(context);
-        this.database = this.dbHelper.getWritableDatabase();
-    }
-
-    @Override
-    public void close() {
-        this.dbHelper.close();
-    }
-
-    @Override
-    public boolean isOpen() {
-        return this.dbHelper != null && this.database.isOpen();
     }
 
     @Override

@@ -1,15 +1,12 @@
 package com.mobila.project.today.model.dataProviding.dataAccess;
 
-import android.content.Context;
 
 import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
-import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Identifiable;
 
 import java.util.Date;
 
 public interface TaskDataAccess {
-
     static TaskDataAccess getInstance() {
         return TaskDataAccessImpl.getInstance();
     }
@@ -17,8 +14,4 @@ public interface TaskDataAccess {
     void setDeadline(Identifiable task, Date date) throws DataKeyNotFoundException;
 
     void setContent(Identifiable task, String content) throws DataKeyNotFoundException;
-
-    void open(Context context);
-
-    void close();
 }

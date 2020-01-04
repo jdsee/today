@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.mobila.project.today.model.Identifiable;
 import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
+import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.DBHelper;
 
 import java.util.Date;
@@ -19,10 +20,9 @@ class TaskDataAccessImpl implements TaskDataAccess {
     public static final String TAG = TaskDataAccessImpl.class.getName();
 
     private SQLiteDatabase database;
-    private DBHelper dbHelper;
 
     private TaskDataAccessImpl() {
-        this.dbHelper = new DBHelper(null);
+        this.database = OrganizerDataProvider.getInstance().getDatabase();
     }
 
     static TaskDataAccess getInstance() {
@@ -43,17 +43,6 @@ class TaskDataAccessImpl implements TaskDataAccess {
         ContentValues values = new ContentValues();
         values.put(TaskTable.COLUMN_CONTENT, content);
         this.updateTaskInDB(task, values);
-    }
-
-    @Override
-    public void open(Context context) {
-        this.dbHelper = new DBHelper(context);
-        this.database = this.dbHelper.getWritableDatabase();
-    }
-
-    @Override
-    public void close() {
-        this.database.close();
     }
 
     private void updateTaskInDB(Identifiable task, ContentValues values) {

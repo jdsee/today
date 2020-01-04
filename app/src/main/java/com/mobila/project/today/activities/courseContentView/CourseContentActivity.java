@@ -46,8 +46,6 @@ public class CourseContentActivity extends DatabaseConnectionActivity
         assert ab != null;
         ab.setTitle(this.course.getTitle());
 
-        OrganizerDataProvider.getInstance().getCourseDataAccess().open(this);
-
         this.tasks = this.course.getTasks();
         this.initTaskView();
 

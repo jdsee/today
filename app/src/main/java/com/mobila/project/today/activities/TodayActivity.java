@@ -27,7 +27,6 @@ import com.mobila.project.today.activities.adapters.CourseAdapter;
 import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
 import com.mobila.project.today.model.dataProviding.SampleDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.RootDataAccess;
-import com.mobila.project.today.model.dataProviding.dataAccess.SemesterDataAccess;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -65,21 +64,12 @@ public class TodayActivity extends DatabaseConnectionActivity
         this.tasks = SampleDataProvider.getExampleTasks();
 
         this.rootDataAccess = OrganizerDataProvider.getInstance().getRootDataAccess();
-        SemesterDataAccess semesterDataAccess = OrganizerDataProvider.getInstance().getSemesterDataAccess();
-        this.rootDataAccess.open(this);
-        semesterDataAccess.open(this);
         this.semesters = rootDataAccess.getAllSemesters();
 
         initTaskView();
         initSemesterView();
         initCourseView();
         setTimeDisplayed();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        this.rootDataAccess.close();
     }
 
     @Override

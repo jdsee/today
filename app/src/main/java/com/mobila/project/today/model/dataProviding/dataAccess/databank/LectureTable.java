@@ -8,6 +8,19 @@ public class LectureTable {
     public static final String COLUMN_DATE = "date";
     public static final String COLUMN_ROOM_NR = "roomNr";
     public static final String COLUMN_RELATED_TO = "relatedTo";
+
     public static final String[] ALL_COLUMNS =
             new String[]{COLUMN_ID, COLUMN_NR, COLUMN_DATE, COLUMN_ROOM_NR, COLUMN_RELATED_TO};
+
+    public static final String SQL_CREATE =
+            "CREATE TABLE " + TABLE_NAME + "("+
+                    COLUMN_ID + " TEXT PRIMARY KEY, " +
+                    COLUMN_NR + " INTEGER, " +
+                    COLUMN_DATE + " INTEGER, " +
+                    COLUMN_ROOM_NR + " INTEGER, " +
+                    COLUMN_RELATED_TO + " TEXT REFERENCES " + SectionTable.TABLE_NAME + " ON DELETE CASCADE);";
+
+    public static final String SQL_DELETE =
+            "DROP TABLE " + TABLE_NAME;
+
 }

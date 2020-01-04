@@ -12,10 +12,6 @@ public interface RootDataAccess {
         return RootDataAccessImpl.getInstance();
     }
 
-    void open(Context context);
-
-    void close();
-
     List<Semester> getAllSemesters();
 
     void addSemester(Semester semester);

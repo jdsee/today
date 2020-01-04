@@ -11,6 +11,7 @@ import com.mobila.project.today.R;
 import com.mobila.project.today.activities.DatabaseConnectionActivity;
 import com.mobila.project.today.activities.adapters.TaskAdapter;
 import com.mobila.project.today.model.Task;
+import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
 
 import java.util.ArrayList;
 import java.util.Date;

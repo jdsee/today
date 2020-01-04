@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.mobila.project.today.model.Identifiable;
 import com.mobila.project.today.model.Lecture;
 import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
+import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.DBHelper;
 
 import java.io.File;
@@ -15,7 +16,6 @@ public class AttachmentDataAccessImpl implements AttachmentDataAccess {
     private static AttachmentDataAccess instance;
 
     private SQLiteDatabase database;
-    private SQLiteOpenHelper dbHelper;
 
     static AttachmentDataAccess getInstance() {
         if (instance == null)
@@ -23,17 +23,9 @@ public class AttachmentDataAccessImpl implements AttachmentDataAccess {
         return instance;
     }
 
-    @Override
-    public void open(Context context) {
-        this.dbHelper = new DBHelper(context);
-        this.database = this.dbHelper.getWritableDatabase();
+    private AttachmentDataAccessImpl(){
+        this.database = OrganizerDataProvider.getInstance().getDatabase();
     }
-
-    @Override
-    public void close() {
-        this.dbHelper.close();
-    }
-
 
     @Override
     public Lecture getLecture(Identifiable attachment) throws DataKeyNotFoundException {

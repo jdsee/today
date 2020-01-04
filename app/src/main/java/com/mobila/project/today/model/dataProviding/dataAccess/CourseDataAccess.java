@@ -15,10 +15,6 @@ public interface CourseDataAccess {
         return CourseDataAccessImpl.getInstance();
     }
 
-    void open(Context context);
-
-    void close();
-
     Semester getSemester(Identifiable course) throws DataKeyNotFoundException;
 
     List<Section> getSections(Identifiable course) throws DataKeyNotFoundException;
@@ -34,6 +30,4 @@ public interface CourseDataAccess {
     void removeSection(Identifiable course, Section section);
 
     void removeTask(Identifiable course, Task task);
-
-    boolean isOpen();
 }

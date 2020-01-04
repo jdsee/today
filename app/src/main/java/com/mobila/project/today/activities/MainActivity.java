@@ -12,6 +12,7 @@ import com.mobila.project.today.activities.editorView.EditorActivity;
 import com.mobila.project.today.activities.taskView.CourseTasksActivity;
 import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Lecture;
+import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
 import com.mobila.project.today.model.dataProviding.SampleDataProvider;
 
 public class MainActivity extends DatabaseConnectionActivity {

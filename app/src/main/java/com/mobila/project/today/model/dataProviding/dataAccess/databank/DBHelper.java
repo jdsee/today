@@ -22,7 +22,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(CourseTable.SQL_CREATE);
         db.execSQL(TaskTable.SQL_CREATE);
         db.execSQL(SectionTable.SQL_CREATE);
-        //TODO create dbs
+        db.execSQL(LectureTable.SQL_CREATE);
     }
 
     @Override

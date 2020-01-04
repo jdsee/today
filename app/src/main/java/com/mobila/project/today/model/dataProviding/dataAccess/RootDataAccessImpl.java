@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.mobila.project.today.model.Semester;
 import com.mobila.project.today.model.Task;
+import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.DBHelper;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.SemesterTable;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.TaskTable;
@@ -22,7 +23,6 @@ class RootDataAccessImpl implements RootDataAccess {
     public static final String TAG = RootDataAccessImpl.class.getName();
 
     private SQLiteDatabase database;
-    private SQLiteOpenHelper dbHelper;
     private List<Semester> semesters;
 
     static RootDataAccess getInstance() {
@@ -32,24 +32,12 @@ class RootDataAccessImpl implements RootDataAccess {
     }
 
     private RootDataAccessImpl() {
-        this(null);
+        this(OrganizerDataProvider.getInstance().getDatabase());
     }
 
     RootDataAccessImpl(SQLiteDatabase database) {
         this.database = database;
-        this.dbHelper = null;
         this.semesters = null;
-    }
-
-    @Override
-    public void open(Context context) {
-        this.dbHelper = new DBHelper(context);
-        this.database = this.dbHelper.getWritableDatabase();
-    }
-
-    @Override
-    public void close() {
-        dbHelper.close();
     }
 
     public long getDataItemsCount() {
@@ -91,7 +79,7 @@ class RootDataAccessImpl implements RootDataAccess {
     public void removeSemester(Semester semester) {
         this.semesters.remove(semester);
         this.database.delete(SemesterTable.TABLE_NAME,
-                SemesterTable.COLUMN_ID + " = '" + semester.getID()+"'", null);
+                SemesterTable.COLUMN_ID + " = '" + semester.getID() + "'", null);
     }
 
     @Override

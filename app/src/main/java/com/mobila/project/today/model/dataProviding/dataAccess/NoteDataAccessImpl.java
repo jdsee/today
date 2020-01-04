@@ -13,6 +13,7 @@ import android.util.Log;
 import com.mobila.project.today.model.Identifiable;
 import com.mobila.project.today.model.NoteReference;
 import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
+import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.NoteReferenceTable;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.NoteTable;
 
@@ -24,6 +25,10 @@ class NoteDataAccessImpl implements NoteDataAccess {
     private static final String NO_REFERENCES_FOR_NOTE_MSG = "no note references found for given course";
 
     private SQLiteDatabase database;
+
+    private NoteDataAccessImpl(){
+        this.database = OrganizerDataProvider.getInstance().getDatabase();
+    }
 
     @Override
     public void setTitle(Identifiable note, String title) throws DataKeyNotFoundException {

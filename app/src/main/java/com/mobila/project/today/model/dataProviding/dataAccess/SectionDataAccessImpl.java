@@ -8,6 +8,7 @@ import android.util.Log;
 import com.mobila.project.today.model.Identifiable;
 import com.mobila.project.today.model.Lecture;
 import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
+import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.LectureTable;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.SectionTable;
 
@@ -27,7 +28,7 @@ class SectionDataAccessImpl implements SectionDataAccess {
     private SectionDataAccessImpl() {
         this(
                 new IdentityMapper<>(),
-                null
+                OrganizerDataProvider.getInstance().getDatabase()
         );
     }
 
@@ -66,13 +67,8 @@ class SectionDataAccessImpl implements SectionDataAccess {
                 LectureTable.ALL_COLUMNS,
                 LectureTable.COLUMN_RELATED_TO + "=?",
                 new String[]{course.getID()}, null, null, null);
-        if (!cursor.moveToNext()) {
-            DataKeyNotFoundException t = new DataKeyNotFoundException(DataKeyNotFoundException.NO_ENTRY_MSG);
-            Log.d(TAG, DataKeyNotFoundException.NO_ENTRY_MSG + ": " + NO_LECTURES_FOR_SECTION_MSG, t);
-            throw t;
-        }
         List<Lecture> lectures = new LinkedList<>();
-        do {
+        while (cursor.moveToNext()) {
             Lecture lecture = new Lecture(
                     cursor.getString(cursor.getColumnIndex(LectureTable.COLUMN_ID)),
                     cursor.getInt(cursor.getColumnIndex(LectureTable.COLUMN_NR)),
@@ -80,7 +76,7 @@ class SectionDataAccessImpl implements SectionDataAccess {
                     cursor.getString(cursor.getColumnIndex(LectureTable.COLUMN_ROOM_NR))
             );
             lectures.add(lecture);
-        } while (cursor.moveToNext());
+        }
         cursor.close();
         return lectures;
     }
