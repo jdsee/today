@@ -8,6 +8,10 @@ import com.mobila.project.today.model.Identifiable;
 import java.util.List;
 
 public interface SectionDataAccess {
+    static SectionDataAccess getInstance() {
+        return SectionDataAccessImpl.getInstance();
+    }
+
     List<Lecture> getLectures(Identifiable course) throws DataKeyNotFoundException;
 
     void addLecture(Identifiable section, Lecture lecture) throws DataKeyNotFoundException;

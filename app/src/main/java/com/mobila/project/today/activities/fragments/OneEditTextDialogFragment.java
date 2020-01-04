@@ -1,4 +1,5 @@
 package com.mobila.project.today.activities.fragments;
+
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,7 +15,6 @@ public class OneEditTextDialogFragment extends GeneralConfirmationDialogFragment
 
     public static final String CONFIRMED_STRING = "CONFIRMATION_STRING";
 
-    private OneEditTextDialogListener callback;
     private EditText editText;
 
     @Override
@@ -27,21 +27,7 @@ public class OneEditTextDialogFragment extends GeneralConfirmationDialogFragment
     }
 
     @Override
-    void onConfirmation(Bundle resultBundle, GeneralConfirmationDialogFragment dialog) {
+    void onConfirmation(Bundle resultBundle) {
         resultBundle.putString(CONFIRMED_STRING, editText.getText().toString());
-        callback.onAddCourseConfirmation(resultBundle, dialog);
-    }
-
-    @Override
-    void onCancellation(Bundle resultBundle, GeneralConfirmationDialogFragment dialog) {
-        callback.onAddCourseConfirmation(resultBundle, dialog);
-    }
-
-    public void setOneEditTextDialogListener(OneEditTextDialogListener listener){
-        this.callback=listener;
-    }
-
-    public interface OneEditTextDialogListener {
-        void onAddCourseConfirmation(Bundle resultBundle, GeneralConfirmationDialogFragment dialog);
     }
 }

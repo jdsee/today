@@ -60,13 +60,15 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.tvSectionName.setText(this.sections.get(position).getTitle());
-        holder.tvLecturer.setText(this.sections.get(position).getLecturer());
+        Section section = this.sections.get(position);
+
+        holder.tvSectionName.setText(section.getTitle());
+        holder.tvLecturer.setText(section.getLecturer());
 
         RecyclerView rvLectures = holder.rvLectures;
         LinearLayoutManager layoutManager = new LinearLayoutManager(this.context);
         rvLectures.setLayoutManager(layoutManager);
-        rvLectures.setAdapter(new LectureAdapter(SampleDataProvider.getExampleLectures()));
+        rvLectures.setAdapter(new LectureAdapter(section.getLectures()));
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rvLectures.getContext(),
                 layoutManager.getOrientation());
         rvLectures.addItemDecoration(dividerItemDecoration);

@@ -1,5 +1,8 @@
 package com.mobila.project.today.model.dataProviding;
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+
 import com.mobila.project.today.model.dataProviding.dataAccess.AttachmentDataAccess;
 import com.mobila.project.today.model.dataProviding.dataAccess.CourseDataAccess;
 import com.mobila.project.today.model.dataProviding.dataAccess.LectureDataAccess;
@@ -13,6 +16,12 @@ public interface OrganizerDataProvider {
     static OrganizerDataProvider getInstance() {
         return OrganizerDataProviderImpl.getInstance();
     }
+
+    void openDbConnection(Context context);
+
+    void closeDbConnection();
+
+    SQLiteDatabase getDatabase();
 
     RootDataAccess getRootDataAccess();
 

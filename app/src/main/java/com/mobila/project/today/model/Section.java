@@ -32,6 +32,14 @@ public class Section implements Identifiable {
         this.dataAccess = dataProvider.getSectionDataAccess();
     }
 
+    public Section(String title, String lecturer) {
+        this(
+                KeyGenerator.getUniqueKey(),
+                title,
+                lecturer
+        );
+    }
+
     /**
      * Returns the course containing this section.
      *
@@ -39,7 +47,7 @@ public class Section implements Identifiable {
      */
     public Course getCourse() throws DataKeyNotFoundException {
         //TODO this method is probably useless
-     return null;
+        return null;
     }
 
     /**

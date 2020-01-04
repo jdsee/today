@@ -15,6 +15,7 @@ public abstract class GeneralConfirmationDialogFragment extends DialogFragment {
     public static final String DIALOG_DECLINING_EXTRA = "EXTRA_DIALOG_DECLINING";
 
     public static final String RESPONSE_CONFIRMED_EXTRA = "EXTRA_DIALOG_RESPONSE";
+    DialogListener callback;
 
     /**
      * Method that gets initialized if the fragment gets created
@@ -64,27 +65,26 @@ public abstract class GeneralConfirmationDialogFragment extends DialogFragment {
         builder.setPositiveButton(entryBundle.getString(DIALOG_CONFIRMING_EXTRA),
                 (dialog, which) -> {
                     resultBundle.putBoolean(RESPONSE_CONFIRMED_EXTRA, true);
-                    onConfirmation(resultBundle, this);
+                    onConfirmation(resultBundle);
+                    callback.onDialogConfirmation(resultBundle, this);
                 });
-        builder.setNegativeButton(entryBundle.getString(DIALOG_DECLINING_EXTRA),
-                (dialog, which) -> {
-                    resultBundle.putBoolean(RESPONSE_CONFIRMED_EXTRA, false);
-                    onCancellation(resultBundle, this);
-                });
+        builder.setNegativeButton(entryBundle.getString(DIALOG_DECLINING_EXTRA), null);
 
     }
 
     /**
-     * Reacting on positive feedback is done here. It is recommended to define an single-method
-     * interface that is called by this method and implemented by the class that creates the dialog.
+     * Reacting on positive feedback is done here.
+     * The DialogListener interface implemented by the class that creates the dialog.
      * The calling class should register itself as a subscriber and the single-method should be
      * called in this and the following method.
      */
-    abstract void onConfirmation(Bundle resultBundle, GeneralConfirmationDialogFragment dialog);
+    abstract void onConfirmation(Bundle resultBundle);
 
-    /**
-     * Reacting on negative feedback is done here. If nothing should be done, leave the body empty.
-     * Else, see documentation of onConfirmation().
-     */
-    abstract void onCancellation(Bundle resultBundle, GeneralConfirmationDialogFragment dialog);
+    public void setDialogListener(DialogListener listener) {
+        this.callback = listener;
+    }
+
+    public interface DialogListener {
+        void onDialogConfirmation(Bundle resultBundle, GeneralConfirmationDialogFragment dialog);
+    }
 }

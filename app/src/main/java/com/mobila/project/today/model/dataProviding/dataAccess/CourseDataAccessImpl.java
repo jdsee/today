@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.mobila.project.today.activities.TodayActivity;
 import com.mobila.project.today.model.Identifiable;
 import com.mobila.project.today.model.Section;
 import com.mobila.project.today.model.Semester;
@@ -98,7 +99,6 @@ class CourseDataAccessImpl implements CourseDataAccess {
             );
             sections.add(section);
         }
-        ;
         cursor.close();
         return sections;
     }

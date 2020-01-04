@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,10 +33,16 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
-public class TodayActivity extends AppCompatActivity
-        implements SimpleConfirmationDialogFragment.SimpleDialogListener,
-        OneEditTextDialogFragment.OneEditTextDialogListener {
+//TODO show appropriate courses if semester is deleted
+
+public class TodayActivity extends DatabaseConnectionActivity
+        implements GeneralConfirmationDialogFragment.DialogListener {
+    private static final String TAG = TodayActivity.class.getName();
+
+    private static final String ADD_COURSE_DIALOG_CODE = "ADD_COURSE_DIALOG";
+    public static final String DELETE_SEMESTER_DIALOG_CODE = "DELETE_COURSE_DIALOG";
 
     private static Bundle DELETE_SEMESTER_DIALOG_BUNDLE;
 
@@ -192,8 +199,8 @@ public class TodayActivity extends AppCompatActivity
             DELETE_SEMESTER_DIALOG_BUNDLE = bundle;
         }
         confirmationDialog.setArguments(DELETE_SEMESTER_DIALOG_BUNDLE);
-        confirmationDialog.setSimpleDialogListener(this);
-        confirmationDialog.show(getSupportFragmentManager(), "Confirmation Dialog");
+        confirmationDialog.setDialogListener(this);
+        confirmationDialog.show(getSupportFragmentManager(), DELETE_SEMESTER_DIALOG_CODE);
     }
 
     public void addCourse(View view) {
@@ -206,15 +213,31 @@ public class TodayActivity extends AppCompatActivity
         bundle.putString(OneEditTextDialogFragment.DIALOG_DECLINING_EXTRA, "cancel");
 
         addCourseDialog.setArguments(bundle);
-        addCourseDialog.setOneEditTextDialogListener(this);
-        addCourseDialog.show(getSupportFragmentManager(), "Add Course Dialog");
+        addCourseDialog.setDialogListener(this);
+        addCourseDialog.show(getSupportFragmentManager(), ADD_COURSE_DIALOG_CODE);
     }
 
     @Override
-    public void onSimpleDialogConfirmation(Bundle bundle,
-                                           GeneralConfirmationDialogFragment dialog) {
+    public void onDialogConfirmation(Bundle resultBundle, GeneralConfirmationDialogFragment dialog) {
+        String dialogType = dialog.getTag();
+        Objects.requireNonNull(dialogType, "dialog tag missing");
+        switch (dialogType) {
+            case ADD_COURSE_DIALOG_CODE:
+                this.onAddCourseDialogConfirmation(resultBundle);
+                break;
+            case DELETE_SEMESTER_DIALOG_CODE:
+                this.onDeleteSemesterDialogConfirmation(resultBundle);
+                break;
+            default:
+                NullPointerException e = new NullPointerException("dialog code unknown");
+                Log.e(TAG, e.getMessage(), e);
+                throw e;
+        }
+    }
+
+    private void onDeleteSemesterDialogConfirmation(Bundle resultBundle) {
         boolean confirmed =
-                bundle.getBoolean(SimpleConfirmationDialogFragment.RESPONSE_CONFIRMED_EXTRA);
+                resultBundle.getBoolean(SimpleConfirmationDialogFragment.RESPONSE_CONFIRMED_EXTRA);
         if (!semesters.isEmpty() && confirmed) {
             this.rootDataAccess.removeSemester(semesters.get(currentSemester));
             if (currentSemester > 0) {
@@ -225,16 +248,10 @@ public class TodayActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public void onAddCourseConfirmation(Bundle resultBundle,
-                                        GeneralConfirmationDialogFragment dialog) {
-        boolean confirmed =
-                resultBundle.getBoolean(OneEditTextDialogFragment.RESPONSE_CONFIRMED_EXTRA);
-        if (confirmed) {
-            String courseName = resultBundle.getString(OneEditTextDialogFragment.CONFIRMED_STRING);
-            Course course = new Course(courseName);
-            semesters.get(currentSemester).addCourse(course);
-        }
+    private void onAddCourseDialogConfirmation(Bundle resultBundle) {
+        String courseName = resultBundle.getString(OneEditTextDialogFragment.CONFIRMED_STRING);
+        Course course = new Course(courseName);
+        semesters.get(currentSemester).addCourse(course);
         initCourseView();
     }
 

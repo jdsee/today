@@ -10,6 +10,7 @@ import android.util.Log;
 import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
 import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Identifiable;
+import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.CourseTable;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.DBHelper;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.SemesterTable;
@@ -29,7 +30,7 @@ class SemesterDataAccessImpl implements SemesterDataAccess {
     private SemesterDataAccessImpl() {
         this(
                 new IdentityMapper<>(),
-                null
+                OrganizerDataProvider.getInstance().getDatabase()
         );
         this.dbHelper = new DBHelper(null);
     }

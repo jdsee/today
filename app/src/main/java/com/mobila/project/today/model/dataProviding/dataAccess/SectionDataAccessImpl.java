@@ -24,11 +24,17 @@ class SectionDataAccessImpl implements SectionDataAccess {
     private IdentityMapper<Lecture> lectureCache;
     private SQLiteDatabase database;
 
-    private SectionDataAccessImpl(){
+    private SectionDataAccessImpl() {
         this(
                 new IdentityMapper<>(),
                 null
         );
+    }
+
+    static SectionDataAccess getInstance() {
+        if (instance == null)
+            instance = new SectionDataAccessImpl();
+        return instance;
     }
 
     /**
@@ -37,7 +43,7 @@ class SectionDataAccessImpl implements SectionDataAccess {
      * it is only supposed to be used for dependency injection -> mockInjection
      *
      * @param lectureCache the IdentityMapper dependency
-     * @param database    the SQLiteDatabase dependency
+     * @param database     the SQLiteDatabase dependency
      */
     SectionDataAccessImpl(IdentityMapper<Lecture> lectureCache, SQLiteDatabase database) {
         this.lectureCache = lectureCache;
@@ -119,7 +125,7 @@ class SectionDataAccessImpl implements SectionDataAccess {
     @Override
     public void removeLecture(Identifiable section, Lecture lecture) {
         this.database.delete(LectureTable.TABLE_NAME,
-                LectureTable.COLUMN_ID +"=?s",new String[]{lecture.getID()});
+                LectureTable.COLUMN_ID + "=?s", new String[]{lecture.getID()});
         this.lectureCache.removeElement(section, lecture);
     }
 }

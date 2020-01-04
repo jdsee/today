@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mobila.project.today.R;
+import com.mobila.project.today.activities.DatabaseConnectionActivity;
 import com.mobila.project.today.model.dataProviding.SampleDataProvider;
 import com.mobila.project.today.activities.adapters.FileAdapter;
 import com.mobila.project.today.activities.adapters.TaskAdapter;
@@ -40,7 +41,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-public class EditorActivity extends AppCompatActivity {
+public class EditorActivity extends DatabaseConnectionActivity {
 
     private Lecture lecture;
     private Section section;
