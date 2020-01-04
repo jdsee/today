@@ -5,6 +5,7 @@ public class CourseTable {
     public static final String COLUMN_ID = "courseID";
     public static final String COLUMN_TITLE = "courseTitle";
     public static final String COLUMN_RELATED_TO = "relatedTo";
+
     public static final String[] ALL_COLUMNS = {COLUMN_ID, COLUMN_TITLE, COLUMN_RELATED_TO};
 
     public static final String SQL_CREATE =

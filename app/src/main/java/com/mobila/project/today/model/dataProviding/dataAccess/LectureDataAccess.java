@@ -11,6 +11,10 @@ import java.util.List;
 
 public interface LectureDataAccess {
 
+    static LectureDataAccess getInstance() {
+        return LectureDataAccessImpl.getInstance();
+    }
+
     Section getSection(Identifiable lecture) throws DataKeyNotFoundException;
 
     Note getNote(Identifiable lecture) throws DataKeyNotFoundException;

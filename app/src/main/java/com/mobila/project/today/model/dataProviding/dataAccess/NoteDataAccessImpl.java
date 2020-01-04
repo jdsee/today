@@ -6,8 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.SpannedString;
 import android.util.Log;
 
 import com.mobila.project.today.model.Identifiable;
@@ -20,11 +18,20 @@ import com.mobila.project.today.model.dataProviding.dataAccess.databank.NoteTabl
 import java.util.List;
 
 class NoteDataAccessImpl implements NoteDataAccess {
+    private static NoteDataAccessImpl instance;
+
     private static final String TAG = NoteDataAccessImpl.class.getName();
     private static final String NO_CONTENT_FOR_NOTE_MSG = "no content found for given course";
     private static final String NO_REFERENCES_FOR_NOTE_MSG = "no note references found for given course";
 
+
     private SQLiteDatabase database;
+
+    static NoteDataAccess getInstance(){
+        if (instance == null)
+            instance = new NoteDataAccessImpl();
+        return instance;
+    }
 
     private NoteDataAccessImpl(){
         this.database = OrganizerDataProvider.getInstance().getDatabase();
@@ -53,8 +60,8 @@ class NoteDataAccessImpl implements NoteDataAccess {
             Log.d(TAG, DataKeyNotFoundException.NO_ENTRY_MSG + ": " + NO_CONTENT_FOR_NOTE_MSG, t);
             throw t;
         }
-
         String contentHtml = cursor.getString(cursor.getColumnIndex(NoteTable.COLUMN_CONTENT));
+        cursor.close();
         return new SpannableString(Html.fromHtml(contentHtml, Html.FROM_HTML_MODE_LEGACY));
     }
 
@@ -82,13 +89,13 @@ class NoteDataAccessImpl implements NoteDataAccess {
             throw t;
         }
 
-        do {
+        //do {
             /*NoteReference noteReference = new NoteReference(
                     cursor.getString(cursor.getColumnIndex(NoteReferenceTable.COLUMN_ID)),
 
             );*/
-        } while(cursor.moveToNext());
-
+        //} while(cursor.moveToNext());
+        cursor.close();
         return null;
     }
 

@@ -6,6 +6,7 @@ public class TaskTable {
     public static final String COLUMN_CONTENT = "content";
     public static final String COLUMN_DEADLINE = "deadline";
     public static final String COLUMN_RELATED_TO = "relatedTo";
+
     public static final String[] ALL_COLUMNS = {COLUMN_ID, COLUMN_CONTENT, COLUMN_DEADLINE, COLUMN_RELATED_TO};
 
     public static final String SQL_CREATE =
@@ -14,6 +15,7 @@ public class TaskTable {
                     COLUMN_CONTENT + " VARCHAR," +
                     COLUMN_DEADLINE + " INTEGER," +
                     COLUMN_RELATED_TO + " VARCHAR);";
+
     public static final String SQL_DELETE =
             "DROP TABLE " + TABLE_NAME;
 }

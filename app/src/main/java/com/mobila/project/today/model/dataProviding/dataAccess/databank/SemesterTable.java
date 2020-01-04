@@ -4,6 +4,7 @@ public class SemesterTable {
     public static final String TABLE_NAME = "semesters";
     public static final String COLUMN_ID = "semesterID";
     public static final String COLUMN_NR = "semesterNr";
+
     public static final String[] ALL_COLUMNS = {COLUMN_ID, COLUMN_NR};
 
     public static final String SQL_CREATE =

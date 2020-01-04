@@ -85,12 +85,12 @@ class OrganizerDataProviderImpl implements OrganizerDataProvider {
 
     @Override
     public LectureDataAccess getLectureDataAccess() {
-        return this.lectureAccess;
+        return LectureDataAccess.getInstance();
     }
 
     @Override
     public NoteDataAccess getNoteDataAccess() {
-        return this.noteAccess;
+        return NoteDataAccess.getInstance();
     }
 
     @Override
