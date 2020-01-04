@@ -8,7 +8,8 @@ public class SimpleConfirmationDialogFragment extends GeneralConfirmationDialogF
     private SimpleDialogListener callback;
 
     @Override
-    void getOptionalDialogAddendum(Bundle bundle, AlertDialog.Builder builder) {}
+    void getOptionalDialogAddendum(Bundle bundle, AlertDialog.Builder builder) {
+    }
 
     @Override
     void onConfirmation(Bundle resultBundle, GeneralConfirmationDialogFragment dialog) {
@@ -20,11 +21,11 @@ public class SimpleConfirmationDialogFragment extends GeneralConfirmationDialogF
         this.callback.onSimpleDialogConfirmation(resultBundle, dialog);
     }
 
-    public void setSimpleDialogListener(SimpleDialogListener listener){
-        this.callback=listener;
+    public void setSimpleDialogListener(SimpleDialogListener listener) {
+        this.callback = listener;
     }
 
-    public interface SimpleDialogListener{
+    public interface SimpleDialogListener {
         void onSimpleDialogConfirmation(Bundle bundle, GeneralConfirmationDialogFragment dialog);
     }
 }

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.mobila.project.today.R;
+import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
 import com.mobila.project.today.model.dataProviding.SampleDataProvider;
 import com.mobila.project.today.activities.adapters.SectionAdapter;
 import com.mobila.project.today.activities.adapters.TaskAdapter;
@@ -35,12 +36,12 @@ public class CourseContentActivity extends AppCompatActivity {
         ActionBar ab = this.getSupportActionBar();
         ab.setTitle(this.course.getTitle());
 
-        this.tasks = SampleDataProvider.getExampleTasks();
-        //TODO this.tasks = this.course.getTasks();
+        OrganizerDataProvider.getInstance().getCourseDataAccess().open(this);
+
+        this.tasks = this.course.getTasks();
         this.initTaskView();
 
-        this.sections = SampleDataProvider.getExampleSections();
-        //TODO this.sections = this.course.getSections();
+        this.sections = this.course.getSections();
         this.initSectionView();
 
     }
@@ -60,6 +61,6 @@ public class CourseContentActivity extends AppCompatActivity {
     }
 
     public void onAddSectionClicked(View view) {
-        //TODO add Section when button clicked
+
     }
 }

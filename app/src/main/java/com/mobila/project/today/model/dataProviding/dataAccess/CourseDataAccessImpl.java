@@ -54,6 +54,11 @@ class CourseDataAccessImpl implements CourseDataAccess {
     }
 
     @Override
+    public boolean isOpen() {
+        return this.dbHelper != null && this.database.isOpen();
+    }
+
+    @Override
     public Semester getSemester(Identifiable course) throws DataKeyNotFoundException {
         Log.d(TAG, "requesting courses from data base");
         return null;
@@ -85,14 +90,15 @@ class CourseDataAccessImpl implements CourseDataAccess {
                 SectionTable.COLUMN_RELATED_TO + "=?", new String[]{course.getID()},
                 null, null, null);
         List<Section> sections = new LinkedList<>();
-        while (cursor.moveToNext()){
+        while (cursor.moveToNext()) {
             Section section = new Section(
                     cursor.getString(cursor.getColumnIndex(SectionTable.COLUMN_ID)),
                     cursor.getString(cursor.getColumnIndex(SectionTable.COLUMN_TITLE)),
                     cursor.getString(cursor.getColumnIndex(SectionTable.COLUMN_LECTURER))
             );
             sections.add(section);
-        };
+        }
+        ;
         cursor.close();
         return sections;
     }
@@ -133,15 +139,10 @@ class CourseDataAccessImpl implements CourseDataAccess {
     private List<Task> getTasksFromDB(Identifiable course) {
         Log.d(TAG, "requesting from database: tasks related to course(id:" + course.getID() + ")");
         Cursor cursor = this.database.query(TaskTable.TABLE_NAME, TaskTable.ALL_COLUMNS,
-                TaskTable.COLUMN_RELATED_TO + "=?s", new String[]{course.getID()},
+                TaskTable.COLUMN_RELATED_TO + "=?", new String[]{course.getID()},
                 null, null, null);
-        if (!cursor.moveToNext()) {
-            DataKeyNotFoundException t = new DataKeyNotFoundException(DataKeyNotFoundException.NO_ENTRY_MSG);
-            Log.d(TAG, DataKeyNotFoundException.NO_ENTRY_MSG + ": " + NO_SECTIONS_FOR_COURSE_MSG, t);
-            throw t;
-        }
         List<Task> tasks = new LinkedList<>();
-        do {
+        while (cursor.moveToNext()) {
             Task section = new Task(
                     cursor.getString(cursor.getColumnIndex(TaskTable.COLUMN_ID)),
                     cursor.getString(cursor.getColumnIndex(TaskTable.COLUMN_CONTENT)),
@@ -149,7 +150,7 @@ class CourseDataAccessImpl implements CourseDataAccess {
                     //cursor.getString(cursor.getColumnIndex(TaskTable.COLUMN_RELATED_TO))
             );
             tasks.add(section);
-        } while (cursor.moveToNext());
+        }
         cursor.close();
         return tasks;
     }

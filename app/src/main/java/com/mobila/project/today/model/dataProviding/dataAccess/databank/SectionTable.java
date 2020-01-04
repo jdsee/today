@@ -11,10 +11,10 @@ public class SectionTable {
 
     public static final String SQL_CREATE =
             "CREATE TABLE " + TABLE_NAME + "(" +
-                    COLUMN_ID + " VARCHAR§ PRIMARY KEY," +
-                    COLUMN_TITLE + " VARCHAR," +
-                    COLUMN_LECTURER + " VARCHAR" +
-                    COLUMN_RELATED_TO + "INTEGER);";
+                    COLUMN_ID + " TEXT PRIMARY KEY," +
+                    COLUMN_TITLE + " TEXT," +
+                    COLUMN_LECTURER + " TEXT," +
+                    COLUMN_RELATED_TO + " TEXT REFERENCES " + CourseTable.TABLE_NAME + " ON DELETE CASCADE);";
     public static final String SQL_DELETE =
             "DROP TABLE " + TABLE_NAME;
 }

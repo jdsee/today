@@ -1,5 +1,8 @@
 package com.mobila.project.today.model.dataProviding;
 
+import android.app.Application;
+
+import com.mobila.project.today.activities.MainActivity;
 import com.mobila.project.today.model.dataProviding.dataAccess.AttachmentDataAccess;
 import com.mobila.project.today.model.dataProviding.dataAccess.CourseDataAccess;
 import com.mobila.project.today.model.dataProviding.dataAccess.LectureDataAccess;
@@ -30,6 +33,7 @@ class OrganizerDataProviderImpl implements OrganizerDataProvider {
         this.attachmentAccess = AttachmentDataAccess.getInstance();
         this.rootAccess = RootDataAccess.getInstance();
         this.semesterAccess = SemesterDataAccess.getInstance();
+        this.courseAccess = CourseDataAccess.getInstance();
     }
 
     @Override

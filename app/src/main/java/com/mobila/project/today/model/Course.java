@@ -138,20 +138,14 @@ public class Course implements Identifiable, Parcelable {
         this.dataAccess.removeSection(this, section);
     }
 
-
-    private void checkTasksNotNull() {
-        if (this.tasks == null)
-            this.tasks = dataAccess.getTasks(this);
-    }
-
     /**
      * Returns a list with all tasks contained in this course.
      *
      * @return a list with all tasks contained in this course
      */
     public List<Task> getTasks() throws DataKeyNotFoundException {
-        this.checkTasksNotNull();
-        this.dataAccess.getTasks(this);
+        if (this.tasks == null)
+            this.tasks = this.dataAccess.getTasks(this);
         return this.tasks;
     }
 
@@ -159,8 +153,8 @@ public class Course implements Identifiable, Parcelable {
      * Adds a task to this course.
      */
     public void addTask(Task task) throws DataKeyNotFoundException {
-        this.checkTasksNotNull();
-        this.tasks.add(task);
+        if (this.tasks != null)
+            this.tasks.add(task);
         this.dataAccess.addTask(this, task);
     }
 
@@ -168,8 +162,8 @@ public class Course implements Identifiable, Parcelable {
      * Removes a task contained in this course.
      */
     public void removeTask(Task task) throws DataKeyNotFoundException {
-        this.checkTasksNotNull();
-        this.tasks.remove(task);
+        if (this.tasks != null)
+            this.tasks.remove(task);
         this.dataAccess.removeTask(this, task);
     }
 

@@ -34,4 +34,6 @@ public interface CourseDataAccess {
     void removeSection(Identifiable course, Section section);
 
     void removeTask(Identifiable course, Task task);
+
+    boolean isOpen();
 }

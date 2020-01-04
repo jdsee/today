@@ -96,7 +96,7 @@ public class TodayActivity extends AppCompatActivity
     }
 
     private void initSemesterView() {
-        currentSemester = semesters.size() != 0 ? semesters.size() - 1 : 0;
+        currentSemester = semesters.size() != 0 ? semesters.size() - 1 : -1;
         this.setSemester();
         showAppropriateSemesterButtons();
     }
@@ -109,7 +109,7 @@ public class TodayActivity extends AppCompatActivity
 
     private void initCourseView() {
         RecyclerView courseRecyclerView = findViewById(R.id.recycler_view_courses);
-        if (this.semesters != null) {
+        if (this.semesters != null && this.currentSemester >= 0) {
             this.courseAdapter = new CourseAdapter(this, semesters.get(currentSemester));
             courseRecyclerView.setAdapter(courseAdapter);
             courseRecyclerView.setLayoutManager(new LinearLayoutManager(this));
