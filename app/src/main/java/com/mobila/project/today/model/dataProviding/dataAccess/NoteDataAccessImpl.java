@@ -9,20 +9,16 @@ import android.text.SpannableString;
 import android.util.Log;
 
 import com.mobila.project.today.model.Identifiable;
-import com.mobila.project.today.model.NoteReference;
 import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
 import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
-import com.mobila.project.today.model.dataProviding.dataAccess.databank.NoteReferenceTable;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.NoteTable;
-
-import java.util.List;
 
 class NoteDataAccessImpl implements NoteDataAccess {
     private static NoteDataAccessImpl instance;
 
     private static final String TAG = NoteDataAccessImpl.class.getName();
     private static final String NO_CONTENT_FOR_NOTE_MSG = "no content found for given course";
-    private static final String NO_REFERENCES_FOR_NOTE_MSG = "no note references found for given course";
+    //private static final String NO_REFERENCES_FOR_NOTE_MSG = "no note references found for given course";
 
 
     private SQLiteDatabase database;
@@ -73,7 +69,8 @@ class NoteDataAccessImpl implements NoteDataAccess {
                 NoteTable.COLUMN_ID + "=?s", new String[]{note.getID()});
     }
 
-    @Override
+
+    /*@Override
     public List<NoteReference> getReferences(Identifiable note) throws DataKeyNotFoundException {
         Cursor cursor = this.database.query(
                 NoteReferenceTable.TABLE_NAME,
@@ -90,10 +87,10 @@ class NoteDataAccessImpl implements NoteDataAccess {
         }
 
         //do {
-            /*NoteReference noteReference = new NoteReference(
+            *//*NoteReference noteReference = new NoteReference(
                     cursor.getString(cursor.getColumnIndex(NoteReferenceTable.COLUMN_ID)),
 
-            );*/
+            );*//*
         //} while(cursor.moveToNext());
         cursor.close();
         return null;
@@ -108,4 +105,5 @@ class NoteDataAccessImpl implements NoteDataAccess {
     public void removeReference(Identifiable reference) {
 
     }
+    */
 }

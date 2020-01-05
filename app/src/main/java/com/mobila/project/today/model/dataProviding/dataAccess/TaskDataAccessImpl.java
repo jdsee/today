@@ -1,12 +1,10 @@
 package com.mobila.project.today.model.dataProviding.dataAccess;
 
-import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.mobila.project.today.model.Identifiable;
 import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
 import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
-import com.mobila.project.today.model.dataProviding.dataAccess.databank.DBHelper;
 
 import java.util.Date;
 

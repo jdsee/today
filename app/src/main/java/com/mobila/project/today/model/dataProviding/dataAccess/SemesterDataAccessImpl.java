@@ -16,7 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 class SemesterDataAccessImpl implements SemesterDataAccess {
-    public static final String TAG = SemesterDataAccessImpl.class.getName();
+    private static final String TAG = SemesterDataAccessImpl.class.getName();
 
     private static SemesterDataAccess instance;
 

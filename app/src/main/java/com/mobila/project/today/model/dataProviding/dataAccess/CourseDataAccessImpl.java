@@ -1,19 +1,16 @@
 package com.mobila.project.today.model.dataProviding.dataAccess;
 
-import android.content.Context;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.mobila.project.today.activities.TodayActivity;
 import com.mobila.project.today.model.Identifiable;
 import com.mobila.project.today.model.Section;
 import com.mobila.project.today.model.Semester;
 import com.mobila.project.today.model.Task;
 import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
 import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
-import com.mobila.project.today.model.dataProviding.dataAccess.databank.DBHelper;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.CourseTable;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.SectionTable;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.TaskTable;
@@ -25,8 +22,7 @@ import java.util.LinkedList;
 class CourseDataAccessImpl implements CourseDataAccess {
     private static CourseDataAccess instance;
 
-    public static final String TAG = CourseDataAccess.class.getName();
-    private static final String NO_SECTIONS_FOR_COURSE_MSG = "no sections related to given course";
+    private static final String TAG = CourseDataAccess.class.getName();
 
     private IdentityMapper<Section> sectionCache;
     private IdentityMapper<Task> taskCache;

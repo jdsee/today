@@ -63,7 +63,7 @@ public class Note implements Identifiable {
         this.noteDataAccess.setContent(this, content);
     }
 
-    public List<NoteReference> getReferences() throws DataKeyNotFoundException {
+   /* public List<NoteReference> getReferences() throws DataKeyNotFoundException {
         return this.noteDataAccess.getReferences(this);
     }
 
@@ -73,7 +73,8 @@ public class Note implements Identifiable {
 
     public void removeReference(Identifiable reference) throws DataKeyNotFoundException {
         this.noteDataAccess.removeReference(reference);
-    }
+    }*/
+
     @Override
     public String getID() {
         return this.ID;

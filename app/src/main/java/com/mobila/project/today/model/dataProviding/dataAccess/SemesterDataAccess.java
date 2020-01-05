@@ -1,7 +1,5 @@
 package com.mobila.project.today.model.dataProviding.dataAccess;
 
-import android.content.Context;
-
 import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
 import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Identifiable;

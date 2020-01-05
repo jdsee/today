@@ -4,10 +4,6 @@ import android.text.Spannable;
 
 import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
 import com.mobila.project.today.model.Identifiable;
-import com.mobila.project.today.model.Lecture;
-import com.mobila.project.today.model.NoteReference;
-
-import java.util.List;
 
 public interface NoteDataAccess {
 
@@ -21,9 +17,9 @@ public interface NoteDataAccess {
 
     void setContent(Identifiable note, Spannable content) throws DataKeyNotFoundException;
 
-    List<NoteReference> getReferences(Identifiable note) throws DataKeyNotFoundException;
+    //List<NoteReference> getReferences(Identifiable note) throws DataKeyNotFoundException;
 
-    void addReference(Identifiable note, Identifiable reference, int row) throws DataKeyNotFoundException;
+    //void addReference(Identifiable note, Identifiable reference, int row) throws DataKeyNotFoundException;
 
-    void removeReference(Identifiable reference);
+    //void removeReference(Identifiable reference);
 }

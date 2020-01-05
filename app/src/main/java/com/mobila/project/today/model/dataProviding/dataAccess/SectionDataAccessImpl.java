@@ -3,7 +3,6 @@ package com.mobila.project.today.model.dataProviding.dataAccess;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.mobila.project.today.model.Identifiable;
 import com.mobila.project.today.model.Lecture;

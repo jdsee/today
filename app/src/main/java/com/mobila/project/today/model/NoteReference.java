@@ -1,3 +1,6 @@
+//class not needed for last milestone
+
+/*
 package com.mobila.project.today.model;
 
 import java.util.UUID;
@@ -39,3 +42,4 @@ public class NoteReference implements Identifiable {
         return this.ID;
     }
 }
+*/
