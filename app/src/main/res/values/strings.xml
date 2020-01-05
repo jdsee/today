@@ -39,6 +39,7 @@
     <string name="background_font_colour_purple">Purple</string>
     <string name="background_font_colour_red">Red</string>
 
+    <string name="semester">Semester</string>
     <string name="add_course">Add course</string>
     <string name="date_format">yyyy.MM.dd-HH:mm:ss</string>
     <string name="add_task">Add task</string>

@@ -1,6 +1,5 @@
 package com.mobila.project.today.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,7 +24,6 @@ import com.mobila.project.today.model.Semester;
 import com.mobila.project.today.model.Task;
 import com.mobila.project.today.activities.adapters.CourseAdapter;
 import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
-import com.mobila.project.today.model.dataProviding.SampleDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.RootDataAccess;
 
 import java.text.SimpleDateFormat;
@@ -61,10 +59,9 @@ public class TodayActivity extends DatabaseConnectionActivity
         setContentView(R.layout.activity_today);
         this.semesterView = findViewById(R.id.semester_view);
 
-        this.tasks = SampleDataProvider.getExampleTasks();
-
         this.rootDataAccess = OrganizerDataProvider.getInstance().getRootDataAccess();
         this.semesters = rootDataAccess.getAllSemesters();
+        this.tasks = rootDataAccess.getAllTasks();
 
         initTaskView();
         initSemesterView();
@@ -166,7 +163,7 @@ public class TodayActivity extends DatabaseConnectionActivity
             } catch (UncheckedTodayException ignored) {
             }
         } else {
-            semesterView.setText(String.format(Locale.getDefault(), "Semester"));
+            semesterView.setText(R.string.semester);
         }
     }
 

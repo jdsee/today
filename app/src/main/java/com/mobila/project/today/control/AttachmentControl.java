@@ -76,7 +76,7 @@ public class AttachmentControl {
 
             if (requestCode == REQUEST_TAKE_PHOTO && currentImagePath != null) {
                 File file = new File(currentImagePath);
-                this.lecture.addAttachment(new Attachment(file));
+                //this.lecture.addAttachment(new Attachment(file));
                 Toast.makeText(context.getApplicationContext(),
                         "Image Saved", Toast.LENGTH_LONG).show();
                 this.currentImagePath = null;
@@ -103,7 +103,7 @@ public class AttachmentControl {
                     }
                     Toast.makeText(context.getApplicationContext(),
                             "File Saved", Toast.LENGTH_LONG).show();
-                    this.lecture.addAttachment(new Attachment(destinationFile));
+                    //this.lecture.addAttachment(new Attachment(destinationFile));
                 } else Toast.makeText(context.getApplicationContext(),
                         "File was lost", Toast.LENGTH_LONG).show();
             } else {
