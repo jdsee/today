@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mobila.project.today.R;
-import com.mobila.project.today.model.dataProviding.SampleDataProvider;
 import com.mobila.project.today.model.Section;
 
 import java.util.List;

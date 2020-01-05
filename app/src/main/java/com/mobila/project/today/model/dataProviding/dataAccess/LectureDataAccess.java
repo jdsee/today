@@ -19,21 +19,15 @@ public interface LectureDataAccess {
 
     Note getNote(Identifiable lecture) throws DataKeyNotFoundException;
 
-    List<Attachment> getAttachments(Identifiable note) throws DataKeyNotFoundException;
+    List<Attachment> getAttachments(Identifiable lecture) throws DataKeyNotFoundException;
 
-    void addAttachment(Identifiable note, Identifiable attachment) throws DataKeyNotFoundException;
-
-    int getLectureNumber(Identifiable lecture) throws DataKeyNotFoundException;
+    void addAttachment(Identifiable lecture, Attachment attachment) throws DataKeyNotFoundException;
 
     void setLectureNumber(Identifiable lecture, int number) throws DataKeyNotFoundException;
 
-    String getRoomNumber(Identifiable lecture) throws DataKeyNotFoundException;
-
     void setRoomNumber(Identifiable lecture, String roomNumber) throws DataKeyNotFoundException;
-
-    Date getDate(Identifiable lecture) throws DataKeyNotFoundException;
 
     void setDate(Identifiable lecture, Date date) throws DataKeyNotFoundException;
 
-    void removeAttachment(Identifiable attachment);
+    void removeAttachment(Identifiable lecture, Attachment attachment);
 }

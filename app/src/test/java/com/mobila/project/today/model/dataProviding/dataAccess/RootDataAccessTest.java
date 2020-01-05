@@ -116,8 +116,7 @@ public class RootDataAccessTest {
     @Test
     public void getAllSemestersWhenDatabaseWasAlreadyAccessedBefore_Test() {
         //exercise
-        List<Semester> result = this.dataAccess.getAllSemesters();
-        result = this.dataAccess.getAllSemesters();
+        this.dataAccess.getAllSemesters();
 
         //verify
         this.verifyQueryOnDatabase(1);

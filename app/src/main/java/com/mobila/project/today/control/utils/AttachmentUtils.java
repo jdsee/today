@@ -13,6 +13,7 @@ import android.webkit.MimeTypeMap;
 import androidx.core.content.ContextCompat;
 
 import com.mobila.project.today.R;
+import com.mobila.project.today.model.Attachment;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -67,6 +68,11 @@ public interface AttachmentUtils {
                     fileExtension.toLowerCase());
         }
         return mimeType;
+    }
+
+    static String getMimeType(Context context, Attachment attachment){
+        //todo
+        return null;
     }
 
     /**
@@ -152,7 +158,7 @@ public interface AttachmentUtils {
      * Method for opening a file
      * @param file the file that should be opened
      */
-    static void openFile(File file){
+    static void openFile(Uri file){
         //TODO after Establishing SQLite Database
 //        Intent intent = new Intent(Intent.ACTION_VIEW);
 //        intent.setDataAndType(Uri.fromFile(file), "*/*");

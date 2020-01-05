@@ -13,14 +13,12 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mobila.project.today.R;
 import com.mobila.project.today.activities.DatabaseConnectionActivity;
-import com.mobila.project.today.model.dataProviding.SampleDataProvider;
 import com.mobila.project.today.activities.adapters.FileAdapter;
 import com.mobila.project.today.activities.adapters.TaskAdapter;
 import com.mobila.project.today.activities.editorView.listeners.EditorKeyboardEventListener;
@@ -78,9 +76,9 @@ public class EditorActivity extends DatabaseConnectionActivity {
         this.lecture = getIntent().getParcelableExtra(Lecture.INTENT_EXTRA_CODE);
 
         //TODO replace with Objects from Lecture
-        this.section = SampleDataProvider.getExampleSection();
-        this.tasks = SampleDataProvider.getExampleTasks();
-        this.attachments = SampleDataProvider.getExampleAttachments();
+        this.section = lecture.getSection();
+        this.tasks = lecture.getSection().getCourse().getTasks();
+        this.attachments = lecture.getAttachments();
 
 
         setupViews();
@@ -517,7 +515,7 @@ public class EditorActivity extends DatabaseConnectionActivity {
         //TODO make note save itself onClose etc...
         /*
         String title = this.titleEditText.getText().toString();
-        note.setTitle(title);
+        note.setName(title);
 
         Spannable content = this.contentEditText.getText();
         note.setContent(content);

@@ -13,7 +13,6 @@ import static org.mockito.ArgumentMatchers.nullable;
 public class MockSQLiteDatabase {
     private SQLiteDatabase mockedDatabase;
     private Cursor mockedCursor;
-    private boolean cursorMoveToNext;
     private int cursorMoveToNextTimes;
 
     public SQLiteDatabase getMockedDatabase() {
@@ -23,7 +22,6 @@ public class MockSQLiteDatabase {
     public MockSQLiteDatabase() {
         this.mockedDatabase = Mockito.mock(SQLiteDatabase.class);
         this.mockedCursor = Mockito.mock(Cursor.class);
-        this.cursorMoveToNext = true;
         this.setupMock();
     }
 
@@ -59,7 +57,6 @@ public class MockSQLiteDatabase {
         this.cursorMoveToNextTimes = hasEntry ? 2 : 0;
         Mockito.when(this.mockedCursor.moveToNext()).thenAnswer(answer -> {
             this.cursorMoveToNextTimes--;
-            System.out.println("cursorMoveToNextTimes: " + this.cursorMoveToNextTimes);
             return cursorMoveToNextTimes > 0;
         });
     }
