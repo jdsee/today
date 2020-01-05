@@ -13,27 +13,28 @@ import java.util.UUID;
 public class Note implements Identifiable {
     public static final String INTENT_EXTRA_CODE = "EXTRA_NOTE";
 
-    private final RootDataAccess rootDataAccess;
     private final NoteDataAccess noteDataAccess;
 
     private final String ID;
     private String title;
-
 
     public Note(String ID, String title) {
         this.ID = ID;
         this.title = title;
 
         OrganizerDataProvider dataProvider = OrganizerDataProvider.getInstance();
-        this.rootDataAccess = dataProvider.getRootDataAccess();
         this.noteDataAccess = dataProvider.getNoteDataAccess();
     }
 
     public Note(String title) {
         this(
-                UUID.randomUUID().toString(),
+                KeyGenerator.getUniqueKey(),
                 title
         );
+    }
+
+    public Note(){
+        this("");
     }
 
     /**

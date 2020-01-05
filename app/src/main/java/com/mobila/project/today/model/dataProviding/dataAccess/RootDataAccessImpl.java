@@ -81,8 +81,9 @@ class RootDataAccessImpl implements RootDataAccess {
 
     @Override
     public List<Task> getAllTasks() {
-        Cursor cursor = this.database.query(TaskTable.TABLE_NAME, TaskTable.ALL_COLUMNS, null,
-                null, null, null, TaskTable.COLUMN_RELATED_TO);
+        Cursor cursor = this.database.query(TaskTable.TABLE_NAME, TaskTable.ALL_COLUMNS,
+                null, null, null, null,
+                TaskTable.COLUMN_RELATED_TO);
         List<Task> tasks = new LinkedList<>();
         while (cursor.moveToNext()) {
             Task task = new Task(
@@ -90,6 +91,7 @@ class RootDataAccessImpl implements RootDataAccess {
                     cursor.getString(cursor.getColumnIndex(TaskTable.COLUMN_CONTENT)),
                     new Date(cursor.getInt(cursor.getColumnIndex(TaskTable.COLUMN_DEADLINE)))
             );
+            tasks.add(task);
         }
         cursor.close();
 

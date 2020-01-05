@@ -1,5 +1,6 @@
 package com.mobila.project.today.model;
 
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -17,12 +18,13 @@ public class Attachment implements Identifiable, Parcelable {
     private final AttachmentDataAccess dataAccess;
 
     private final String ID;
-    private File content;
+    private String name;
+    private Uri content;
 
-    public Attachment(String ID, @NonNull File content) {
+    public Attachment(String ID, String name, Uri content) {
         this.ID = ID;
         this.content = content;
-
+        this.name = name;
         this.dataAccess = OrganizerDataProvider.getInstance().getAttachmentDataAccess();
     }
 
@@ -39,9 +41,10 @@ public class Attachment implements Identifiable, Parcelable {
         }
     };
 
-    public Attachment(File content) {
+    public Attachment(String name, Uri content) {
         this(
                 UUID.randomUUID().toString(),
+                name,
                 content
         );
     }
@@ -57,22 +60,13 @@ public class Attachment implements Identifiable, Parcelable {
 
     }
 
-    /**
-     * Returns the lecture containing this attachment.
-     *
-     * @return the lecture containing this attachment
-     */
-    public Lecture getLecture() throws DataKeyNotFoundException {
-        return this.dataAccess.getLecture(this);
-    }
-
-    public File getContent() throws DataKeyNotFoundException {
+    public Uri getContent() throws DataKeyNotFoundException {
         if (this.content == null)
             this.content = this.dataAccess.getContent(this);
         return this.content;
     }
 
-    public void setContent(File content) throws DataKeyNotFoundException {
+    public void setContent(Uri content) throws DataKeyNotFoundException {
         this.dataAccess.setContent(this, content);
         this.content = content;
     }
@@ -80,5 +74,9 @@ public class Attachment implements Identifiable, Parcelable {
     @Override
     public String getID() {
         return this.ID;
+    }
+
+    public String getName() {
+        return this.name;
     }
 }

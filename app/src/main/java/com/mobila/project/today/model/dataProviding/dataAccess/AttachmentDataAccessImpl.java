@@ -1,13 +1,11 @@
 package com.mobila.project.today.model.dataProviding.dataAccess;
 
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 
 import com.mobila.project.today.model.Identifiable;
-import com.mobila.project.today.model.Lecture;
 import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
 import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
-
-import java.io.File;
 
 public class AttachmentDataAccessImpl implements AttachmentDataAccess {
     private static AttachmentDataAccess instance;
@@ -25,11 +23,6 @@ public class AttachmentDataAccessImpl implements AttachmentDataAccess {
     }
 
     @Override
-    public Lecture getLecture(Identifiable attachment) throws DataKeyNotFoundException {
-        return null;
-    }
-
-    @Override
     public String getTitle(Identifiable attachment) throws DataKeyNotFoundException {
         return null;
     }
@@ -40,22 +33,12 @@ public class AttachmentDataAccessImpl implements AttachmentDataAccess {
     }
 
     @Override
-    public File getContent(Identifiable attachment) throws DataKeyNotFoundException {
+    public Uri getContent(Identifiable attachment) throws DataKeyNotFoundException {
         return null;
     }
 
     @Override
-    public void setContent(Identifiable attachment, File file) throws DataKeyNotFoundException {
-
-    }
-
-    @Override
-    public int getPosition(Identifiable attachment) throws DataKeyNotFoundException {
-        return 0;
-    }
-
-    @Override
-    public void setPosition(Identifiable attachment, int position) throws DataKeyNotFoundException {
+    public void setContent(Identifiable attachment, Uri file) throws DataKeyNotFoundException {
 
     }
 }

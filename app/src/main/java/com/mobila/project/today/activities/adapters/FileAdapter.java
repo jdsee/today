@@ -14,6 +14,7 @@ import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mobila.project.today.R;
+import com.mobila.project.today.model.Attachment;
 import com.mobila.project.today.model.Lecture;
 import com.mobila.project.today.control.utils.AttachmentUtils;
 
@@ -39,10 +40,10 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        final File attachment = lecture.getAttachments().get(position).getContent();
+        final Attachment attachment = lecture.getAttachments().get(position);
         //Set name and icon of file
         holder.fileName.setText(attachment.getName());
-        holder.fileImage.setImageDrawable(AttachmentUtils.getDrawable(context, attachment));
+        holder.fileImage.setImageDrawable(AttachmentUtils.getDrawable(context, attachment.getName()));
 
         holder.fileHolder.setOnClickListener(v -> {
             Toast.makeText(context, AttachmentUtils.getMimeType(context, attachment),
