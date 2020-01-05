@@ -19,7 +19,7 @@ public class Attachment implements Identifiable, Parcelable {
 
     private final String ID;
     private String name;
-    private Uri content;
+    private final Uri content;
 
     public Attachment(String ID, String name, Uri content) {
         this.ID = ID;
@@ -52,23 +52,17 @@ public class Attachment implements Identifiable, Parcelable {
 
     @Override
     public int describeContents() {
+        //todo
         return 0;
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-
+        //todo
     }
 
     public Uri getContent() throws DataKeyNotFoundException {
-        if (this.content == null)
-            this.content = this.dataAccess.getContent(this);
         return this.content;
-    }
-
-    public void setContent(Uri content) throws DataKeyNotFoundException {
-        this.dataAccess.setContent(this, content);
-        this.content = content;
     }
 
     @Override

@@ -152,6 +152,6 @@ class SemesterDataAccessImpl implements SemesterDataAccess {
         ContentValues values = new ContentValues();
         values.put(SemesterTable.COLUMN_NR, nr);
         this.database.update(SemesterTable.TABLE_NAME, values,
-                SemesterTable.COLUMN_NR + "=?s", new String[]{String.valueOf(nr)});
+                SemesterTable.COLUMN_ID + "=?", new String[]{semester.getID()});
     }
 }

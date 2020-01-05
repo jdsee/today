@@ -11,11 +11,5 @@ public interface AttachmentDataAccess {
         return AttachmentDataAccessImpl.getInstance();
     }
 
-    String getTitle(Identifiable attachment) throws DataKeyNotFoundException;
-
-    void setTitle(Identifiable attachment, String title) throws DataKeyNotFoundException;
-
-    Uri getContent(Identifiable attachment) throws DataKeyNotFoundException;
-
-    void setContent(Identifiable attachment, Uri file) throws DataKeyNotFoundException;
+    void setName(Identifiable attachment, String title) throws DataKeyNotFoundException;
 }

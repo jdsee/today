@@ -517,7 +517,7 @@ public class EditorActivity extends DatabaseConnectionActivity {
         //TODO make note save itself onClose etc...
         /*
         String title = this.titleEditText.getText().toString();
-        note.setTitle(title);
+        note.setName(title);
 
         Spannable content = this.contentEditText.getText();
         note.setContent(content);
