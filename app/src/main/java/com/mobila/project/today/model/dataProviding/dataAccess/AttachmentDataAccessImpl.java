@@ -1,11 +1,14 @@
 package com.mobila.project.today.model.dataProviding.dataAccess;
 
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 
 import com.mobila.project.today.model.Identifiable;
 import com.mobila.project.today.model.Lecture;
 import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
 import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
+import com.mobila.project.today.model.dataProviding.dataAccess.databank.DBHelper;
 
 import java.io.File;
 
@@ -13,6 +16,7 @@ public class AttachmentDataAccessImpl implements AttachmentDataAccess {
     private static AttachmentDataAccess instance;
 
     private SQLiteDatabase database;
+    private SQLiteOpenHelper dbHelper;
 
     static AttachmentDataAccess getInstance() {
         if (instance == null)

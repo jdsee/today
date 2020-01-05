@@ -63,7 +63,8 @@ class SectionDataAccessImpl implements SectionDataAccess {
     private List<Lecture> getLecturesFromDB(Identifiable course) {
         Cursor cursor = this.database.query(
                 LectureTable.TABLE_NAME,
-                LectureTable.ALL_COLUMNS,
+                new String[]{LectureTable.COLUMN_ID, LectureTable.COLUMN_NR,
+                        LectureTable.COLUMN_DATE, LectureTable.COLUMN_ROOM_NR},
                 LectureTable.COLUMN_RELATED_TO + "=?",
                 new String[]{course.getID()}, null, null, null);
         List<Lecture> lectures = new LinkedList<>();
@@ -92,6 +93,7 @@ class SectionDataAccessImpl implements SectionDataAccess {
         values.put(LectureTable.COLUMN_NR, lecture.getLectureNr());
         values.put(LectureTable.COLUMN_DATE, lecture.getDate().getTime());
         values.put(LectureTable.COLUMN_ROOM_NR, lecture.getRoomNr());
+        values.put(LectureTable.COLUMN_RELATED_TO, section.getID());
 
         this.database.insert(LectureTable.TABLE_NAME, null, values);
     }
@@ -114,13 +116,13 @@ class SectionDataAccessImpl implements SectionDataAccess {
 
     private void updateSectionInDB(Identifiable section, ContentValues values) {
         this.database.update(SectionTable.TABLE_NAME, values,
-                SectionTable.COLUMN_ID + "=?s", new String[]{section.getID()});
+                SectionTable.COLUMN_ID + "=?", new String[]{section.getID()});
     }
 
     @Override
     public void removeLecture(Identifiable section, Lecture lecture) {
         this.database.delete(LectureTable.TABLE_NAME,
-                LectureTable.COLUMN_ID + "=?s", new String[]{lecture.getID()});
+                LectureTable.COLUMN_ID + "=?", new String[]{lecture.getID()});
         this.lectureCache.removeElement(section, lecture);
     }
 }

@@ -10,7 +10,7 @@ public class SemesterTable {
 
     static final String SQL_CREATE =
             "CREATE TABLE " + TABLE_NAME + "(" +
-                    COLUMN_ID + " VARCHAR PRIMARY KEY, " +
+                    COLUMN_ID + " TEXT PRIMARY KEY, " +
                     COLUMN_NR + " INTEGER);";
 
     static final String SQL_DELETE =

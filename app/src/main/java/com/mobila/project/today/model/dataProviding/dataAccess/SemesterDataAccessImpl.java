@@ -135,8 +135,7 @@ class SemesterDataAccessImpl implements SemesterDataAccess {
     @Override
     public void removeCourse(Identifiable semester, Course course) {
         this.database.delete(CourseTable.TABLE_NAME,
-        CourseTable.COLUMN_ID + " = '" + course.getID() + "' ", null);
-        //CourseTable.COLUMN_ID + "=?s", new String[]{course.getID()});
+                CourseTable.COLUMN_ID + "=?", new String[]{course.getID()});
         this.courseCache.removeElement(semester, course);
     }
 
@@ -152,6 +151,6 @@ class SemesterDataAccessImpl implements SemesterDataAccess {
         ContentValues values = new ContentValues();
         values.put(SemesterTable.COLUMN_NR, nr);
         this.database.update(SemesterTable.TABLE_NAME, values,
-                SemesterTable.COLUMN_NR + "=?s", new String[]{String.valueOf(nr)});
+                SemesterTable.COLUMN_NR + "=?", new String[]{String.valueOf(nr)});
     }
 }

@@ -5,11 +5,11 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.mobila.project.today.model.Lecture;
 import com.mobila.project.today.model.Section;
-import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.LectureTable;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.Assert;
 import org.mockito.Mockito;
 
 import java.util.Date;
@@ -27,7 +27,7 @@ public class SectionDataAccessTest {
     private Lecture lectureMock2;
     private Lecture lectureMock3;
     private List<Lecture> lectureMocks;
-    private IdentityMapper lectureCacheMock;
+    private IdentityMapper<Lecture> lectureCacheMock;
     private SQLiteDatabase databaseMock;
 
     @Before
@@ -79,8 +79,10 @@ public class SectionDataAccessTest {
         Mockito.verify(this.lectureCacheMock, Mockito.times(1))
                 .get(this.sectionMock);
         Mockito.verify(this.databaseMock, Mockito.times(1))
-                .query(LectureTable.TABLE_NAME, LectureTable.ALL_COLUMNS,
-                        LectureTable.COLUMN_RELATED_TO + "=?s",
+                .query(LectureTable.TABLE_NAME,
+                        new String[]{LectureTable.COLUMN_ID, LectureTable.COLUMN_NR,
+                                LectureTable.COLUMN_DATE, LectureTable.COLUMN_ROOM_NR},
+                        LectureTable.COLUMN_RELATED_TO + "=?",
                         new String[]{this.sectionMock.getID()},
                         null, null, null);
     }
@@ -97,14 +99,25 @@ public class SectionDataAccessTest {
         Mockito.verifyZeroInteractions(databaseMock);
     }
 
-    @Test(expected = DataKeyNotFoundException.class)
+    @Test
     public void getLecturesWithNoEntryRelatedToKeyExistentInDB_Test() {
         //setup
         this.setLectureCacheEmpty();
         this.databaseMock = new MockSQLiteDatabase().setTableEmpty().getMockedDatabase();
         this.dataAccess = new SectionDataAccessImpl(lectureCacheMock, databaseMock);
         //exercise
-        this.dataAccess.getLectures(this.sectionMock);
+        List<Lecture> lectures = this.dataAccess.getLectures(this.sectionMock);
+        //verify
+        Mockito.verify(this.lectureCacheMock, Mockito.times(1))
+                .get(this.sectionMock);
+        Mockito.verify(this.databaseMock, Mockito.times(1))
+                .query(LectureTable.TABLE_NAME,
+                        new String[]{LectureTable.COLUMN_ID, LectureTable.COLUMN_NR,
+                                LectureTable.COLUMN_DATE, LectureTable.COLUMN_ROOM_NR},
+                        LectureTable.COLUMN_RELATED_TO + "=?",
+                        new String[]{this.sectionMock.getID()},
+                        null, null, null);
+        Assert.assertTrue(lectures.isEmpty());
     }
 
     @Test
@@ -118,7 +131,7 @@ public class SectionDataAccessTest {
                 .removeElement(this.sectionMock, this.lectureMock1);
         Mockito.verify(this.databaseMock, Mockito.times(1))
                 .delete(LectureTable.TABLE_NAME,
-                        LectureTable.COLUMN_ID + "=?s",
+                        LectureTable.COLUMN_ID + "=?",
                         new String[]{this.lectureMock1.getID()});
     }
 
@@ -133,7 +146,7 @@ public class SectionDataAccessTest {
                 .removeElement(this.sectionMock, this.lectureMock1);
         Mockito.verify(this.databaseMock, Mockito.times(1))
                 .delete(LectureTable.TABLE_NAME,
-                        LectureTable.COLUMN_ID + "=?s",
+                        LectureTable.COLUMN_ID + "=?",
                         new String[]{this.lectureMock1.getID()});
     }
 
