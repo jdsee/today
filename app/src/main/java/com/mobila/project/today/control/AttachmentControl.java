@@ -73,12 +73,14 @@ public class AttachmentControl {
      */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
+
             if (requestCode == REQUEST_TAKE_PHOTO && currentImagePath != null) {
                 File file = new File(currentImagePath);
                 this.lecture.addAttachment(new Attachment(file));
                 Toast.makeText(context.getApplicationContext(),
                         "Image Saved", Toast.LENGTH_LONG).show();
                 this.currentImagePath = null;
+
             } else if (requestCode == REQUEST_FILE_OPEN && data != null) {
                 Uri fileUri = data.getData();
                 if (fileUri != null) {

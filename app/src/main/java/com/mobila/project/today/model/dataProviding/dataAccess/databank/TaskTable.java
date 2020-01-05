@@ -10,6 +10,7 @@ public class TaskTable {
 
     public static final String[] ALL_COLUMNS = {COLUMN_ID, COLUMN_CONTENT, COLUMN_DEADLINE, COLUMN_RELATED_TO};
 
+
     static final String SQL_CREATE =
             "CREATE TABLE " + TABLE_NAME + "(" +
                     COLUMN_ID + " TEXT PRIMARY KEY, " +
