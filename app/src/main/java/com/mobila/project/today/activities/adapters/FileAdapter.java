@@ -46,8 +46,8 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
         holder.fileImage.setImageDrawable(AttachmentUtils.getDrawable(context, attachment.getName()));
 
         holder.fileHolder.setOnClickListener(v -> {
-            Toast.makeText(context, AttachmentUtils.getMimeType(context, attachment.getContent()),
-                    Toast.LENGTH_LONG).show();
+            //Toast.makeText(context, AttachmentUtils.getMimeType(context, attachment.getContent()),
+              //      Toast.LENGTH_LONG).show();
             AttachmentUtils.openFile(context, lecture.getAttachments().get(position).getContent());
         });
 
