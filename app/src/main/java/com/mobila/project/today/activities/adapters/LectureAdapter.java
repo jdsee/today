@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class LectureAdapter extends RecyclerView.Adapter<LectureAdapter.ViewHolder> {
-    private static final String LECTURE_TITLE = "Veranstaltung";
+    private static final String LECTURE_TITLE = "Lecture";
     private List<Lecture> lectures;
 
     LectureAdapter(List<Lecture> lectures) {

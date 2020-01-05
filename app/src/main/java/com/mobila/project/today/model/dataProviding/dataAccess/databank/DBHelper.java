@@ -24,6 +24,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(SectionTable.SQL_CREATE);
         db.execSQL(LectureTable.SQL_CREATE);
         db.execSQL(NoteTable.SQL_CREATE);
+        db.execSQL(AttachmentTable.SQL_CREATE);
     }
 
     @Override
@@ -34,6 +35,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(TaskTable.SQL_DELETE);
         db.execSQL(CourseTable.SQL_DELETE);
         db.execSQL(SemesterTable.SQL_DELETE);
+        db.execSQL(AttachmentTable.SQL_DELETE);
         onCreate(db);
     }
 }

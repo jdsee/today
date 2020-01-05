@@ -12,7 +12,7 @@ import com.mobila.project.today.R;
 import com.mobila.project.today.activities.DatabaseConnectionActivity;
 import com.mobila.project.today.activities.fragments.GeneralConfirmationDialogFragment;
 import com.mobila.project.today.activities.fragments.TwoEditTextDialogFragment;
-import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
+import com.mobila.project.today.model.Lecture;
 import com.mobila.project.today.activities.adapters.SectionAdapter;
 import com.mobila.project.today.activities.adapters.TaskAdapter;
 import com.mobila.project.today.model.Course;
@@ -27,6 +27,7 @@ public class CourseContentActivity extends DatabaseConnectionActivity
     private static final String TAG = CourseContentActivity.class.getName();
 
     private static final String ADD_SECTION_DIALOG_CODE = "ADD_SECTION_DIALOG";
+    private static final String ADD_LECTURE_DIALOG_CODE = "ADD_LECTURE_DIALOG_CODE";
 
     private Course course;
     private List<Task> tasks;
@@ -82,6 +83,21 @@ public class CourseContentActivity extends DatabaseConnectionActivity
         dialog.show(getSupportFragmentManager(), ADD_SECTION_DIALOG_CODE);
     }
 
+    public void onAddLectureClicked(View view) {
+        TwoEditTextDialogFragment dialog = new TwoEditTextDialogFragment();
+        Bundle bundle = new Bundle();
+
+        bundle.putString(TwoEditTextDialogFragment.DIALOG_MESSAGE_EXTRA, "Add lecture");
+        bundle.putString(TwoEditTextDialogFragment.FIRST_EDIT_TEXT_HINT, "lecture date");
+        bundle.putString(TwoEditTextDialogFragment.SECOND_EDIT_TEXT_HINT, "room number");
+        bundle.putString(TwoEditTextDialogFragment.DIALOG_CONFIRMING_EXTRA, "add");
+        bundle.putString(TwoEditTextDialogFragment.DIALOG_DECLINING_EXTRA, "cancel");
+
+        dialog.setArguments(bundle);
+        dialog.setDialogListener(this);
+        dialog.show(getSupportFragmentManager(), ADD_LECTURE_DIALOG_CODE);
+    }
+
     @Override
     public void onDialogConfirmation(Bundle resultBundle, GeneralConfirmationDialogFragment dialog) {
         String dialogType = dialog.getTag();
@@ -90,11 +106,22 @@ public class CourseContentActivity extends DatabaseConnectionActivity
             case ADD_SECTION_DIALOG_CODE:
                 this.onAddSectionDialogConfirmation(resultBundle);
                 break;
+            case ADD_LECTURE_DIALOG_CODE:
+                this.onAddLectureDialogConfirmation(resultBundle);
+                break;
             default:
                 NullPointerException e = new NullPointerException("dialog code unknown");
                 Log.e(TAG, e.getMessage(), e);
                 throw e;
         }
+    }
+
+    private void onAddLectureDialogConfirmation(Bundle resultBundle) {
+            /*int lectureNr = this.section
+            Lecture lecture = new Lecture(
+                    resultBundle.getString(TwoEditTextDialogFragment.FIRST_EDIT_TEXT_HINT),
+                    resultBundle.getString(TwoEditTextDialogFragment.SECOND_EDIT_TEXT_CONTENT)
+            )*/
     }
 
     private void onAddSectionDialogConfirmation(Bundle resultBundle) {

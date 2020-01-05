@@ -41,12 +41,6 @@ class CourseDataAccessImpl implements CourseDataAccess {
     }
 
     @Override
-    public Semester getSemester(Identifiable course) throws DataKeyNotFoundException {
-        Log.d(TAG, "requesting courses from data base");
-        return null;
-    }
-
-    @Override
     public List<Section> getSections(Identifiable course) throws DataKeyNotFoundException {
         List<Section> sections = this.sectionCache.get(course);
         if (sections == null) {

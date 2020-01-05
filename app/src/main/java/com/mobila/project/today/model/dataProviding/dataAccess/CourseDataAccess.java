@@ -13,8 +13,6 @@ public interface CourseDataAccess {
         return CourseDataAccessImpl.getInstance();
     }
 
-    Semester getSemester(Identifiable course) throws DataKeyNotFoundException;
-
     List<Section> getSections(Identifiable course) throws DataKeyNotFoundException;
 
     void addSection(Identifiable course, Section section) throws DataKeyNotFoundException;
