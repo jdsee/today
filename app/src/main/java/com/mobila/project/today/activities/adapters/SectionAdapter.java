@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -20,13 +21,17 @@ import java.util.List;
 public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.ViewHolder> {
     private final Context context;
     private List<Section> sections;
+    private RecyclerViewButtonClicked addLectureClickListener;
 
-    public SectionAdapter(Context context, List<Section> sections) {
+    public SectionAdapter(Context context, List<Section> sections,
+                          RecyclerViewButtonClicked addLectureClickListener) {
         this.sections = sections;
         this.context = context;
+        this.addLectureClickListener = addLectureClickListener;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
+        ImageButton btnAddLecture;
         RelativeLayout rlSectionItem;
         RecyclerView rvLectures;
         TextView tvSectionName;
@@ -39,12 +44,16 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.ViewHold
             this.tvSectionName = itemView.findViewById(R.id.txt_section_name);
             this.tvLecturer = itemView.findViewById(R.id.txt_lecturer);
             this.rvLectures = itemView.findViewById(R.id.rv_lecture_list);
+            this.btnAddLecture = itemView.findViewById(R.id.btn_add_lecture);
 
             this.rlSectionItem.setOnClickListener(v -> {
-                if (rvLectures.getVisibility() == View.GONE)
+                if (rvLectures.getVisibility() == View.GONE) {
                     rvLectures.setVisibility(View.VISIBLE);
-                else
+                    btnAddLecture.setVisibility(View.VISIBLE);
+                } else {
                     rvLectures.setVisibility(View.GONE);
+                    btnAddLecture.setVisibility(View.GONE);
+                }
             });
         }
     }
@@ -71,6 +80,10 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.ViewHold
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rvLectures.getContext(),
                 layoutManager.getOrientation());
         rvLectures.addItemDecoration(dividerItemDecoration);
+
+        holder.btnAddLecture.setOnClickListener(view ->
+                this.addLectureClickListener.recyclerViewButtonClicked(view, position)
+        );
     }
 
     @Override

@@ -10,6 +10,7 @@ import android.view.View;
 
 import com.mobila.project.today.R;
 import com.mobila.project.today.activities.DatabaseConnectionActivity;
+import com.mobila.project.today.activities.adapters.RecyclerViewButtonClicked;
 import com.mobila.project.today.activities.fragments.GeneralConfirmationDialogFragment;
 import com.mobila.project.today.activities.fragments.TwoEditTextDialogFragment;
 import com.mobila.project.today.model.Lecture;
@@ -19,11 +20,14 @@ import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Section;
 import com.mobila.project.today.model.Task;
 
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class CourseContentActivity extends DatabaseConnectionActivity
-        implements GeneralConfirmationDialogFragment.DialogListener {
+        implements GeneralConfirmationDialogFragment.DialogListener, RecyclerViewButtonClicked {
     private static final String TAG = CourseContentActivity.class.getName();
 
     private static final String ADD_SECTION_DIALOG_CODE = "ADD_SECTION_DIALOG";
@@ -34,6 +38,7 @@ public class CourseContentActivity extends DatabaseConnectionActivity
     private List<Section> sections;
     private TaskAdapter taskAdapter;
     private SectionAdapter sectionAdapter;
+    private int currentPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +56,6 @@ public class CourseContentActivity extends DatabaseConnectionActivity
 
         this.sections = this.course.getSections();
         this.initSectionView();
-
     }
 
     private void initTaskView() {
@@ -64,7 +68,7 @@ public class CourseContentActivity extends DatabaseConnectionActivity
     private void initSectionView() {
         RecyclerView recyclerView = findViewById(R.id.rv_section_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        this.sectionAdapter = new SectionAdapter(this, this.sections);
+        this.sectionAdapter = new SectionAdapter(this, this.sections, this);
         recyclerView.setAdapter(this.sectionAdapter);
     }
 
@@ -83,7 +87,10 @@ public class CourseContentActivity extends DatabaseConnectionActivity
         dialog.show(getSupportFragmentManager(), ADD_SECTION_DIALOG_CODE);
     }
 
-    public void onAddLectureClicked(View view) {
+    @Override
+    public void recyclerViewButtonClicked(View view, int position) {
+        this.currentPosition = position;
+
         TwoEditTextDialogFragment dialog = new TwoEditTextDialogFragment();
         Bundle bundle = new Bundle();
 
@@ -117,11 +124,19 @@ public class CourseContentActivity extends DatabaseConnectionActivity
     }
 
     private void onAddLectureDialogConfirmation(Bundle resultBundle) {
-            /*int lectureNr = this.section
-            Lecture lecture = new Lecture(
-                    resultBundle.getString(TwoEditTextDialogFragment.FIRST_EDIT_TEXT_HINT),
-                    resultBundle.getString(TwoEditTextDialogFragment.SECOND_EDIT_TEXT_CONTENT)
-            )*/
+        Section currentSection = this.sections.get(this.currentPosition);
+        Optional maxLectureNr = currentSection.getLectures().stream()
+                .map(Lecture::getLectureNr)
+                .max(Integer::compareTo);
+        int lectureNr = maxLectureNr.isPresent() ? (int) maxLectureNr.get() + 1 : 1;
+        Date date = this.parseStringToDate(resultBundle.getString(TwoEditTextDialogFragment.FIRST_EDIT_TEXT_HINT));
+        String roomNr = resultBundle.getString(TwoEditTextDialogFragment.SECOND_EDIT_TEXT_CONTENT);
+        Lecture lecture = new Lecture(lectureNr, date, roomNr);
+        currentSection.addLecture(lecture);
+    }
+
+    private Date parseStringToDate(String dateString) throws NumberFormatException {
+        return new Date(Integer.parseInt(dateString));
     }
 
     private void onAddSectionDialogConfirmation(Bundle resultBundle) {
