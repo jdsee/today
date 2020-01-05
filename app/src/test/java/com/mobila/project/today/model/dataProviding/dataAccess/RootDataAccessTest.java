@@ -1,8 +1,5 @@
 package com.mobila.project.today.model.dataProviding.dataAccess;
-<<<<<<< HEAD
 
-=======
->>>>>>> refactor/modulisingActivitiesInPresenterAndView
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -119,8 +116,7 @@ public class RootDataAccessTest {
     @Test
     public void getAllSemestersWhenDatabaseWasAlreadyAccessedBefore_Test() {
         //exercise
-        List<Semester> result = this.dataAccess.getAllSemesters();
-        result = this.dataAccess.getAllSemesters();
+        this.dataAccess.getAllSemesters();
 
         //verify
         this.verifyQueryOnDatabase(1);

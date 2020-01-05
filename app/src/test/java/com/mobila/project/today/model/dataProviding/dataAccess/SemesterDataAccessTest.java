@@ -77,7 +77,7 @@ public class SemesterDataAccessTest {
                 .get(this.semesterMock);
         Mockito.verify(this.databaseMock, Mockito.times(1))
                 .query(CourseTable.TABLE_NAME, CourseTable.ALL_COLUMNS,
-                        CourseTable.COLUMN_RELATED_TO + "=?s",
+                        CourseTable.COLUMN_RELATED_TO + "=?",
                         new String[]{this.semesterMock.getID()},
                         null, null, null);
     }
@@ -115,7 +115,7 @@ public class SemesterDataAccessTest {
                 .removeElement(this.semesterMock, this.courseMock1);
         Mockito.verify(this.databaseMock, Mockito.times(1))
                 .delete(CourseTable.TABLE_NAME,
-                        CourseTable.COLUMN_ID + "=?s",
+                        CourseTable.COLUMN_ID + "=?",
                         new String[]{this.courseMock1.getID()});
     }
 
@@ -130,7 +130,7 @@ public class SemesterDataAccessTest {
                 .removeElement(this.semesterMock, this.courseMock1);
         Mockito.verify(this.databaseMock, Mockito.times(1))
                 .delete(CourseTable.TABLE_NAME,
-                        CourseTable.COLUMN_ID + "=?s",
+                        CourseTable.COLUMN_ID + "=?",
                         new String[]{this.courseMock1.getID()});
     }
 

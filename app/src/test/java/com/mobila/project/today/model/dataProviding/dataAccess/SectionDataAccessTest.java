@@ -80,7 +80,7 @@ public class SectionDataAccessTest {
                 .get(this.sectionMock);
         Mockito.verify(this.databaseMock, Mockito.times(1))
                 .query(LectureTable.TABLE_NAME, LectureTable.ALL_COLUMNS,
-                        LectureTable.COLUMN_RELATED_TO + "=?s",
+                        LectureTable.COLUMN_RELATED_TO + "=?",
                         new String[]{this.sectionMock.getID()},
                         null, null, null);
     }
