@@ -14,6 +14,7 @@ import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.AttachmentTable;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.LectureTable;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.NoteTable;
+import com.mobila.project.today.model.dataProviding.dataAccess.databank.SectionTable;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -25,6 +26,7 @@ public class LectureDataAccessImpl implements LectureDataAccess {
 
     private final SQLiteDatabase database;
     private Note note;
+    private Section section;
     private IdentityMapper<Attachment> attachmentCache;
 
     static LectureDataAccess getInstance() {
@@ -40,29 +42,50 @@ public class LectureDataAccessImpl implements LectureDataAccess {
         );
     }
 
-    private LectureDataAccessImpl(IdentityMapper<Attachment> attachmentCache, SQLiteDatabase database){
+    private LectureDataAccessImpl(IdentityMapper<Attachment> attachmentCache, SQLiteDatabase database) {
         this.attachmentCache = attachmentCache;
-        this.database= database;
+        this.database = database;
     }
 
     @Override
     public Section getSection(Identifiable lecture) throws DataKeyNotFoundException {
-        //TODO
-        return null;
+        if (this.section == null) {
+            //Getting parentID of lecture
+            String relatedTo;
+            Cursor lectureCursor = this.database.query(LectureTable.TABLE_NAME, new String[]{LectureTable.COLUMN_RELATED_TO},
+                    LectureTable.COLUMN_RELATED_TO + "=?", new String[]{lecture.getID()},
+                    null, null, null);
+            if (!lectureCursor.moveToNext())
+                throw new DataKeyNotFoundException("We have an Orphan!");
+            String sectionID = lectureCursor.getString(lectureCursor.getColumnIndex(LectureTable.COLUMN_RELATED_TO));
+            lectureCursor.close();
+            //Getting parent of lecture
+            Cursor sectionCursor = this.database.query(SectionTable.TABLE_NAME, SectionTable.ALL_COLUMNS,
+                    SectionTable.COLUMN_ID + "=?", new String[]{sectionID},
+                    null, null, null);
+            this.section = new Section(
+                    sectionCursor.getString(sectionCursor.getColumnIndex(SectionTable.COLUMN_ID)),
+                    sectionCursor.getString(sectionCursor.getColumnIndex(SectionTable.COLUMN_TITLE)),
+                    sectionCursor.getString(sectionCursor.getColumnIndex(SectionTable.COLUMN_LECTURER))
+            );
+            sectionCursor.close();
+        }
+        return this.section;
     }
 
     @Override
     public Note getNote(Identifiable lecture) throws DataKeyNotFoundException {
-        if(this.note==null) {
+        if (this.note == null) {
             Cursor cursor = this.database.query(NoteTable.TABLE_NAME, NoteTable.ALL_COLUMNS,
                     NoteTable.COLUMN_RELATED_TO + "=?", new String[]{lecture.getID()},
                     null, null, null);
-            if(cursor.moveToNext()){
-                this.note=new Note(
+            if (cursor.moveToNext()) {
+                this.note = new Note(
                         cursor.getString(cursor.getColumnIndex(NoteTable.COLUMN_ID)),
                         cursor.getString(cursor.getColumnIndex(NoteTable.COLUMN_TITLE))
                 );
-            } this.note = new Note();
+            } else
+                this.note = new Note();
             cursor.close();
         }
         return note;
@@ -71,12 +94,12 @@ public class LectureDataAccessImpl implements LectureDataAccess {
     @Override
     public List<Attachment> getAttachments(Identifiable lecture) throws DataKeyNotFoundException {
         List<Attachment> attachments = this.attachmentCache.get(lecture);
-        if (attachments == null){
+        if (attachments == null) {
             Cursor cursor = this.database.query(AttachmentTable.TABLE_NAME, AttachmentTable.ALL_COLUMNS,
                     AttachmentTable.COLUMN_RELATED_TO + "=?", new String[]{lecture.getID()},
                     null, null, AttachmentTable.COLUMN_NAME);
             attachments = new LinkedList<>();
-            while (cursor.moveToNext()){
+            while (cursor.moveToNext()) {
                 Attachment attachment = new Attachment(
                         cursor.getString(cursor.getColumnIndex(AttachmentTable.COLUMN_ID)),
                         cursor.getString(cursor.getColumnIndex(AttachmentTable.COLUMN_NAME)),
