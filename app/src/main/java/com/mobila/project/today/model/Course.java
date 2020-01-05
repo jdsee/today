@@ -74,16 +74,6 @@ public class Course implements Identifiable, Parcelable {
         dest.writeString(this.title);
     }
 
-
-    /**
-     * Returns the semester containing this course.
-     *
-     * @return the semester containing this course
-     */
-    public Semester getSemester() throws DataKeyNotFoundException {
-        return this.dataAccess.getSemester(this);
-    }
-
     /**
      * Returns the title of this course.
      *

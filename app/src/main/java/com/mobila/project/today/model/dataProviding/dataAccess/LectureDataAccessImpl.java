@@ -51,7 +51,6 @@ public class LectureDataAccessImpl implements LectureDataAccess {
     public Section getSection(Identifiable lecture) throws DataKeyNotFoundException {
         if (this.section == null) {
             //Getting parentID of lecture
-            String relatedTo;
             Cursor lectureCursor = this.database.query(LectureTable.TABLE_NAME, new String[]{LectureTable.COLUMN_RELATED_TO},
                     LectureTable.COLUMN_RELATED_TO + "=?", new String[]{lecture.getID()},
                     null, null, null);
@@ -63,6 +62,7 @@ public class LectureDataAccessImpl implements LectureDataAccess {
             Cursor sectionCursor = this.database.query(SectionTable.TABLE_NAME, SectionTable.ALL_COLUMNS,
                     SectionTable.COLUMN_ID + "=?", new String[]{sectionID},
                     null, null, null);
+            if(!sectionCursor.moveToNext()) throw new DataKeyNotFoundException();
             this.section = new Section(
                     sectionCursor.getString(sectionCursor.getColumnIndex(SectionTable.COLUMN_ID)),
                     sectionCursor.getString(sectionCursor.getColumnIndex(SectionTable.COLUMN_TITLE)),
@@ -118,7 +118,7 @@ public class LectureDataAccessImpl implements LectureDataAccess {
         ContentValues values = new ContentValues();
         values.put(AttachmentTable.COLUMN_ID, attachment.getID());
         values.put(AttachmentTable.COLUMN_NAME, attachment.getName());
-        values.put(AttachmentTable.COLUMN_URI, attachment.getContent().toString());
+        values.put(AttachmentTable.COLUMN_URI, attachment.getContent().getPath());
         values.put(AttachmentTable.COLUMN_RELATED_TO, lecture.getID());
     }
 

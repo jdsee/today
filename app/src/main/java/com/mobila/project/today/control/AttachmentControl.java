@@ -16,6 +16,7 @@ import com.mobila.project.today.control.utils.AttachmentUtils;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -73,39 +74,34 @@ public class AttachmentControl {
      */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
-
             if (requestCode == REQUEST_TAKE_PHOTO && currentImagePath != null) {
                 File file = new File(currentImagePath);
-                //this.lecture.addAttachment(new Attachment(file));
+                Uri fileUri = Uri.fromFile(file);
+                String fileName = AttachmentUtils.getFileName(context, fileUri);
+
+                this.lecture.addAttachment(new Attachment(fileName, fileUri));
+
                 Toast.makeText(context.getApplicationContext(),
                         "Image Saved", Toast.LENGTH_LONG).show();
-                this.currentImagePath = null;
 
+                this.currentImagePath = null;
             } else if (requestCode == REQUEST_FILE_OPEN && data != null) {
-                Uri fileUri = data.getData();
-                if (fileUri != null) {
-                    String sourceString = fileUri.getPath();
-                    File sourceFile = null;
-                    if (sourceString != null) {
-                        sourceFile = new File(sourceString);
-                    }
-                    String filename = AttachmentUtils.getFileName(context, fileUri);
-                    File destinationFile;
-                    destinationFile =
-                            new File(context.getExternalFilesDir(
-                                    Environment.DIRECTORY_DOCUMENTS), filename);
-                    try {
-                        if (sourceFile != null) {
-                            Files.copy(sourceFile.toPath(), destinationFile.toPath());
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                try {
+                    Uri fileUri = data.getData();
+                    String sourceString = Objects.requireNonNull(fileUri).getPath();
+                    File sourceFile = new File(Objects.requireNonNull(sourceString));
+
+                    String destinationFileName = AttachmentUtils.getFileName(context, fileUri);
+                    File destinationFile = new File(context.getExternalFilesDir(
+                            Environment.DIRECTORY_DOCUMENTS), destinationFileName);
+                    Uri destinationUri = Uri.fromFile(destinationFile);
+                    Files.copy(sourceFile.toPath(), destinationFile.toPath());
+                    this.lecture.addAttachment(new Attachment(destinationFileName, destinationUri));
                     Toast.makeText(context.getApplicationContext(),
                             "File Saved", Toast.LENGTH_LONG).show();
-                    //this.lecture.addAttachment(new Attachment(destinationFile));
-                } else Toast.makeText(context.getApplicationContext(),
-                        "File was lost", Toast.LENGTH_LONG).show();
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
             } else {
                 Toast.makeText(context.getApplicationContext(),
                         "Nothing was saved", Toast.LENGTH_LONG).show();

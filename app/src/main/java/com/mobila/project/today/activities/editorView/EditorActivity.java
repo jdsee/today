@@ -39,6 +39,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
+import static com.mobila.project.today.control.AttachmentControl.REQUEST_FILE_OPEN;
+import static com.mobila.project.today.control.AttachmentControl.REQUEST_TAKE_PHOTO;
+
 public class EditorActivity extends DatabaseConnectionActivity {
 
     private Lecture lecture;
@@ -75,7 +78,6 @@ public class EditorActivity extends DatabaseConnectionActivity {
 
         this.lecture = getIntent().getParcelableExtra(Lecture.INTENT_EXTRA_CODE);
 
-        //TODO replace with Objects from Lecture
         this.section = lecture.getSection();
         this.tasks = lecture.getSection().getCourse().getTasks();
         this.attachments = lecture.getAttachments();
@@ -293,10 +295,7 @@ public class EditorActivity extends DatabaseConnectionActivity {
      * @param view the clicked camera-icon. Is only needed for using this method via the layout
      */
     public void onTakePhotoPickerPressed(View view) {
-        //TODO make it work wih real Objects
-        /*
         startActivityForResult(attachmentControl.getTakePictureIntent(), REQUEST_TAKE_PHOTO);
-         */
     }
 
     /**
@@ -305,10 +304,7 @@ public class EditorActivity extends DatabaseConnectionActivity {
      * @param view the pressed file-icon. Is only needed for using this method via the layout
      */
     public void onFilePickerPressed(View view) {
-        //TODO make it work with real Objects
-        /*
         startActivityForResult(attachmentControl.getOpenFileIntent(), REQUEST_FILE_OPEN);
-         */
     }
 
     /**
