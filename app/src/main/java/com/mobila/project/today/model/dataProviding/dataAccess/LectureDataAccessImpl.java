@@ -124,8 +124,10 @@ public class LectureDataAccessImpl extends ParentDataAccessImpl implements Lectu
 
                 Attachment attachment = new Attachment(attachmentId, attachmentName, uri);
 
+                //DEBUG >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
                 System.out.println("URI WHEN READING FROM DATABASE: " + uri);
                 System.out.println("URI STRING WHEN READING FROM DATABASE: " + uriString);
+                //DEBUG >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
                 attachments.add(attachment);
             }
@@ -139,14 +141,15 @@ public class LectureDataAccessImpl extends ParentDataAccessImpl implements Lectu
     public void addAttachment(Identifiable lecture, Attachment attachment) throws DataKeyNotFoundException {
         this.attachmentCache.addElement(lecture, attachment);
         ContentValues values = new ContentValues();
+        Uri uri = attachment.getContent();
+
         values.put(AttachmentTable.COLUMN_ID, attachment.getID());
         values.put(AttachmentTable.COLUMN_NAME, attachment.getName());
-        Uri uri = attachment.getContent();
-        String uriString = uri.getPath();
         values.put(AttachmentTable.COLUMN_URI, uri.toString());
 
+        //DEBUG >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         System.out.println("URI WHEN WRITING IN DATABASE: " + uri);
-        System.out.println("URI STRING WHEN WRITING IN DATABASE: " + uriString);
+        //DEBUG >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
         values.put(AttachmentTable.COLUMN_RELATED_TO, lecture.getID());
 

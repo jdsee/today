@@ -53,14 +53,8 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.Vi
         holder.fileHolder.setOnClickListener(v -> {
             //Toast.makeText(context, AttachmentUtils.getMimeType(context, attachment.getContent()),
             //      Toast.LENGTH_LONG).show();
-
-
-            String uriString = this.attachments.get(position).getContent().getPath();
-            File file = new File(uriString);
-            Uri uri = FileProvider.getUriForFile(this.context,
-                    context.getApplicationContext().getPackageName() + ".fileprovider", file);
-
-
+            
+            Uri uri = this.attachments.get(position).getContent();
             AttachmentUtils.openFile(context, uri);
         });
 
