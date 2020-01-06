@@ -33,10 +33,7 @@ public class LectureDataAccessImpl extends ParentDataAccessImpl implements Lectu
     }
 
     private LectureDataAccessImpl() {
-        this(
-                new IdentityMapper<>(),
-                null
-        );
+        this.attachmentCache=new IdentityMapper<>();
     }
 
     /**
@@ -48,7 +45,6 @@ public class LectureDataAccessImpl extends ParentDataAccessImpl implements Lectu
      */
     private LectureDataAccessImpl(IdentityMapper<Attachment> attachmentCache, SQLiteDatabase database) {
         this.attachmentCache = attachmentCache;
-        this.database = database;
     }
 
     @Override
@@ -116,12 +112,13 @@ public class LectureDataAccessImpl extends ParentDataAccessImpl implements Lectu
 
     @Override
     public void addAttachment(Identifiable lecture, Attachment attachment) throws DataKeyNotFoundException {
-        this.attachmentCache.addElement(note, attachment);
+        this.attachmentCache.addElement(lecture, attachment);
         ContentValues values = new ContentValues();
         values.put(AttachmentTable.COLUMN_ID, attachment.getID());
         values.put(AttachmentTable.COLUMN_NAME, attachment.getName());
         values.put(AttachmentTable.COLUMN_URI, attachment.getContent().getPath());
         values.put(AttachmentTable.COLUMN_RELATED_TO, lecture.getID());
+        this.database.insert(AttachmentTable.TABLE_NAME, null, values);
     }
 
     @Override
