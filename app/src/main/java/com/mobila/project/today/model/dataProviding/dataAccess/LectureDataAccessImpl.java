@@ -123,7 +123,7 @@ public class LectureDataAccessImpl extends ParentDataAccessImpl implements Lectu
         ContentValues values = new ContentValues();
         values.put(AttachmentTable.COLUMN_ID, attachment.getID());
         values.put(AttachmentTable.COLUMN_NAME, attachment.getName());
-        values.put(AttachmentTable.COLUMN_URI, attachment.getContent().toString());
+        values.put(AttachmentTable.COLUMN_URI, attachment.getContent().getPath());
         values.put(AttachmentTable.COLUMN_RELATED_TO, lecture.getID());
     }
 

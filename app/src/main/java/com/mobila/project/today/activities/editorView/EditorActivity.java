@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.text.Spannable;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -12,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -28,6 +30,7 @@ import com.mobila.project.today.control.AttachmentControl;
 import com.mobila.project.today.control.NoteControl;
 import com.mobila.project.today.control.utils.DateUtils;
 import com.mobila.project.today.model.Attachment;
+import com.mobila.project.today.model.Note;
 import com.mobila.project.today.model.Section;
 import com.mobila.project.today.model.Lecture;
 import com.mobila.project.today.model.Task;
@@ -38,6 +41,9 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+
+import static com.mobila.project.today.control.AttachmentControl.REQUEST_FILE_OPEN;
+import static com.mobila.project.today.control.AttachmentControl.REQUEST_TAKE_PHOTO;
 
 public class EditorActivity extends DatabaseConnectionActivity {
 
@@ -56,6 +62,7 @@ public class EditorActivity extends DatabaseConnectionActivity {
 
     private boolean keyBoardOpen;
     private boolean focusOnNoteContent;
+    private Note note;
 
 
     /**
@@ -74,6 +81,7 @@ public class EditorActivity extends DatabaseConnectionActivity {
         //get Note from Intent
 
         this.lecture = getIntent().getParcelableExtra(Lecture.INTENT_EXTRA_CODE);
+        this.note = lecture.getNote();
 
         this.section = lecture.getSection();
         this.tasks = lecture.getSection().getCourse().getTasks();
@@ -292,10 +300,7 @@ public class EditorActivity extends DatabaseConnectionActivity {
      * @param view the clicked camera-icon. Is only needed for using this method via the layout
      */
     public void onTakePhotoPickerPressed(View view) {
-        //TODO make it work wih real Objects
-        /*
         startActivityForResult(attachmentControl.getTakePictureIntent(), REQUEST_TAKE_PHOTO);
-         */
     }
 
     /**
@@ -304,10 +309,7 @@ public class EditorActivity extends DatabaseConnectionActivity {
      * @param view the pressed file-icon. Is only needed for using this method via the layout
      */
     public void onFilePickerPressed(View view) {
-        //TODO make it work with real Objects
-        /*
         startActivityForResult(attachmentControl.getOpenFileIntent(), REQUEST_FILE_OPEN);
-         */
     }
 
     /**
@@ -354,16 +356,12 @@ public class EditorActivity extends DatabaseConnectionActivity {
      * @param view the view that calls this Method. Only needed for calling this Method via layout
      */
     public void onAttachmentsPressed(View view) {
-        //TODO make Attachments work with real Attachments
-        /*
         if (fileContainer.getVisibility() == View.VISIBLE) {
             closeAttachments();
         } else if (lecture.getAttachments().size() != 0) {
             openAttachments();
         } else Toast.makeText(
                 this, "Your attachmentControl go here", Toast.LENGTH_SHORT).show();
-
-         */
     }
 
     /**
@@ -516,11 +514,10 @@ public class EditorActivity extends DatabaseConnectionActivity {
         //TODO make note save itself onClose etc...
         /*
         String title = this.titleEditText.getText().toString();
-        note.setName(title);
+        note.setTitle(title);
 
         Spannable content = this.contentEditText.getText();
         note.setContent(content);
-
          */
     }
 }

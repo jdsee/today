@@ -3,6 +3,7 @@ package com.mobila.project.today.control.utils;
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -24,8 +25,9 @@ public interface AttachmentUtils {
 
     /**
      * Method for obtaining the name of a file
+     *
      * @param context The context from where the method gets called from
-     * @param uri the Uri pf the file in question
+     * @param uri     the Uri pf the file in question
      * @return the name of the file
      */
     static String getFileName(Context context, Uri uri) {
@@ -51,12 +53,12 @@ public interface AttachmentUtils {
 
     /**
      * Method for obtaining the Mime-Type of a file
+     *
      * @param context The context from where the method gets called from
-     * @param file the file in question
+     * @param uri    the uri of the file in question
      * @return the Mime-Type of the file
      */
-    static String getMimeType(Context context, File file) {
-        Uri uri = Uri.fromFile(file);
+    static String getMimeType(Context context, Uri uri) {
         String mimeType;
         if (Objects.requireNonNull(uri.getScheme()).equals(ContentResolver.SCHEME_CONTENT)) {
             ContentResolver cr = context.getContentResolver();
@@ -70,14 +72,10 @@ public interface AttachmentUtils {
         return mimeType;
     }
 
-    static String getMimeType(Context context, Attachment attachment){
-        //todo
-        return null;
-    }
-
     /**
      * Method for receiving a symbolic icon for a file-type
-     * @param context The context from where the method gets called from
+     *
+     * @param context  The context from where the method gets called from
      * @param mimeType the Mime-Type of the file in question
      * @return a Drawable containing a symbolic icon
      */
@@ -130,17 +128,19 @@ public interface AttachmentUtils {
 
     /**
      * Method for receiving a symbolic icon for a file
+     *
      * @param context The context from where the method gets called from
-     * @param file the file for which the icon is searched for
+     * @param uri    the uri of the file for which the icon is searched for
      * @return a symbolic icon
      */
-    static Drawable getDrawable(Context context, File file) {
-        String mimeType = getMimeType(context, file);
+    static Drawable getDrawable(Context context, Uri uri) {
+        String mimeType = getMimeType(context, uri);
         return getDrawable(context, mimeType);
     }
 
     /**
      * Method for creating a image file (in which an image can be copied into)
+     *
      * @param context The context from where the method gets called from
      * @return an file with the name IMAGE_ + (current date) + (current time).jpg
      */
@@ -154,15 +154,19 @@ public interface AttachmentUtils {
         return new File(storageDir, imageFileName + ".jpg");
     }
 
+    static File createDataFile(Context context) {
+        return context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
+    }
+
     /**
      * Method for opening a file
-     * @param file the file that should be opened
+     *
+     * @param uri the the uri of the file that should be opened
      */
-    static void openFile(Uri file){
-        //TODO after Establishing SQLite Database
-//        Intent intent = new Intent(Intent.ACTION_VIEW);
-//        intent.setDataAndType(Uri.fromFile(file), "*/*");
-//        startActivity(intent);
+    static void openFile(Context context, Uri uri) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(uri, "*/*");
+        context.startActivity(intent);
     }
 
 }
