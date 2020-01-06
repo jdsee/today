@@ -513,13 +513,16 @@ public class EditorActivity extends DatabaseConnectionActivity {
      */
     private void saveContent() {
         //TODO make note save itself onClose etc...
-        /*
         String title = this.titleEditText.getText().toString();
         note.setTitle(title);
 
         Spannable content = this.contentEditText.getText();
         note.setContent(content);
-         */
-        this.note.setTitle(this.titleEditText.toString());
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        this.saveContent();
     }
 }

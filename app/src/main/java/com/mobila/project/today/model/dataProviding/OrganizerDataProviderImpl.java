@@ -26,7 +26,6 @@ class OrganizerDataProviderImpl implements OrganizerDataProvider {
     private final NoteDataAccess noteAccess;
 
     private DBHelper dbHelper;
-    private SQLiteDatabase database;
 
     private final LectureDataAccess lectureAccess;
 
@@ -49,7 +48,8 @@ class OrganizerDataProviderImpl implements OrganizerDataProvider {
     @Override
     public void openDbConnection(Context context) {
         this.dbHelper = new DBHelper(context);
-        this.database = dbHelper.getWritableDatabase();
+        SQLiteDatabase database = dbHelper.getWritableDatabase();
+
         this.rootAccess.openDbConnection(database);
         this.semesterAccess.openDbConnection(database);
         this.courseAccess.openDbConnection(database);
@@ -63,11 +63,6 @@ class OrganizerDataProviderImpl implements OrganizerDataProvider {
     public void closeDbConnection() {
         if (this.dbHelper != null)
             this.dbHelper.close();
-    }
-
-    @Override
-    public SQLiteDatabase getDatabase() {
-        return this.database;
     }
 
     @Override

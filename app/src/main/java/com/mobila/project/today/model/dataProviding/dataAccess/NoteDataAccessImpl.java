@@ -20,13 +20,13 @@ class NoteDataAccessImpl extends ParentDataAccessImpl implements NoteDataAccess 
     private static final String NO_CONTENT_FOR_NOTE_MSG = "no content found for given course";
     //private static final String NO_REFERENCES_FOR_NOTE_MSG = "no note references found for given course";
 
-    static NoteDataAccess getInstance(){
+    static NoteDataAccess getInstance() {
         if (instance == null)
             instance = new NoteDataAccessImpl();
         return instance;
     }
 
-    private NoteDataAccessImpl(){
+    private NoteDataAccessImpl() {
     }
 
     @Override
@@ -62,7 +62,7 @@ class NoteDataAccessImpl extends ParentDataAccessImpl implements NoteDataAccess 
         ContentValues values = new ContentValues();
         values.put(NoteTable.COLUMN_CONTENT, Html.toHtml(content, Html.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE));
         this.database.update(NoteTable.TABLE_NAME, values,
-                NoteTable.COLUMN_ID + "=?s", new String[]{note.getID()});
+                NoteTable.COLUMN_ID + "=?", new String[]{note.getID()});
     }
 
 

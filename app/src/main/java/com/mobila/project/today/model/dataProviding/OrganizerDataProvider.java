@@ -21,8 +21,6 @@ public interface OrganizerDataProvider {
 
     void closeDbConnection();
 
-    SQLiteDatabase getDatabase();
-
     RootDataAccess getRootDataAccess();
 
     SemesterDataAccess getSemesterDataAccess();

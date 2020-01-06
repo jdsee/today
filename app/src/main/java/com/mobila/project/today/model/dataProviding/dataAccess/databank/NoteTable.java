@@ -12,7 +12,7 @@ public class NoteTable {
 
     static final String SQL_CREATE =
             "CREATE TABLE " + TABLE_NAME + "(" +
-                    COLUMN_ID + "TEXT PRIMARY KEY, "+
+                    COLUMN_ID + " TEXT PRIMARY KEY, "+
                     COLUMN_TITLE + " TEXT, " +
                     COLUMN_CONTENT + " TEXT, " +
                     COLUMN_RELATED_TO + " TEXT REFERENCES " + SectionTable.TABLE_NAME + " ON DELETE CASCADE);";

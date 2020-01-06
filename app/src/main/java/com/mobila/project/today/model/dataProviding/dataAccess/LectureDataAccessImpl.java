@@ -33,10 +33,7 @@ public class LectureDataAccessImpl extends ParentDataAccessImpl implements Lectu
     }
 
     private LectureDataAccessImpl() {
-        this(
-                new IdentityMapper<>(),
-                null
-        );
+        this.attachmentCache = new IdentityMapper<>();
     }
 
     /**
@@ -46,7 +43,7 @@ public class LectureDataAccessImpl extends ParentDataAccessImpl implements Lectu
      * @param attachmentCache
      * @param database
      */
-    private LectureDataAccessImpl(IdentityMapper<Attachment> attachmentCache, SQLiteDatabase database) {
+    LectureDataAccessImpl(IdentityMapper<Attachment> attachmentCache, SQLiteDatabase database) {
         this.attachmentCache = attachmentCache;
         this.database = database;
     }
