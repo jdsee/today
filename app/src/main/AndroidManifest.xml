@@ -10,6 +10,8 @@
         android:name="android.permission.READ_INTERNAL_STORAGE"
         android:required="false" />
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
@@ -24,7 +26,7 @@
             android:name=".activities.TodayActivity"
             android:theme="@style/NoActionBarWhiteNavigationBar">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
@@ -32,9 +34,6 @@
 
         <activity android:name=".activities.courseContentView.CourseContentActivity" />
 
-        <activity
-            android:name=".activities.taskView.CourseTasksActivity"
-            android:parentActivityName=".activities.TodayActivity" />
         <activity
             android:name=".activities.editorView.EditorActivity"
             android:parentActivityName=".activities.TodayActivity"

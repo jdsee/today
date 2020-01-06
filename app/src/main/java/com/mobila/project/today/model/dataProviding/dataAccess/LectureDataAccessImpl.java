@@ -23,7 +23,6 @@ public class LectureDataAccessImpl extends ParentDataAccessImpl implements Lectu
 
     private static LectureDataAccessImpl instance;
 
-    private Note note;
     private IdentityMapper<Attachment> attachmentCache;
 
     static LectureDataAccess getInstance() {
@@ -45,6 +44,7 @@ public class LectureDataAccessImpl extends ParentDataAccessImpl implements Lectu
      */
     LectureDataAccessImpl(IdentityMapper<Attachment> attachmentCache, SQLiteDatabase database) {
         this.attachmentCache = attachmentCache;
+        this.database = database;
     }
 
     @Override
@@ -73,19 +73,33 @@ public class LectureDataAccessImpl extends ParentDataAccessImpl implements Lectu
 
     @Override
     public Note getNote(Identifiable lecture) throws DataKeyNotFoundException {
-        if (this.note == null) {
-            Cursor cursor = this.database.query(NoteTable.TABLE_NAME, null,
-                    NoteTable.COLUMN_RELATED_TO + "=?", new String[]{lecture.getID()},
-                    null, null, null);
-            if (cursor.moveToNext()) {
-                this.note = new Note(
-                        cursor.getString(cursor.getColumnIndex(NoteTable.COLUMN_ID)),
-                        cursor.getString(cursor.getColumnIndex(NoteTable.COLUMN_TITLE))
-                );
-            } else
-                this.note = new Note();
-            cursor.close();
-        }
+        Note note = null;
+        Cursor cursor = this.database.query(NoteTable.TABLE_NAME, null,
+                NoteTable.COLUMN_RELATED_TO + "=?", new String[]{lecture.getID()},
+                null, null, null);
+        if (cursor.moveToNext()) {
+            note = new Note(
+                    cursor.getString(cursor.getColumnIndex(NoteTable.COLUMN_ID)),
+                    cursor.getString(cursor.getColumnIndex(NoteTable.COLUMN_TITLE))
+            );
+        } else
+            //TODO constructor for note
+            note = this.addNoteToDB(lecture);
+
+        cursor.close();
+        return note;
+    }
+
+    private Note addNoteToDB(Identifiable lecture) {
+        Note note = new Note();
+        ContentValues values = new ContentValues();
+
+        values.put(NoteTable.COLUMN_ID, note.getID());
+        values.put(NoteTable.COLUMN_TITLE, note.getTitle());
+        values.put(NoteTable.COLUMN_CONTENT, "");
+        values.put(NoteTable.COLUMN_RELATED_TO, lecture.getID());
+
+        this.database.insert(NoteTable.TABLE_NAME, null, values);
         return note;
     }
 
@@ -105,6 +119,7 @@ public class LectureDataAccessImpl extends ParentDataAccessImpl implements Lectu
                 );
                 attachments.add(attachment);
             }
+            this.attachmentCache.add(lecture, attachments);
             cursor.close();
         }
         return attachments;
@@ -118,6 +133,7 @@ public class LectureDataAccessImpl extends ParentDataAccessImpl implements Lectu
         values.put(AttachmentTable.COLUMN_NAME, attachment.getName());
         values.put(AttachmentTable.COLUMN_URI, attachment.getContent().getPath());
         values.put(AttachmentTable.COLUMN_RELATED_TO, lecture.getID());
+
         this.database.insert(AttachmentTable.TABLE_NAME, null, values);
     }
 

@@ -52,8 +52,13 @@ public class LectureAdapter extends RecyclerView.Adapter<LectureAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Lecture lecture = this.lectures.get(position);
-        holder.tvLectureTitle.setText(String.format(
-                Locale.getDefault(), "%s %d", LECTURE_TITLE, lecture.getLectureNr()));
+
+        String lectureTitle = lecture.getNote().getTitle();
+        lectureTitle = lectureTitle.isEmpty() ?
+                String.format(Locale.getDefault(), "%s %d", LECTURE_TITLE, lecture.getLectureNr())
+                : lectureTitle;
+        holder.tvLectureTitle.setText(lectureTitle);
+
         holder.tvRoomNr.setText(lecture.getRoomNr());
         holder.tvTime.setText(lecture.getDate().toString());
 

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
@@ -12,8 +13,11 @@ import androidx.core.content.FileProvider;
 import com.mobila.project.today.model.Attachment;
 import com.mobila.project.today.model.Lecture;
 import com.mobila.project.today.control.utils.AttachmentUtils;
+import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
+import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -22,19 +26,17 @@ import java.util.Objects;
 import static android.app.Activity.RESULT_OK;
 
 public class AttachmentControl {
+    private static final String TAG = AttachmentControl.class.getName();
 
     private Context context;
-    private Lecture lecture;
 
     public static final int REQUEST_TAKE_PHOTO = 1;
     public static final int REQUEST_FILE_OPEN = 2;
 
     private String currentImagePath;
 
-    public AttachmentControl(Context context,
-                             Lecture lecture) {
+    public AttachmentControl(Context context) {
         this.context = context;
-        this.lecture = lecture;
     }
 
     /**
@@ -73,19 +75,19 @@ public class AttachmentControl {
      * @param resultCode  the confirmation if the request was successful
      * @param data        the optional data of the intent-result
      */
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public Uri onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_TAKE_PHOTO && currentImagePath != null) {
                 File file = new File(currentImagePath);
-                Uri fileUri = Uri.fromFile(file);
-                String fileName = AttachmentUtils.getFileName(context, fileUri);
+                //Uri fileUri = Uri.fromFile(file);
+                Uri fileUri = FileProvider.getUriForFile(context,
+                        context.getApplicationContext().getPackageName() + ".fileprovider", file);
 
-                this.lecture.addAttachment(new Attachment(fileName, fileUri));
-
-                Toast.makeText(context.getApplicationContext(),
-                        "Image Saved", Toast.LENGTH_LONG).show();
-
+                Toast.makeText(context.getApplicationContext(), "Image Saved", Toast.LENGTH_LONG).show();
+                Log.d(TAG, "Image persisted on internal storage. not added to database yet");
                 this.currentImagePath = null;
+
+                return fileUri;
             } else if (requestCode == REQUEST_FILE_OPEN && data != null) {
                 try {
                     Uri fileUri = data.getData();
@@ -97,17 +99,29 @@ public class AttachmentControl {
 
                     AttachmentUtils.copy(fileInputStream, destinationFile);
 
-                    Uri destinationUri = Uri.fromFile(destinationFile);
-                    this.lecture.addAttachment(new Attachment(destinationFileName, destinationUri));
-                    Toast.makeText(context.getApplicationContext(),
-                            "File Saved", Toast.LENGTH_LONG).show();
-                } catch (Exception e){
+                    Uri destinationUri = FileProvider.getUriForFile(context,
+                            context.getApplicationContext().getPackageName() + ".fileprovider", destinationFile);
+                    //Uri destinationUri = Uri.fromFile(destinationFile);
+
+                    Toast.makeText(this.context.getApplicationContext(), "File Saved", Toast.LENGTH_LONG).show();
+                    Log.d(TAG, "Image persisted on internal storage. not added to database yet");
+
+                    return destinationUri;
+                } catch (DataKeyNotFoundException e) {
+                    e.printStackTrace();
+                    Log.e(TAG, "uri could not been added to database", e);
+                    throw e;
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                    Log.e(TAG, "file could not been found", e);
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
-            } else {
-                Toast.makeText(context.getApplicationContext(),
-                        "Nothing was saved", Toast.LENGTH_LONG).show();
             }
+        } else {
+            Toast.makeText(context.getApplicationContext(),
+                    "Nothing was saved", Toast.LENGTH_LONG).show();
         }
+        return null;
     }
 }

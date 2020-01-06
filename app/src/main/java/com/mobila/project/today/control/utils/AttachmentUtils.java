@@ -27,6 +27,34 @@ import java.util.Date;
 import java.util.Objects;
 
 public interface AttachmentUtils {
+    /**
+     * Method for obtaining the Mime-Type of a file
+     *
+     * @param context The context from where the method gets called from
+     * @param uri     the uri of the file in question
+     * @return the Mime-Type of the file
+     */
+    static String getMimeType(Context context, Uri uri) {
+        String mimeType;
+        if (Objects.requireNonNull(uri.getScheme()).equals(ContentResolver.SCHEME_CONTENT)) {
+            ContentResolver cr = context.getContentResolver();
+            mimeType = cr.getType(uri);
+        } else {
+            String fileExtension = MimeTypeMap.getFileExtensionFromUrl(uri
+                    .toString());
+            mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
+                    fileExtension.toLowerCase());
+        }
+        return mimeType;
+       /* ContentResolver cR = context.getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        String type = mime.getExtensionFromMimeType(cR.getType(uri));
+
+        System.out.println("FILE URI: " + uri);
+
+        return cR.getType(uri);*/
+    }
+
 
     /**
      * Method for obtaining the name of a file
@@ -54,27 +82,6 @@ public interface AttachmentUtils {
             }
         }
         return result;
-    }
-
-    /**
-     * Method for obtaining the Mime-Type of a file
-     *
-     * @param context The context from where the method gets called from
-     * @param uri    the uri of the file in question
-     * @return the Mime-Type of the file
-     */
-    static String getMimeType(Context context, Uri uri) {
-        String mimeType;
-        if (Objects.requireNonNull(uri.getScheme()).equals(ContentResolver.SCHEME_CONTENT)) {
-            ContentResolver cr = context.getContentResolver();
-            mimeType = cr.getType(uri);
-        } else {
-            String fileExtension = MimeTypeMap.getFileExtensionFromUrl(uri
-                    .toString());
-            mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
-                    fileExtension.toLowerCase());
-        }
-        return mimeType;
     }
 
     /**
@@ -135,7 +142,7 @@ public interface AttachmentUtils {
      * Method for receiving a symbolic icon for a file
      *
      * @param context The context from where the method gets called from
-     * @param uri    the uri of the file for which the icon is searched for
+     * @param uri     the uri of the file for which the icon is searched for
      * @return a symbolic icon
      */
     static Drawable getDrawable(Context context, Uri uri) {
@@ -170,11 +177,12 @@ public interface AttachmentUtils {
      */
     static void openFile(Context context, Uri uri) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(uri, "*/*");
+        intent.setDataAndType(uri, getMimeType(context, uri));
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         context.startActivity(intent);
     }
 
-    public static void copy(InputStream src, File dst) throws IOException {
+    static void copy(InputStream src, File dst) throws IOException {
         try (InputStream in = src) {
             try (OutputStream out = new FileOutputStream(dst)) {
                 // Transfer bytes from in to out

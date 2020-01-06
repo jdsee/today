@@ -3,9 +3,10 @@ package com.mobila.project.today.activities.editorView;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Spannable;
-import android.text.SpannableString;
+import android.util.Log;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -22,19 +23,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.mobila.project.today.R;
 import com.mobila.project.today.activities.DatabaseConnectionActivity;
-import com.mobila.project.today.activities.adapters.FileAdapter;
+import com.mobila.project.today.activities.adapters.AttachmentAdapter;
+import com.mobila.project.today.activities.adapters.RecyclerViewButtonClickListener;
 import com.mobila.project.today.activities.adapters.TaskAdapter;
 import com.mobila.project.today.activities.editorView.listeners.EditorKeyboardEventListener;
 import com.mobila.project.today.activities.editorView.listeners.TitleOnEditorActionListener;
 import com.mobila.project.today.activities.editorView.listeners.noteFocusChangeListener;
 import com.mobila.project.today.control.AttachmentControl;
 import com.mobila.project.today.control.NoteControl;
+import com.mobila.project.today.control.utils.AttachmentUtils;
 import com.mobila.project.today.control.utils.DateUtils;
 import com.mobila.project.today.model.Attachment;
 import com.mobila.project.today.model.Note;
 import com.mobila.project.today.model.Section;
 import com.mobila.project.today.model.Lecture;
 import com.mobila.project.today.model.Task;
+import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 
@@ -46,8 +50,10 @@ import java.util.Objects;
 import static com.mobila.project.today.control.AttachmentControl.REQUEST_FILE_OPEN;
 import static com.mobila.project.today.control.AttachmentControl.REQUEST_TAKE_PHOTO;
 
-public class EditorActivity extends DatabaseConnectionActivity {
+public class EditorActivity extends DatabaseConnectionActivity
+        implements RecyclerViewButtonClickListener {
 
+    private static final String TAG = EditorActivity.class.getName();
     private Lecture lecture;
     private Section section;
     private List<Task> tasks;
@@ -65,6 +71,7 @@ public class EditorActivity extends DatabaseConnectionActivity {
     private boolean focusOnNoteContent;
     private Note note;
 
+    private AttachmentAdapter attachmentAdapter;
 
     /**
      * Method for creating this activity.
@@ -93,6 +100,11 @@ public class EditorActivity extends DatabaseConnectionActivity {
 
         this.contentEditText = findViewById(R.id.editor_content);
         this.titleEditText = findViewById(R.id.editor_title);
+
+        this.contentEditText.setText(this.note.getContent());
+        this.titleEditText.setText(this.note.getTitle());
+
+        this.attachmentAdapter = new AttachmentAdapter(this.getApplicationContext(), this, this.attachments);
 
         hideCameraIfNotAvailable();
         setupContent();
@@ -126,7 +138,7 @@ public class EditorActivity extends DatabaseConnectionActivity {
      */
     private void setupControls() {
         this.noteEditor = new NoteControl(this, this.contentEditText);
-        this.attachmentControl = new AttachmentControl(this, this.lecture);
+        this.attachmentControl = new AttachmentControl(this);
     }
 
     /**
@@ -185,20 +197,19 @@ public class EditorActivity extends DatabaseConnectionActivity {
      * @param view The vie that is taking this action
      */
     public void onBackPressed(View view) {
-        finish();
         prepareGoBack();
+        finish();
     }
 
     @Override
     public void onBackPressed() {
-        finish();
         prepareGoBack();
+        finish();
     }
 
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
-        prepareGoBack();
         return true;
     }
 
@@ -215,8 +226,9 @@ public class EditorActivity extends DatabaseConnectionActivity {
             assert imm != null;
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
-        //save note
-        saveContent();
+        //TODO save note
+
+
         //sliding animation to the left out of the activity
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
@@ -324,8 +336,21 @@ public class EditorActivity extends DatabaseConnectionActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //TODO Needs to avoid contentEditText provider all together after SQL db is established to make contentEditText provider obsolete
         super.onActivityResult(requestCode, resultCode, data);
-        attachmentControl.onActivityResult(requestCode, resultCode, data);
+        OrganizerDataProvider.getInstance().openDbConnection(this);
+        Uri uri = attachmentControl.onActivityResult(requestCode, resultCode, data);
+        this.addFileToAttachments(uri);
         updateFileNumber();
+    }
+
+    public void addFileToAttachments(Uri uri) {
+        if (uri != null) {
+            String fileName = AttachmentUtils.getFileName(this.getApplicationContext(), uri);
+            this.lecture.addAttachment(new Attachment(fileName, uri));
+
+            this.attachmentAdapter.notifyDataSetChanged();
+
+            Log.d(TAG, "file behind uri has been added to attachments");
+        }
     }
 
     /**
@@ -362,7 +387,7 @@ public class EditorActivity extends DatabaseConnectionActivity {
         } else if (lecture.getAttachments().size() != 0) {
             openAttachments();
         } else Toast.makeText(
-                this, "Your attachmentControl go here", Toast.LENGTH_SHORT).show();
+                this, "Your attachments go here", Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -421,9 +446,15 @@ public class EditorActivity extends DatabaseConnectionActivity {
      */
     private void initAttachmentsView() {
         this.fileContainer = findViewById(R.id.recycler_view_files);
-        FileAdapter fileHolderAdapter = new FileAdapter(this, this.lecture);
-        this.fileContainer.setAdapter(fileHolderAdapter);
+        this.attachmentAdapter = new AttachmentAdapter(this, this, this.lecture.getAttachments());
+        this.fileContainer.setAdapter(attachmentAdapter);
         this.fileContainer.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    @Override
+    public void recyclerViewButtonClicked(View view, int position) {
+        lecture.removeAttachment(this.attachments.get(position));
+        this.attachmentAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -521,7 +552,7 @@ public class EditorActivity extends DatabaseConnectionActivity {
 
     @Override
     protected void onPause() {
-        super.onPause();
         this.saveContent();
+        super.onPause();
     }
 }

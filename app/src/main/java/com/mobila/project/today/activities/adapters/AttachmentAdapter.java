@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageButton;
@@ -15,19 +14,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.mobila.project.today.R;
 import com.mobila.project.today.model.Attachment;
-import com.mobila.project.today.model.Lecture;
 import com.mobila.project.today.control.utils.AttachmentUtils;
 
-import java.io.File;
+import java.util.List;
 
-public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
+public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.ViewHolder> {
 
-    private Lecture lecture;
     private Context context;
+    private List<Attachment> attachments;
+    private RecyclerViewButtonClickListener recyclerViewButtonClickListener;
 
-    public FileAdapter(Context context, Lecture lecture) {
-        this.lecture = lecture;
+    public AttachmentAdapter(Context context,
+                             RecyclerViewButtonClickListener recyclerViewButtonClickListener,
+                             List<Attachment> attachments) {
+        this.attachments = attachments;
         this.context = context;
+        this.recyclerViewButtonClickListener = recyclerViewButtonClickListener;
     }
 
     @NonNull
@@ -40,26 +42,26 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        final Attachment attachment = lecture.getAttachments().get(position);
+        final Attachment attachment = this.attachments.get(position);
         //Set name and icon of file
         holder.fileName.setText(attachment.getName());
         holder.fileImage.setImageDrawable(AttachmentUtils.getDrawable(context, attachment.getName()));
 
         holder.fileHolder.setOnClickListener(v -> {
             //Toast.makeText(context, AttachmentUtils.getMimeType(context, attachment.getContent()),
-              //      Toast.LENGTH_LONG).show();
-            AttachmentUtils.openFile(context, lecture.getAttachments().get(position).getContent());
+            //      Toast.LENGTH_LONG).show();
+            AttachmentUtils.openFile(context, this.attachments.get(position).getContent());
         });
 
         holder.button.setOnClickListener(v -> {
-            lecture.removeAttachment(lecture.getAttachments().get(position));
+            this.recyclerViewButtonClickListener.recyclerViewButtonClicked(v, position);
             notifyDataSetChanged();
         });
     }
 
     @Override
     public int getItemCount() {
-        return lecture.getAttachments().size();
+        return this.attachments.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

@@ -45,13 +45,11 @@ class NoteDataAccessImpl extends ParentDataAccessImpl implements NoteDataAccess 
                 null, null, null
         );
 
-        if (!cursor.moveToNext()) {
-            DataKeyNotFoundException t = new DataKeyNotFoundException(DataKeyNotFoundException.NO_ENTRY_MSG);
-            Log.d(TAG, DataKeyNotFoundException.NO_ENTRY_MSG + ": " + NO_CONTENT_FOR_NOTE_MSG, t);
-            throw t;
-        }
-        String contentHtml = cursor.getString(cursor.getColumnIndex(NoteTable.COLUMN_CONTENT));
+        String contentHtml = "";
+        if (cursor.moveToFirst())
+            contentHtml = cursor.getString(cursor.getColumnIndex(NoteTable.COLUMN_CONTENT));
         cursor.close();
+
         return new SpannableString(Html.fromHtml(contentHtml, Html.FROM_HTML_MODE_LEGACY));
     }
 
