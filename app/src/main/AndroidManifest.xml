@@ -86,6 +86,7 @@
                 <data android:pathPattern=".*\\..*\\..*\\..*\\.com.mobila.project.today" />
             </intent-filter>
         </activity>
+        <activity android:name=".activities.DatabaseConnectionActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

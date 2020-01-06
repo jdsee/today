@@ -3,11 +3,14 @@ package com.mobila.project.today.model.dataProviding.dataAccess;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
+import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Identifiable;
 import com.mobila.project.today.model.Lecture;
 import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
 import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
+import com.mobila.project.today.model.dataProviding.dataAccess.databank.CourseTable;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.LectureTable;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.SectionTable;
 
@@ -19,6 +22,7 @@ class SectionDataAccessImpl implements SectionDataAccess {
     private static SectionDataAccess instance;
 
     private static final String TAG = SectionDataAccessImpl.class.getName();
+    private static final String LOG_MSG_DB_UPDATE = "section has been updated in database";
     private static final String NO_LECTURES_FOR_SECTION_MSG = "no lectures related to given section";
 
     private IdentityMapper<Lecture> lectureCache;
@@ -48,6 +52,29 @@ class SectionDataAccessImpl implements SectionDataAccess {
     SectionDataAccessImpl(IdentityMapper<Lecture> lectureCache, SQLiteDatabase database) {
         this.lectureCache = lectureCache;
         this.database = database;
+    }
+
+    @Override
+    public Course getCourse(Identifiable section) {
+        Cursor sectionCursor = this.database.query(SectionTable.TABLE_NAME, new String[]{SectionTable.COLUMN_RELATED_TO},
+                SectionTable.COLUMN_ID + "=?", new String[]{section.getID()},
+                null, null, null);
+        if (!sectionCursor.moveToNext())
+            throw new DataKeyNotFoundException("FATAL ERROR: no parent found for given section!");
+        String sectionID = sectionCursor.getString(sectionCursor.getColumnIndex(SectionTable.COLUMN_RELATED_TO));
+        sectionCursor.close();
+
+        Cursor courseCursor = this.database.query(CourseTable.TABLE_NAME, CourseTable.ALL_COLUMNS,
+                CourseTable.COLUMN_ID + "=?", new String[]{sectionID},
+                null, null, null);
+        courseCursor.moveToFirst();
+        Course course = new Course(
+                courseCursor.getString(courseCursor.getColumnIndex(CourseTable.COLUMN_ID)),
+                courseCursor.getString(courseCursor.getColumnIndex(CourseTable.COLUMN_TITLE))
+                );
+        courseCursor.close();
+
+        return course;
     }
 
     @Override
@@ -96,6 +123,8 @@ class SectionDataAccessImpl implements SectionDataAccess {
         values.put(LectureTable.COLUMN_RELATED_TO, section.getID());
 
         this.database.insert(LectureTable.TABLE_NAME, null, values);
+
+        Log.d(TAG, "lecture has been added to database (id: " + lecture + ")");
     }
 
     @Override
@@ -104,6 +133,8 @@ class SectionDataAccessImpl implements SectionDataAccess {
         values.put(SectionTable.COLUMN_TITLE, title);
 
         this.updateSectionInDB(section, values);
+
+        Log.d(TAG, LOG_MSG_DB_UPDATE + " (id: " + section + ")");
     }
 
     @Override
@@ -117,6 +148,8 @@ class SectionDataAccessImpl implements SectionDataAccess {
     private void updateSectionInDB(Identifiable section, ContentValues values) {
         this.database.update(SectionTable.TABLE_NAME, values,
                 SectionTable.COLUMN_ID + "=?", new String[]{section.getID()});
+
+        Log.d(TAG, LOG_MSG_DB_UPDATE + " (id: " + section + ")");
     }
 
     @Override

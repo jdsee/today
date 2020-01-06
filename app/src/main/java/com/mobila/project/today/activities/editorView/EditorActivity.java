@@ -75,7 +75,6 @@ public class EditorActivity extends DatabaseConnectionActivity {
 
         this.lecture = getIntent().getParcelableExtra(Lecture.INTENT_EXTRA_CODE);
 
-        //TODO replace with Objects from Lecture
         this.section = lecture.getSection();
         this.tasks = lecture.getSection().getCourse().getTasks();
         this.attachments = lecture.getAttachments();
@@ -315,8 +314,8 @@ public class EditorActivity extends DatabaseConnectionActivity {
      * Method for resolving the contentEditText of a received intent
      *
      * @param requestCode the code of the request that asked for a result
-     * @param resultCode the code that contains information about the success of the request
-     * @param data the data contained in the result
+     * @param resultCode  the code that contains information about the success of the request
+     * @param data        the data contained in the result
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -441,6 +440,7 @@ public class EditorActivity extends DatabaseConnectionActivity {
 
     /**
      * Method for displaying the task-view
+     *
      * @param view the view that was clicked on. Only needed for calling this method via layout
      */
     public void openTasks(View view) {
@@ -452,6 +452,7 @@ public class EditorActivity extends DatabaseConnectionActivity {
 
     /**
      * Method for closing the task-view
+     *
      * @param view the view that was clicked on. Only needed for calling this method via layout
      */
     public void closeTasks(View view) {
@@ -511,7 +512,7 @@ public class EditorActivity extends DatabaseConnectionActivity {
     /**
      * Method for saving the contentEditText of the editor
      */
-    private void saveContent(){
+    private void saveContent() {
         //TODO make note save itself onClose etc...
         /*
         String title = this.titleEditText.getText().toString();

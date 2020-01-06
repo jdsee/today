@@ -13,7 +13,6 @@ import java.util.List;
  */
 public class Section implements Identifiable {
     public static final String INTENT_EXTRA_CODE = "EXTRA_SECTION";
-    private final RootDataAccess rootDataAccess;
     private final SectionDataAccess dataAccess;
 
     private final String ID;
@@ -28,7 +27,6 @@ public class Section implements Identifiable {
         this.lectures = null;
 
         OrganizerDataProvider dataProvider = OrganizerDataProvider.getInstance();
-        this.rootDataAccess = dataProvider.getRootDataAccess();
         this.dataAccess = dataProvider.getSectionDataAccess();
     }
 
@@ -46,8 +44,7 @@ public class Section implements Identifiable {
      * @return the course containing this section
      */
     public Course getCourse() throws DataKeyNotFoundException {
-        //TODO this method is probably useless
-        return null;
+        return this.dataAccess.getCourse(this);
     }
 
     /**

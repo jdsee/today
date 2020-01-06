@@ -5,13 +5,14 @@ import com.mobila.project.today.model.Attachment;
 import com.mobila.project.today.model.Identifiable;
 import com.mobila.project.today.model.Note;
 import com.mobila.project.today.model.Section;
+import com.mobila.project.today.model.dataProviding.dataAccess.databank.DBHelper;
 
 import java.util.Date;
 import java.util.List;
 
-public interface LectureDataAccess {
+public interface LectureDataAccess extends ParentDataAccess {
 
-    static LectureDataAccess getInstance() {
+    static LectureDataAccess createInstance() {
         return LectureDataAccessImpl.getInstance();
     }
 

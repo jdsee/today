@@ -16,7 +16,10 @@ import com.mobila.project.today.model.dataProviding.dataAccess.databank.DBHelper
 class OrganizerDataProviderImpl implements OrganizerDataProvider {
     private static OrganizerDataProviderImpl instance;
 
+    private DBHelper dbHelper;
     private SQLiteDatabase database;
+
+    private final LectureDataAccess lectureAccess;
 
     static OrganizerDataProviderImpl getInstance() {
         if (instance == null)
@@ -25,18 +28,20 @@ class OrganizerDataProviderImpl implements OrganizerDataProvider {
     }
 
     private OrganizerDataProviderImpl() {
+        this.lectureAccess = LectureDataAccess.createInstance();
     }
 
     @Override
     public void openDbConnection(Context context) {
-        DBHelper dbHelper = new DBHelper(context);
+        this.dbHelper = new DBHelper(context);
         this.database = dbHelper.getWritableDatabase();
+        this.lectureAccess.openDbConnection(dbHelper);
     }
 
     @Override
     public void closeDbConnection() {
-        if (this.database != null)
-            this.database.close();
+        if (this.dbHelper != null)
+            this.dbHelper.close();
     }
 
     @Override
@@ -66,7 +71,7 @@ class OrganizerDataProviderImpl implements OrganizerDataProvider {
 
     @Override
     public LectureDataAccess getLectureDataAccess() {
-        return LectureDataAccess.getInstance();
+        return this.lectureAccess;
     }
 
     @Override

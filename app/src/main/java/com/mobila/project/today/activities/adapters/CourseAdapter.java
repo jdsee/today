@@ -16,7 +16,6 @@ import com.mobila.project.today.R;
 import com.mobila.project.today.activities.courseContentView.CourseContentActivity;
 import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Semester;
-import com.mobila.project.today.model.dataProviding.dataAccess.RootDataAccess;
 
 import java.util.List;
 

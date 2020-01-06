@@ -10,9 +10,11 @@ import android.view.View;
 
 import com.mobila.project.today.R;
 import com.mobila.project.today.activities.DatabaseConnectionActivity;
-import com.mobila.project.today.activities.adapters.RecyclerViewButtonClicked;
+import com.mobila.project.today.activities.adapters.RecyclerViewButtonClickListener;
 import com.mobila.project.today.activities.fragments.GeneralConfirmationDialogFragment;
+import com.mobila.project.today.activities.fragments.LectureSetupDialogFragment;
 import com.mobila.project.today.activities.fragments.TwoEditTextDialogFragment;
+import com.mobila.project.today.control.utils.DateUtils;
 import com.mobila.project.today.model.Lecture;
 import com.mobila.project.today.activities.adapters.SectionAdapter;
 import com.mobila.project.today.activities.adapters.TaskAdapter;
@@ -20,14 +22,14 @@ import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Section;
 import com.mobila.project.today.model.Task;
 
-import java.util.Comparator;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 public class CourseContentActivity extends DatabaseConnectionActivity
-        implements GeneralConfirmationDialogFragment.DialogListener, RecyclerViewButtonClicked {
+        implements GeneralConfirmationDialogFragment.DialogListener, RecyclerViewButtonClickListener {
     private static final String TAG = CourseContentActivity.class.getName();
 
     private static final String ADD_SECTION_DIALOG_CODE = "ADD_SECTION_DIALOG";
@@ -91,14 +93,14 @@ public class CourseContentActivity extends DatabaseConnectionActivity
     public void recyclerViewButtonClicked(View view, int position) {
         this.currentPosition = position;
 
-        TwoEditTextDialogFragment dialog = new TwoEditTextDialogFragment();
+        LectureSetupDialogFragment dialog = new LectureSetupDialogFragment();
         Bundle bundle = new Bundle();
 
-        bundle.putString(TwoEditTextDialogFragment.DIALOG_MESSAGE_EXTRA, "Add lecture");
-        bundle.putString(TwoEditTextDialogFragment.FIRST_EDIT_TEXT_HINT, "lecture date");
-        bundle.putString(TwoEditTextDialogFragment.SECOND_EDIT_TEXT_HINT, "room number");
-        bundle.putString(TwoEditTextDialogFragment.DIALOG_CONFIRMING_EXTRA, "add");
-        bundle.putString(TwoEditTextDialogFragment.DIALOG_DECLINING_EXTRA, "cancel");
+        bundle.putString(LectureSetupDialogFragment.DIALOG_MESSAGE_EXTRA, "Add lecture");
+        bundle.putString(LectureSetupDialogFragment.ROOM_NR_EDIT_TEXT_HINT, "room number");
+        bundle.putString(LectureSetupDialogFragment.DATE_EDIT_TEXT_HINT, "lecture date");
+        bundle.putString(LectureSetupDialogFragment.DIALOG_CONFIRMING_EXTRA, "add");
+        bundle.putString(LectureSetupDialogFragment.DIALOG_DECLINING_EXTRA, "cancel");
 
         dialog.setArguments(bundle);
         dialog.setDialogListener(this);
@@ -129,14 +131,17 @@ public class CourseContentActivity extends DatabaseConnectionActivity
                 .map(Lecture::getLectureNr)
                 .max(Integer::compareTo);
         int lectureNr = maxLectureNr.isPresent() ? (int) maxLectureNr.get() + 1 : 1;
-        Date date = this.parseStringToDate(resultBundle.getString(TwoEditTextDialogFragment.FIRST_EDIT_TEXT_HINT));
-        String roomNr = resultBundle.getString(TwoEditTextDialogFragment.SECOND_EDIT_TEXT_CONTENT);
+        Date date = null;
+        try {
+            date = DateUtils.parseStringToDate(resultBundle.getString(LectureSetupDialogFragment.DATE_EDIT_TEXT_CONTENT));
+        } catch (ParseException e) {
+            e.printStackTrace();
+            Log.e(TAG, "given date could not be parsed", e);
+        }
+        String roomNr = resultBundle.getString(LectureSetupDialogFragment.ROOM_NR_EDIT_TEXT_HINT);
         Lecture lecture = new Lecture(lectureNr, date, roomNr);
-        currentSection.addLecture(lecture);
-    }
 
-    private Date parseStringToDate(String dateString) throws NumberFormatException {
-        return new Date(Integer.parseInt(dateString));
+        currentSection.addLecture(lecture);
     }
 
     private void onAddSectionDialogConfirmation(Bundle resultBundle) {

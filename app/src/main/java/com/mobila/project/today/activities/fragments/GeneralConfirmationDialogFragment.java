@@ -26,7 +26,6 @@ public abstract class GeneralConfirmationDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public final Dialog onCreateDialog(Bundle savedInstanceState) {
-
         Bundle entryBundle = this.getArguments();
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 

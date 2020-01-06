@@ -21,10 +21,10 @@ import java.util.List;
 public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.ViewHolder> {
     private final Context context;
     private List<Section> sections;
-    private RecyclerViewButtonClicked addLectureClickListener;
+    private RecyclerViewButtonClickListener addLectureClickListener;
 
     public SectionAdapter(Context context, List<Section> sections,
-                          RecyclerViewButtonClicked addLectureClickListener) {
+                          RecyclerViewButtonClickListener addLectureClickListener) {
         this.sections = sections;
         this.context = context;
         this.addLectureClickListener = addLectureClickListener;
@@ -76,7 +76,7 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.ViewHold
         RecyclerView rvLectures = holder.rvLectures;
         LinearLayoutManager layoutManager = new LinearLayoutManager(this.context);
         rvLectures.setLayoutManager(layoutManager);
-        rvLectures.setAdapter(new LectureAdapter(section.getLectures()));
+        rvLectures.setAdapter(new LectureAdapter(this.context, section.getLectures()));
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rvLectures.getContext(),
                 layoutManager.getOrientation());
         rvLectures.addItemDecoration(dividerItemDecoration);

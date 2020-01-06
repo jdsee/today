@@ -1,5 +1,6 @@
 package com.mobila.project.today.model.dataProviding.dataAccess;
 
+import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Lecture;
 import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
 import com.mobila.project.today.model.Identifiable;
@@ -10,6 +11,8 @@ public interface SectionDataAccess {
     static SectionDataAccess getInstance() {
         return SectionDataAccessImpl.getInstance();
     }
+
+    Course getCourse(Identifiable section);
 
     List<Lecture> getLectures(Identifiable course) throws DataKeyNotFoundException;
 

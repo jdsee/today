@@ -14,7 +14,6 @@ import java.util.UUID;
 
 public class Lecture implements Identifiable, Parcelable {
     public static final String INTENT_EXTRA_CODE = "EXTRA_LECTURE";
-    private final RootDataAccess rootDataAccess;
     private final LectureDataAccess dataAccess;
 
     private final String ID;
@@ -27,7 +26,6 @@ public class Lecture implements Identifiable, Parcelable {
         this.lectureNr = lectureNr;
 
         OrganizerDataProvider dataProvider = OrganizerDataProvider.getInstance();
-        this.rootDataAccess = dataProvider.getRootDataAccess();
         this.dataAccess = dataProvider.getLectureDataAccess();
         this.date = date;
         this.roomNr = roomNr;
