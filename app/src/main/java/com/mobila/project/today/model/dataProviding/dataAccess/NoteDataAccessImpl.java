@@ -20,9 +20,6 @@ class NoteDataAccessImpl extends ParentDataAccessImpl implements NoteDataAccess 
     private static final String NO_CONTENT_FOR_NOTE_MSG = "no content found for given course";
     //private static final String NO_REFERENCES_FOR_NOTE_MSG = "no note references found for given course";
 
-
-    private SQLiteDatabase database;
-
     static NoteDataAccess getInstance(){
         if (instance == null)
             instance = new NoteDataAccessImpl();
@@ -30,7 +27,6 @@ class NoteDataAccessImpl extends ParentDataAccessImpl implements NoteDataAccess 
     }
 
     private NoteDataAccessImpl(){
-        this.database = OrganizerDataProvider.getInstance().getDatabase();
     }
 
     @Override

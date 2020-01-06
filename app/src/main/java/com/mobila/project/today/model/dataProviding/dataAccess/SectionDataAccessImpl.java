@@ -9,7 +9,6 @@ import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Identifiable;
 import com.mobila.project.today.model.Lecture;
 import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
-import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.CourseTable;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.LectureTable;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.SectionTable;
@@ -26,12 +25,11 @@ class SectionDataAccessImpl extends ParentDataAccessImpl implements SectionDataA
     private static final String NO_LECTURES_FOR_SECTION_MSG = "no lectures related to given section";
 
     private IdentityMapper<Lecture> lectureCache;
-    private SQLiteDatabase database;
 
     private SectionDataAccessImpl() {
         this(
                 new IdentityMapper<>(),
-                OrganizerDataProvider.getInstance().getDatabase()
+                null
         );
     }
 
@@ -71,7 +69,7 @@ class SectionDataAccessImpl extends ParentDataAccessImpl implements SectionDataA
         Course course = new Course(
                 courseCursor.getString(courseCursor.getColumnIndex(CourseTable.COLUMN_ID)),
                 courseCursor.getString(courseCursor.getColumnIndex(CourseTable.COLUMN_TITLE))
-                );
+        );
         courseCursor.close();
 
         return course;

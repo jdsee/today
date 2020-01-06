@@ -26,12 +26,11 @@ class CourseDataAccessImpl extends ParentDataAccessImpl implements CourseDataAcc
 
     private IdentityMapper<Section> sectionCache;
     private IdentityMapper<Task> taskCache;
-    private SQLiteDatabase database;
 
     private CourseDataAccessImpl() {
+        super();
         this.sectionCache = new IdentityMapper<>();
         this.taskCache = new IdentityMapper<>();
-        this.database = OrganizerDataProvider.getInstance().getDatabase();
     }
 
     public static CourseDataAccess getInstance() {

@@ -1,18 +1,14 @@
 package com.mobila.project.today.model.dataProviding.dataAccess;
 
 import android.content.ContentValues;
-import android.database.sqlite.SQLiteDatabase;
 
 import com.mobila.project.today.model.Identifiable;
 import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
-import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
 
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.AttachmentTable;
 
 public class AttachmentDataAccessImpl extends ParentDataAccessImpl implements AttachmentDataAccess {
     private static AttachmentDataAccess instance;
-
-    private SQLiteDatabase database;
 
     static AttachmentDataAccess getInstance() {
         if (instance == null)
@@ -22,7 +18,6 @@ public class AttachmentDataAccessImpl extends ParentDataAccessImpl implements At
 
     private AttachmentDataAccessImpl(){
         super();
-        this.database = OrganizerDataProvider.getInstance().getDatabase();
     }
 
     @Override

@@ -19,7 +19,6 @@ class RootDataAccessImpl extends ParentDataAccessImpl implements RootDataAccess 
     private static RootDataAccess instance;
     public static final String TAG = RootDataAccessImpl.class.getName();
 
-    private SQLiteDatabase database;
     private List<Semester> semesters;
 
     static RootDataAccess getInstance() {
@@ -29,7 +28,7 @@ class RootDataAccessImpl extends ParentDataAccessImpl implements RootDataAccess 
     }
 
     private RootDataAccessImpl() {
-        this(OrganizerDataProvider.getInstance().getDatabase());
+        this(null);
     }
 
     RootDataAccessImpl(SQLiteDatabase database) {

@@ -10,9 +10,7 @@ import com.mobila.project.today.model.Identifiable;
 import com.mobila.project.today.model.Note;
 import com.mobila.project.today.model.Section;
 import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
-import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.AttachmentTable;
-import com.mobila.project.today.model.dataProviding.dataAccess.databank.DBHelper;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.LectureTable;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.NoteTable;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.SectionTable;
@@ -80,7 +78,7 @@ public class LectureDataAccessImpl extends ParentDataAccessImpl implements Lectu
     @Override
     public Note getNote(Identifiable lecture) throws DataKeyNotFoundException {
         if (this.note == null) {
-            Cursor cursor = this.database.query(NoteTable.TABLE_NAME, NoteTable.ALL_COLUMNS,
+            Cursor cursor = this.database.query(NoteTable.TABLE_NAME, null,
                     NoteTable.COLUMN_RELATED_TO + "=?", new String[]{lecture.getID()},
                     null, null, null);
             if (cursor.moveToNext()) {

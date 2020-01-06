@@ -1,10 +1,7 @@
 package com.mobila.project.today.model.dataProviding.dataAccess;
 
-import android.database.sqlite.SQLiteDatabase;
-
 import com.mobila.project.today.model.Identifiable;
 import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
-import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
 
 import java.util.Date;
 
@@ -17,10 +14,7 @@ class TaskDataAccessImpl extends ParentDataAccessImpl implements TaskDataAccess 
 
     public static final String TAG = TaskDataAccessImpl.class.getName();
 
-    private SQLiteDatabase database;
-
     private TaskDataAccessImpl() {
-        this.database = OrganizerDataProvider.getInstance().getDatabase();
     }
 
     static TaskDataAccess getInstance() {

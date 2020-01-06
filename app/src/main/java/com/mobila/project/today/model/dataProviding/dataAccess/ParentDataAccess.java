@@ -1,8 +1,8 @@
 package com.mobila.project.today.model.dataProviding.dataAccess;
 
-import com.mobila.project.today.model.dataProviding.dataAccess.databank.DBHelper;
+import android.database.sqlite.SQLiteDatabase;
 
 public interface ParentDataAccess {
 
-    void openDbConnection(DBHelper dbHelper);
+    void openDbConnection(SQLiteDatabase database);
 }

@@ -50,13 +50,13 @@ class OrganizerDataProviderImpl implements OrganizerDataProvider {
     public void openDbConnection(Context context) {
         this.dbHelper = new DBHelper(context);
         this.database = dbHelper.getWritableDatabase();
-        this.rootAccess.openDbConnection(dbHelper);
-        this.semesterAccess.openDbConnection(dbHelper);
-        this.courseAccess.openDbConnection(dbHelper);
-        this.taskAccess.openDbConnection(dbHelper);
-        this.sectionAccess.openDbConnection(dbHelper);
-        this.lectureAccess.openDbConnection(dbHelper);
-        this.noteAccess.openDbConnection(dbHelper);
+        this.rootAccess.openDbConnection(database);
+        this.semesterAccess.openDbConnection(database);
+        this.courseAccess.openDbConnection(database);
+        this.taskAccess.openDbConnection(database);
+        this.sectionAccess.openDbConnection(database);
+        this.lectureAccess.openDbConnection(database);
+        this.noteAccess.openDbConnection(database);
     }
 
     @Override

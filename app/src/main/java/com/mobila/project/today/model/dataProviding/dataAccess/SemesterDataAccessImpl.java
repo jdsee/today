@@ -21,12 +21,11 @@ class SemesterDataAccessImpl extends ParentDataAccessImpl implements SemesterDat
     private static SemesterDataAccess instance;
 
     private IdentityMapper<Course> courseCache;
-    private SQLiteDatabase database;
 
     private SemesterDataAccessImpl() {
         this(
                 new IdentityMapper<>(),
-                OrganizerDataProvider.getInstance().getDatabase()
+                null
         );
     }
 
