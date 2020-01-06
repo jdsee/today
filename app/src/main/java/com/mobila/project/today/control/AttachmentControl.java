@@ -15,6 +15,7 @@ import com.mobila.project.today.control.utils.AttachmentUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.Objects;
 
@@ -61,7 +62,7 @@ public class AttachmentControl {
     public Intent getOpenFileIntent() {
         Intent openFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
         openFileIntent.setType("*/*");
-        openFileIntent.addCategory(Intent.CATEGORY_OPENABLE);
+        openFileIntent = Intent.createChooser(openFileIntent, "Choose a FIle");
         return openFileIntent;
     }
 
@@ -88,14 +89,15 @@ public class AttachmentControl {
             } else if (requestCode == REQUEST_FILE_OPEN && data != null) {
                 try {
                     Uri fileUri = data.getData();
-                    String sourceString = Objects.requireNonNull(fileUri).getPath();
-                    File sourceFile = new File(Objects.requireNonNull(sourceString));
+                    InputStream fileInputStream = context.getContentResolver().openInputStream(fileUri);
 
                     String destinationFileName = AttachmentUtils.getFileName(context, fileUri);
                     File destinationFile = new File(context.getExternalFilesDir(
                             Environment.DIRECTORY_DOCUMENTS), destinationFileName);
+
+                    AttachmentUtils.copy(fileInputStream, destinationFile);
+
                     Uri destinationUri = Uri.fromFile(destinationFile);
-                    Files.copy(sourceFile.toPath(), destinationFile.toPath());
                     this.lecture.addAttachment(new Attachment(destinationFileName, destinationUri));
                     Toast.makeText(context.getApplicationContext(),
                             "File Saved", Toast.LENGTH_LONG).show();

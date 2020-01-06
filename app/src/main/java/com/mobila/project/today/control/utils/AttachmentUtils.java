@@ -17,6 +17,11 @@ import com.mobila.project.today.R;
 import com.mobila.project.today.model.Attachment;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
@@ -154,8 +159,8 @@ public interface AttachmentUtils {
         return new File(storageDir, imageFileName + ".jpg");
     }
 
-    static File createDataFile(Context context) {
-        return context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
+    static File createDataFile(Context context, String name) {
+        return new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), name);
     }
 
     /**
@@ -169,4 +174,16 @@ public interface AttachmentUtils {
         context.startActivity(intent);
     }
 
+    public static void copy(InputStream src, File dst) throws IOException {
+        try (InputStream in = src) {
+            try (OutputStream out = new FileOutputStream(dst)) {
+                // Transfer bytes from in to out
+                byte[] buf = new byte[1024];
+                int len;
+                while ((len = in.read(buf)) > 0) {
+                    out.write(buf, 0, len);
+                }
+            }
+        }
+    }
 }
