@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface LectureDataAccess extends ParentDataAccess {
 
-    static LectureDataAccess createInstance() {
+    static LectureDataAccess getInstance() {
         return LectureDataAccessImpl.getInstance();
     }
 

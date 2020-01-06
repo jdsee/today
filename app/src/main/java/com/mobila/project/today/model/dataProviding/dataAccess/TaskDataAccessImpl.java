@@ -12,7 +12,7 @@ import android.content.ContentValues;
 
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.TaskTable;
 
-class TaskDataAccessImpl implements TaskDataAccess {
+class TaskDataAccessImpl extends ParentDataAccessImpl implements TaskDataAccess {
     private static TaskDataAccess instance;
 
     public static final String TAG = TaskDataAccessImpl.class.getName();

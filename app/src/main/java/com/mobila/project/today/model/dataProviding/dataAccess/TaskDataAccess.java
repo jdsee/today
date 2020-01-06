@@ -6,7 +6,7 @@ import com.mobila.project.today.model.Identifiable;
 
 import java.util.Date;
 
-public interface TaskDataAccess {
+public interface TaskDataAccess extends ParentDataAccess {
     static TaskDataAccess getInstance() {
         return TaskDataAccessImpl.getInstance();
     }

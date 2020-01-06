@@ -7,14 +7,23 @@ import com.mobila.project.today.model.dataProviding.dataAccess.AttachmentDataAcc
 import com.mobila.project.today.model.dataProviding.dataAccess.CourseDataAccess;
 import com.mobila.project.today.model.dataProviding.dataAccess.LectureDataAccess;
 import com.mobila.project.today.model.dataProviding.dataAccess.NoteDataAccess;
+import com.mobila.project.today.model.dataProviding.dataAccess.ParentDataAccess;
 import com.mobila.project.today.model.dataProviding.dataAccess.RootDataAccess;
 import com.mobila.project.today.model.dataProviding.dataAccess.SectionDataAccess;
 import com.mobila.project.today.model.dataProviding.dataAccess.SemesterDataAccess;
 import com.mobila.project.today.model.dataProviding.dataAccess.TaskDataAccess;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.DBHelper;
 
+import java.util.LinkedList;
+
 class OrganizerDataProviderImpl implements OrganizerDataProvider {
     private static OrganizerDataProviderImpl instance;
+    private final RootDataAccess rootAccess;
+    private final SemesterDataAccess semesterAccess;
+    private final CourseDataAccess courseAccess;
+    private final TaskDataAccess taskAccess;
+    private final SectionDataAccess sectionAccess;
+    private final NoteDataAccess noteAccess;
 
     private DBHelper dbHelper;
     private SQLiteDatabase database;
@@ -28,14 +37,26 @@ class OrganizerDataProviderImpl implements OrganizerDataProvider {
     }
 
     private OrganizerDataProviderImpl() {
-        this.lectureAccess = LectureDataAccess.createInstance();
+        this.rootAccess = RootDataAccess.getInstance();
+        this.semesterAccess = SemesterDataAccess.getInstance();
+        this.courseAccess = CourseDataAccess.getInstance();
+        this.taskAccess = TaskDataAccess.getInstance();
+        this.sectionAccess = SectionDataAccess.getInstance();
+        this.lectureAccess = LectureDataAccess.getInstance();
+        this.noteAccess = NoteDataAccess.getInstance();
     }
 
     @Override
     public void openDbConnection(Context context) {
         this.dbHelper = new DBHelper(context);
         this.database = dbHelper.getWritableDatabase();
+        this.rootAccess.openDbConnection(dbHelper);
+        this.semesterAccess.openDbConnection(dbHelper);
+        this.courseAccess.openDbConnection(dbHelper);
+        this.taskAccess.openDbConnection(dbHelper);
+        this.sectionAccess.openDbConnection(dbHelper);
         this.lectureAccess.openDbConnection(dbHelper);
+        this.noteAccess.openDbConnection(dbHelper);
     }
 
     @Override
@@ -51,22 +72,27 @@ class OrganizerDataProviderImpl implements OrganizerDataProvider {
 
     @Override
     public RootDataAccess getRootDataAccess() {
-        return RootDataAccess.getInstance();
+        return this.rootAccess;
     }
 
     @Override
     public SemesterDataAccess getSemesterDataAccess() {
-        return SemesterDataAccess.getInstance();
+        return this.semesterAccess;
     }
 
     @Override
     public CourseDataAccess getCourseDataAccess() {
-        return CourseDataAccess.getInstance();
+        return this.courseAccess;
+    }
+
+    @Override
+    public TaskDataAccess getTaskDataAccess() {
+        return this.taskAccess;
     }
 
     @Override
     public SectionDataAccess getSectionDataAccess() {
-        return SectionDataAccess.getInstance();
+        return this.sectionAccess;
     }
 
     @Override
@@ -76,16 +102,11 @@ class OrganizerDataProviderImpl implements OrganizerDataProvider {
 
     @Override
     public NoteDataAccess getNoteDataAccess() {
-        return NoteDataAccess.getInstance();
+        return this.noteAccess;
     }
 
     @Override
     public AttachmentDataAccess getAttachmentDataAccess() {
         return AttachmentDataAccess.getInstance();
-    }
-
-    @Override
-    public TaskDataAccess getTaskDataAccess() {
-        return TaskDataAccess.getInstance();
     }
 }

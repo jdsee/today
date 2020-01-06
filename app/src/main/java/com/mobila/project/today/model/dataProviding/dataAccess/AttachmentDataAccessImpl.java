@@ -9,7 +9,7 @@ import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
 
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.AttachmentTable;
 
-public class AttachmentDataAccessImpl implements AttachmentDataAccess {
+public class AttachmentDataAccessImpl extends ParentDataAccessImpl implements AttachmentDataAccess {
     private static AttachmentDataAccess instance;
 
     private SQLiteDatabase database;
@@ -21,6 +21,7 @@ public class AttachmentDataAccessImpl implements AttachmentDataAccess {
     }
 
     private AttachmentDataAccessImpl(){
+        super();
         this.database = OrganizerDataProvider.getInstance().getDatabase();
     }
 

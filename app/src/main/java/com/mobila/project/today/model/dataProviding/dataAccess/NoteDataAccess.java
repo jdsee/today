@@ -5,7 +5,7 @@ import android.text.Spannable;
 import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
 import com.mobila.project.today.model.Identifiable;
 
-public interface NoteDataAccess {
+public interface NoteDataAccess extends ParentDataAccess{
 
     static NoteDataAccess getInstance() {
         return NoteDataAccessImpl.getInstance();

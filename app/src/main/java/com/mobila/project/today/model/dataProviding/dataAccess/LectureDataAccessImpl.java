@@ -49,7 +49,6 @@ public class LectureDataAccessImpl extends ParentDataAccessImpl implements Lectu
      * @param database
      */
     private LectureDataAccessImpl(IdentityMapper<Attachment> attachmentCache, SQLiteDatabase database) {
-        super(new DBHelper(null));
         this.attachmentCache = attachmentCache;
         this.database = database;
     }

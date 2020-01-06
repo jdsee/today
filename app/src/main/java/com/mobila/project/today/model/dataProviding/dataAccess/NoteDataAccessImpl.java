@@ -13,7 +13,7 @@ import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
 import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.NoteTable;
 
-class NoteDataAccessImpl implements NoteDataAccess {
+class NoteDataAccessImpl extends ParentDataAccessImpl implements NoteDataAccess {
     private static NoteDataAccessImpl instance;
 
     private static final String TAG = NoteDataAccessImpl.class.getName();

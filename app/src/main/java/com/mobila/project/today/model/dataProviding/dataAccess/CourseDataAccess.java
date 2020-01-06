@@ -8,7 +8,7 @@ import com.mobila.project.today.model.Task;
 
 import java.util.List;
 
-public interface CourseDataAccess {
+public interface CourseDataAccess extends ParentDataAccess {
     static CourseDataAccess getInstance() {
         return CourseDataAccessImpl.getInstance();
     }

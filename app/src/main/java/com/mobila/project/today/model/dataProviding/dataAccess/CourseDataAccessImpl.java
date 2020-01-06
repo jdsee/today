@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Date;
 import java.util.LinkedList;
 
-class CourseDataAccessImpl implements CourseDataAccess {
+class CourseDataAccessImpl extends ParentDataAccessImpl implements CourseDataAccess {
     private static CourseDataAccess instance;
 
     private static final String TAG = CourseDataAccess.class.getName();

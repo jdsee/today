@@ -7,7 +7,7 @@ import com.mobila.project.today.model.Identifiable;
 
 import java.util.List;
 
-public interface SectionDataAccess {
+public interface SectionDataAccess extends ParentDataAccess {
     static SectionDataAccess getInstance() {
         return SectionDataAccessImpl.getInstance();
     }

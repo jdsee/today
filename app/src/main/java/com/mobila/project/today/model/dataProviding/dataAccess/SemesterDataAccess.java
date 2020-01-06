@@ -6,7 +6,7 @@ import com.mobila.project.today.model.Identifiable;
 
 import java.util.List;
 
-public interface SemesterDataAccess {
+public interface SemesterDataAccess extends ParentDataAccess {
     static SemesterDataAccess getInstance(){return SemesterDataAccessImpl.getInstance();}
 
     List<Course> getCourses(Identifiable semester) throws DataKeyNotFoundException;

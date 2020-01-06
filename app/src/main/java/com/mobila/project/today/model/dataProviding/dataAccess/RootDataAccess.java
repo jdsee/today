@@ -5,7 +5,7 @@ import com.mobila.project.today.model.Task;
 
 import java.util.List;
 
-public interface RootDataAccess {
+public interface RootDataAccess extends ParentDataAccess {
     static RootDataAccess getInstance() {
         return RootDataAccessImpl.getInstance();
     }

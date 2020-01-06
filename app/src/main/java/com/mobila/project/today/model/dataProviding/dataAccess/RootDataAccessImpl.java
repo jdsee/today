@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-class RootDataAccessImpl implements RootDataAccess {
+class RootDataAccessImpl extends ParentDataAccessImpl implements RootDataAccess {
     private static RootDataAccess instance;
     public static final String TAG = RootDataAccessImpl.class.getName();
 

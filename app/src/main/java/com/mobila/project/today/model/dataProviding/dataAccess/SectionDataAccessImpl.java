@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-class SectionDataAccessImpl implements SectionDataAccess {
+class SectionDataAccessImpl extends ParentDataAccessImpl implements SectionDataAccess {
     private static SectionDataAccess instance;
 
     private static final String TAG = SectionDataAccessImpl.class.getName();

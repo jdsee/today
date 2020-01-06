@@ -15,7 +15,7 @@ import com.mobila.project.today.model.dataProviding.dataAccess.databank.Semester
 import java.util.LinkedList;
 import java.util.List;
 
-class SemesterDataAccessImpl implements SemesterDataAccess {
+class SemesterDataAccessImpl extends ParentDataAccessImpl implements SemesterDataAccess {
     private static final String TAG = SemesterDataAccessImpl.class.getName();
 
     private static SemesterDataAccess instance;
