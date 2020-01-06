@@ -1,6 +1,7 @@
 package com.mobila.project.today.activities.adapters;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,12 +11,14 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageButton;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mobila.project.today.R;
 import com.mobila.project.today.model.Attachment;
 import com.mobila.project.today.control.utils.AttachmentUtils;
 
+import java.io.File;
 import java.util.List;
 
 public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.ViewHolder> {
@@ -50,7 +53,15 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.Vi
         holder.fileHolder.setOnClickListener(v -> {
             //Toast.makeText(context, AttachmentUtils.getMimeType(context, attachment.getContent()),
             //      Toast.LENGTH_LONG).show();
-            AttachmentUtils.openFile(context, this.attachments.get(position).getContent());
+
+
+            String uriString = this.attachments.get(position).getContent().getPath();
+            File file = new File(uriString);
+            Uri uri = FileProvider.getUriForFile(this.context,
+                    context.getApplicationContext().getPackageName() + ".fileprovider", file);
+
+
+            AttachmentUtils.openFile(context, uri);
         });
 
         holder.button.setOnClickListener(v -> {

@@ -1,9 +1,13 @@
 package com.mobila.project.today.model.dataProviding.dataAccess;
 
+import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.provider.MediaStore;
+
+import androidx.core.content.FileProvider;
 
 import com.mobila.project.today.model.Attachment;
 import com.mobila.project.today.model.Identifiable;
@@ -15,6 +19,7 @@ import com.mobila.project.today.model.dataProviding.dataAccess.databank.LectureT
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.NoteTable;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.SectionTable;
 
+import java.io.File;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -112,11 +117,16 @@ public class LectureDataAccessImpl extends ParentDataAccessImpl implements Lectu
                     null, null, AttachmentTable.COLUMN_NAME);
             attachments = new LinkedList<>();
             while (cursor.moveToNext()) {
-                Attachment attachment = new Attachment(
-                        cursor.getString(cursor.getColumnIndex(AttachmentTable.COLUMN_ID)),
-                        cursor.getString(cursor.getColumnIndex(AttachmentTable.COLUMN_NAME)),
-                        Uri.parse(cursor.getString(cursor.getColumnIndex(AttachmentTable.COLUMN_URI)))
-                );
+                String attachmentId = cursor.getString(cursor.getColumnIndex(AttachmentTable.COLUMN_ID));
+                String attachmentName = cursor.getString(cursor.getColumnIndex(AttachmentTable.COLUMN_NAME));
+                String uriString = cursor.getString(cursor.getColumnIndex(AttachmentTable.COLUMN_URI));
+                Uri uri = Uri.parse(uriString);
+
+                Attachment attachment = new Attachment(attachmentId, attachmentName, uri);
+
+                System.out.println("URI WHEN READING FROM DATABASE: " + uri);
+                System.out.println("URI STRING WHEN READING FROM DATABASE: " + uriString);
+
                 attachments.add(attachment);
             }
             this.attachmentCache.add(lecture, attachments);
@@ -131,7 +141,13 @@ public class LectureDataAccessImpl extends ParentDataAccessImpl implements Lectu
         ContentValues values = new ContentValues();
         values.put(AttachmentTable.COLUMN_ID, attachment.getID());
         values.put(AttachmentTable.COLUMN_NAME, attachment.getName());
-        values.put(AttachmentTable.COLUMN_URI, attachment.getContent().getPath());
+        Uri uri = attachment.getContent();
+        String uriString = uri.getPath();
+        values.put(AttachmentTable.COLUMN_URI, uri.toString());
+
+        System.out.println("URI WHEN WRITING IN DATABASE: " + uri);
+        System.out.println("URI STRING WHEN WRITING IN DATABASE: " + uriString);
+
         values.put(AttachmentTable.COLUMN_RELATED_TO, lecture.getID());
 
         this.database.insert(AttachmentTable.TABLE_NAME, null, values);
