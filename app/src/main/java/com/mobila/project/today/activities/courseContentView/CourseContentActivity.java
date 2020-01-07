@@ -68,7 +68,7 @@ public class CourseContentActivity extends DatabaseConnectionActivity
         recyclerView.setAdapter(taskAdapter);
         EditText taskEnterField = findViewById(R.id.edit_text_add_task);
         ImageButton confirmationButton = findViewById(R.id.add_task_button);
-        new TaskController(taskEnterField, confirmationButton, this.tasks, taskAdapter);
+        new TaskController(taskEnterField, confirmationButton, this.course, taskAdapter);
     }
 
     private void initSectionView() {

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -24,18 +25,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         this.context = context;
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
-        TextView taskText;
-        LinearLayout linearLayout;
-
-        ViewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            this.taskText = itemView.findViewById(R.id.task_item_text_alt);
-            this.linearLayout = itemView.findViewById(R.id.ll_course_tasks);
-        }
-    }
-
     @NonNull
     @Override
     public TaskAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -49,10 +38,28 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull TaskAdapter.ViewHolder holder, int position) {
         holder.itemView.setTag(tasks.get(position));
         holder.taskText.setText(tasks.get(position).getContent());
+        holder.checkBox.setOnClickListener(v -> {
+            tasks.remove(tasks.get(position));
+            notifyDataSetChanged();
+        });
     }
 
     @Override
     public int getItemCount() {
         return tasks.size();
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder {
+        private final CheckBox checkBox;
+        TextView taskText;
+        LinearLayout linearLayout;
+
+        ViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            this.taskText = itemView.findViewById(R.id.task_item_text_alt);
+            this.linearLayout = itemView.findViewById(R.id.ll_course_tasks);
+            this.checkBox = itemView.findViewById(R.id.cb_task_item);
+        }
     }
 }

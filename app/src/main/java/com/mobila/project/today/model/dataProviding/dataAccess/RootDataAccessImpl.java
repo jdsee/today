@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.mobila.project.today.model.Semester;
 import com.mobila.project.today.model.Task;
-import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.SemesterTable;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.TaskTable;
 

@@ -21,11 +21,11 @@ public class Task implements Identifiable, Parcelable {
     //TODO considering a relatedTo-Member for easy access to the parent course
     // -> useful in rootDataAccess
 
-    public Task(String content){
+    public Task(String content) {
         this(
                 KeyGenerator.getUniqueKey(),
                 content,
-                null
+                new Date()
         );
     }
 
@@ -38,7 +38,12 @@ public class Task implements Identifiable, Parcelable {
     }
 
     public Task(String id, String content, Date deadline) {
-        this(id, content, deadline, OrganizerDataProvider.getInstance().getTaskDataAccess());
+        this(
+                id,
+                content,
+                deadline,
+                OrganizerDataProvider.getInstance().getTaskDataAccess()
+        );
     }
 
     public static final Creator<Task> CREATOR = new Creator<Task>() {
