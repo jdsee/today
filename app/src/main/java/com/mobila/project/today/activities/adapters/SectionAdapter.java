@@ -4,7 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -19,6 +19,8 @@ import com.mobila.project.today.model.Section;
 import java.util.List;
 
 public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.ViewHolder> {
+    public static final String RV_BUTTON_CLICKED_TAG = "SECTION_ADAPTER_BUTTON_CLICKED";
+
     private final Context context;
     private List<Section> sections;
     private RecyclerViewButtonClickListener addLectureClickListener;
@@ -31,7 +33,7 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.ViewHold
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        ImageButton btnAddLecture;
+        Button btnAddLecture;
         RelativeLayout rlSectionItem;
         RecyclerView rvLectures;
         TextView tvSectionName;
@@ -63,6 +65,7 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.ViewHold
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.listitem_section, parent, false);
+        view.setTag(RV_BUTTON_CLICKED_TAG);
         return new ViewHolder(view);
     }
 
@@ -82,7 +85,7 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.ViewHold
         rvLectures.addItemDecoration(dividerItemDecoration);
 
         holder.btnAddLecture.setOnClickListener(view ->
-                this.addLectureClickListener.recyclerViewButtonClicked(view, position)
+                this.addLectureClickListener.onRecyclerViewButtonClicked(view, position)
         );
     }
 

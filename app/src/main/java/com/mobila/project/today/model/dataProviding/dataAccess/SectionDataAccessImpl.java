@@ -40,7 +40,7 @@ class SectionDataAccessImpl extends ParentDataAccessImpl implements SectionDataA
     }
 
     /**
-     * Supposed for TESTING REASONS ONLY.
+     * SUPPOSED FOR TESTING REASONS ONLY!
      * Do not use this constructor for normal instantiating,
      * it is only supposed to be used for dependency injection -> mockInjection
      *
@@ -94,12 +94,15 @@ class SectionDataAccessImpl extends ParentDataAccessImpl implements SectionDataA
                 new String[]{course.getID()}, null, null, null);
         List<Lecture> lectures = new LinkedList<>();
         while (cursor.moveToNext()) {
-            Lecture lecture = new Lecture(
-                    cursor.getString(cursor.getColumnIndex(LectureTable.COLUMN_ID)),
-                    cursor.getInt(cursor.getColumnIndex(LectureTable.COLUMN_NR)),
-                    new Date(cursor.getInt(cursor.getColumnIndex(LectureTable.COLUMN_DATE))),
-                    cursor.getString(cursor.getColumnIndex(LectureTable.COLUMN_ROOM_NR))
-            );
+            String lectureId = cursor.getString(cursor.getColumnIndex(LectureTable.COLUMN_ID));
+            int lectureNr = cursor.getInt(cursor.getColumnIndex(LectureTable.COLUMN_NR));
+            long dateValue = cursor.getLong(cursor.getColumnIndex(LectureTable.COLUMN_DATE));
+
+            Log.d(TAG, "READING FROM DB - lecture date as long: " + dateValue);
+
+            Date date = new Date(dateValue);
+            String roomNr = cursor.getString(cursor.getColumnIndex(LectureTable.COLUMN_ROOM_NR));
+            Lecture lecture = new Lecture(lectureId, lectureNr, date, roomNr);
             lectures.add(lecture);
         }
         cursor.close();
@@ -119,6 +122,8 @@ class SectionDataAccessImpl extends ParentDataAccessImpl implements SectionDataA
         values.put(LectureTable.COLUMN_DATE, lecture.getDate().getTime());
         values.put(LectureTable.COLUMN_ROOM_NR, lecture.getRoomNr());
         values.put(LectureTable.COLUMN_RELATED_TO, section.getID());
+
+        Log.d(TAG, "WRITING TO DB - lecture date as long: " + lecture.getDate().getTime());
 
         this.database.insert(LectureTable.TABLE_NAME, null, values);
 

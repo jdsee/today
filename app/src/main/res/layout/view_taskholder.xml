@@ -28,13 +28,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
-                    android:layout_toStartOf="@+id/add_task_button"
+                    android:layout_toStartOf="@+id/btn_add_task"
                     android:textSize="24sp"
                     android:layout_marginStart="4dp"
                     android:layout_marginEnd="4dp"/>
 
                 <ImageButton
-                    android:id="@+id/add_task_button"
+                    android:id="@+id/btn_add_task"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"

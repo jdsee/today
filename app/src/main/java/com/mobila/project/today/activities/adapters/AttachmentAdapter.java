@@ -56,7 +56,7 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.Vi
         });
 
         holder.button.setOnClickListener(v -> {
-            this.recyclerViewButtonClickListener.recyclerViewButtonClicked(v, position);
+            this.recyclerViewButtonClickListener.onRecyclerViewButtonClicked(v, position);
             notifyDataSetChanged();
         });
     }

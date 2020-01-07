@@ -15,7 +15,15 @@ public abstract class GeneralConfirmationDialogFragment extends DialogFragment {
     public static final String DIALOG_DECLINING_EXTRA = "EXTRA_DIALOG_DECLINING";
 
     public static final String RESPONSE_CONFIRMED_EXTRA = "EXTRA_DIALOG_RESPONSE";
-    DialogListener callback;
+    private DialogListener callback;
+
+    public interface DialogListener {
+        void onDialogConfirmation(Bundle resultBundle, GeneralConfirmationDialogFragment dialog);
+    }
+
+    public void setDialogListener(DialogListener listener) {
+        this.callback = listener;
+    }
 
     /**
      * Method that gets initialized if the fragment gets created
@@ -78,12 +86,4 @@ public abstract class GeneralConfirmationDialogFragment extends DialogFragment {
      * called in this and the following method.
      */
     abstract void onConfirmation(Bundle resultBundle);
-
-    public void setDialogListener(DialogListener listener) {
-        this.callback = listener;
-    }
-
-    public interface DialogListener {
-        void onDialogConfirmation(Bundle resultBundle, GeneralConfirmationDialogFragment dialog);
-    }
 }

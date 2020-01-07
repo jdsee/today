@@ -67,18 +67,18 @@ public class LectureDataAccessImpl extends ParentDataAccessImpl implements Lectu
                 SectionTable.COLUMN_ID + "=?", new String[]{sectionID},
                 null, null, null);
         sectionCursor.moveToFirst();
-        Section section = new Section(
-                sectionCursor.getString(sectionCursor.getColumnIndex(SectionTable.COLUMN_ID)),
-                sectionCursor.getString(sectionCursor.getColumnIndex(SectionTable.COLUMN_TITLE)),
-                sectionCursor.getString(sectionCursor.getColumnIndex(SectionTable.COLUMN_LECTURER))
-        );
+
+        String sectionId = sectionCursor.getString(sectionCursor.getColumnIndex(SectionTable.COLUMN_ID));
+        String title = sectionCursor.getString(sectionCursor.getColumnIndex(SectionTable.COLUMN_TITLE));
+        String lecturer = sectionCursor.getString(sectionCursor.getColumnIndex(SectionTable.COLUMN_LECTURER));
+        Section section = new Section(sectionId, title, lecturer);
         sectionCursor.close();
         return section;
     }
 
     @Override
     public Note getNote(Identifiable lecture) throws DataKeyNotFoundException {
-        Note note = null;
+        Note note;
         Cursor cursor = this.database.query(NoteTable.TABLE_NAME, null,
                 NoteTable.COLUMN_RELATED_TO + "=?", new String[]{lecture.getID()},
                 null, null, null);
@@ -90,7 +90,6 @@ public class LectureDataAccessImpl extends ParentDataAccessImpl implements Lectu
         } else
             //TODO constructor for note
             note = this.addNoteToDB(lecture);
-
         cursor.close();
         return note;
     }

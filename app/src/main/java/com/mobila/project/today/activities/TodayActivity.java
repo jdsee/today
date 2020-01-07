@@ -4,6 +4,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.text.Editable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.mobila.project.today.R;
 import com.mobila.project.today.UncheckedTodayException;
+import com.mobila.project.today.activities.adapters.RecyclerViewButtonClickListener;
 import com.mobila.project.today.activities.adapters.TaskAdapter;
 import com.mobila.project.today.activities.fragments.GeneralConfirmationDialogFragment;
 import com.mobila.project.today.activities.fragments.OneEditTextDialogFragment;
@@ -35,7 +37,8 @@ import java.util.Objects;
 //TODO show appropriate courses if semester is deleted
 
 public class TodayActivity extends DatabaseConnectionActivity
-        implements GeneralConfirmationDialogFragment.DialogListener {
+        implements GeneralConfirmationDialogFragment.DialogListener,
+        RecyclerViewButtonClickListener {
     private static final String TAG = TodayActivity.class.getName();
 
     private static final String ADD_COURSE_DIALOG_CODE = "ADD_COURSE_DIALOG";
@@ -98,7 +101,7 @@ public class TodayActivity extends DatabaseConnectionActivity
     private void initTaskView() {
         RecyclerView recyclerView = findViewById(R.id.rv_course_tasks);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new TaskAdapter(this, this.tasks));
+        recyclerView.setAdapter(new TaskAdapter(this, this, this.tasks));
     }
 
     private void initCourseView() {
@@ -248,5 +251,15 @@ public class TodayActivity extends DatabaseConnectionActivity
             if (semester.getSemesterNr() > max) max = semester.getSemesterNr();
         }
         return max;
+    }
+
+    @Override
+    public void onRecyclerViewButtonClicked(View view, int position) {
+        Editable taskContentView = view.findViewById(R.id.task_item_text_alt);
+        String taskContent = taskContentView.toString();
+        Task task = new Task(taskContent, Calendar.getInstance().getTime());
+        //TODO implement functionality to add deadline
+        //.addTask(task);
+        //TODO where is task to add? there is no course at the moment
     }
 }

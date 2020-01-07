@@ -5,8 +5,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.text.Editable;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 
 import com.mobila.project.today.R;
 import com.mobila.project.today.activities.DatabaseConnectionActivity;
@@ -23,6 +25,8 @@ import com.mobila.project.today.model.Section;
 import com.mobila.project.today.model.Task;
 
 import java.text.ParseException;
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -47,10 +51,10 @@ public class CourseContentActivity extends DatabaseConnectionActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_content);
 
-        this.course = this.getIntent().getParcelableExtra(Course.INTENT_EXTRA_CODE);
-
         ActionBar ab = this.getSupportActionBar();
         assert ab != null;
+
+        this.course = this.getIntent().getParcelableExtra(Course.INTENT_EXTRA_CODE);
         ab.setTitle(this.course.getTitle());
 
         this.tasks = this.course.getTasks();
@@ -60,10 +64,17 @@ public class CourseContentActivity extends DatabaseConnectionActivity
         this.initSectionView();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        this.sectionAdapter.notifyDataSetChanged();
+    }
+
     private void initTaskView() {
         RecyclerView recyclerView = findViewById(R.id.rv_course_tasks);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        this.taskAdapter = new TaskAdapter(this, this.tasks);
+        this.taskAdapter = new TaskAdapter(this, this, this.tasks);
         recyclerView.setAdapter(this.taskAdapter);
     }
 
@@ -90,9 +101,21 @@ public class CourseContentActivity extends DatabaseConnectionActivity
     }
 
     @Override
-    public void recyclerViewButtonClicked(View view, int position) {
+    public void onRecyclerViewButtonClicked(View view, int position) {
         this.currentPosition = position;
+        switch (view.getTag().toString()) {
+            case SectionAdapter.RV_BUTTON_CLICKED_TAG:
+                this.addLectureToSection();
+                break;
+            case TaskAdapter.RV_BUTTON_CLICKED_TAG:
+                this.addTaskToCourse(view);
+                break;
+            default:
+                Log.e(TAG, "no tag specified for received view");
+        }
+    }
 
+    private void addLectureToSection() {
         LectureSetupDialogFragment dialog = new LectureSetupDialogFragment();
         Bundle bundle = new Bundle();
 
@@ -105,6 +128,14 @@ public class CourseContentActivity extends DatabaseConnectionActivity
         dialog.setArguments(bundle);
         dialog.setDialogListener(this);
         dialog.show(getSupportFragmentManager(), ADD_LECTURE_DIALOG_CODE);
+    }
+
+    private void addTaskToCourse(View view) {
+        Editable taskContentView = view.findViewById(R.id.task_item_text_alt);
+        String taskContent = taskContentView.toString();
+        Task task = new Task(taskContent, Calendar.getInstance().getTime());
+        //TODO implement functionality to add deadline
+        this.course.addTask(task);
     }
 
     @Override

@@ -33,6 +33,11 @@ public class Task implements Identifiable, Parcelable {
         this(id, content, deadline, OrganizerDataProvider.getInstance().getTaskDataAccess());
     }
 
+    public Task(String content, Date deadline) {
+        this(KeyGenerator.getUniqueKey(),
+                content, deadline, OrganizerDataProvider.getInstance().getTaskDataAccess());
+    }
+
     public static final Creator<Task> CREATOR = new Creator<Task>() {
         public Task createFromParcel(Parcel source) {
             return new Task(source);
