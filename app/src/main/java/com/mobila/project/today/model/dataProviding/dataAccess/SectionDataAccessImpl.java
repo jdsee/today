@@ -22,7 +22,6 @@ class SectionDataAccessImpl extends ParentDataAccessImpl implements SectionDataA
 
     private static final String TAG = SectionDataAccessImpl.class.getName();
     private static final String LOG_MSG_DB_UPDATE = "section has been updated in database";
-    private static final String NO_LECTURES_FOR_SECTION_MSG = "no lectures related to given section";
 
     private IdentityMapper<Lecture> lectureCache;
 
@@ -59,11 +58,11 @@ class SectionDataAccessImpl extends ParentDataAccessImpl implements SectionDataA
                 null, null, null);
         if (!sectionCursor.moveToNext())
             throw new DataKeyNotFoundException("FATAL ERROR: no parent found for given section!");
-        String sectionID = sectionCursor.getString(sectionCursor.getColumnIndex(SectionTable.COLUMN_RELATED_TO));
+        String courseID = sectionCursor.getString(sectionCursor.getColumnIndex(SectionTable.COLUMN_RELATED_TO));
         sectionCursor.close();
 
         Cursor courseCursor = this.database.query(CourseTable.TABLE_NAME, CourseTable.ALL_COLUMNS,
-                CourseTable.COLUMN_ID + "=?", new String[]{sectionID},
+                CourseTable.COLUMN_ID + "=?", new String[]{courseID},
                 null, null, null);
         courseCursor.moveToFirst();
         Course course = new Course(

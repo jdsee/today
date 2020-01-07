@@ -39,7 +39,9 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         holder.itemView.setTag(tasks.get(position));
         holder.taskText.setText(tasks.get(position).getContent());
         holder.checkBox.setOnClickListener(v -> {
-            tasks.remove(tasks.get(position));
+            Task currentTask = tasks.get(position);
+            currentTask.getCourse().removeTask(currentTask);
+            tasks.remove(currentTask);
             notifyDataSetChanged();
         });
     }

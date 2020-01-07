@@ -2,15 +2,12 @@ package com.mobila.project.today.model.dataProviding.dataAccess;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.mobila.project.today.model.Identifiable;
 import com.mobila.project.today.model.Section;
-import com.mobila.project.today.model.Semester;
 import com.mobila.project.today.model.Task;
 import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
-import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.CourseTable;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.SectionTable;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.TaskTable;
@@ -25,12 +22,12 @@ class CourseDataAccessImpl extends ParentDataAccessImpl implements CourseDataAcc
     private static final String TAG = CourseDataAccess.class.getName();
 
     private IdentityMapper<Section> sectionCache;
-    private IdentityMapper<Task> taskCache;
+    //private IdentityMapper<Task> taskCache;
 
     private CourseDataAccessImpl() {
         super();
         this.sectionCache = new IdentityMapper<>();
-        this.taskCache = new IdentityMapper<>();
+        //this.taskCache = new IdentityMapper<>();
     }
 
     public static CourseDataAccess getInstance() {
@@ -102,12 +99,13 @@ class CourseDataAccessImpl extends ParentDataAccessImpl implements CourseDataAcc
 
     @Override
     public List<Task> getTasks(Identifiable course) throws DataKeyNotFoundException {
-        List<Task> tasks = this.taskCache.get(course);
+        /*List<Task> tasks = this.taskCache.get(course);
         if (tasks == null) {
             tasks = this.getTasksFromDB(course);
             this.taskCache.add(course, tasks);
-        }
-        return tasks;
+        }*/
+        //return tasks;
+        return getTasksFromDB(course);
     }
 
     private List<Task> getTasksFromDB(Identifiable course) {
@@ -121,7 +119,6 @@ class CourseDataAccessImpl extends ParentDataAccessImpl implements CourseDataAcc
                     cursor.getString(cursor.getColumnIndex(TaskTable.COLUMN_ID)),
                     cursor.getString(cursor.getColumnIndex(TaskTable.COLUMN_CONTENT)),
                     new Date(cursor.getInt(cursor.getColumnIndex(TaskTable.COLUMN_DEADLINE)))
-                    //cursor.getString(cursor.getColumnIndex(TaskTable.COLUMN_RELATED_TO))
             );
             tasks.add(section);
         }
@@ -132,7 +129,7 @@ class CourseDataAccessImpl extends ParentDataAccessImpl implements CourseDataAcc
     @Override
     public void addTask(Identifiable course, Task task) throws DataKeyNotFoundException {
         this.addTaskToDB(course, task);
-        this.taskCache.addElement(course, task);
+        //this.taskCache.addElement(course, task);
     }
 
     private void addTaskToDB(Identifiable course, Task task) {
@@ -166,6 +163,6 @@ class CourseDataAccessImpl extends ParentDataAccessImpl implements CourseDataAcc
         this.database.delete(TaskTable.TABLE_NAME,
                 TaskTable.COLUMN_ID +
                         "=?", new String[]{task.getID()});
-        this.taskCache.removeElement(course, task);
+        //this.taskCache.removeElement(course, task);
     }
 }
