@@ -103,7 +103,7 @@ public class TodayActivity extends DatabaseConnectionActivity
 
     private void initCourseView() {
         RecyclerView courseRecyclerView = findViewById(R.id.recycler_view_courses);
-        if (this.semesters != null && this.currentSemester >= 0) {
+        if (!semesters.isEmpty() && this.currentSemester >= 0) {
             this.courseAdapter = new CourseAdapter(this, semesters.get(currentSemester));
             courseRecyclerView.setAdapter(courseAdapter);
             courseRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -141,18 +141,27 @@ public class TodayActivity extends DatabaseConnectionActivity
         ImageButton goBackwardsButton = findViewById(R.id.go_back_semester);
         if (currentSemester == semesters.size() - 1) {
             goForwardButton.setImageResource(R.drawable.baseline_add_24);
-        } else {
-            goForwardButton.setImageResource(R.drawable.baseline_arrow_back_ios_24);
+            showAddCourseButton(true);
+        } else if (semesters.isEmpty()) {
+            goForwardButton.setImageResource(R.drawable.baseline_add_24);
+            showAddCourseButton(false);
         }
-        if (currentSemester == 0) {
+        else {
+            goForwardButton.setImageResource(R.drawable.baseline_arrow_back_ios_24);
+            showAddCourseButton(true);
+        }
+        if (currentSemester <= 0) {
             goBackwardsButton.setImageResource(R.drawable.transparent_placeholder);
         } else {
             goBackwardsButton.setImageResource(R.drawable.baseline_arrow_back_ios_24);
+            showAddCourseButton(true);
         }
-        if (currentSemester == 0 && semesters.size() == 0) {
-            goBackwardsButton.setImageResource(R.drawable.transparent_placeholder);
-            goForwardButton.setImageResource(R.drawable.baseline_add_24);
-        }
+    }
+
+    private void showAddCourseButton(boolean visible) {
+        ImageButton addCourseButton = findViewById(R.id.add_courseButton);
+        if (visible) addCourseButton.setVisibility(View.VISIBLE);
+        else addCourseButton.setVisibility(View.GONE);
     }
 
     private void setSemester() {
