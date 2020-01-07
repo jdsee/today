@@ -33,6 +33,7 @@ import com.mobila.project.today.activities.editorView.listeners.noteFocusChangeL
 import com.mobila.project.today.control.AttachmentControl;
 import com.mobila.project.today.control.CommunicationController;
 import com.mobila.project.today.control.NoteControl;
+import com.mobila.project.today.control.TaskController;
 import com.mobila.project.today.control.utils.AttachmentUtils;
 import com.mobila.project.today.control.utils.DateUtils;
 import com.mobila.project.today.model.Attachment;
@@ -91,7 +92,7 @@ public class EditorActivity extends DatabaseConnectionActivity
         //get Note from Intent
 
         this.lecture = getIntent().getParcelableExtra(Lecture.INTENT_EXTRA_CODE);
-        this.note = lecture.getNote();
+        this.note = Objects.requireNonNull(lecture).getNote();
 
         this.section = lecture.getSection();
         this.tasks = lecture.getSection().getCourse().getTasks();
@@ -481,10 +482,12 @@ public class EditorActivity extends DatabaseConnectionActivity
      */
     private void initTaskView() {
         RecyclerView recyclerView = findViewById(R.id.rv_course_tasks);
-        TaskAdapter taskAdapter =
-                new TaskAdapter(this, tasks);
-        recyclerView.setAdapter(taskAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        TaskAdapter taskAdapter = new TaskAdapter(this, this.tasks);
+        recyclerView.setAdapter(taskAdapter);
+        EditText taskEnterField = findViewById(R.id.edit_text_add_task);
+        ImageButton confirmationButton = findViewById(R.id.add_task_button);
+        new TaskController(taskEnterField, confirmationButton, this.tasks, taskAdapter);
     }
 
     /**

@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.mobila.project.today.R;
 import com.mobila.project.today.activities.DatabaseConnectionActivity;
@@ -14,6 +16,7 @@ import com.mobila.project.today.activities.adapters.RecyclerViewButtonClickListe
 import com.mobila.project.today.activities.fragments.GeneralConfirmationDialogFragment;
 import com.mobila.project.today.activities.fragments.LectureSetupDialogFragment;
 import com.mobila.project.today.activities.fragments.TwoEditTextDialogFragment;
+import com.mobila.project.today.control.TaskController;
 import com.mobila.project.today.control.utils.DateUtils;
 import com.mobila.project.today.model.Lecture;
 import com.mobila.project.today.activities.adapters.SectionAdapter;
@@ -38,8 +41,6 @@ public class CourseContentActivity extends DatabaseConnectionActivity
     private Course course;
     private List<Task> tasks;
     private List<Section> sections;
-    private TaskAdapter taskAdapter;
-    private SectionAdapter sectionAdapter;
     private int currentPosition;
 
     @Override
@@ -63,15 +64,18 @@ public class CourseContentActivity extends DatabaseConnectionActivity
     private void initTaskView() {
         RecyclerView recyclerView = findViewById(R.id.rv_course_tasks);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        this.taskAdapter = new TaskAdapter(this, this.tasks);
-        recyclerView.setAdapter(this.taskAdapter);
+        TaskAdapter taskAdapter = new TaskAdapter(this, this.tasks);
+        recyclerView.setAdapter(taskAdapter);
+        EditText taskEnterField = findViewById(R.id.edit_text_add_task);
+        ImageButton confirmationButton = findViewById(R.id.add_task_button);
+        new TaskController(taskEnterField, confirmationButton, this.tasks, taskAdapter);
     }
 
     private void initSectionView() {
         RecyclerView recyclerView = findViewById(R.id.rv_section_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        this.sectionAdapter = new SectionAdapter(this, this.sections, this);
-        recyclerView.setAdapter(this.sectionAdapter);
+        SectionAdapter sectionAdapter = new SectionAdapter(this, this.sections, this);
+        recyclerView.setAdapter(sectionAdapter);
     }
 
     public void onAddSectionClicked(View view) {

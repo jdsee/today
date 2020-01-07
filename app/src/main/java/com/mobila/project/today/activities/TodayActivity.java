@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -18,6 +19,7 @@ import com.mobila.project.today.activities.adapters.TaskAdapter;
 import com.mobila.project.today.activities.fragments.GeneralConfirmationDialogFragment;
 import com.mobila.project.today.activities.fragments.OneEditTextDialogFragment;
 import com.mobila.project.today.activities.fragments.SimpleConfirmationDialogFragment;
+import com.mobila.project.today.control.TaskController;
 import com.mobila.project.today.control.utils.DateUtils;
 import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Semester;
@@ -98,7 +100,11 @@ public class TodayActivity extends DatabaseConnectionActivity
     private void initTaskView() {
         RecyclerView recyclerView = findViewById(R.id.rv_course_tasks);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new TaskAdapter(this, this.tasks));
+        TaskAdapter taskAdapter = new TaskAdapter(this, this.tasks);
+        recyclerView.setAdapter(taskAdapter);
+        EditText taskEnterField = findViewById(R.id.edit_text_add_task);
+        ImageButton confirmationButton = findViewById(R.id.add_task_button);
+        new TaskController(taskEnterField, confirmationButton, this.tasks, taskAdapter);
     }
 
     private void initCourseView() {

@@ -21,6 +21,14 @@ public class Task implements Identifiable, Parcelable {
     //TODO considering a relatedTo-Member for easy access to the parent course
     // -> useful in rootDataAccess
 
+    public Task(String content){
+        this(
+                KeyGenerator.getUniqueKey(),
+                content,
+                null
+        );
+    }
+
     public Task(String id, String content, Date deadline, TaskDataAccess dataAccess) {
         this.ID = id;
         this.content = content;
@@ -93,7 +101,7 @@ public class Task implements Identifiable, Parcelable {
         if (this == o) return true;
         if (o == null || this.getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return this.ID == task.ID &&
+        return this.ID.equals(task.ID) &&
                 Objects.equals(this.content, task.content) &&
                 Objects.equals(this.deadline, task.deadline);
         //TODO when DataAccess is implemented: change inspection so that dataAccess must be nonNull
