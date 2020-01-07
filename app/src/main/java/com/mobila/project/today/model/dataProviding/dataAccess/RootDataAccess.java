@@ -1,22 +1,20 @@
 package com.mobila.project.today.model.dataProviding.dataAccess;
 
-import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
-import com.mobila.project.today.model.Identifiable;
 import com.mobila.project.today.model.Semester;
 import com.mobila.project.today.model.Task;
 
 import java.util.List;
 
-public interface RootDataAccess {
-    void open();
-
-    void close();
+public interface RootDataAccess extends ParentDataAccess {
+    static RootDataAccess getInstance() {
+        return RootDataAccessImpl.getInstance();
+    }
 
     List<Semester> getAllSemesters();
 
     void addSemester(Semester semester);
 
-    List<Task> getAllTasks();
+    void removeSemester(Semester semester);
 
-    void removeEntityInstance(Identifiable instance) throws DataKeyNotFoundException;
+    List<Task> getAllTasks();
 }

@@ -60,14 +60,24 @@
             <LinearLayout
                 android:id="@+id/ll_lectures"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/btn_add_lecture"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@color/standardBackground"
+                    android:onClick="onAddLectureClicked"
+                    android:src="@drawable/baseline_add_24"
+                    android:tint="@color/icon_text_grey"
+                    android:visibility="gone"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_lecture_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:visibility="gone"/>
-
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>

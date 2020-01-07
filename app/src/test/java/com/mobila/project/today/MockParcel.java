@@ -62,11 +62,9 @@ public class MockParcel {
     }
 
     private void setupOthers() {
-        doAnswer(new Answer<Void>() {
-            @Override public Void answer(InvocationOnMock invocation) throws Throwable {
-                position = ((Integer) invocation.getArguments()[0]);
-                return null;
-            }
+        doAnswer((Answer<Void>) invocation -> {
+            position = ((Integer) invocation.getArguments()[0]);
+            return null;
         }).when(mockedParcel).setDataPosition(anyInt());
     }
 }

@@ -9,7 +9,6 @@ import com.mobila.project.today.model.dataProviding.dataAccess.CourseDataAccess;
 import com.mobila.project.today.model.dataProviding.dataAccess.RootDataAccess;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Allows access to all data contained in the "Course"-entity.
@@ -40,7 +39,7 @@ public class Course implements Identifiable, Parcelable {
 
     public Course(String title) {
         this(
-                UUID.randomUUID().toString(),
+                KeyGenerator.getUniqueKey(),
                 title
         );
     }
@@ -75,16 +74,6 @@ public class Course implements Identifiable, Parcelable {
         dest.writeString(this.title);
     }
 
-
-    /**
-     * Returns the semester containing this course.
-     *
-     * @return the semester containing this course
-     */
-    public Semester getSemester() throws DataKeyNotFoundException {
-        return this.dataAccess.getSemester(this);
-    }
-
     /**
      * Returns the title of this course.
      *
@@ -104,18 +93,14 @@ public class Course implements Identifiable, Parcelable {
         this.dataAccess.setTitle(this, title);
     }
 
-    private void checkSectionsNotNull() {
-        if (this.sections == null)
-            this.sections = this.dataAccess.getSections(this);
-    }
-
     /**
      * Returns a list with all sections contained in this course.
      *
      * @return a list with all sections contained in this course
      */
     public List<Section> getSections() throws DataKeyNotFoundException {
-        this.checkSectionsNotNull();
+        if (this.sections == null)
+            this.sections = this.dataAccess.getSections(this);
         return this.sections;
     }
 
@@ -125,24 +110,18 @@ public class Course implements Identifiable, Parcelable {
      * @param section section to add
      */
     public void addSection(Section section) throws DataKeyNotFoundException {
-        this.checkSectionsNotNull();
-        this.sections.add(section);
+        if (this.sections != null)
+            this.sections.add(section);
         this.dataAccess.addSection(this, section);
     }
 
     /**
      * Removes a section of this course.
      */
-    public void removeSection(Identifiable section) throws DataKeyNotFoundException {
-        this.checkSectionsNotNull();
-        this.sections.remove(section);
-        this.rootDataAccess.removeEntityInstance(section);
-    }
-
-
-    private void checkTasksNotNull() {
-        if (this.tasks == null)
-            this.tasks = dataAccess.getTasks(this);
+    public void removeSection(Section section) throws DataKeyNotFoundException {
+        if (this.sections != null)
+            this.sections.remove(section);
+        this.dataAccess.removeSection(this, section);
     }
 
     /**
@@ -151,8 +130,8 @@ public class Course implements Identifiable, Parcelable {
      * @return a list with all tasks contained in this course
      */
     public List<Task> getTasks() throws DataKeyNotFoundException {
-        this.checkTasksNotNull();
-        this.dataAccess.getTasks(this);
+        if (this.tasks == null)
+            this.tasks = this.dataAccess.getTasks(this);
         return this.tasks;
     }
 
@@ -160,18 +139,18 @@ public class Course implements Identifiable, Parcelable {
      * Adds a task to this course.
      */
     public void addTask(Task task) throws DataKeyNotFoundException {
-        this.checkTasksNotNull();
-        this.tasks.add(task);
+        if (this.tasks != null)
+            this.tasks.add(task);
         this.dataAccess.addTask(this, task);
     }
 
     /**
      * Removes a task contained in this course.
      */
-    public void removeTask(Identifiable task) throws DataKeyNotFoundException {
-        this.checkTasksNotNull();
-        this.tasks.remove(task);
-        this.rootDataAccess.removeEntityInstance(task);
+    public void removeTask(Task task) throws DataKeyNotFoundException {
+        if (this.tasks != null)
+            this.tasks.remove(task);
+        this.dataAccess.removeTask(this, task);
     }
 
     @Override

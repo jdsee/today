@@ -13,27 +13,28 @@ import java.util.UUID;
 public class Note implements Identifiable {
     public static final String INTENT_EXTRA_CODE = "EXTRA_NOTE";
 
-    private final RootDataAccess rootDataAccess;
     private final NoteDataAccess noteDataAccess;
 
     private final String ID;
     private String title;
-
 
     public Note(String ID, String title) {
         this.ID = ID;
         this.title = title;
 
         OrganizerDataProvider dataProvider = OrganizerDataProvider.getInstance();
-        this.rootDataAccess = dataProvider.getRootDataAccess();
         this.noteDataAccess = dataProvider.getNoteDataAccess();
     }
 
     public Note(String title) {
         this(
-                UUID.randomUUID().toString(),
+                KeyGenerator.getUniqueKey(),
                 title
         );
+    }
+
+    public Note(){
+        this("");
     }
 
     /**
@@ -42,7 +43,8 @@ public class Note implements Identifiable {
      * @return the lecture containing this attachment
      */
     public Lecture getLecture() throws DataKeyNotFoundException {
-        return this.noteDataAccess.getLecture(this);
+        //TODO return lecture or remove method
+        return null;
     }
 
     public String getTitle() {
@@ -62,17 +64,18 @@ public class Note implements Identifiable {
         this.noteDataAccess.setContent(this, content);
     }
 
-    public List<NoteReference> getReferences() throws DataKeyNotFoundException {
+   /* public List<NoteReference> getReferences() throws DataKeyNotFoundException {
         return this.noteDataAccess.getReferences(this);
     }
 
-    public void addReference(Identifiable ref, int row) throws DataKeyNotFoundException {
-        this.noteDataAccess.addReference(this, ref, row);
+    public void addReference(Identifiable reference, int row) throws DataKeyNotFoundException {
+        this.noteDataAccess.addReference(this, reference, row);
     }
 
-    public void removeReference(Identifiable ref) throws DataKeyNotFoundException {
-        this.rootDataAccess.removeEntityInstance(ref);
-    }
+    public void removeReference(Identifiable reference) throws DataKeyNotFoundException {
+        this.noteDataAccess.removeReference(reference);
+    }*/
+
     @Override
     public String getID() {
         return this.ID;

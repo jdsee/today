@@ -9,22 +9,26 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mobila.project.today.R;
 import com.mobila.project.today.activities.courseContentView.CourseContentActivity;
 import com.mobila.project.today.model.Course;
+import com.mobila.project.today.model.Semester;
 
 import java.util.List;
 
 public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder> {
 
+    private Semester semester;
     private List<Course> courses;
     private Context context;
 
-    public CourseAdapter(Context context, List<Course> courses) {
-        this.courses = courses;
+    public CourseAdapter(Context context, Semester semester) {
+        this.courses = semester.getCourses();
         this.context = context;
+        this.semester = semester;
     }
 
     @NonNull
@@ -44,6 +48,10 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
                     this.context.startActivity(intent);
                 }
         );
+        holder.button.setOnClickListener(v -> {
+            semester.removeCourse(courses.get(position));
+            notifyDataSetChanged();
+        });
     }
 
     @Override
@@ -55,11 +63,13 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
 
         TextView course;
         RelativeLayout courseLayout;
+        AppCompatImageButton button;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
             course = itemView.findViewById(R.id.course_name);
             courseLayout = itemView.findViewById(R.id.rl_course_holder);
+            button = itemView.findViewById(R.id.button_remove_course);
         }
     }
 }

@@ -5,17 +5,7 @@
     <item android:id="@+id/action_share"
         android:title="@string/share"
         android:icon="@drawable/baseline_share_24"
-        app:showAsAction="never"/>
-
-    <item android:id="@+id/action_delete"
-        android:title="@string/delete_note"
-        android:icon="@drawable/baseline_delete_outline_24"
-        app:showAsAction="never"/>
-
-    <item android:id="@+id/action_settings"
-        android:title="@string/settings"
-        android:icon="@drawable/baseline_settings_applications_24"
-        app:showAsAction="never"/>
-
+        app:showAsAction="always"
+        android:onClick="onShareLectureClicked"/>
 
 </menu>

@@ -8,6 +8,7 @@ import com.mobila.project.today.model.Semester;
 import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.CourseTable;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -27,7 +28,7 @@ public class SemesterDataAccessTest {
     private Course courseMock2;
     private Course courseMock3;
     private List<Course> courseMocks;
-    private IdentityMapper courseCacheMock;
+    private IdentityMapper<Course> courseCacheMock;
     private SQLiteDatabase databaseMock;
 
     @Before
@@ -77,7 +78,7 @@ public class SemesterDataAccessTest {
                 .get(this.semesterMock);
         Mockito.verify(this.databaseMock, Mockito.times(1))
                 .query(CourseTable.TABLE_NAME, CourseTable.ALL_COLUMNS,
-                        "WHERE " + CourseTable.COLUMN_RELATED_TO + "=?s",
+                        CourseTable.COLUMN_RELATED_TO + "=?",
                         new String[]{this.semesterMock.getID()},
                         null, null, null);
     }
@@ -94,13 +95,23 @@ public class SemesterDataAccessTest {
         Mockito.verifyZeroInteractions(databaseMock);
     }
 
-    @Test(expected = DataKeyNotFoundException.class)
+    @Test
     public void getCoursesWithNoEntryRelatedToKeyExistentInDB_Test() {
         //setup
         this.setCourseCacheEmpty();
         this.databaseMock = new MockSQLiteDatabase().setTableEmpty().getMockedDatabase();
+        this.dataAccess = new SemesterDataAccessImpl(this.courseCacheMock, this.databaseMock);
         //exercise
-        this.dataAccess.getCourses(this.semesterMock);
+        List<Course> courses = this.dataAccess.getCourses(this.semesterMock);
+        //verify
+        Mockito.verify(this.courseCacheMock, Mockito.times(1))
+                .get(this.semesterMock);
+        Mockito.verify(this.databaseMock, Mockito.times(1))
+                .query(CourseTable.TABLE_NAME, CourseTable.ALL_COLUMNS,
+                        CourseTable.COLUMN_RELATED_TO + "=?",
+                        new String[]{this.semesterMock.getID()},
+                        null, null, null);
+        Assert.assertTrue(courses.isEmpty());
     }
 
     @Test
@@ -114,7 +125,7 @@ public class SemesterDataAccessTest {
                 .removeElement(this.semesterMock, this.courseMock1);
         Mockito.verify(this.databaseMock, Mockito.times(1))
                 .delete(CourseTable.TABLE_NAME,
-                        "WHERE " + CourseTable.COLUMN_ID + "=?s",
+                        CourseTable.COLUMN_ID + "=?",
                         new String[]{this.courseMock1.getID()});
     }
 
@@ -129,7 +140,7 @@ public class SemesterDataAccessTest {
                 .removeElement(this.semesterMock, this.courseMock1);
         Mockito.verify(this.databaseMock, Mockito.times(1))
                 .delete(CourseTable.TABLE_NAME,
-                        "WHERE " + CourseTable.COLUMN_ID + "=?s",
+                        CourseTable.COLUMN_ID + "=?",
                         new String[]{this.courseMock1.getID()});
     }
 

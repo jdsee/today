@@ -1,49 +1,39 @@
 package com.mobila.project.today.model.dataProviding.dataAccess;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 
-import com.mobila.project.today.model.Identifiable;
 import com.mobila.project.today.model.Semester;
 import com.mobila.project.today.model.Task;
-import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
-import com.mobila.project.today.model.dataProviding.dataAccess.databank.DBHelper;
+import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.SemesterTable;
+import com.mobila.project.today.model.dataProviding.dataAccess.databank.TaskTable;
 
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-class RootDataAccessImpl implements RootDataAccess {
+class RootDataAccessImpl extends ParentDataAccessImpl implements RootDataAccess {
+    private static RootDataAccess instance;
     public static final String TAG = RootDataAccessImpl.class.getName();
 
-    private Context context;
-    private SQLiteDatabase database;
-    private SQLiteOpenHelper dbHelper;
     private List<Semester> semesters;
 
-    public RootDataAccessImpl(Context context) {
-        this(context, null);
+    static RootDataAccess getInstance() {
+        if (instance == null)
+            instance = new RootDataAccessImpl();
+        return instance;
     }
 
-    RootDataAccessImpl(Context context, SQLiteDatabase database) {
-        this.context = context;
+    private RootDataAccessImpl() {
+        this(null);
+    }
+
+    RootDataAccessImpl(SQLiteDatabase database) {
         this.database = database;
         this.semesters = null;
-    }
-
-    @Override
-    public void open() {
-        this.database = this.dbHelper.getWritableDatabase();
-    }
-
-    @Override
-    public void close() {
-        dbHelper.close();
     }
 
     public long getDataItemsCount() {
@@ -52,8 +42,9 @@ class RootDataAccessImpl implements RootDataAccess {
 
     @Override
     public List<Semester> getAllSemesters() {
-        if (this.semesters == null)
+        if (this.semesters == null) {
             this.semesters = this.getAllSemestersFromDB();
+        }
         return this.semesters;
     }
 
@@ -81,12 +72,31 @@ class RootDataAccessImpl implements RootDataAccess {
     }
 
     @Override
-    public List<Task> getAllTasks() {
-        return null;
+    public void removeSemester(Semester semester) {
+        this.semesters.remove(semester);
+        this.database.delete(SemesterTable.TABLE_NAME,
+                SemesterTable.COLUMN_ID + " = '" + semester.getID() + "'", null);
     }
 
     @Override
-    public void removeEntityInstance(Identifiable instance) throws DataKeyNotFoundException {
+    public List<Task> getAllTasks() {
+        Cursor cursor = this.database.query(TaskTable.TABLE_NAME, TaskTable.ALL_COLUMNS,
+                null, null, null, null,
+                TaskTable.COLUMN_RELATED_TO);
+        List<Task> tasks = new LinkedList<>();
+        while (cursor.moveToNext()) {
+            Task task = new Task(
+                    cursor.getString(cursor.getColumnIndex(TaskTable.COLUMN_ID)),
+                    cursor.getString(cursor.getColumnIndex(TaskTable.COLUMN_CONTENT)),
+                    new Date(cursor.getInt(cursor.getColumnIndex(TaskTable.COLUMN_DEADLINE)))
+            );
+            tasks.add(task);
+        }
+        cursor.close();
 
+        // for now the tasks won't be cached in an IdentityMapper
+        // one solution to make that possible could be an added getCourse() method in Task
+
+        return tasks;
     }
 }

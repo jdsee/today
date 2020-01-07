@@ -13,7 +13,7 @@ import static org.mockito.ArgumentMatchers.nullable;
 public class MockSQLiteDatabase {
     private SQLiteDatabase mockedDatabase;
     private Cursor mockedCursor;
-    private boolean cursorMoveToNext;
+    private int cursorMoveToNextTimes;
 
     public SQLiteDatabase getMockedDatabase() {
         return this.mockedDatabase;
@@ -22,7 +22,6 @@ public class MockSQLiteDatabase {
     public MockSQLiteDatabase() {
         this.mockedDatabase = Mockito.mock(SQLiteDatabase.class);
         this.mockedCursor = Mockito.mock(Cursor.class);
-        this.cursorMoveToNext = true;
         this.setupMock();
     }
 
@@ -37,8 +36,8 @@ public class MockSQLiteDatabase {
      * @return the modified MockSQLiteDatabase-object
      */
     public MockSQLiteDatabase setTableEmpty() {
-        this.cursorMoveToNext = false;
-        this.setupDefaultCursor();
+        this.setupCursor(false);
+        this.setupQuery();
         return this;
     }
 
@@ -48,16 +47,17 @@ public class MockSQLiteDatabase {
     }
 
     private void setupMock() {
-        this.setupDefaultCursor();
+        this.setupCursor(true);
         this.setupQuery();
         this.setupInsert();
         //this.setupRemove();
     }
 
-    private void setupDefaultCursor() {
+    private void setupCursor(boolean hasEntry) {
+        this.cursorMoveToNextTimes = hasEntry ? 2 : 0;
         Mockito.when(this.mockedCursor.moveToNext()).thenAnswer(answer -> {
-            this.cursorMoveToNext = !this.cursorMoveToNext;
-            return !this.cursorMoveToNext;
+            this.cursorMoveToNextTimes--;
+            return cursorMoveToNextTimes > 0;
         });
     }
 

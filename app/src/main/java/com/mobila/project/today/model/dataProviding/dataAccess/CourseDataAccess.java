@@ -8,9 +8,10 @@ import com.mobila.project.today.model.Task;
 
 import java.util.List;
 
-public interface CourseDataAccess {
-
-    Semester getSemester(Identifiable course) throws DataKeyNotFoundException;
+public interface CourseDataAccess extends ParentDataAccess {
+    static CourseDataAccess getInstance() {
+        return CourseDataAccessImpl.getInstance();
+    }
 
     List<Section> getSections(Identifiable course) throws DataKeyNotFoundException;
 
@@ -20,7 +21,9 @@ public interface CourseDataAccess {
 
     void addTask(Identifiable course, Task task) throws DataKeyNotFoundException;
 
-    String getTitle(Identifiable course) throws DataKeyNotFoundException;
-
     void setTitle(Identifiable course, String title) throws DataKeyNotFoundException;
+
+    void removeSection(Identifiable course, Section section);
+
+    void removeTask(Identifiable course, Task task);
 }

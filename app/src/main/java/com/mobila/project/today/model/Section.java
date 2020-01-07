@@ -13,7 +13,6 @@ import java.util.List;
  */
 public class Section implements Identifiable {
     public static final String INTENT_EXTRA_CODE = "EXTRA_SECTION";
-    private final RootDataAccess rootDataAccess;
     private final SectionDataAccess dataAccess;
 
     private final String ID;
@@ -28,8 +27,15 @@ public class Section implements Identifiable {
         this.lectures = null;
 
         OrganizerDataProvider dataProvider = OrganizerDataProvider.getInstance();
-        this.rootDataAccess = dataProvider.getRootDataAccess();
         this.dataAccess = dataProvider.getSectionDataAccess();
+    }
+
+    public Section(String title, String lecturer) {
+        this(
+                KeyGenerator.getUniqueKey(),
+                title,
+                lecturer
+        );
     }
 
     /**
@@ -77,8 +83,8 @@ public class Section implements Identifiable {
     }
 
 
-    public void removeLecture(Identifiable lecture) throws DataKeyNotFoundException {
-        this.rootDataAccess.removeEntityInstance(lecture);
+    public void removeLecture(Lecture lecture) throws DataKeyNotFoundException {
+        this.dataAccess.removeLecture(this, lecture);
         if (this.lectures != null)
             this.lectures.remove(lecture);
     }

@@ -1,62 +1,51 @@
 package com.mobila.project.today.model.dataProviding.dataAccess;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
 import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Identifiable;
+import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.CourseTable;
-import com.mobila.project.today.model.dataProviding.dataAccess.databank.DBHelper;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.SemesterTable;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.mobila.project.today.model.dataProviding.dataAccess.databank.SemesterDataSource.TAG;
+class SemesterDataAccessImpl extends ParentDataAccessImpl implements SemesterDataAccess {
+    private static final String TAG = SemesterDataAccessImpl.class.getName();
 
-class SemesterDataAccessImpl implements SemesterDataAccess {
     private static SemesterDataAccess instance;
 
-    private static final String NO_COURSES_FOR_SEM_MSG = "no courses related to given semester";
-
     private IdentityMapper<Course> courseCache;
-    private SQLiteDatabase database;
-    private SQLiteOpenHelper dbHelper;
 
-    private SemesterDataAccessImpl(Context context) {
+    private SemesterDataAccessImpl() {
         this(
                 new IdentityMapper<>(),
                 null
         );
-        this.dbHelper = new DBHelper(context, CourseTable.TABLE_NAME);
-        //TODO How to access more tables than one??? do we need another SQLiteDatabase object?
     }
 
+    /**
+     * Supposed for TESTING REASONS ONLY.
+     * Do not use this constructor for normal instantiating,
+     * it is only supposed to be used for dependency injection -> mockInjection
+     *
+     * @param courseCache the IdentityMapper dependency
+     * @param database    the SQLiteDatabase dependency
+     */
     SemesterDataAccessImpl(IdentityMapper<Course> courseCache, SQLiteDatabase database) {
         this.courseCache = courseCache;
         this.database = database;
     }
 
-    public static final SemesterDataAccess getInstance(Context context) {
-        //TODO how to react to the context here? -> DependencyInjection?
+    static SemesterDataAccess getInstance() {
         if (instance == null)
-            instance = new SemesterDataAccessImpl(context);
+            instance = new SemesterDataAccessImpl();
         return instance;
-    }
-
-    @Override
-    public void open() {
-        this.database = this.dbHelper.getWritableDatabase();
-    }
-
-    @Override
-    public void close() {
-        dbHelper.close();
     }
 
     /**
@@ -90,21 +79,15 @@ class SemesterDataAccessImpl implements SemesterDataAccess {
     private List<Course> getCoursesFromDB(Identifiable semester) throws DataKeyNotFoundException {
         Log.d(TAG, "requesting courses from data base");
         Cursor cursor = this.database.query(CourseTable.TABLE_NAME, CourseTable.ALL_COLUMNS,
-                "WHERE " + CourseTable.COLUMN_RELATED_TO + "=?s", new String[]{semester.getID()},
+                CourseTable.COLUMN_RELATED_TO + "=?", new String[]{semester.getID()},
                 null, null, null);
-        if (!cursor.moveToNext()) {
-            DataKeyNotFoundException t = new DataKeyNotFoundException(DataKeyNotFoundException.NO_ENTRY_MSG);
-            Log.d(TAG, DataKeyNotFoundException.NO_ENTRY_MSG + ": " + NO_COURSES_FOR_SEM_MSG, t);
-            throw t;
-        }
         List<Course> courses = new LinkedList<>();
-        do {
+        while (cursor.moveToNext()) {
             Course course = new Course(
                     cursor.getString(cursor.getColumnIndex(CourseTable.COLUMN_ID)),
-                    cursor.getString(cursor.getColumnIndex(CourseTable.COLUMN_TITLE))
-            );
+                    cursor.getString(cursor.getColumnIndex(CourseTable.COLUMN_TITLE)));
             courses.add(course);
-        } while (cursor.moveToNext());
+        }
         cursor.close();
         return courses;
     }
@@ -118,20 +101,24 @@ class SemesterDataAccessImpl implements SemesterDataAccess {
      * @throws DataKeyNotFoundException if the key associated to the specified semester is not existent in db
      */
     @Override
+    //TODO probably DataKeyNotFoundException makes no sense here
+    //-> id of semester is not approved within this call
     public void addCourse(Identifiable semester, Course course) throws DataKeyNotFoundException {
         this.courseCache.addElement(semester, course);
-        this.addCourseToDB(course);
+        this.addCourseToDB(semester, course);
     }
 
     /**
      * Accesses database to add the specified course to the course table.
      *
-     * @param course the course that is to be added
+     * @param semester the semester corresponding to the specified course
+     * @param course   the course that is to be added
      */
-    private void addCourseToDB(Course course) {
+    private void addCourseToDB(Identifiable semester, Course course) {
         ContentValues values = new ContentValues();
         values.put(CourseTable.COLUMN_ID, course.getID());
         values.put(CourseTable.COLUMN_TITLE, course.getTitle());
+        values.put(CourseTable.COLUMN_RELATED_TO, semester.getID());
         this.database.insert(CourseTable.TABLE_NAME, null, values);
     }
 
@@ -146,9 +133,9 @@ class SemesterDataAccessImpl implements SemesterDataAccess {
      */
     @Override
     public void removeCourse(Identifiable semester, Course course) {
-        this.courseCache.removeElement(semester, course);
         this.database.delete(CourseTable.TABLE_NAME,
-                "WHERE " + CourseTable.COLUMN_ID + "=?s", new String[]{course.getID()});
+                CourseTable.COLUMN_ID + "=?", new String[]{course.getID()});
+        this.courseCache.removeElement(semester, course);
     }
 
     /**
@@ -163,6 +150,6 @@ class SemesterDataAccessImpl implements SemesterDataAccess {
         ContentValues values = new ContentValues();
         values.put(SemesterTable.COLUMN_NR, nr);
         this.database.update(SemesterTable.TABLE_NAME, values,
-                "WHERE " + SemesterTable.COLUMN_NR + "=?s", new String[]{String.valueOf(nr)});
+                SemesterTable.COLUMN_ID + "=?", new String[]{semester.getID()});
     }
 }

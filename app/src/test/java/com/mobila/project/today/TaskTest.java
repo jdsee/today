@@ -22,8 +22,6 @@ public class TaskTest {
     @Before
     public void setUp() {
         this.dataAccessMock = Mockito.mock(TaskDataAccess.class);
-        Mockito.when(this.dataAccessMock.getContent(this.task)).thenReturn(this.testContent);
-        Mockito.when(this.dataAccessMock.getDeadline(this.task)).thenReturn(this.testDate);
 
         this.testContent = "content";
         this.testDate = new Date();
@@ -52,20 +50,11 @@ public class TaskTest {
         assertEquals(changedContent, content);
         Mockito.verify(this.dataAccessMock, Mockito.times(1))
                 .setContent(this.task, changedContent);
-        Mockito.verify(this.dataAccessMock, Mockito.times(0))
-                .getContent(this.task);
 
         this.task.setContent(null);
         Mockito.verify(this.dataAccessMock, Mockito.times(1))
                 .setContent(this.task, changedContent);
         content = this.task.getContent();
         assertEquals(null, content);
-        Mockito.verify(this.dataAccessMock, Mockito.times(1))
-                .getContent(this.task);
-
-        Task nullContentTask = new Task("1234", null, null, this.dataAccessMock);
-        content = nullContentTask.getContent();
-        assertNull(content);
-        Mockito.verify(this.dataAccessMock, Mockito.times(1)).getContent(nullContentTask);
     }
 }

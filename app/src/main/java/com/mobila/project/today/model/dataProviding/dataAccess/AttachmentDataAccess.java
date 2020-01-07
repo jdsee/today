@@ -1,29 +1,15 @@
 package com.mobila.project.today.model.dataProviding.dataAccess;
 
-import com.mobila.project.today.model.Lecture;
+import android.net.Uri;
+
 import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
 import com.mobila.project.today.model.Identifiable;
 
-import java.io.File;
-
-public interface AttachmentDataAccess {
+public interface AttachmentDataAccess extends ParentDataAccess {
 
     static AttachmentDataAccess getInstance() {
-        //TODO return implementation
-        return null;
+        return AttachmentDataAccessImpl.getInstance();
     }
 
-    Lecture getLecture(Identifiable attachment) throws DataKeyNotFoundException;
-
-    String getTitle(Identifiable attachment) throws DataKeyNotFoundException;
-
-    void setTitle(Identifiable attachment, String title) throws DataKeyNotFoundException;
-
-    File getContent(Identifiable attachment) throws DataKeyNotFoundException;
-
-    void setContent(Identifiable attachment, File file) throws DataKeyNotFoundException;
-
-    int getPosition(Identifiable attachment) throws DataKeyNotFoundException;
-
-    void setPosition(Identifiable attachment, int position) throws DataKeyNotFoundException;
+    void setName(Identifiable attachment, String title) throws DataKeyNotFoundException;
 }

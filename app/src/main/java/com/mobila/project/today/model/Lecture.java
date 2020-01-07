@@ -14,33 +14,28 @@ import java.util.UUID;
 
 public class Lecture implements Identifiable, Parcelable {
     public static final String INTENT_EXTRA_CODE = "EXTRA_LECTURE";
-    private final RootDataAccess rootDataAccess;
     private final LectureDataAccess dataAccess;
 
     private final String ID;
     private int lectureNr;
     private Date date;
     private String roomNr;
+    private List<Attachment> attachments;
 
-    public Lecture(String ID, int lectureNr) {
-        this.ID = ID;
+    public Lecture(String id, int lectureNr, Date date, String roomNr) {
+        this.ID = id;
         this.lectureNr = lectureNr;
 
         OrganizerDataProvider dataProvider = OrganizerDataProvider.getInstance();
-        this.rootDataAccess = dataProvider.getRootDataAccess();
         this.dataAccess = dataProvider.getLectureDataAccess();
-    }
-
-    public Lecture(String id, int lectureNr, Date date, String roomNr) {
-        this(id, lectureNr);
         this.date = date;
         this.roomNr = roomNr;
     }
 
-    public Lecture() {
+    public Lecture(int lectureNr, Date date, String roomNr) {
         this(
-                UUID.randomUUID().toString(),
-                0
+                KeyGenerator.getUniqueKey(),
+                lectureNr, date, roomNr
         );
     }
 
@@ -56,7 +51,7 @@ public class Lecture implements Identifiable, Parcelable {
         }
     };
 
-    public Lecture(Parcel in) {
+    private Lecture(Parcel in) {
         this(in.readString(), in.readInt(), new Date(in.readLong()), in.readString());
     }
 
@@ -83,19 +78,24 @@ public class Lecture implements Identifiable, Parcelable {
     }
 
     public Note getNote() throws DataKeyNotFoundException {
-        return this.dataAccess.getNote(this);
+        Note note = this.dataAccess.getNote(this);
+        return note != null ? note : new Note();
     }
 
     public List<Attachment> getAttachments() throws DataKeyNotFoundException {
-        return this.dataAccess.getAttachments(this);
+        if (this.attachments == null)
+            this.attachments = this.dataAccess.getAttachments(this);
+        return attachments;
     }
 
     public void addAttachment(Attachment attachment) throws DataKeyNotFoundException {
         this.dataAccess.addAttachment(this, attachment);
+        this.attachments.add(attachment);
     }
 
-    public void removeAttachment(Identifiable attachment) throws DataKeyNotFoundException {
-        this.rootDataAccess.removeEntityInstance(attachment);
+    public void removeAttachment(Attachment attachment) throws DataKeyNotFoundException {
+        this.dataAccess.removeAttachment(this, attachment);
+        this.attachments.remove(attachment);
     }
 
     public int getLectureNr() throws DataKeyNotFoundException {

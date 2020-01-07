@@ -6,24 +6,36 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
-public class DBHelper extends SQLiteOpenHelper {
-    public static final String DB_FILE_NAME = "today.db";
-    public static final int DB_VERSION = 1;
-    private final String table;
+import com.mobila.project.today.model.Section;
 
-    public DBHelper(@Nullable Context context, String table) {
+public class DBHelper extends SQLiteOpenHelper {
+    private static final String DB_FILE_NAME = "today.db";
+    private static final int DB_VERSION = 1;
+
+    public DBHelper(@Nullable Context context) {
         super(context, DB_FILE_NAME, null, DB_VERSION);
-        this.table = table;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(this.table);
+        db.execSQL(SemesterTable.SQL_CREATE);
+        db.execSQL(CourseTable.SQL_CREATE);
+        db.execSQL(TaskTable.SQL_CREATE);
+        db.execSQL(SectionTable.SQL_CREATE);
+        db.execSQL(LectureTable.SQL_CREATE);
+        db.execSQL(NoteTable.SQL_CREATE);
+        db.execSQL(AttachmentTable.SQL_CREATE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL(NoteTable.SQL_DELETE);
+        db.execSQL(LectureTable.SQL_DELETE);
+        db.execSQL(SectionTable.SQL_DELETE);
+        db.execSQL(TaskTable.SQL_DELETE);
+        db.execSQL(CourseTable.SQL_DELETE);
         db.execSQL(SemesterTable.SQL_DELETE);
+        db.execSQL(AttachmentTable.SQL_DELETE);
         onCreate(db);
     }
 }

@@ -1,5 +1,6 @@
 package com.mobila.project.today.model.dataProviding.dataAccess;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -9,14 +10,12 @@ import com.mobila.project.today.model.Semester;
 import com.mobila.project.today.model.Task;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.SemesterTable;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -59,7 +58,7 @@ public class RootDataAccessTest {
                 .setMockedCursor(mockedCursor)
                 .getMockedDatabase();
         Context contextMock = new MockContext().getMockedContext();
-        this.dataAccess = new RootDataAccessImpl(contextMock, this.databaseMock);
+        this.dataAccess = new RootDataAccessImpl(this.databaseMock);
     }
 
     private int moveToNextTimes;
@@ -117,15 +116,42 @@ public class RootDataAccessTest {
     @Test
     public void getAllSemestersWhenDatabaseWasAlreadyAccessedBefore_Test() {
         //exercise
-        List<Semester> result = this.dataAccess.getAllSemesters();
-        result = this.dataAccess.getAllSemesters();
+        this.dataAccess.getAllSemesters();
 
         //verify
         this.verifyQueryOnDatabase(1);
     }
 
     @Test
-    public void addSemesterInitially() {
-
+    public void addSemester() {
+        //setup
+        ContentValues mockValues = new ContentValues();
+        Mockito.when(this.semesterMock1.toValues()).thenReturn(mockValues);
+        mockValues.put(SemesterTable.COLUMN_ID, "semersterMock1");
+        mockValues.put(SemesterTable.COLUMN_NR, 1);
+        //exercise
+        this.dataAccess.addSemester(this.semesterMock1);
+        //verify
+        Mockito.verify(this.databaseMock, Mockito.times(1))
+                .insert(anyString(),
+                        nullable(String.class),
+                        any(ContentValues.class));
     }
+
+    @Test
+    public void getAllTasksInitially_Test() {
+        //exercise
+        this.dataAccess.getAllTasks();
+        //verify
+        this.verifyQueryOnDatabase(1);
+    }
+
+    /*@Test
+    public void getAllTasksWhenDatabaseWasAlreadyAccessedBefore_Test(){
+        //exercise
+        this.dataAccess.getAllTasks();
+        this.dataAccess.getAllTasks();
+        //verify
+        this.verifyQueryOnDatabase(1);
+    }*/
 }

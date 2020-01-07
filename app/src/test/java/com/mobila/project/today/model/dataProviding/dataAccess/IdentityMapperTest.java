@@ -3,7 +3,6 @@ package com.mobila.project.today.model.dataProviding.dataAccess;
 import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Semester;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
