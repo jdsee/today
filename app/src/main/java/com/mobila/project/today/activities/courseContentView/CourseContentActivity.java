@@ -39,9 +39,9 @@ public class CourseContentActivity extends DatabaseConnectionActivity
     private static final String ADD_LECTURE_DIALOG_CODE = "ADD_LECTURE_DIALOG_CODE";
 
     private Course course;
-    private List<Task> tasks;
     private List<Section> sections;
     private int currentPosition;
+    private TaskAdapter taskAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,17 +54,22 @@ public class CourseContentActivity extends DatabaseConnectionActivity
         assert ab != null;
         ab.setTitle(this.course.getTitle());
 
-        this.tasks = this.course.getTasks();
         this.initTaskView();
 
         this.sections = this.course.getSections();
         this.initSectionView();
     }
 
+    @Override
+    protected void onResume(){
+        super.onResume();
+        taskAdapter.notifyDataSetChanged();
+    }
+
     private void initTaskView() {
         RecyclerView recyclerView = findViewById(R.id.rv_course_tasks);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        TaskAdapter taskAdapter = new TaskAdapter(this, this.tasks);
+        this.taskAdapter = new TaskAdapter(this, this.course.getTasks());
         recyclerView.setAdapter(taskAdapter);
         EditText taskEnterField = findViewById(R.id.edit_text_add_task);
         ImageButton confirmationButton = findViewById(R.id.add_task_button);

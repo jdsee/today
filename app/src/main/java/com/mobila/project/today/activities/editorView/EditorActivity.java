@@ -37,6 +37,7 @@ import com.mobila.project.today.control.TaskController;
 import com.mobila.project.today.control.utils.AttachmentUtils;
 import com.mobila.project.today.control.utils.DateUtils;
 import com.mobila.project.today.model.Attachment;
+import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Note;
 import com.mobila.project.today.model.Section;
 import com.mobila.project.today.model.Lecture;
@@ -59,7 +60,6 @@ public class EditorActivity extends DatabaseConnectionActivity
     private static final String TAG = EditorActivity.class.getName();
     private Lecture lecture;
     private Section section;
-    private List<Task> tasks;
     private List<Attachment> attachments;
 
     private EditText contentEditText;
@@ -95,7 +95,6 @@ public class EditorActivity extends DatabaseConnectionActivity
         this.note = Objects.requireNonNull(lecture).getNote();
 
         this.section = lecture.getSection();
-        this.tasks = lecture.getSection().getCourse().getTasks();
         this.attachments = lecture.getAttachments();
 
 
@@ -481,13 +480,14 @@ public class EditorActivity extends DatabaseConnectionActivity
      * Method for initializing the task-view
      */
     private void initTaskView() {
+        Course course = this.lecture.getSection().getCourse();
         RecyclerView recyclerView = findViewById(R.id.rv_course_tasks);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        TaskAdapter taskAdapter = new TaskAdapter(this, this.tasks);
+        TaskAdapter taskAdapter = new TaskAdapter(this, course.getTasks());
         recyclerView.setAdapter(taskAdapter);
         EditText taskEnterField = findViewById(R.id.edit_text_add_task);
         ImageButton confirmationButton = findViewById(R.id.add_task_button);
-        new TaskController(taskEnterField, confirmationButton, this.lecture.getSection().getCourse(), taskAdapter);
+        new TaskController(taskEnterField, confirmationButton, course, taskAdapter);
     }
 
     /**

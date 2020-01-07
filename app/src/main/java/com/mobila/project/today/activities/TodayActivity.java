@@ -45,7 +45,6 @@ public class TodayActivity extends DatabaseConnectionActivity
 
     private static Bundle DELETE_SEMESTER_DIALOG_BUNDLE;
 
-    private List<Task> tasks;
     private List<Semester> semesters;
 
     TextView semesterView;
@@ -54,6 +53,7 @@ public class TodayActivity extends DatabaseConnectionActivity
     CourseAdapter courseAdapter;
 
     private RootDataAccess rootDataAccess;
+    private TaskAdapter taskAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +63,6 @@ public class TodayActivity extends DatabaseConnectionActivity
 
         this.rootDataAccess = OrganizerDataProvider.getInstance().getRootDataAccess();
         this.semesters = rootDataAccess.getAllSemesters();
-        this.tasks = rootDataAccess.getAllTasks();
 
         initTaskView();
         initSemesterView();
@@ -75,6 +74,7 @@ public class TodayActivity extends DatabaseConnectionActivity
     protected void onResume() {
         super.onResume();
         this.semesters = rootDataAccess.getAllSemesters();
+        this.taskAdapter.notifyDataSetChanged();
     }
 
     private void setTimeDisplayed() {
@@ -100,7 +100,7 @@ public class TodayActivity extends DatabaseConnectionActivity
     private void initTaskView() {
         RecyclerView recyclerView = findViewById(R.id.rv_course_tasks);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        TaskAdapter taskAdapter = new TaskAdapter(this, this.tasks);
+        this.taskAdapter = new TaskAdapter(this, rootDataAccess.getAllTasks());
         recyclerView.setAdapter(taskAdapter);
         EditText taskEnterField = findViewById(R.id.edit_text_add_task);
         ImageButton confirmationButton = findViewById(R.id.add_task_button);
@@ -159,6 +159,7 @@ public class TodayActivity extends DatabaseConnectionActivity
         }
         if (currentSemester <= 0) {
             goBackwardsButton.setImageResource(R.drawable.transparent_placeholder);
+            if (currentSemester<0)showAddCourseButton(false);
         } else {
             goBackwardsButton.setImageResource(R.drawable.baseline_arrow_back_ios_24);
             showAddCourseButton(true);
