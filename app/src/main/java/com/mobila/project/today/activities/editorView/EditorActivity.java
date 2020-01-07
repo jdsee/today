@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.text.Spannable;
 import android.util.Log;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -30,6 +31,7 @@ import com.mobila.project.today.activities.editorView.listeners.EditorKeyboardEv
 import com.mobila.project.today.activities.editorView.listeners.TitleOnEditorActionListener;
 import com.mobila.project.today.activities.editorView.listeners.noteFocusChangeListener;
 import com.mobila.project.today.control.AttachmentControl;
+import com.mobila.project.today.control.CommunicationController;
 import com.mobila.project.today.control.NoteControl;
 import com.mobila.project.today.control.utils.AttachmentUtils;
 import com.mobila.project.today.control.utils.DateUtils;
@@ -110,6 +112,23 @@ public class EditorActivity extends DatabaseConnectionActivity
         setupContent();
         setupListeners();
         setupControls();
+    }
+
+    @Override
+    protected void onPause() {
+        this.saveContent();
+        super.onPause();
+    }
+
+    /**
+     * Method for saving the contentEditText of the editor
+     */
+    private void saveContent() {
+        String title = this.titleEditText.getText().toString();
+        note.setTitle(title);
+
+        Spannable content = this.contentEditText.getText();
+        note.setContent(content);
     }
 
     /**
@@ -539,20 +558,10 @@ public class EditorActivity extends DatabaseConnectionActivity
         findViewById(R.id.edit_items).setVisibility(View.GONE);
     }
 
-    /**
-     * Method for saving the contentEditText of the editor
-     */
-    private void saveContent() {
-        String title = this.titleEditText.getText().toString();
-        note.setTitle(title);
-
-        Spannable content = this.contentEditText.getText();
-        note.setContent(content);
-    }
-
-    @Override
-    protected void onPause() {
-        this.saveContent();
-        super.onPause();
+    public void onShareLectureClicked(MenuItem item) {
+        CommunicationController communicator = new CommunicationController(this);
+        Spannable spannable = this.contentEditText.getText();
+        String noteTitle = this.titleEditText.getText().toString();
+        communicator.sendSpannable(spannable, noteTitle);
     }
 }
