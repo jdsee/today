@@ -74,7 +74,7 @@ public class TodayActivity extends DatabaseConnectionActivity
     protected void onResume() {
         super.onResume();
         this.semesters = rootDataAccess.getAllSemesters();
-        this.taskAdapter.notifyDataSetChanged();
+        this.initTaskView();
     }
 
     private void setTimeDisplayed() {
