@@ -42,7 +42,7 @@ class RootDataAccessImpl extends ParentDataAccessImpl implements RootDataAccess 
     @Override
     public List<Semester> getAllSemesters() {
         if (this.semesters == null) {
-            this.semesters = this.getAllSemestersFromDB();
+            return this.getAllSemestersFromDB();
         }
         return this.semesters;
     }

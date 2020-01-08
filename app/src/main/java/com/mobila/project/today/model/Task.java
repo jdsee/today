@@ -3,8 +3,8 @@ package com.mobila.project.today.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
-import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
+import com.mobila.project.today.model.dataProviding.dataAccess.DataKeyNotFoundException;
+import com.mobila.project.today.model.dataProviding.dataAccess.OrganizerDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.TaskDataAccess;
 
 import java.util.Date;
@@ -17,6 +17,7 @@ public class Task implements Identifiable, Parcelable {
     private final String ID;
     private String content;
     private Date deadline;
+    private Course relatedCourse;
 
     //TODO considering a relatedTo-Member for easy access to the parent course
     // -> useful in rootDataAccess
@@ -61,6 +62,7 @@ public class Task implements Identifiable, Parcelable {
                 in.readString(),
                 in.readString(),
                 new Date(in.readLong()));
+
     }
 
     public int describeContents() {

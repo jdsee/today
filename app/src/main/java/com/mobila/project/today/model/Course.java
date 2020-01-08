@@ -3,8 +3,8 @@ package com.mobila.project.today.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
-import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
+import com.mobila.project.today.model.dataProviding.dataAccess.DataKeyNotFoundException;
+import com.mobila.project.today.model.dataProviding.dataAccess.OrganizerDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.CourseDataAccess;
 import com.mobila.project.today.model.dataProviding.dataAccess.RootDataAccess;
 

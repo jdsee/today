@@ -5,7 +5,6 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Semester;
-import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.CourseTable;
 
 import org.junit.Assert;

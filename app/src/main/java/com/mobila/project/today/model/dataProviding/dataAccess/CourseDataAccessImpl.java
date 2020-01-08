@@ -2,15 +2,11 @@ package com.mobila.project.today.model.dataProviding.dataAccess;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.mobila.project.today.model.Identifiable;
 import com.mobila.project.today.model.Section;
-import com.mobila.project.today.model.Semester;
 import com.mobila.project.today.model.Task;
-import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
-import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.CourseTable;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.SectionTable;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.TaskTable;
@@ -33,7 +29,7 @@ class CourseDataAccessImpl extends ParentDataAccessImpl implements CourseDataAcc
         this.taskCache = new IdentityMapper<>();
     }
 
-    public static CourseDataAccess getInstance() {
+    static CourseDataAccess getInstance() {
         if (instance == null)
             instance = new CourseDataAccessImpl();
         return instance;

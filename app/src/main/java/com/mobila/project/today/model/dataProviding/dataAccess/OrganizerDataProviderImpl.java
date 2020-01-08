@@ -1,20 +1,9 @@
-package com.mobila.project.today.model.dataProviding;
+package com.mobila.project.today.model.dataProviding.dataAccess;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.mobila.project.today.model.dataProviding.dataAccess.AttachmentDataAccess;
-import com.mobila.project.today.model.dataProviding.dataAccess.CourseDataAccess;
-import com.mobila.project.today.model.dataProviding.dataAccess.LectureDataAccess;
-import com.mobila.project.today.model.dataProviding.dataAccess.NoteDataAccess;
-import com.mobila.project.today.model.dataProviding.dataAccess.ParentDataAccess;
-import com.mobila.project.today.model.dataProviding.dataAccess.RootDataAccess;
-import com.mobila.project.today.model.dataProviding.dataAccess.SectionDataAccess;
-import com.mobila.project.today.model.dataProviding.dataAccess.SemesterDataAccess;
-import com.mobila.project.today.model.dataProviding.dataAccess.TaskDataAccess;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.DBHelper;
-
-import java.util.LinkedList;
 
 class OrganizerDataProviderImpl implements OrganizerDataProvider {
     private static OrganizerDataProviderImpl instance;

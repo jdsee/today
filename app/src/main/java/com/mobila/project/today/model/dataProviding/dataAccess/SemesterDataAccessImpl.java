@@ -5,10 +5,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
 import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Identifiable;
-import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.CourseTable;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.SemesterTable;
 
@@ -16,9 +14,15 @@ import java.util.LinkedList;
 import java.util.List;
 
 class SemesterDataAccessImpl extends ParentDataAccessImpl implements SemesterDataAccess {
-    private static final String TAG = SemesterDataAccessImpl.class.getName();
-
     private static SemesterDataAccess instance;
+
+    static SemesterDataAccess getInstance() {
+        if (instance == null)
+            instance = new SemesterDataAccessImpl();
+        return instance;
+    }
+
+    private static final String TAG = SemesterDataAccessImpl.class.getName();
 
     private IdentityMapper<Course> courseCache;
 
@@ -40,12 +44,6 @@ class SemesterDataAccessImpl extends ParentDataAccessImpl implements SemesterDat
     SemesterDataAccessImpl(IdentityMapper<Course> courseCache, SQLiteDatabase database) {
         this.courseCache = courseCache;
         this.database = database;
-    }
-
-    static SemesterDataAccess getInstance() {
-        if (instance == null)
-            instance = new SemesterDataAccessImpl();
-        return instance;
     }
 
     /**

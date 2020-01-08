@@ -8,7 +8,6 @@ import android.util.Log;
 import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Identifiable;
 import com.mobila.project.today.model.Lecture;
-import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.CourseTable;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.LectureTable;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.SectionTable;
@@ -20,8 +19,15 @@ import java.util.List;
 class SectionDataAccessImpl extends ParentDataAccessImpl implements SectionDataAccess {
     private static SectionDataAccess instance;
 
+    static SectionDataAccess getInstance() {
+        if (instance == null)
+            instance = new SectionDataAccessImpl();
+        return instance;
+    }
+
     private static final String TAG = SectionDataAccessImpl.class.getName();
     private static final String LOG_MSG_DB_UPDATE = "section has been updated in database";
+
     private static final String NO_LECTURES_FOR_SECTION_MSG = "no lectures related to given section";
 
     private IdentityMapper<Lecture> lectureCache;
@@ -31,12 +37,6 @@ class SectionDataAccessImpl extends ParentDataAccessImpl implements SectionDataA
                 new IdentityMapper<>(),
                 null
         );
-    }
-
-    static SectionDataAccess getInstance() {
-        if (instance == null)
-            instance = new SectionDataAccessImpl();
-        return instance;
     }
 
     /**

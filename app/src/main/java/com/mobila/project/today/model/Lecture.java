@@ -3,14 +3,12 @@ package com.mobila.project.today.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
-import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
+import com.mobila.project.today.model.dataProviding.dataAccess.DataKeyNotFoundException;
+import com.mobila.project.today.model.dataProviding.dataAccess.OrganizerDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.LectureDataAccess;
-import com.mobila.project.today.model.dataProviding.dataAccess.RootDataAccess;
 
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 public class Lecture implements Identifiable, Parcelable {
     public static final String INTENT_EXTRA_CODE = "EXTRA_LECTURE";

@@ -26,8 +26,6 @@ public class RootDataAccessTest {
 
     private SQLiteDatabase databaseMock;
     private Semester semesterMock1;
-    private Semester semesterMock2;
-    private Semester semesterMock3;
     private List<Semester> semesterMocks;
     @Mock
     private Task taskMock1;
@@ -50,8 +48,6 @@ public class RootDataAccessTest {
         this.semesterMock1 = this.getSemesterMock("SemesterMock3", 3);
         this.semesterMocks = new LinkedList<>();
         this.semesterMocks.add(this.semesterMock1);
-        this.semesterMocks.add(this.semesterMock2);
-        this.semesterMocks.add(this.semesterMock3);
 
         Cursor mockedCursor = this.getMockedCursor();
         this.databaseMock = new MockSQLiteDatabase()

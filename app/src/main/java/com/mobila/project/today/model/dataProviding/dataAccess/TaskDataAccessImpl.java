@@ -1,7 +1,7 @@
 package com.mobila.project.today.model.dataProviding.dataAccess;
 
+import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Identifiable;
-import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
 
 import java.util.Date;
 
@@ -12,15 +12,21 @@ import com.mobila.project.today.model.dataProviding.dataAccess.databank.TaskTabl
 class TaskDataAccessImpl extends ParentDataAccessImpl implements TaskDataAccess {
     private static TaskDataAccess instance;
 
+    static TaskDataAccess getInstance() {
+        if (instance == null)
+            instance = new TaskDataAccessImpl();
+        return instance;
+    }
+
     public static final String TAG = TaskDataAccessImpl.class.getName();
 
     private TaskDataAccessImpl() {
     }
 
-    static TaskDataAccess getInstance() {
-        if (instance == null)
-            instance = new TaskDataAccessImpl();
-        return instance;
+    @Override
+    public Course getCourse(){
+//        this.database.query()
+        return null;
     }
 
     @Override

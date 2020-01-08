@@ -41,8 +41,7 @@ import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Note;
 import com.mobila.project.today.model.Section;
 import com.mobila.project.today.model.Lecture;
-import com.mobila.project.today.model.Task;
-import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
+import com.mobila.project.today.model.dataProviding.dataAccess.OrganizerDataProvider;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 

@@ -1,30 +1,24 @@
 package com.mobila.project.today.model.dataProviding.dataAccess;
 
-import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import android.provider.MediaStore;
-
-import androidx.core.content.FileProvider;
 
 import com.mobila.project.today.model.Attachment;
 import com.mobila.project.today.model.Identifiable;
 import com.mobila.project.today.model.Note;
 import com.mobila.project.today.model.Section;
-import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.AttachmentTable;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.LectureTable;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.NoteTable;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.SectionTable;
 
-import java.io.File;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-public class LectureDataAccessImpl extends ParentDataAccessImpl implements LectureDataAccess {
+class LectureDataAccessImpl extends ParentDataAccessImpl implements LectureDataAccess {
 
     private static LectureDataAccessImpl instance;
 
@@ -78,7 +72,7 @@ public class LectureDataAccessImpl extends ParentDataAccessImpl implements Lectu
 
     @Override
     public Note getNote(Identifiable lecture) throws DataKeyNotFoundException {
-        Note note = null;
+        Note note;
         Cursor cursor = this.database.query(NoteTable.TABLE_NAME, null,
                 NoteTable.COLUMN_RELATED_TO + "=?", new String[]{lecture.getID()},
                 null, null, null);

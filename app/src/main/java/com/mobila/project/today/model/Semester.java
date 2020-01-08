@@ -3,7 +3,7 @@ package com.mobila.project.today.model;
 import android.content.ContentValues;
 
 import com.mobila.project.today.UncheckedTodayException;
-import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
+import com.mobila.project.today.model.dataProviding.dataAccess.OrganizerDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.RootDataAccess;
 import com.mobila.project.today.model.dataProviding.dataAccess.SemesterDataAccess;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.SemesterTable;

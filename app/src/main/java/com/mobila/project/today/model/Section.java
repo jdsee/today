@@ -1,8 +1,7 @@
 package com.mobila.project.today.model;
 
-import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
-import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
-import com.mobila.project.today.model.dataProviding.dataAccess.RootDataAccess;
+import com.mobila.project.today.model.dataProviding.dataAccess.DataKeyNotFoundException;
+import com.mobila.project.today.model.dataProviding.dataAccess.OrganizerDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.SectionDataAccess;
 
 import java.util.List;

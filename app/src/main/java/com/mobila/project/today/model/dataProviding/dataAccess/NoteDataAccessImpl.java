@@ -5,10 +5,8 @@ import android.database.Cursor;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.util.Log;
 
 import com.mobila.project.today.model.Identifiable;
-import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.NoteTable;
 
 class NoteDataAccessImpl extends ParentDataAccessImpl implements NoteDataAccess {

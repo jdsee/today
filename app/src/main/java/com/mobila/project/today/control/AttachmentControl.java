@@ -10,18 +10,13 @@ import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
 
-import com.mobila.project.today.model.Attachment;
-import com.mobila.project.today.model.Lecture;
 import com.mobila.project.today.control.utils.AttachmentUtils;
-import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
-import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
+import com.mobila.project.today.model.dataProviding.dataAccess.DataKeyNotFoundException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
 
