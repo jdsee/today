@@ -63,7 +63,8 @@ public class CourseContentActivity extends DatabaseConnectionActivity
     @Override
     protected void onResume(){
         super.onResume();
-        taskAdapter.notifyDataSetChanged();
+        this.course.refresh();
+        initTaskView();
     }
 
     private void initTaskView() {

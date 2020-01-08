@@ -22,7 +22,7 @@ public class Note implements Identifiable {
         this.noteDataAccess = dataProvider.getNoteDataAccess();
     }
 
-    public Note(String title) {
+    private Note(String title) {
         this(
                 KeyGenerator.getUniqueKey(),
                 title
@@ -31,16 +31,6 @@ public class Note implements Identifiable {
 
     public Note(){
         this("");
-    }
-
-    /**
-     * Returns the lecture containing this attachment.
-     *
-     * @return the lecture containing this attachment
-     */
-    public Lecture getLecture() throws DataKeyNotFoundException {
-        //TODO return lecture or remove method
-        return null;
     }
 
     public String getTitle() {
@@ -59,18 +49,6 @@ public class Note implements Identifiable {
     public void setContent(Spannable content) throws DataKeyNotFoundException {
         this.noteDataAccess.setContent(this, content);
     }
-
-   /* public List<NoteReference> getReferences() throws DataKeyNotFoundException {
-        return this.noteDataAccess.getReferences(this);
-    }
-
-    public void addReference(Identifiable reference, int row) throws DataKeyNotFoundException {
-        this.noteDataAccess.addReference(this, reference, row);
-    }
-
-    public void removeReference(Identifiable reference) throws DataKeyNotFoundException {
-        this.noteDataAccess.removeReference(reference);
-    }*/
 
     @Override
     public String getID() {

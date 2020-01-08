@@ -135,6 +135,10 @@ public class Course implements Identifiable, Parcelable {
         return this.tasks;
     }
 
+    public void refresh(){
+        this.tasks = this.dataAccess.getTasks(this);
+    }
+
     /**
      * Adds a task to this course.
      */

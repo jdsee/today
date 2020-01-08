@@ -38,8 +38,8 @@ class LectureDataAccessImpl extends ParentDataAccessImpl implements LectureDataA
      * SUPPOSED FOR TESTING REASONS ONLY!
      * do not use this for creating new objects!
      *
-     * @param attachmentCache
-     * @param database
+     * @param attachmentCache a mocked cache
+     * @param database a mocked database
      */
     LectureDataAccessImpl(IdentityMapper<Attachment> attachmentCache, SQLiteDatabase database) {
         this.attachmentCache = attachmentCache;
@@ -82,7 +82,6 @@ class LectureDataAccessImpl extends ParentDataAccessImpl implements LectureDataA
                     cursor.getString(cursor.getColumnIndex(NoteTable.COLUMN_TITLE))
             );
         } else
-            //TODO constructor for note
             note = this.addNoteToDB(lecture);
 
         cursor.close();

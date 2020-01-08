@@ -6,7 +6,9 @@ import com.mobila.project.today.model.Identifiable;
 import java.util.Date;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 
+import com.mobila.project.today.model.dataProviding.dataAccess.databank.CourseTable;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.TaskTable;
 
 class TaskDataAccessImpl extends ParentDataAccessImpl implements TaskDataAccess {
@@ -41,6 +43,29 @@ class TaskDataAccessImpl extends ParentDataAccessImpl implements TaskDataAccess 
         ContentValues values = new ContentValues();
         values.put(TaskTable.COLUMN_CONTENT, content);
         this.updateTaskInDB(task, values);
+    }
+
+    @Override
+    public Course getCourse(Identifiable task) {
+        Cursor taskCursor = this.database.query(TaskTable.TABLE_NAME, new String[]{TaskTable.COLUMN_RELATED_TO},
+                TaskTable.COLUMN_ID + "=?", new String[]{task.getID()},
+                null, null, null);
+        if (!taskCursor.moveToNext())
+            throw new DataKeyNotFoundException("FATAL ERROR: no parent found for given task!");
+        String courseID = taskCursor.getString(taskCursor.getColumnIndex(TaskTable.COLUMN_RELATED_TO));
+        taskCursor.close();
+
+        Cursor courseCursor = this.database.query(CourseTable.TABLE_NAME, CourseTable.ALL_COLUMNS,
+                CourseTable.COLUMN_ID + "=?", new String[]{courseID},
+                null, null, null);
+        courseCursor.moveToFirst();
+        Course course = new Course(
+                courseCursor.getString(courseCursor.getColumnIndex(CourseTable.COLUMN_ID)),
+                courseCursor.getString(courseCursor.getColumnIndex(CourseTable.COLUMN_TITLE))
+        );
+        courseCursor.close();
+
+        return course;
     }
 
     private void updateTaskInDB(Identifiable task, ContentValues values) {

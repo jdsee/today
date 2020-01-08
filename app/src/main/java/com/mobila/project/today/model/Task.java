@@ -81,8 +81,7 @@ public class Task implements Identifiable, Parcelable {
      * @return the course containing this task
      */
     public Course getCourse() throws DataKeyNotFoundException {
-        //TODO add attribute to class and add the corresponding parameter in constructor
-        return null;
+        return this.dataAccess.getCourse(this);
     }
 
     public Date getDeadline() {

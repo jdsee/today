@@ -14,7 +14,6 @@ class NoteDataAccessImpl extends ParentDataAccessImpl implements NoteDataAccess 
 
     private static final String TAG = NoteDataAccessImpl.class.getName();
     private static final String NO_CONTENT_FOR_NOTE_MSG = "no content found for given course";
-    //private static final String NO_REFERENCES_FOR_NOTE_MSG = "no note references found for given course";
 
     static NoteDataAccess getInstance() {
         if (instance == null)
@@ -58,42 +57,4 @@ class NoteDataAccessImpl extends ParentDataAccessImpl implements NoteDataAccess 
         this.database.update(NoteTable.TABLE_NAME, values,
                 NoteTable.COLUMN_ID + "=?", new String[]{note.getID()});
     }
-
-
-    /*@Override
-    public List<NoteReference> getReferences(Identifiable note) throws DataKeyNotFoundException {
-        Cursor cursor = this.database.query(
-                NoteReferenceTable.TABLE_NAME,
-                null,
-                NoteReferenceTable.COLUMN_NOTE_ID + "=",
-                new String[]{note.getID()},
-                null, null, null
-        );
-
-        if (!cursor.moveToNext()) {
-            DataKeyNotFoundException t = new DataKeyNotFoundException(DataKeyNotFoundException.NO_ENTRY_MSG);
-            Log.d(TAG, DataKeyNotFoundException.NO_ENTRY_MSG + ": " + NO_REFERENCES_FOR_NOTE_MSG, t);
-            throw t;
-        }
-
-        //do {
-            *//*NoteReference noteReference = new NoteReference(
-                    cursor.getString(cursor.getColumnIndex(NoteReferenceTable.COLUMN_ID)),
-
-            );*//*
-        //} while(cursor.moveToNext());
-        cursor.close();
-        return null;
-    }
-
-    @Override
-    public void addReference(Identifiable note, Identifiable reference, int row) throws DataKeyNotFoundException {
-
-    }
-
-    @Override
-    public void removeReference(Identifiable reference) {
-
-    }
-    */
 }

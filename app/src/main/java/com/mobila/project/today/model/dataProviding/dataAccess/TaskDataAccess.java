@@ -2,6 +2,8 @@ package com.mobila.project.today.model.dataProviding.dataAccess;
 
 
 import com.mobila.project.today.model.Course;
+import com.mobila.project.today.model.Task;
+import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
 import com.mobila.project.today.model.Identifiable;
 
 import java.util.Date;
@@ -11,9 +13,9 @@ public interface TaskDataAccess extends ParentDataAccess {
         return TaskDataAccessImpl.getInstance();
     }
 
-    Course getCourse();
-
     void setDeadline(Identifiable task, Date date) throws DataKeyNotFoundException;
 
     void setContent(Identifiable task, String content) throws DataKeyNotFoundException;
+
+    Course getCourse(Identifiable task);
 }
