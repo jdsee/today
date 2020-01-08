@@ -19,14 +19,11 @@ import com.mobila.project.today.activities.adapters.TaskAdapter;
 import com.mobila.project.today.activities.fragments.GeneralConfirmationDialogFragment;
 import com.mobila.project.today.activities.fragments.OneEditTextDialogFragment;
 import com.mobila.project.today.activities.fragments.SimpleConfirmationDialogFragment;
-import com.mobila.project.today.control.TaskController;
 import com.mobila.project.today.control.utils.DateUtils;
 import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Semester;
-import com.mobila.project.today.model.Task;
 import com.mobila.project.today.activities.adapters.CourseAdapter;
-import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
-import com.mobila.project.today.model.dataProviding.dataAccess.RootDataAccess;
+import com.mobila.project.today.model.Student;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -52,7 +49,7 @@ public class TodayActivity extends DatabaseConnectionActivity
 
     CourseAdapter courseAdapter;
 
-    private RootDataAccess rootDataAccess;
+    private Student student;
     private TaskAdapter taskAdapter;
 
     @Override
@@ -61,8 +58,8 @@ public class TodayActivity extends DatabaseConnectionActivity
         setContentView(R.layout.activity_today);
         this.semesterView = findViewById(R.id.semester_view);
 
-        this.rootDataAccess = OrganizerDataProvider.getInstance().getRootDataAccess();
-        this.semesters = rootDataAccess.getAllSemesters();
+        this.student = new Student();
+        this.semesters = student.getAllSemesters();
 
         initTaskView();
         initSemesterView();
@@ -73,8 +70,8 @@ public class TodayActivity extends DatabaseConnectionActivity
     @Override
     protected void onResume() {
         super.onResume();
-        this.semesters = rootDataAccess.getAllSemesters();
-        this.initTaskView();
+        this.semesters = student.getAllSemesters();
+        this.taskAdapter.notifyDataSetChanged();
     }
 
     private void setTimeDisplayed() {
@@ -100,7 +97,7 @@ public class TodayActivity extends DatabaseConnectionActivity
     private void initTaskView() {
         RecyclerView recyclerView = findViewById(R.id.rv_course_tasks);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        this.taskAdapter = new TaskAdapter(this, rootDataAccess.getAllTasks());
+        this.taskAdapter = new TaskAdapter(this, student.getAllTasks());
         recyclerView.setAdapter(taskAdapter);
         EditText taskEnterField = findViewById(R.id.edit_text_add_task);
         ImageButton confirmationButton = findViewById(R.id.add_task_button);
@@ -129,10 +126,10 @@ public class TodayActivity extends DatabaseConnectionActivity
     public void goForwardSemester(View view) {
         if (this.semesters.isEmpty()) {
             this.currentSemester = 0;
-            rootDataAccess.addSemester(new Semester(getMaxSemester() + 1));
+            student.addSemester(new Semester(getMaxSemester() + 1));
             initSemesterView();
         } else if (currentSemester == semesters.size() - 1) {
-            rootDataAccess.addSemester(new Semester(getMaxSemester() + 1));
+            student.addSemester(new Semester(getMaxSemester() + 1));
             currentSemester++;
         }
         if (currentSemester < semesters.size() - 1) {
@@ -243,7 +240,7 @@ public class TodayActivity extends DatabaseConnectionActivity
         boolean confirmed =
                 resultBundle.getBoolean(SimpleConfirmationDialogFragment.RESPONSE_CONFIRMED_EXTRA);
         if (!semesters.isEmpty() && confirmed) {
-            this.rootDataAccess.removeSemester(semesters.get(currentSemester));
+            this.student.removeSemester(semesters.get(currentSemester));
             if (currentSemester > 0) {
                 currentSemester--;
             }

@@ -7,7 +7,6 @@ import android.util.Log;
 import com.mobila.project.today.model.Identifiable;
 import com.mobila.project.today.model.Section;
 import com.mobila.project.today.model.Task;
-import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.CourseTable;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.SectionTable;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.TaskTable;
