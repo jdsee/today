@@ -1,6 +1,7 @@
 insert into semesters (semesterID, semesterNr) values (1, 1);
 insert into semesters (semesterID, semesterNr) values (2, 2);
 insert into semesters (semesterID, semesterNr) values (3, 3);
+insert into semesters (semesterID, semesterNr) values (4, 4);
 
 insert into courses (courseID, name, relatedTo)
 values (11, 'English for Applied Computing', 1);
@@ -19,11 +20,19 @@ insert into tasks (taskID, deadline, content, relatedTo)
 values (131, '20200420T173000Z', 'Abgabe Arraylisten', 13);
 insert into tasks (taskID, deadline, content, relatedTo)
 values (132, '20200427T173000Z', 'Abgabe Drei Gewinnt', 13);
+insert into tasks (taskID, deadline, content, relatedTo)
+values (133, '20200504T173000Z', 'Vortrag', 13);
+insert into tasks (taskID, deadline, content, relatedTo)
+values (134, '2020059T173000Z', 'Ausfall', 13);
 
 insert into sections (sectionID, name, lecturer, relatedTo)
 values (1301, 'Übung', 'Prof Schwotzer', 13);
 insert into sections (sectionID, name, lecturer, relatedTo)
 values (1302, 'Vorlesung', 'Prof Schwotzer', 13);
+insert into sections (sectionID, name, lecturer, relatedTo)
+values (1401, 'Übung', 'Prof Senner', 14);
+insert into sections (sectionID, name, lecturer, relatedTo)
+values (1402, 'Vorlesung', 'Prof Senner', 14);
 
 insert into lectures (lectureID, lectureNr, roomNr, startTime, endTime, relatedTo)
 values (130111, 1, 445, '20200325T133000Z', '20200325T153000Z', 1301);
@@ -48,7 +57,15 @@ values (1301211, 'Einführungsveranstalltung', 'heute hatte ich einen ersten sch
 insert into notes (noteID, title, content, relatedTo)
 values (1301212, 'For-Schleifen', 'For-schleifen sind so aufgebaut: for (int i=0; i<10; i++){}', 130122);
 insert into notes (noteID, title, content, relatedTo)
-values (1301213, 'If-Statements', 'heute brauch ich nichts auf zu schreiben', 130123);
+values (1301213, 'If-Statements', 'If-Statements beinhalten einen Boolean Wert: if(!ausfall()){}', 130123);
+insert into notes (noteID, title, content, relatedTo)
+values (1301214, 'Ausfall', 'heute brauch ich nichts auf zu schreiben', 130123);
 
 insert into noteReferences (referenceID, row, noteID)
 values (01, 8, 1301211);
+insert into noteReferences (referenceID, row, noteID)
+values (02, 17, 1301211);
+insert into noteReferences (referenceID, row, noteID)
+values (03, 3, 1301211);
+insert into noteReferences (referenceID, row, noteID)
+values (04, 7, 1301211);
