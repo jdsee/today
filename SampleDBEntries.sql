@@ -44,11 +44,11 @@ insert into lectures (lectureID, lectureNr, roomNr, startTime, endTime, relatedT
 values (130124, 4, 640, '20200416T133000Z', '20200416T153000Z', 1302);
 
 insert into notes (noteID, title, content, relatedTo)
-values (1301211, 'Einführungsveranstalltung', null, 130121);
+values (1301211, 'Einführungsveranstalltung', 'heute hatte ich einen ersten schoenen Tag', 130121);
 insert into notes (noteID, title, content, relatedTo)
-values (1301212, 'For-Schleifen', null, 130122);
+values (1301212, 'For-Schleifen', 'For-schleifen sind so aufgebaut: for (int i=0; i<10; i++){}', 130122);
 insert into notes (noteID, title, content, relatedTo)
-values (1301213, 'If-Statements', null, 130123);
+values (1301213, 'If-Statements', 'heute brauch ich nichts auf zu schreiben', 130123);
 
 insert into noteReferences (referenceID, row, noteID)
 values (01, 8, 1301211);
