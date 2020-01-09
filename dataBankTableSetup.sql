@@ -49,7 +49,7 @@ CREATE TABLE noteReferences
 
 
 CREATE TABLE attachments
-(attachmentID	VARCHAR PRIMARY KEY,
+(attachmentID	INTEGER PRIMARY KEY,
  content		VARCHAR,
  name VARCHAR,
  relatedTo	INTEGER REFERENCES lectures ON DELETE CASCADE);
