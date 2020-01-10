@@ -26,6 +26,7 @@ class RootDataAccessImpl extends ParentDataAccessImpl implements RootDataAccess 
         return instance;
     }
 
+
     private RootDataAccessImpl() {
         this(null);
     }
