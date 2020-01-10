@@ -1,6 +1,7 @@
 package com.mobila.project.today.control.utils;
 
 import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +10,9 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.OpenableColumns;
+import android.util.Log;
 import android.webkit.MimeTypeMap;
+import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
@@ -27,6 +30,8 @@ import java.util.Date;
 import java.util.Objects;
 
 public interface AttachmentUtils {
+    public static final String TAG = AttachmentUtils.class.getSimpleName();
+
     /**
      * Method for obtaining the Mime-Type of a file
      *
@@ -181,7 +186,12 @@ public interface AttachmentUtils {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setDataAndType(uri, getMimeType(context, uri));
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        context.startActivity(intent);
+        try {
+            context.startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(context, "There is no Application to open files of this type.", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "File could not be opened");
+        }
     }
 
     static void copy(InputStream src, File dst) throws IOException {

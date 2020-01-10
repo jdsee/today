@@ -36,13 +36,14 @@ public class CourseContentActivity extends DatabaseConnectionActivity
         implements GeneralConfirmationDialogFragment.DialogListener, RecyclerViewButtonClickListener {
     private static final String TAG = CourseContentActivity.class.getName();
 
-    private static final String ADD_SECTION_DIALOG_CODE = "ADD_SECTION_DIALOG";
+    private static final String ADD_SECTION_DIALOG_CODE = "ADD_SECTION_DIALOG_CODE";
     private static final String ADD_LECTURE_DIALOG_CODE = "ADD_LECTURE_DIALOG_CODE";
 
     private Course course;
     private List<Section> sections;
     private int currentPosition;
     private TaskAdapter taskAdapter;
+    private SectionAdapter sectionAdapter;
 //    private List<Task> tasks;
 
     @Override
@@ -68,6 +69,8 @@ public class CourseContentActivity extends DatabaseConnectionActivity
 //        this.course.refresh();
 //        initTaskView();
         this.taskAdapter.notifyDataSetChanged();
+        this.sectionAdapter.notifyDataSetChanged();
+
     }
 
     private void initTaskView() {
@@ -84,8 +87,8 @@ public class CourseContentActivity extends DatabaseConnectionActivity
     private void initSectionView() {
         RecyclerView recyclerView = findViewById(R.id.rv_section_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        SectionAdapter sectionAdapter = new SectionAdapter(this, this.sections, this);
-        recyclerView.setAdapter(sectionAdapter);
+        this.sectionAdapter = new SectionAdapter(this, this.sections, this);
+        recyclerView.setAdapter(this.sectionAdapter);
     }
 
     public void onAddSectionClicked(View view) {

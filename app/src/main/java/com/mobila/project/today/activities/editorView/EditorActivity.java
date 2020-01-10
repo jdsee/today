@@ -1,5 +1,6 @@
 package com.mobila.project.today.activities.editorView;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -105,7 +106,7 @@ public class EditorActivity extends DatabaseConnectionActivity
         this.contentEditText.setText(this.note.getContent());
         this.titleEditText.setText(this.note.getTitle());
 
-        this.attachmentAdapter = new AttachmentAdapter(this.getApplicationContext(), this, this.attachments);
+        this.attachmentAdapter = new AttachmentAdapter(this, this, this.attachments);
 
         hideCameraIfNotAvailable();
         setupContent();
@@ -336,7 +337,23 @@ public class EditorActivity extends DatabaseConnectionActivity
      * @param view the clicked camera-icon. Is only needed for using this method via the layout
      */
     public void onTakePhotoPickerPressed(View view) {
-        startActivityForResult(attachmentControl.getTakePictureIntent(), REQUEST_TAKE_PHOTO);
+        if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            this.intentTakePhoto();
+        } else {
+            if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
+                Toast.makeText(this, "Camera permission is needed to add photos.", Toast.LENGTH_SHORT);
+            }
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, REQUEST_TAKE_PHOTO);
+        }
+    }
+
+    private void intentTakePhoto() {
+        try {
+            startActivityForResult(attachmentControl.getTakePictureIntent(), REQUEST_TAKE_PHOTO);
+        } catch (Exception e) {
+            Toast.makeText(this, "Camera is not available.", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "Camera Intent could not proceed");
+        }
     }
 
     /**

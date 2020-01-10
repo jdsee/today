@@ -14,13 +14,14 @@ public class DatabaseConnectionActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        openDBConntectionIfNeccessary();
+        openDBConnectionIfNeccessary();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        this.organizerDataProvider.closeDbConnection();
+        if (organizerDataProvider.isOpen())
+            this.organizerDataProvider.closeDbConnection();
     }
 
     /*@Override
@@ -32,16 +33,16 @@ public class DatabaseConnectionActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        openDBConntectionIfNeccessary();
+        openDBConnectionIfNeccessary();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        openDBConntectionIfNeccessary();
+        openDBConnectionIfNeccessary();
     }
 
-    private void openDBConntectionIfNeccessary(){
+    private void openDBConnectionIfNeccessary() {
         if (!this.organizerDataProvider.isOpen())
             this.organizerDataProvider.openDbConnection(this);
     }
