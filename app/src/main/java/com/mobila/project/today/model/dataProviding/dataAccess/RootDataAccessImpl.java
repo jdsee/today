@@ -59,7 +59,8 @@ class RootDataAccessImpl extends ParentDataAccessImpl implements RootDataAccess 
             semesters.add(semester);
         }
         cursor.close();
-        return semesters;
+        this.semesters=semesters;
+        return this.semesters;
     }
 
     @Override
