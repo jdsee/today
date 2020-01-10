@@ -360,7 +360,7 @@ public class EditorActivity extends DatabaseConnectionActivity
         super.onActivityResult(requestCode, resultCode, data);
         Uri uri = attachmentControl.onActivityResult(requestCode, resultCode, data);
         this.addFileToAttachments(uri);
-        updateFileNumber();
+        this.updateFileNumber();
     }
 
     public void addFileToAttachments(Uri uri) {

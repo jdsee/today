@@ -127,7 +127,7 @@ class LectureDataAccessImpl extends ParentDataAccessImpl implements LectureDataA
             this.attachmentCache.add(lecture, attachments);
             cursor.close();
         }
-        return attachments;
+        return this.attachmentCache.get(lecture);
     }
 
     @Override

@@ -18,7 +18,7 @@ public class Lecture implements Identifiable, Parcelable {
     private int lectureNr;
     private Date date;
     private String roomNr;
-    private List<Attachment> attachments;
+    //private List<Attachment> attachments;
 
     public Lecture(String id, int lectureNr, Date date, String roomNr) {
         this.ID = id;
@@ -81,19 +81,20 @@ public class Lecture implements Identifiable, Parcelable {
     }
 
     public List<Attachment> getAttachments() throws DataKeyNotFoundException {
-        if (this.attachments == null)
-            this.attachments = this.dataAccess.getAttachments(this);
-        return attachments;
+//        if (this.attachments == null)
+//            this.attachments = this.dataAccess.getAttachments(this);
+//        return attachments;
+        return this.dataAccess.getAttachments(this);
     }
 
     public void addAttachment(Attachment attachment) throws DataKeyNotFoundException {
         this.dataAccess.addAttachment(this, attachment);
-        this.attachments.add(attachment);
+        //this.attachments.add(attachment);
     }
 
     public void removeAttachment(Attachment attachment) throws DataKeyNotFoundException {
         this.dataAccess.removeAttachment(this, attachment);
-        this.attachments.remove(attachment);
+        //this.attachments.remove(attachment);
     }
 
     public int getLectureNr() throws DataKeyNotFoundException {
