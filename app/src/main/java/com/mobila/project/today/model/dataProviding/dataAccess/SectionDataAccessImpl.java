@@ -8,7 +8,6 @@ import android.util.Log;
 import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Identifiable;
 import com.mobila.project.today.model.Lecture;
-import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.CourseTable;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.LectureTable;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.SectionTable;

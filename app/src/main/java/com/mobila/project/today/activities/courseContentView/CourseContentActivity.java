@@ -26,6 +26,7 @@ import com.mobila.project.today.model.Section;
 import com.mobila.project.today.model.Task;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -42,6 +43,7 @@ public class CourseContentActivity extends DatabaseConnectionActivity
     private List<Section> sections;
     private int currentPosition;
     private TaskAdapter taskAdapter;
+//    private List<Task> tasks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,16 +63,18 @@ public class CourseContentActivity extends DatabaseConnectionActivity
     }
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
-        this.course.refresh();
-        initTaskView();
+//        this.course.refresh();
+//        initTaskView();
+        this.taskAdapter.notifyDataSetChanged();
     }
 
     private void initTaskView() {
         RecyclerView recyclerView = findViewById(R.id.rv_course_tasks);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        this.taskAdapter = new TaskAdapter(this, this.course.getTasks());
+        List<Task> tasks = this.course.getTasks();
+        this.taskAdapter = new TaskAdapter(this, tasks);
         recyclerView.setAdapter(taskAdapter);
         EditText taskEnterField = findViewById(R.id.edit_text_add_task);
         ImageButton confirmationButton = findViewById(R.id.add_task_button);

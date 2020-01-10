@@ -21,12 +21,12 @@ class CourseDataAccessImpl extends ParentDataAccessImpl implements CourseDataAcc
     private static final String TAG = CourseDataAccess.class.getName();
 
     private IdentityMapper<Section> sectionCache;
-    //private IdentityMapper<Task> taskCache;
+    private IdentityMapper<Task> taskCache;
 
     private CourseDataAccessImpl() {
         super();
         this.sectionCache = new IdentityMapper<>();
-        //this.taskCache = new IdentityMapper<>();
+        this.taskCache = new IdentityMapper<>();
     }
 
     public static CourseDataAccess getInstance() {
@@ -98,13 +98,13 @@ class CourseDataAccessImpl extends ParentDataAccessImpl implements CourseDataAcc
 
     @Override
     public List<Task> getTasks(Identifiable course) throws DataKeyNotFoundException {
-        /*List<Task> tasks = this.taskCache.get(course);
+        List<Task> tasks = this.taskCache.get(course);
         if (tasks == null) {
             tasks = this.getTasksFromDB(course);
             this.taskCache.add(course, tasks);
-        }*/
-        //return tasks;
-        return getTasksFromDB(course);
+        }
+        Log.d(TAG, "tasks in idMap: " + this.taskCache.get(course));
+        return tasks;
     }
 
     private List<Task> getTasksFromDB(Identifiable course) {
@@ -128,7 +128,8 @@ class CourseDataAccessImpl extends ParentDataAccessImpl implements CourseDataAcc
     @Override
     public void addTask(Identifiable course, Task task) throws DataKeyNotFoundException {
         this.addTaskToDB(course, task);
-        //this.taskCache.addElement(course, task);
+        this.taskCache.addElement(course, task);
+        Log.d(TAG, "tasks in idMap: " + this.taskCache.get(course));
     }
 
     private void addTaskToDB(Identifiable course, Task task) {
@@ -162,6 +163,8 @@ class CourseDataAccessImpl extends ParentDataAccessImpl implements CourseDataAcc
         this.database.delete(TaskTable.TABLE_NAME,
                 TaskTable.COLUMN_ID +
                         "=?", new String[]{task.getID()});
-        //this.taskCache.removeElement(course, task);
+        this.taskCache.removeElement(course, task);
+        Log.d(TAG, "removed task");
+        Log.d(TAG, "tasks in idMap: " + this.taskCache.get(course));
     }
 }

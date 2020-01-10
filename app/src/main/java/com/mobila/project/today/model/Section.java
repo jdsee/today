@@ -17,13 +17,13 @@ public class Section implements Identifiable {
     private final String ID;
     private String title;
     private String lecturer;
-    private List<Lecture> lectures;
+//    private List<Lecture> lectures;
 
     public Section(String ID, String title, String lecturer) {
         this.ID = ID;
         this.title = title;
         this.lecturer = lecturer;
-        this.lectures = null;
+//        this.lectures = null;
 
         OrganizerDataProvider dataProvider = OrganizerDataProvider.getInstance();
         this.dataAccess = dataProvider.getSectionDataAccess();
@@ -64,28 +64,29 @@ public class Section implements Identifiable {
     }
 
     private void initLectures() {
-        this.lectures = this.dataAccess.getLectures(this);
+//        this.lectures = this.dataAccess.getLectures(this);
     }
 
     public List<Lecture> getLectures() throws DataKeyNotFoundException {
-        if (this.lectures == null)
-            this.initLectures();
-        return this.lectures;
+//        if (this.lectures == null)
+//            this.initLectures();
+//        return this.lectures;
+        return this.dataAccess.getLectures(this);
     }
 
 
     public void addLecture(Lecture lecture) throws DataKeyNotFoundException {
         this.dataAccess.addLecture(this, lecture);
-        if (this.lectures == null)
-            this.initLectures();
-        else this.lectures.add(lecture);
+//        if (this.lectures == null)
+//            this.initLectures();
+//        else this.lectures.add(lecture);
     }
 
 
     public void removeLecture(Lecture lecture) throws DataKeyNotFoundException {
         this.dataAccess.removeLecture(this, lecture);
-        if (this.lectures != null)
-            this.lectures.remove(lecture);
+//        if (this.lectures != null)
+//            this.lectures.remove(lecture);
     }
 
 

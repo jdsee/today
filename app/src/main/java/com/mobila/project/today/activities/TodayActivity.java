@@ -24,6 +24,7 @@ import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Semester;
 import com.mobila.project.today.activities.adapters.CourseAdapter;
 import com.mobila.project.today.model.Student;
+import com.mobila.project.today.model.Task;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -51,6 +52,7 @@ public class TodayActivity extends DatabaseConnectionActivity
 
     private Student student;
     private TaskAdapter taskAdapter;
+    private List<Task> tasks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +62,7 @@ public class TodayActivity extends DatabaseConnectionActivity
 
         this.student = new Student();
         this.semesters = student.getAllSemesters();
+        this.tasks = student.getAllTasks();
 
         initTaskView();
         initSemesterView();
@@ -70,7 +73,13 @@ public class TodayActivity extends DatabaseConnectionActivity
     @Override
     protected void onResume() {
         super.onResume();
-        this.semesters = student.getAllSemesters();
+//        this.semesters = student.getAllSemesters();
+        this.onDataSetChanged();
+    }
+
+    private void onDataSetChanged() {
+        this.tasks.clear();
+        this.tasks.addAll(this.student.getAllTasks());
         this.taskAdapter.notifyDataSetChanged();
     }
 
@@ -97,7 +106,7 @@ public class TodayActivity extends DatabaseConnectionActivity
     private void initTaskView() {
         RecyclerView recyclerView = findViewById(R.id.rv_course_tasks);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        this.taskAdapter = new TaskAdapter(this, student.getAllTasks());
+        this.taskAdapter = new TaskAdapter(this, this.tasks);
         recyclerView.setAdapter(taskAdapter);
         EditText taskEnterField = findViewById(R.id.edit_text_add_task);
         ImageButton confirmationButton = findViewById(R.id.add_task_button);
@@ -107,7 +116,7 @@ public class TodayActivity extends DatabaseConnectionActivity
 
     private void initCourseView() {
         RecyclerView courseRecyclerView = findViewById(R.id.recycler_view_courses);
-        if (!semesters.isEmpty() && this.currentSemester >= 0) {
+        if (!semesters.isEmpty()) {
             this.courseAdapter = new CourseAdapter(this, semesters.get(currentSemester));
             courseRecyclerView.setAdapter(courseAdapter);
             courseRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -149,14 +158,13 @@ public class TodayActivity extends DatabaseConnectionActivity
         } else if (semesters.isEmpty()) {
             goForwardButton.setImageResource(R.drawable.baseline_add_24);
             showAddCourseButton(false);
-        }
-        else {
+        } else {
             goForwardButton.setImageResource(R.drawable.baseline_arrow_back_ios_24);
             showAddCourseButton(true);
         }
         if (currentSemester <= 0) {
             goBackwardsButton.setImageResource(R.drawable.transparent_placeholder);
-            if (currentSemester<0)showAddCourseButton(false);
+            if (currentSemester < 0) showAddCourseButton(false);
         } else {
             goBackwardsButton.setImageResource(R.drawable.baseline_arrow_back_ios_24);
             showAddCourseButton(true);
@@ -170,7 +178,7 @@ public class TodayActivity extends DatabaseConnectionActivity
     }
 
     private void setSemester() {
-        if (!semesters.isEmpty()) {
+        if (!semesters.isEmpty() && currentSemester >= 0) {
             try {
                 semesterView.setText(String.format(Locale.getDefault(),
                         "Semester %d", semesters.get(currentSemester).getSemesterNr()));
@@ -246,6 +254,7 @@ public class TodayActivity extends DatabaseConnectionActivity
             }
             this.setSemester();
             showAppropriateSemesterButtons();
+            this.onDataSetChanged();
         }
     }
 

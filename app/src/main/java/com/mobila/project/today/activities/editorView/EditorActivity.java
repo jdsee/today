@@ -41,6 +41,7 @@ import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Note;
 import com.mobila.project.today.model.Section;
 import com.mobila.project.today.model.Lecture;
+import com.mobila.project.today.model.Task;
 import com.mobila.project.today.model.dataProviding.dataAccess.OrganizerDataProvider;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
@@ -96,7 +97,6 @@ public class EditorActivity extends DatabaseConnectionActivity
         this.section = lecture.getSection();
         this.attachments = lecture.getAttachments();
 
-
         setupViews();
 
         this.contentEditText = findViewById(R.id.editor_content);
@@ -117,6 +117,11 @@ public class EditorActivity extends DatabaseConnectionActivity
     protected void onPause() {
         this.saveContent();
         super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     /**
@@ -357,6 +362,7 @@ public class EditorActivity extends DatabaseConnectionActivity
         OrganizerDataProvider.getInstance().openDbConnection(this);
         Uri uri = attachmentControl.onActivityResult(requestCode, resultCode, data);
         this.addFileToAttachments(uri);
+        OrganizerDataProvider.getInstance().closeDbConnection();
         updateFileNumber();
     }
 
@@ -482,7 +488,8 @@ public class EditorActivity extends DatabaseConnectionActivity
         Course course = this.lecture.getSection().getCourse();
         RecyclerView recyclerView = findViewById(R.id.rv_course_tasks);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        TaskAdapter taskAdapter = new TaskAdapter(this, course.getTasks());
+        List<Task> tasks = course.getTasks();
+        TaskAdapter taskAdapter = new TaskAdapter(this, tasks);
         recyclerView.setAdapter(taskAdapter);
         EditText taskEnterField = findViewById(R.id.edit_text_add_task);
         ImageButton confirmationButton = findViewById(R.id.add_task_button);

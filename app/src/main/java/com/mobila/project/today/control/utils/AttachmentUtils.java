@@ -35,7 +35,7 @@ public interface AttachmentUtils {
      * @return the Mime-Type of the file
      */
     static String getMimeType(Context context, Uri uri) {
-        String mimeType;
+        /*String mimeType;
         if (Objects.requireNonNull(uri.getScheme()).equals(ContentResolver.SCHEME_CONTENT)) {
             ContentResolver cr = context.getContentResolver();
             mimeType = cr.getType(uri);
@@ -45,14 +45,14 @@ public interface AttachmentUtils {
             mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
                     fileExtension.toLowerCase());
         }
-        return mimeType;
-       /* ContentResolver cR = context.getContentResolver();
+        return mimeType;*/
+        ContentResolver cR = context.getContentResolver();
         MimeTypeMap mime = MimeTypeMap.getSingleton();
         String type = mime.getExtensionFromMimeType(cR.getType(uri));
 
         System.out.println("FILE URI: " + uri);
 
-        return cR.getType(uri);*/
+        return cR.getType(uri);
     }
 
 
@@ -92,50 +92,52 @@ public interface AttachmentUtils {
      * @return a Drawable containing a symbolic icon
      */
     static Drawable getDrawable(Context context, String mimeType) {
-        switch (mimeType) {
-            case "application/pdf":
-                return ContextCompat.getDrawable(context, R.drawable.file_format_pdf);
-            case "image/jpeg":
-                return ContextCompat.getDrawable(context, R.drawable.file_format_jpg);
-            case "audio/mpeg":
-                return ContextCompat.getDrawable(context, R.drawable.file_format_mp3);
-            case "application/zip":
-                return ContextCompat.getDrawable(context, R.drawable.file_format_zip);
-            case "text/plain":
-                return ContextCompat.getDrawable(context, R.drawable.file_format_txt);
-            case "application/msword":
-                return ContextCompat.getDrawable(context, R.drawable.file_format_doc);
-            case "application/x-msdos-program":
-                return ContextCompat.getDrawable(context, R.drawable.file_format_exe);
-            case "application/x-flac":
-                return ContextCompat.getDrawable(context, R.drawable.file_format_flac);
-            case "image/gif":
-                return ContextCompat.getDrawable(context, R.drawable.file_format_gif);
-            case "text/html":
-                return ContextCompat.getDrawable(context, R.drawable.file_format_html);
-            case "application/x-iso9660-image":
-                return ContextCompat.getDrawable(context, R.drawable.file_format_iso);
-            case "application/x-javascript":
-                return ContextCompat.getDrawable(context, R.drawable.file_format_js);
-            case "video/mp4":
-                return ContextCompat.getDrawable(context, R.drawable.file_format_mp4);
-            case "application/vnd.ms-powerpoint":
-                return ContextCompat.getDrawable(context, R.drawable.file_format_ppt);
-            case "image/x-photoshop":
-                return ContextCompat.getDrawable(context, R.drawable.file_format_psd);
-            case "application/rar":
-                return ContextCompat.getDrawable(context, R.drawable.file_format_rar);
-            case "image/svg+xml":
-                return ContextCompat.getDrawable(context, R.drawable.file_format_svg);
-            case "audio/x-wav":
-                return ContextCompat.getDrawable(context, R.drawable.file_format_wav);
-            case "audio/x-ms-wma":
-                return ContextCompat.getDrawable(context, R.drawable.file_format_wma);
-            case "application/xml":
-                return ContextCompat.getDrawable(context, R.drawable.file_format_xml);
-            default:
-                return ContextCompat.getDrawable(context, R.drawable.file_format_unknown);
-        }
+        if (mimeType != null)
+            switch (mimeType) {
+                case "application/pdf":
+                    return ContextCompat.getDrawable(context, R.drawable.file_format_pdf);
+                case "image/jpeg":
+                    return ContextCompat.getDrawable(context, R.drawable.file_format_jpg);
+                case "audio/mpeg":
+                    return ContextCompat.getDrawable(context, R.drawable.file_format_mp3);
+                case "application/zip":
+                    return ContextCompat.getDrawable(context, R.drawable.file_format_zip);
+                case "text/plain":
+                    return ContextCompat.getDrawable(context, R.drawable.file_format_txt);
+                case "application/msword":
+                    return ContextCompat.getDrawable(context, R.drawable.file_format_doc);
+                case "application/x-msdos-program":
+                    return ContextCompat.getDrawable(context, R.drawable.file_format_exe);
+                case "application/x-flac":
+                    return ContextCompat.getDrawable(context, R.drawable.file_format_flac);
+                case "image/gif":
+                    return ContextCompat.getDrawable(context, R.drawable.file_format_gif);
+                case "text/html":
+                    return ContextCompat.getDrawable(context, R.drawable.file_format_html);
+                case "application/x-iso9660-image":
+                    return ContextCompat.getDrawable(context, R.drawable.file_format_iso);
+                case "application/x-javascript":
+                    return ContextCompat.getDrawable(context, R.drawable.file_format_js);
+                case "video/mp4":
+                    return ContextCompat.getDrawable(context, R.drawable.file_format_mp4);
+                case "application/vnd.ms-powerpoint":
+                    return ContextCompat.getDrawable(context, R.drawable.file_format_ppt);
+                case "image/x-photoshop":
+                    return ContextCompat.getDrawable(context, R.drawable.file_format_psd);
+                case "application/rar":
+                    return ContextCompat.getDrawable(context, R.drawable.file_format_rar);
+                case "image/svg+xml":
+                    return ContextCompat.getDrawable(context, R.drawable.file_format_svg);
+                case "audio/x-wav":
+                    return ContextCompat.getDrawable(context, R.drawable.file_format_wav);
+                case "audio/x-ms-wma":
+                    return ContextCompat.getDrawable(context, R.drawable.file_format_wma);
+                case "application/xml":
+                    return ContextCompat.getDrawable(context, R.drawable.file_format_xml);
+                default:
+//                    return ContextCompat.getDrawable(context, R.drawable.file_format_unknown);
+            }
+        return ContextCompat.getDrawable(context, R.drawable.file_format_unknown);
     }
 
     /**

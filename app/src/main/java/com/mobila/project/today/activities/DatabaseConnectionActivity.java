@@ -13,7 +13,8 @@ public class DatabaseConnectionActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.organizerDataProvider.openDbConnection(this);
+        if (!this.organizerDataProvider.isOpen())
+            this.organizerDataProvider.openDbConnection(this);
     }
 
     @Override
@@ -22,9 +23,16 @@ public class DatabaseConnectionActivity extends AppCompatActivity {
         this.organizerDataProvider.closeDbConnection();
     }
 
+    /*@Override
+    protected void onStop() {
+        super.onStop();
+        this.organizerDataProvider.closeDbConnection();
+    }*/
+
     @Override
     protected void onResume() {
         super.onResume();
-        this.organizerDataProvider.openDbConnection(this);
+        if (!this.organizerDataProvider.isOpen())
+            this.organizerDataProvider.openDbConnection(this);
     }
 }

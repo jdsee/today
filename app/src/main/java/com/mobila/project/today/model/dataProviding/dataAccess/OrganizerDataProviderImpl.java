@@ -17,6 +17,7 @@ class OrganizerDataProviderImpl implements OrganizerDataProvider {
     private DBHelper dbHelper;
 
     private final LectureDataAccess lectureAccess;
+    private SQLiteDatabase database;
 
     static OrganizerDataProviderImpl getInstance() {
         if (instance == null)
@@ -52,6 +53,11 @@ class OrganizerDataProviderImpl implements OrganizerDataProvider {
     public void closeDbConnection() {
         if (this.dbHelper != null)
             this.dbHelper.close();
+    }
+
+    @Override
+    public boolean isOpen() {
+        return this.database != null && this.database.isOpen();
     }
 
     @Override

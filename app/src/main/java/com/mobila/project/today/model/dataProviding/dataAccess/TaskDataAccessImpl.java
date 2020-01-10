@@ -26,12 +26,6 @@ class TaskDataAccessImpl extends ParentDataAccessImpl implements TaskDataAccess 
     }
 
     @Override
-    public Course getCourse(){
-//        this.database.query()
-        return null;
-    }
-
-    @Override
     public void setDeadline(Identifiable task, Date date) throws DataKeyNotFoundException {
         ContentValues values = new ContentValues();
         values.put(TaskTable.COLUMN_DEADLINE, date.getTime());

@@ -26,4 +26,6 @@ public interface OrganizerDataProvider {
     AttachmentDataAccess getAttachmentDataAccess();
 
     TaskDataAccess getTaskDataAccess();
+
+    boolean isOpen();
 }

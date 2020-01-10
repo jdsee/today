@@ -23,13 +23,13 @@ public class Course implements Identifiable, Parcelable {
 
     private final String ID;
     private String title;
-    private List<Task> tasks;
+//    private List<Task> tasks;
     private List<Section> sections;
 
     public Course(String ID, String title) {
         this.ID = ID;
         this.title = title;
-        this.tasks = null;
+//        this.tasks = null;
         this.sections = null;
 
         OrganizerDataProvider dataProvider = OrganizerDataProvider.getInstance();
@@ -130,21 +130,22 @@ public class Course implements Identifiable, Parcelable {
      * @return a list with all tasks contained in this course
      */
     public List<Task> getTasks() throws DataKeyNotFoundException {
-        if (this.tasks == null)
-            this.tasks = this.dataAccess.getTasks(this);
-        return this.tasks;
+//        if (this.tasks == null)
+//            this.tasks = this.dataAccess.getTasks(this);
+//        return this.tasks;
+        return this.dataAccess.getTasks(this);
     }
 
     public void refresh(){
-        this.tasks = this.dataAccess.getTasks(this);
+//        this.tasks = this.dataAccess.getTasks(this);
     }
 
     /**
      * Adds a task to this course.
      */
     public void addTask(Task task) throws DataKeyNotFoundException {
-        if (this.tasks != null)
-            this.tasks.add(task);
+//        if (this.tasks != null)
+//            this.tasks.add(task);
         this.dataAccess.addTask(this, task);
     }
 
@@ -152,8 +153,8 @@ public class Course implements Identifiable, Parcelable {
      * Removes a task contained in this course.
      */
     public void removeTask(Task task) throws DataKeyNotFoundException {
-        if (this.tasks != null)
-            this.tasks.remove(task);
+//        if (this.tasks != null)
+//            this.tasks.remove(task);
         this.dataAccess.removeTask(this, task);
     }
 

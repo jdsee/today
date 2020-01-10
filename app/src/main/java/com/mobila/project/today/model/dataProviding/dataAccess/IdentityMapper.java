@@ -40,9 +40,11 @@ class IdentityMapper<T extends Identifiable> {
      * @param element the element that is to be added
      */
     public void addElement(Identifiable key, T element) {
-        List<T> elements = this.map.get(key);
-        if (elements != null && !elements.contains(element))
-            elements.add(element);
+        List<T> entries = this.map.get(key.getID());
+        if (entries != null && !entries.contains(element)) {
+            entries.add(element);
+//            this.map.put(key.getID(), entries);
+        }
     }
 
     /**
@@ -76,8 +78,10 @@ class IdentityMapper<T extends Identifiable> {
      * @param element the element that is to be removed
      */
     public void removeElement(Identifiable key, T element) {
-        List<T> elements = this.map.get(key);
-        if (elements != null)
-            elements.remove(element);
+        List<T> entries = this.map.get(key.getID());
+        if (entries != null) {
+            entries.remove(element);
+//            this.map.put(key.getID(), entries);
+        }
     }
 }
