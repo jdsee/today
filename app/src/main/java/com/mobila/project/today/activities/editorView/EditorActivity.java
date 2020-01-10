@@ -357,12 +357,9 @@ public class EditorActivity extends DatabaseConnectionActivity
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //TODO Needs to avoid contentEditText provider all together after SQL db is established to make contentEditText provider obsolete
         super.onActivityResult(requestCode, resultCode, data);
-        OrganizerDataProvider.getInstance().openDbConnection(this);
         Uri uri = attachmentControl.onActivityResult(requestCode, resultCode, data);
         this.addFileToAttachments(uri);
-        OrganizerDataProvider.getInstance().closeDbConnection();
         updateFileNumber();
     }
 
