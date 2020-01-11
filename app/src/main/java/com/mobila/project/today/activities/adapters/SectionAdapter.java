@@ -4,7 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -31,7 +31,7 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.ViewHold
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        ImageButton btnAddLecture;
+        Button btnAddLecture;
         RelativeLayout rlSectionItem;
         RecyclerView rvLectures;
         TextView tvSectionName;

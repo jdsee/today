@@ -27,7 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txt_lecture_title"
-        android:layout_marginLeft="4dp"
+        android:layout_marginStart="4dp"
         android:layout_toEndOf="@+id/txt_lecture_spacer"
         android:text="@string/error_message" />
 
