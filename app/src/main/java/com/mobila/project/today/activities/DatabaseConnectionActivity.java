@@ -13,27 +13,22 @@ public class DatabaseConnectionActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         openDBConnectionIfNeccessary();
+        super.onCreate(savedInstanceState);
     }
 
     @Override
     protected void onPause() {
-        super.onPause();
-        if (organizerDataProvider.isOpen())
+        if (organizerDataProvider.isOpen()) {
             this.organizerDataProvider.closeDbConnection();
+        }
+        super.onPause();
     }
-
-    /*@Override
-    protected void onStop() {
-        super.onStop();
-        this.organizerDataProvider.closeDbConnection();
-    }*/
 
     @Override
     protected void onResume() {
-        super.onResume();
         openDBConnectionIfNeccessary();
+        super.onResume();
     }
 
     @Override

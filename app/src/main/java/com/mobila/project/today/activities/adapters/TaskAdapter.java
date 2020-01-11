@@ -49,6 +49,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         holder.taskText.setText(tasks.get(position).getContent());
         holder.checkBox.setOnCheckedChangeListener((view, isChecked) ->
             this.onCheckBoxClicked(holder, isChecked, position));
+        holder.checkBox.setChecked(false);
     }
 
     private void onCheckBoxClicked(TaskAdapter.ViewHolder holder, boolean isChecked, int position) {
