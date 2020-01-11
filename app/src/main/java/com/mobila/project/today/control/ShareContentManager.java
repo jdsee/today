@@ -3,7 +3,6 @@ package com.mobila.project.today.control;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Environment;
 import android.text.Html;
 import android.text.Spannable;
 import android.util.Log;
@@ -12,20 +11,15 @@ import android.widget.Toast;
 import androidx.core.content.FileProvider;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 
-import static android.content.Context.MODE_PRIVATE;
+public class ShareContentManager {
 
-public class CommunicationController {
-
-    private static final String TAG = CommunicationController.class.getSimpleName();
+    private static final String TAG = ShareContentManager.class.getSimpleName();
     private final Context context;
 
-    public CommunicationController(Context context) {
+    public ShareContentManager(Context context) {
         this.context = context;
     }
 

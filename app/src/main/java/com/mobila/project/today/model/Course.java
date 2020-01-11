@@ -99,9 +99,10 @@ public class Course implements Identifiable, Parcelable {
      * @return a list with all sections contained in this course
      */
     public List<Section> getSections() throws DataKeyNotFoundException {
-        if (this.sections == null)
-            this.sections = this.dataAccess.getSections(this);
-        return this.sections;
+//        if (this.sections == null)
+//            this.sections = this.dataAccess.getSections(this);
+//        return this.sections;
+        return this.dataAccess.getSections(this);
     }
 
     /**
@@ -110,8 +111,8 @@ public class Course implements Identifiable, Parcelable {
      * @param section section to add
      */
     public void addSection(Section section) throws DataKeyNotFoundException {
-        if (this.sections != null)
-            this.sections.add(section);
+//        if (this.sections != null)
+//            this.sections.add(section);
         this.dataAccess.addSection(this, section);
     }
 
@@ -119,8 +120,8 @@ public class Course implements Identifiable, Parcelable {
      * Removes a section of this course.
      */
     public void removeSection(Section section) throws DataKeyNotFoundException {
-        if (this.sections != null)
-            this.sections.remove(section);
+//        if (this.sections != null)
+//            this.sections.remove(section);
         this.dataAccess.removeSection(this, section);
     }
 
@@ -134,10 +135,6 @@ public class Course implements Identifiable, Parcelable {
 //            this.tasks = this.dataAccess.getTasks(this);
 //        return this.tasks;
         return this.dataAccess.getTasks(this);
-    }
-
-    public void refresh(){
-//        this.tasks = this.dataAccess.getTasks(this);
     }
 
     /**

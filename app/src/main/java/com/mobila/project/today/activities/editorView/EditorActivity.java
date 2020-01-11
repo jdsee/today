@@ -32,7 +32,7 @@ import com.mobila.project.today.activities.editorView.listeners.EditorKeyboardEv
 import com.mobila.project.today.activities.editorView.listeners.TitleOnEditorActionListener;
 import com.mobila.project.today.activities.editorView.listeners.noteFocusChangeListener;
 import com.mobila.project.today.control.AttachmentControl;
-import com.mobila.project.today.control.CommunicationController;
+import com.mobila.project.today.control.ShareContentManager;
 import com.mobila.project.today.control.NoteControl;
 import com.mobila.project.today.control.TaskController;
 import com.mobila.project.today.control.utils.AttachmentUtils;
@@ -43,7 +43,6 @@ import com.mobila.project.today.model.Note;
 import com.mobila.project.today.model.Section;
 import com.mobila.project.today.model.Lecture;
 import com.mobila.project.today.model.Task;
-import com.mobila.project.today.model.dataProviding.dataAccess.OrganizerDataProvider;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 
@@ -582,7 +581,7 @@ public class EditorActivity extends DatabaseConnectionActivity
     }
 
     public void onShareLectureClicked(MenuItem item) {
-        CommunicationController communicator = new CommunicationController(this);
+        ShareContentManager communicator = new ShareContentManager(this);
         Spannable spannable = this.contentEditText.getText();
         String noteTitle = this.titleEditText.getText().toString();
         communicator.sendSpannable(spannable, noteTitle);

@@ -9,6 +9,7 @@ import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.Assert.*;
 
@@ -19,6 +20,8 @@ public class IdentityMapperTest {
     private List<Course> courses2;
     private Semester sem1;
     private Semester sem2;
+    private Course course;
+    private Course identicalCourse;
 
     @Before
     public void setup() {
@@ -30,12 +33,22 @@ public class IdentityMapperTest {
             this.courses2.add(Mockito.mock(Course.class));
         }
 
+        String identicalId = "111";
+        this.course = this.getMockedCourse(identicalId);
+        this.identicalCourse = this.getMockedCourse(identicalId);
+
         this.sem1 = Mockito.mock(Semester.class);
         this.sem2 = Mockito.mock(Semester.class);
         Mockito.when(this.sem1.getID()).thenReturn("sem1");
         Mockito.when(this.sem2.getID()).thenReturn("sem2");
 
         this.identityMapper = new IdentityMapper<>();
+    }
+
+    private Course getMockedCourse(String id) {
+        Course mockedCourse = Mockito.mock(Course.class);
+        Mockito.when(mockedCourse.getID()).thenReturn(id);
+        return mockedCourse;
     }
 
     @Test
@@ -118,4 +131,62 @@ public class IdentityMapperTest {
     public void overwriteEntryWithNullParam_Test2() {
         this.identityMapper.overwrite(this.sem1, null);
     }
+
+    @Test
+    public void addElement_Test() {
+        //given
+        this.identityMapper.add(sem1, courses1);
+        this.identityMapper.add(sem2, courses2);
+        int expectedSize = this.courses1.size() + 1;
+        //when
+        this.identityMapper.addElement(sem1, this.course);
+        //then
+        assertEquals(expectedSize, this.courses1.size());
+        assertTrue(this.identityMapper.get(sem1).contains(this.course));
+        assertEquals(expectedSize, this.identityMapper.get(sem1).size());
+
+    }
+
+    @Test
+    public void addElementWithSameId_Test() {
+        //given
+        this.identityMapper.add(sem1, courses1);
+        this.identityMapper.add(sem2, courses2);
+        int expectedSize = this.courses1.size() + 1;
+        //when
+        this.identityMapper.addElement(sem1, this.course);
+        this.identityMapper.addElement(sem1, identicalCourse);
+        //then
+        assertEquals(expectedSize, this.courses1.size());
+        assertEquals(expectedSize, this.identityMapper.get(sem1).size());
+
+        assertTrue(this.identityMapper.get(sem1).contains(this.course));
+        List<Course> result = this.identityMapper.get(sem1);
+        assertTrue(result.stream()
+                .filter(Objects::nonNull)
+                .anyMatch(c -> c.getID().equals(identicalCourse.getID())));
+        //TODO where does this NullPointerException comes from?
+
+        Mockito.verifyZeroInteractions(this.courses2.get(0));
+    }
+
+    @Test
+    public void removeElement() {
+        //given
+        this.courses1.add(this.course);
+        this.identityMapper.add(sem1, courses1);
+        this.identityMapper.add(sem2, courses2);
+        int expectedSize = courses1.size() - 1;
+        //when
+        this.identityMapper.removeElement(sem1, this.identicalCourse);
+        //then
+        assertEquals(expectedSize, this.identityMapper.get(sem1).size());
+        assertEquals(expectedSize, this.courses1.size());
+
+        assertFalse(this.identityMapper.get(sem1).contains(course));
+
+        Mockito.verifyZeroInteractions(this.courses2.get(0));
+    }
+
+
 }
