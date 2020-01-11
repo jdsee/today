@@ -79,10 +79,10 @@
                 <data android:mimeType="*/*" />
                 <!-- Work around for opening files -->
                 <data android:host="*" />
-                <data android:pathPattern=".*\\.com.mobila.project.today" />
-                <data android:pathPattern=".*\\..*\\.com.mobila.project.today" />
-                <data android:pathPattern=".*\\..*\\..*\\.com.mobila.project.today" />
-                <data android:pathPattern=".*\\..*\\..*\\..*\\.com.mobila.project.today" />
+                <data android:pathPattern=".*\\.today" />
+                <data android:pathPattern=".*\\..*\\.today" />
+                <data android:pathPattern=".*\\..*\\..*\\.today" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.today" />
             </intent-filter>
         </activity>
         <activity android:name=".activities.DatabaseConnectionActivity" />
