@@ -6,7 +6,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.text.Html;
 import android.text.Spannable;
+import android.text.SpannableString;
 import android.util.Log;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -46,6 +49,10 @@ import com.mobila.project.today.model.Task;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
@@ -93,10 +100,47 @@ public class EditorActivity extends DatabaseConnectionActivity
         //get Note from Intent
 
         this.lecture = getIntent().getParcelableExtra(Lecture.INTENT_EXTRA_CODE);
-        this.note = Objects.requireNonNull(lecture).getNote();
+        if (lecture!=null)this.note = Objects.requireNonNull(lecture).getNote();
+        else {
+            Intent intent = getIntent();
+            String action = intent.getAction();
+            String type = intent.getType();
 
-        this.section = lecture.getSection();
-        this.attachments = lecture.getAttachments();
+            if (Intent.ACTION_VIEW.equals(action) && type != null){
+                Uri uri = intent.getData();
+
+                InputStream fileInputStream;
+                try {
+                    fileInputStream = this.getContentResolver().openInputStream(uri);
+                    String destinationFileName = AttachmentUtils.getFileName(this, uri);
+                    File destinationFile = new File(this.getExternalFilesDir(
+                            Environment.DIRECTORY_DOCUMENTS), destinationFileName);
+
+                    AttachmentUtils.copy(fileInputStream, destinationFile);
+
+
+                    FileReader fileReader = new FileReader(destinationFile);
+                    StringBuilder stringBuffer = new StringBuilder();
+                    int numCharsRead;
+                    char[] charArray = new char[1024];
+                    while ((numCharsRead = fileReader.read(charArray))>0){
+                        stringBuffer.append(charArray, 0, numCharsRead);
+                    }
+                    fileReader.close();
+                    String content = stringBuffer.toString();
+                    content = stringBuffer.toString();
+                    Spannable spannable = new SpannableString(Html.fromHtml(content, Html.FROM_HTML_MODE_LEGACY));
+                    this.note = new Note();
+                    this.note.setTitle("TEST");
+                    this.note.setContent(spannable);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        //this.section = lecture.getSection();
+        //this.attachments = lecture.getAttachments();
 
         setupViews();
 
@@ -144,8 +188,8 @@ public class EditorActivity extends DatabaseConnectionActivity
     private void setupViews() {
         setContentView(R.layout.activity_editor);
         setSupportActionBar(findViewById(R.id.editor_toolbar));
-        initAttachmentsView();
-        initTaskView();
+        //initAttachmentsView();
+        //initTaskView();
     }
 
     /**
@@ -183,12 +227,12 @@ public class EditorActivity extends DatabaseConnectionActivity
      */
     private void setupContent() {
         //Todo Title just needs to be preset if no other has been set
-        this.titleEditText.setHint("Lecture " + this.lecture.getLectureNr());
+        //this.titleEditText.setHint("Lecture " + this.lecture.getLectureNr());
         TextView textView = findViewById(R.id.editor_subtitle);
         SimpleDateFormat lectureDate =
                 new SimpleDateFormat(DateUtils.DAY_DATE_FORMAT, Locale.getDefault());
-        textView.setText(String.format(
-                "%s  -  %s", lectureDate.format(lecture.getDate()), this.section.getTitle()));
+        //textView.setText(String.format(
+         //       "%s  -  %s", lectureDate.format(lecture.getDate()), this.section.getTitle()));
         Objects.requireNonNull(getSupportActionBar()).setTitle("");
     }
 
@@ -433,8 +477,8 @@ public class EditorActivity extends DatabaseConnectionActivity
      * Method for closing the attachment-view
      */
     public void closeAttachments() {
-        fileContainer.setVisibility(View.GONE);
-        displayFileNumber();
+        //fileContainer.setVisibility(View.GONE);
+        //displayFileNumber();
     }
 
     /**
