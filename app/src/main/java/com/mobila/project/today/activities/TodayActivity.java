@@ -77,6 +77,12 @@ public class TodayActivity extends DatabaseConnectionActivity
         this.onDataSetChanged();
     }
 
+    @Override
+    protected void onPause() {
+        this.taskAdapter.removeCheckedTasks();
+        super.onPause();
+    }
+
     private void onDataSetChanged() {
         this.tasks.clear();
         this.tasks.addAll(this.student.getAllTasks());

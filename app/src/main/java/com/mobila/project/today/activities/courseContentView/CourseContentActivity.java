@@ -73,6 +73,12 @@ public class CourseContentActivity extends DatabaseConnectionActivity
 
     }
 
+    @Override
+    protected void onPause() {
+        this.taskAdapter.removeCheckedTasks();
+        super.onPause();
+    }
+
     private void initTaskView() {
         RecyclerView recyclerView = findViewById(R.id.rv_course_tasks);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -81,7 +87,7 @@ public class CourseContentActivity extends DatabaseConnectionActivity
         recyclerView.setAdapter(taskAdapter);
         EditText taskEnterField = findViewById(R.id.edit_text_add_task);
         ImageButton confirmationButton = findViewById(R.id.add_task_button);
-        new TaskController(taskEnterField, confirmationButton, this.course, taskAdapter);
+        new TaskController(this, taskEnterField, confirmationButton, this.course, taskAdapter);
     }
 
     private void initSectionView() {

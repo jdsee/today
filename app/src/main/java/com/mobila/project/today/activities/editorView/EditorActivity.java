@@ -75,6 +75,7 @@ public class EditorActivity extends DatabaseConnectionActivity
     private Note note;
 
     private AttachmentAdapter attachmentAdapter;
+    private TaskAdapter taskAdapter;
 
     /**
      * Method for creating this activity.
@@ -115,6 +116,7 @@ public class EditorActivity extends DatabaseConnectionActivity
 
     @Override
     protected void onPause() {
+        this.taskAdapter.removeCheckedTasks();
         this.saveContent();
         super.onPause();
     }
@@ -502,11 +504,11 @@ public class EditorActivity extends DatabaseConnectionActivity
         RecyclerView recyclerView = findViewById(R.id.rv_course_tasks);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         List<Task> tasks = course.getTasks();
-        TaskAdapter taskAdapter = new TaskAdapter(this, tasks);
+        this.taskAdapter = new TaskAdapter(this, tasks);
         recyclerView.setAdapter(taskAdapter);
         EditText taskEnterField = findViewById(R.id.edit_text_add_task);
         ImageButton confirmationButton = findViewById(R.id.add_task_button);
-        new TaskController(taskEnterField, confirmationButton, course, taskAdapter);
+        new TaskController(this, taskEnterField, confirmationButton, course, taskAdapter);
     }
 
     /**
