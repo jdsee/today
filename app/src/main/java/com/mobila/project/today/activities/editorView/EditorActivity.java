@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -38,7 +37,7 @@ import com.mobila.project.today.control.AttachmentControl;
 import com.mobila.project.today.control.ShareContentManager;
 import com.mobila.project.today.control.NoteControl;
 import com.mobila.project.today.control.TaskController;
-import com.mobila.project.today.control.utils.AttachmentUtils;
+import com.mobila.project.today.control.utils.FileUtils;
 import com.mobila.project.today.control.utils.DateUtils;
 import com.mobila.project.today.model.Attachment;
 import com.mobila.project.today.model.Course;
@@ -49,8 +48,6 @@ import com.mobila.project.today.model.Task;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -100,44 +97,8 @@ public class EditorActivity extends DatabaseConnectionActivity
         //get Note from Intent
 
         this.lecture = getIntent().getParcelableExtra(Lecture.INTENT_EXTRA_CODE);
-        if (lecture!=null)this.note = Objects.requireNonNull(lecture).getNote();
-        else {
-            Intent intent = getIntent();
-            String action = intent.getAction();
-            String type = intent.getType();
-
-            if (Intent.ACTION_VIEW.equals(action) && type != null){
-                Uri uri = intent.getData();
-
-                InputStream fileInputStream;
-                try {
-                    fileInputStream = this.getContentResolver().openInputStream(uri);
-                    String destinationFileName = AttachmentUtils.getFileName(this, uri);
-                    File destinationFile = new File(this.getExternalFilesDir(
-                            Environment.DIRECTORY_DOCUMENTS), destinationFileName);
-
-                    AttachmentUtils.copy(fileInputStream, destinationFile);
-
-
-                    FileReader fileReader = new FileReader(destinationFile);
-                    StringBuilder stringBuffer = new StringBuilder();
-                    int numCharsRead;
-                    char[] charArray = new char[1024];
-                    while ((numCharsRead = fileReader.read(charArray))>0){
-                        stringBuffer.append(charArray, 0, numCharsRead);
-                    }
-                    fileReader.close();
-                    String content = stringBuffer.toString();
-                    content = stringBuffer.toString();
-                    Spannable spannable = new SpannableString(Html.fromHtml(content, Html.FROM_HTML_MODE_LEGACY));
-                    this.note = new Note();
-                    this.note.setTitle("TEST");
-                    this.note.setContent(spannable);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+        if (lecture != null) this.note = Objects.requireNonNull(lecture).getNote();
+        else this.note = getNoteFromIntent(getIntent());
 
         //this.section = lecture.getSection();
         //this.attachments = lecture.getAttachments();
@@ -157,6 +118,31 @@ public class EditorActivity extends DatabaseConnectionActivity
         setupListeners();
         setupControls();
     }
+
+    private Note getNoteFromIntent(Intent intent) {
+        Note receivedNote = new Note();
+
+        String action = intent.getAction();
+        String type = intent.getType();
+
+        if (Intent.ACTION_VIEW.equals(action) && type != null) {
+            Uri uri = intent.getData();
+
+            InputStream fileInputStream;
+            try {
+                fileInputStream = this.getContentResolver().openInputStream(uri);
+                String fileString = ShareContentManager.convertStreamToString(fileInputStream);
+                Spannable spannable = new SpannableString(Html.fromHtml(fileString, Html.FROM_HTML_MODE_LEGACY));
+                receivedNote = new Note();
+                receivedNote.setTitle(FileUtils.getFileNameWOExtension(this, uri));
+                receivedNote.setContent(spannable);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return receivedNote;
+    }
+
 
     @Override
     protected void onPause() {
@@ -232,7 +218,7 @@ public class EditorActivity extends DatabaseConnectionActivity
         SimpleDateFormat lectureDate =
                 new SimpleDateFormat(DateUtils.DAY_DATE_FORMAT, Locale.getDefault());
         //textView.setText(String.format(
-         //       "%s  -  %s", lectureDate.format(lecture.getDate()), this.section.getTitle()));
+        //       "%s  -  %s", lectureDate.format(lecture.getDate()), this.section.getTitle()));
         Objects.requireNonNull(getSupportActionBar()).setTitle("");
     }
 
@@ -386,7 +372,7 @@ public class EditorActivity extends DatabaseConnectionActivity
             this.intentTakePhoto();
         } else {
             if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
-                Toast.makeText(this, "Camera permission is needed to add photos.", Toast.LENGTH_SHORT);
+                Toast.makeText(this, "Camera permission is needed to add photos.", Toast.LENGTH_SHORT).show();
             }
             requestPermissions(new String[]{Manifest.permission.CAMERA}, REQUEST_TAKE_PHOTO);
         }
@@ -427,7 +413,7 @@ public class EditorActivity extends DatabaseConnectionActivity
 
     public void addFileToAttachments(Uri uri) {
         if (uri != null) {
-            String fileName = AttachmentUtils.getFileName(this.getApplicationContext(), uri);
+            String fileName = FileUtils.getFileName(this.getApplicationContext(), uri);
             this.lecture.addAttachment(new Attachment(fileName, uri));
 
             this.attachmentAdapter.notifyDataSetChanged();

@@ -17,10 +17,8 @@ import android.widget.Toast;
 import androidx.core.content.ContextCompat;
 
 import com.mobila.project.today.R;
-import com.mobila.project.today.model.Attachment;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,8 +27,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
-public interface AttachmentUtils {
-    public static final String TAG = AttachmentUtils.class.getSimpleName();
+public interface FileUtils {
+    String TAG = FileUtils.class.getSimpleName();
 
     /**
      * Method for obtaining the Mime-Type of a file
@@ -89,6 +87,11 @@ public interface AttachmentUtils {
         return result;
     }
 
+    static String getFileNameWOExtension(Context context, Uri uri){
+        String fileNameWExtension = getFileName(context, uri);
+        return fileNameWExtension.substring(0, fileNameWExtension.lastIndexOf('.'));
+    }
+
     /**
      * Method for receiving a symbolic icon for a file-type
      *
@@ -139,8 +142,6 @@ public interface AttachmentUtils {
                     return ContextCompat.getDrawable(context, R.drawable.file_format_wma);
                 case "application/xml":
                     return ContextCompat.getDrawable(context, R.drawable.file_format_xml);
-                default:
-//                    return ContextCompat.getDrawable(context, R.drawable.file_format_unknown);
             }
         return ContextCompat.getDrawable(context, R.drawable.file_format_unknown);
     }

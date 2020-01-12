@@ -10,9 +10,12 @@ import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class ShareContentManager {
 
@@ -73,5 +76,22 @@ public class ShareContentManager {
             Log.d(TAG, "created new file: " + file.getAbsolutePath() + ", exists: " + file.exists());
         } catch (Exception e) {
         }
+    }
+
+    public static String convertStreamToString(InputStream is) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        StringBuilder sb = new StringBuilder();
+        String line;
+        boolean firstLine = true;
+        while ((line = reader.readLine()) != null) {
+            if(firstLine){
+                sb.append(line);
+                firstLine = false;
+            } else {
+                sb.append("\n").append(line);
+            }
+        }
+        reader.close();
+        return sb.toString();
     }
 }
