@@ -25,7 +25,7 @@
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/note_action_button"
+        android:id="@+id/tasks_open_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="32dp"
@@ -47,7 +47,7 @@
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/go_back_actionButton"
+        android:id="@+id/close_tasks_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="32dp"
@@ -85,6 +85,7 @@
             android:orientation="horizontal">
 
             <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/go_back_button"
                 android:layout_width="36dp"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
@@ -124,6 +125,7 @@
             </LinearLayout>
 
             <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/menu_button"
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
@@ -170,7 +172,7 @@
         layout="@layout/view_fileholder" />
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/note_view"
+        android:id="@+id/task_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@color/overlay_transparant"
@@ -202,10 +204,10 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <include layout="@layout/editor_font_style_chooser"/>
+    <include layout="@layout/editor_font_style_chooser" />
 
-    <include layout="@layout/editor_color_chooser"/>
+    <include layout="@layout/editor_color_chooser" />
 
-    <include layout="@layout/editor_highlighter_chooser"/>
+    <include layout="@layout/editor_highlighter_chooser" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
