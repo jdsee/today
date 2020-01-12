@@ -24,12 +24,15 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
     private Semester semester;
     private List<Course> courses;
     private Context context;
+    private RecyclerViewChangeListener rvChangeListener;
 
-    public CourseAdapter(Context context, Semester semester) {
+    public CourseAdapter(Context context, RecyclerViewChangeListener rvChangeListener, Semester semester) {
         this.courses = semester.getCourses();
         this.context = context;
         this.semester = semester;
+        this.rvChangeListener = rvChangeListener;
     }
+
 
     @NonNull
     @Override
@@ -51,6 +54,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
         holder.button.setOnClickListener(v -> {
             semester.removeCourse(courses.get(position));
             notifyDataSetChanged();
+            this.rvChangeListener.recyclerViewStateChanged(v, position);
         });
     }
 

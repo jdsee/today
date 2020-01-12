@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.mobila.project.today.R;
 import com.mobila.project.today.UncheckedTodayException;
+import com.mobila.project.today.activities.adapters.RecyclerViewChangeListener;
 import com.mobila.project.today.activities.adapters.TaskAdapter;
 import com.mobila.project.today.activities.fragments.GeneralConfirmationDialogFragment;
 import com.mobila.project.today.activities.fragments.OneEditTextDialogFragment;
@@ -35,7 +36,8 @@ import java.util.Objects;
 //TODO show appropriate courses if semester is deleted
 
 public class TodayActivity extends DatabaseConnectionActivity
-        implements GeneralConfirmationDialogFragment.DialogListener {
+        implements GeneralConfirmationDialogFragment.DialogListener,
+        RecyclerViewChangeListener {
     private static final String TAG = TodayActivity.class.getName();
 
     private static final String ADD_COURSE_DIALOG_CODE = "ADD_COURSE_DIALOG";
@@ -123,7 +125,7 @@ public class TodayActivity extends DatabaseConnectionActivity
     private void initCourseView() {
         RecyclerView courseRecyclerView = findViewById(R.id.recycler_view_courses);
         if (!semesters.isEmpty()) {
-            this.courseAdapter = new CourseAdapter(this, semesters.get(currentSemester));
+            this.courseAdapter = new CourseAdapter(this, this, semesters.get(currentSemester));
             courseRecyclerView.setAdapter(courseAdapter);
             courseRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         }
@@ -277,5 +279,10 @@ public class TodayActivity extends DatabaseConnectionActivity
             if (semester.getSemesterNr() > max) max = semester.getSemesterNr();
         }
         return max;
+    }
+
+    @Override
+    public void recyclerViewStateChanged(View v, int position) {
+        this.onDataSetChanged();
     }
 }

@@ -85,7 +85,7 @@ public class AttachmentView implements RecyclerViewButtonClickListener{
     }
 
     @Override
-    public void recyclerViewButtonClicked(View view, int position) {
+    public void onRecyclerViewButtonClicked(View view, int position) {
         lecture.removeAttachment(this.lecture.getAttachments().get(position));
         this.attachmentAdapter.notifyDataSetChanged();
         updateFileNumber();

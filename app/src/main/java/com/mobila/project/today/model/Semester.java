@@ -1,6 +1,7 @@
 package com.mobila.project.today.model;
 
 import android.content.ContentValues;
+import android.util.Log;
 
 import com.mobila.project.today.UncheckedTodayException;
 import com.mobila.project.today.model.dataProviding.dataAccess.OrganizerDataProvider;
@@ -15,6 +16,8 @@ import java.util.Objects;
  * Allows access to all data of the "Semester"-entity.
  */
 public class Semester implements Identifiable {
+    private static final String TAG = Semester.class.getSimpleName();
+
     private static RootDataAccess rootDataAccess;
     private static SemesterDataAccess semesterDataAccess;
 
@@ -55,23 +58,19 @@ public class Semester implements Identifiable {
      * @return a list with all courses contained in this semester
      */
     public List<Course> getCourses() throws UncheckedTodayException {
-//        if (this.courses == null)
-//            this.initCourses();
-//        return this.courses;
         return semesterDataAccess.getCourses(this);
     }
 
     public void addCourse(Course course) throws UncheckedTodayException {
         semesterDataAccess.addCourse(this, course);
-//        if (this.courses == null)
-//            this.initCourses();
-//        else this.courses.add(course);
     }
 
     public void removeCourse(Course course) throws UncheckedTodayException {
+        for (Task task : course.getTasks()) {
+            course.removeTask(task);
+            Log.d(TAG, "task deleted(id: " + task.getID() + ")");
+        }
         semesterDataAccess.removeCourse(this, course);
-//        if (this.courses != null)
-//            this.courses.remove(course);
     }
 
     @Override
