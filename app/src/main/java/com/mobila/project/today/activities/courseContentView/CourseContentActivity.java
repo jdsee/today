@@ -15,6 +15,7 @@ import com.mobila.project.today.activities.DatabaseConnectionActivity;
 import com.mobila.project.today.activities.adapters.RecyclerViewButtonClickListener;
 import com.mobila.project.today.activities.fragments.GeneralConfirmationDialogFragment;
 import com.mobila.project.today.activities.fragments.LectureSetupDialogFragment;
+import com.mobila.project.today.activities.fragments.SimpleConfirmationDialogFragment;
 import com.mobila.project.today.activities.fragments.TwoEditTextDialogFragment;
 import com.mobila.project.today.control.TaskController;
 import com.mobila.project.today.control.utils.DateUtils;
@@ -26,11 +27,12 @@ import com.mobila.project.today.model.Section;
 import com.mobila.project.today.model.Task;
 
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
+import static com.mobila.project.today.activities.TodayActivity.DELETE_SEMESTER_DIALOG_CODE;
 
 public class CourseContentActivity extends DatabaseConnectionActivity
         implements GeneralConfirmationDialogFragment.DialogListener, RecyclerViewButtonClickListener {
@@ -38,13 +40,15 @@ public class CourseContentActivity extends DatabaseConnectionActivity
 
     private static final String ADD_SECTION_DIALOG_CODE = "ADD_SECTION_DIALOG_CODE";
     private static final String ADD_LECTURE_DIALOG_CODE = "ADD_LECTURE_DIALOG_CODE";
+    private static final String DELETE_SECTION_DIALOG_CODE = "DELETE_SECTION_DIALOG_CODE";
+    private static final String SECTION_POSITION_DIALOG_CODE = "SECTION_POSITION_DIALOG_CODE";
+    private static Bundle DELETE_SECTION_DIALOG_BUNDLE = null;
 
     private Course course;
     private List<Section> sections;
-    private int currentPosition;
+    private int currentSectionPosition;
     private TaskAdapter taskAdapter;
     private SectionAdapter sectionAdapter;
-//    private List<Task> tasks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,8 +70,6 @@ public class CourseContentActivity extends DatabaseConnectionActivity
     @Override
     protected void onResume() {
         super.onResume();
-//        this.course.refresh();
-//        initTaskView();
         this.taskAdapter.notifyDataSetChanged();
         this.sectionAdapter.notifyDataSetChanged();
 
@@ -113,9 +115,24 @@ public class CourseContentActivity extends DatabaseConnectionActivity
     }
 
     @Override
-    public void recyclerViewButtonClicked(View view, int position) {
-        this.currentPosition = position;
+    public void onRecyclerViewButtonClicked(View view, int position) {
+        this.currentSectionPosition = position;
+        String buttonContext = (String) view.getTag();
+        switch (buttonContext){
+            case SectionAdapter.BTN_ADD_LECTURE_TAG:
+                this.onAddLectureClicked(position);
+                break;
+            case SectionAdapter.BTN_REMOVE_SECTION_TAG:
+                this.onRemoveSectionClicked(position);
+                break;
+            default:
+                IllegalArgumentException e = new IllegalArgumentException("button desriptor unknown");
+                Log.e(TAG, "unknown button descriptor", e);
+                throw e;
+        }
+    }
 
+    private void onAddLectureClicked(int position){
         LectureSetupDialogFragment dialog = new LectureSetupDialogFragment();
         Bundle bundle = new Bundle();
 
@@ -130,6 +147,23 @@ public class CourseContentActivity extends DatabaseConnectionActivity
         dialog.show(getSupportFragmentManager(), ADD_LECTURE_DIALOG_CODE);
     }
 
+    public void onRemoveSectionClicked(int position){
+        SimpleConfirmationDialogFragment dialog = new SimpleConfirmationDialogFragment();
+
+        if (DELETE_SECTION_DIALOG_BUNDLE == null) {
+            Bundle bundle = new Bundle();
+            bundle.putString(SimpleConfirmationDialogFragment.DIALOG_MESSAGE_EXTRA,
+                    "Do your really want to delete this section?");
+            bundle.putString(SimpleConfirmationDialogFragment.DIALOG_CONFIRMING_EXTRA, "Delete");
+            bundle.putString(SimpleConfirmationDialogFragment.DIALOG_DECLINING_EXTRA, "Cancel");
+//            bundle.putInt(SECTION_POSITION_DIALOG_CODE, position);
+            DELETE_SECTION_DIALOG_BUNDLE = bundle;
+        }
+        dialog.setArguments(DELETE_SECTION_DIALOG_BUNDLE);
+        dialog.setDialogListener(this);
+        dialog.show(getSupportFragmentManager(), DELETE_SECTION_DIALOG_CODE);
+    }
+
     @Override
     public void onDialogConfirmation(Bundle resultBundle, GeneralConfirmationDialogFragment dialog) {
         String dialogType = dialog.getTag();
@@ -141,6 +175,9 @@ public class CourseContentActivity extends DatabaseConnectionActivity
             case ADD_LECTURE_DIALOG_CODE:
                 this.onAddLectureDialogConfirmation(resultBundle);
                 break;
+            case DELETE_SECTION_DIALOG_CODE:
+                this.onDeleteSectionDialogConfirmation();
+                break;
             default:
                 NullPointerException e = new NullPointerException("dialog code unknown");
                 Log.e(TAG, e.getMessage(), e);
@@ -148,8 +185,14 @@ public class CourseContentActivity extends DatabaseConnectionActivity
         }
     }
 
+    private void onDeleteSectionDialogConfirmation() {
+        Section currentSection = this.sections.get(currentSectionPosition);
+        this.course.removeSection(currentSection);
+            this.sectionAdapter.notifyDataSetChanged();
+    }
+
     private void onAddLectureDialogConfirmation(Bundle resultBundle) {
-        Section currentSection = this.sections.get(this.currentPosition);
+        Section currentSection = this.sections.get(this.currentSectionPosition);
         Optional maxLectureNr = currentSection.getLectures().stream()
                 .map(Lecture::getLectureNr)
                 .max(Integer::compareTo);
@@ -165,6 +208,7 @@ public class CourseContentActivity extends DatabaseConnectionActivity
         Lecture lecture = new Lecture(lectureNr, date, roomNr);
 
         currentSection.addLecture(lecture);
+        this.sectionAdapter.notifyDataSetChanged();
     }
 
     private void onAddSectionDialogConfirmation(Bundle resultBundle) {

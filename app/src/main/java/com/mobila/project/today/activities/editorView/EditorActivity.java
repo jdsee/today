@@ -491,7 +491,7 @@ public class EditorActivity extends DatabaseConnectionActivity
     }
 
     @Override
-    public void recyclerViewButtonClicked(View view, int position) {
+    public void onRecyclerViewButtonClicked(View view, int position) {
         lecture.removeAttachment(this.attachments.get(position));
         this.attachmentAdapter.notifyDataSetChanged();
     }

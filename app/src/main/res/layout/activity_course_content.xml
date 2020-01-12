@@ -38,12 +38,20 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_margin="20dp"
+        android:layout_gravity="bottom|center"
+        android:layout_margin="10dp"
         android:background="@color/standardBackground"
+        android:drawableStart="@drawable/baseline_add_24"
         android:onClick="onAddSectionClicked"
         android:paddingStart="120dp"
         android:paddingEnd="120dp"
         android:text="@string/add_section"
-        android:drawableLeft="@drawable/baseline_add_24"
         android:tint="@color/icon_text_grey" />
+
+    <!--    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:contentDescription="add note"-->
+<!--        android:text="add note"-->
+<!--        app:icon="@drawable/baseline_add_24"/>-->
 </LinearLayout>
