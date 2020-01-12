@@ -13,6 +13,7 @@ public class Note implements Identifiable {
 
     private final String ID;
     private String title;
+    private Spannable content;
 
     public Note(String ID, String title) {
         this.ID = ID;
@@ -43,11 +44,15 @@ public class Note implements Identifiable {
     }
 
     public Spannable getContent() throws DataKeyNotFoundException {
-        return this.noteDataAccess.getContent(this);
+        if (this.content == null){
+            this.content = this.noteDataAccess.getContent(this);
+        }
+        return content;
     }
 
     public void setContent(Spannable content) throws DataKeyNotFoundException {
         this.noteDataAccess.setContent(this, content);
+        this.content = content;
     }
 
     @Override

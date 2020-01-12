@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.mobila.project.today.R;
 import com.mobila.project.today.model.Attachment;
-import com.mobila.project.today.control.utils.AttachmentUtils;
+import com.mobila.project.today.control.utils.FileUtils;
 
 import java.util.List;
 
@@ -47,12 +47,12 @@ public class AttachmentAdapter extends RecyclerView.Adapter<AttachmentAdapter.Vi
         final Attachment attachment = this.attachments.get(position);
         //Set name and icon of file
         holder.fileName.setText(attachment.getName());
-        Drawable fileIcon = AttachmentUtils.getDrawable(this.context, attachment.getContent());
+        Drawable fileIcon = FileUtils.getDrawable(this.context, attachment.getContent());
         holder.fileImage.setImageDrawable(fileIcon);
 
         holder.fileHolder.setOnClickListener(v -> {
             Uri uri = this.attachments.get(position).getContent();
-            AttachmentUtils.openFile(context, uri);
+            FileUtils.openFile(context, uri);
         });
 
         holder.button.setOnClickListener(v -> {

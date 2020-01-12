@@ -5,14 +5,21 @@ import android.content.Intent;
 import android.net.Uri;
 import android.text.Html;
 import android.text.Spannable;
+import android.text.SpannableString;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
 
+import com.mobila.project.today.control.utils.FileUtils;
+import com.mobila.project.today.model.Note;
+
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class ShareContentManager {
 
@@ -73,5 +80,46 @@ public class ShareContentManager {
             Log.d(TAG, "created new file: " + file.getAbsolutePath() + ", exists: " + file.exists());
         } catch (Exception e) {
         }
+    }
+
+    private static String convertStreamToString(InputStream is) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        StringBuilder sb = new StringBuilder();
+        String line;
+        boolean firstLine = true;
+        while ((line = reader.readLine()) != null) {
+            if(firstLine){
+                sb.append(line);
+                firstLine = false;
+            } else {
+                sb.append("\n").append(line);
+            }
+        }
+        reader.close();
+        return sb.toString();
+    }
+
+    public Note getNoteFromIntent(Intent intent) {
+        Note receivedNote = new Note();
+
+        String action = intent.getAction();
+        String type = intent.getType();
+
+        if (Intent.ACTION_VIEW.equals(action) && type != null) {
+            Uri uri = intent.getData();
+
+            InputStream fileInputStream;
+            try {
+                fileInputStream = this.context.getContentResolver().openInputStream(uri);
+                String fileString = ShareContentManager.convertStreamToString(fileInputStream);
+                Spannable spannable = new SpannableString(Html.fromHtml(fileString, Html.FROM_HTML_MODE_LEGACY));
+                receivedNote = new Note();
+                receivedNote.setTitle(FileUtils.getFileNameWOExtension(this.context, uri));
+                receivedNote.setContent(spannable);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return receivedNote;
     }
 }

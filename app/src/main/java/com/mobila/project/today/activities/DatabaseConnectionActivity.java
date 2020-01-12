@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.mobila.project.today.R;
 import com.mobila.project.today.model.dataProviding.dataAccess.OrganizerDataProvider;
 
 public class DatabaseConnectionActivity extends AppCompatActivity {
@@ -13,7 +14,8 @@ public class DatabaseConnectionActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        openDBConnectionIfNeccessary();
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        openDBConnectionIfNotOpenedYet();
         super.onCreate(savedInstanceState);
     }
 
@@ -27,17 +29,17 @@ public class DatabaseConnectionActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        openDBConnectionIfNeccessary();
+        this.openDBConnectionIfNotOpenedYet();
         super.onResume();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        openDBConnectionIfNeccessary();
+        openDBConnectionIfNotOpenedYet();
     }
 
-    private void openDBConnectionIfNeccessary() {
+    private void openDBConnectionIfNotOpenedYet() {
         if (!this.organizerDataProvider.isOpen())
             this.organizerDataProvider.openDbConnection(this);
     }
