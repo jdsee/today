@@ -3,8 +3,8 @@ package com.mobila.project.today.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
-import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
+import com.mobila.project.today.model.dataProviding.dataAccess.DataKeyNotFoundException;
+import com.mobila.project.today.model.dataProviding.dataAccess.OrganizerDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.TaskDataAccess;
 
 import java.util.Date;
@@ -17,9 +17,18 @@ public class Task implements Identifiable, Parcelable {
     private final String ID;
     private String content;
     private Date deadline;
+    private Course relatedCourse;
 
     //TODO considering a relatedTo-Member for easy access to the parent course
     // -> useful in rootDataAccess
+
+    public Task(String content) {
+        this(
+                KeyGenerator.getUniqueKey(),
+                content,
+                new Date()
+        );
+    }
 
     public Task(String id, String content, Date deadline, TaskDataAccess dataAccess) {
         this.ID = id;
@@ -30,7 +39,12 @@ public class Task implements Identifiable, Parcelable {
     }
 
     public Task(String id, String content, Date deadline) {
-        this(id, content, deadline, OrganizerDataProvider.getInstance().getTaskDataAccess());
+        this(
+                id,
+                content,
+                deadline,
+                OrganizerDataProvider.getInstance().getTaskDataAccess()
+        );
     }
 
     public Task(String content, Date deadline) {
@@ -53,6 +67,7 @@ public class Task implements Identifiable, Parcelable {
                 in.readString(),
                 in.readString(),
                 new Date(in.readLong()));
+
     }
 
     public int describeContents() {
@@ -71,8 +86,7 @@ public class Task implements Identifiable, Parcelable {
      * @return the course containing this task
      */
     public Course getCourse() throws DataKeyNotFoundException {
-        //TODO add attribute to class and add the corresponding parameter in constructor
-        return null;
+        return this.dataAccess.getCourse(this);
     }
 
     public Date getDeadline() {
@@ -98,7 +112,7 @@ public class Task implements Identifiable, Parcelable {
         if (this == o) return true;
         if (o == null || this.getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return this.ID == task.ID &&
+        return this.ID.equals(task.ID) &&
                 Objects.equals(this.content, task.content) &&
                 Objects.equals(this.deadline, task.deadline);
         //TODO when DataAccess is implemented: change inspection so that dataAccess must be nonNull

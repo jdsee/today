@@ -2,15 +2,11 @@ package com.mobila.project.today.model.dataProviding.dataAccess;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.mobila.project.today.model.Identifiable;
 import com.mobila.project.today.model.Section;
-import com.mobila.project.today.model.Semester;
 import com.mobila.project.today.model.Task;
-import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
-import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.CourseTable;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.SectionTable;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.TaskTable;
@@ -107,6 +103,7 @@ class CourseDataAccessImpl extends ParentDataAccessImpl implements CourseDataAcc
             tasks = this.getTasksFromDB(course);
             this.taskCache.add(course, tasks);
         }
+        Log.d(TAG, "tasks in idMap: " + this.taskCache.get(course));
         return tasks;
     }
 
@@ -121,7 +118,6 @@ class CourseDataAccessImpl extends ParentDataAccessImpl implements CourseDataAcc
                     cursor.getString(cursor.getColumnIndex(TaskTable.COLUMN_ID)),
                     cursor.getString(cursor.getColumnIndex(TaskTable.COLUMN_CONTENT)),
                     new Date(cursor.getInt(cursor.getColumnIndex(TaskTable.COLUMN_DEADLINE)))
-                    //cursor.getString(cursor.getColumnIndex(TaskTable.COLUMN_RELATED_TO))
             );
             tasks.add(section);
         }
@@ -133,6 +129,7 @@ class CourseDataAccessImpl extends ParentDataAccessImpl implements CourseDataAcc
     public void addTask(Identifiable course, Task task) throws DataKeyNotFoundException {
         this.addTaskToDB(course, task);
         this.taskCache.addElement(course, task);
+        Log.d(TAG, "tasks in idMap: " + this.taskCache.get(course));
     }
 
     private void addTaskToDB(Identifiable course, Task task) {
@@ -167,5 +164,7 @@ class CourseDataAccessImpl extends ParentDataAccessImpl implements CourseDataAcc
                 TaskTable.COLUMN_ID +
                         "=?", new String[]{task.getID()});
         this.taskCache.removeElement(course, task);
+        Log.d(TAG, "removed task");
+        Log.d(TAG, "tasks in idMap: " + this.taskCache.get(course));
     }
 }

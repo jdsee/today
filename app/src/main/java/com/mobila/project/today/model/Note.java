@@ -2,13 +2,9 @@ package com.mobila.project.today.model;
 
 import android.text.Spannable;
 
-import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
-import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
+import com.mobila.project.today.model.dataProviding.dataAccess.DataKeyNotFoundException;
+import com.mobila.project.today.model.dataProviding.dataAccess.OrganizerDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.NoteDataAccess;
-import com.mobila.project.today.model.dataProviding.dataAccess.RootDataAccess;
-
-import java.util.List;
-import java.util.UUID;
 
 public class Note implements Identifiable {
     public static final String INTENT_EXTRA_CODE = "EXTRA_NOTE";
@@ -17,6 +13,7 @@ public class Note implements Identifiable {
 
     private final String ID;
     private String title;
+    private Spannable content;
 
     public Note(String ID, String title) {
         this.ID = ID;
@@ -26,7 +23,7 @@ public class Note implements Identifiable {
         this.noteDataAccess = dataProvider.getNoteDataAccess();
     }
 
-    public Note(String title) {
+    private Note(String title) {
         this(
                 KeyGenerator.getUniqueKey(),
                 title
@@ -35,16 +32,6 @@ public class Note implements Identifiable {
 
     public Note(){
         this("");
-    }
-
-    /**
-     * Returns the lecture containing this attachment.
-     *
-     * @return the lecture containing this attachment
-     */
-    public Lecture getLecture() throws DataKeyNotFoundException {
-        //TODO return lecture or remove method
-        return null;
     }
 
     public String getTitle() {
@@ -57,24 +44,16 @@ public class Note implements Identifiable {
     }
 
     public Spannable getContent() throws DataKeyNotFoundException {
-        return this.noteDataAccess.getContent(this);
+        if (this.content == null){
+            this.content = this.noteDataAccess.getContent(this);
+        }
+        return content;
     }
 
     public void setContent(Spannable content) throws DataKeyNotFoundException {
         this.noteDataAccess.setContent(this, content);
+        this.content = content;
     }
-
-   /* public List<NoteReference> getReferences() throws DataKeyNotFoundException {
-        return this.noteDataAccess.getReferences(this);
-    }
-
-    public void addReference(Identifiable reference, int row) throws DataKeyNotFoundException {
-        this.noteDataAccess.addReference(this, reference, row);
-    }
-
-    public void removeReference(Identifiable reference) throws DataKeyNotFoundException {
-        this.noteDataAccess.removeReference(reference);
-    }*/
 
     @Override
     public String getID() {

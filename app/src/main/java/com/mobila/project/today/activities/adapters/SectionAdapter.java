@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -19,20 +20,22 @@ import com.mobila.project.today.model.Section;
 import java.util.List;
 
 public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.ViewHolder> {
-    public static final String RV_BUTTON_CLICKED_TAG = "SECTION_ADAPTER_BUTTON_CLICKED";
-
     private final Context context;
     private List<Section> sections;
-    private RecyclerViewButtonClickListener addLectureClickListener;
+
+    private RecyclerViewButtonClickListener recyclerViewButtonClickListener;
+    public static final String BTN_ADD_LECTURE_TAG = "BTN_ADD_LECTURE";
+    public static final String BTN_REMOVE_SECTION_TAG = "BTN_REMOVE_SECTION";
 
     public SectionAdapter(Context context, List<Section> sections,
                           RecyclerViewButtonClickListener addLectureClickListener) {
         this.sections = sections;
         this.context = context;
-        this.addLectureClickListener = addLectureClickListener;
+        this.recyclerViewButtonClickListener = addLectureClickListener;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
+        ImageButton btnRemoveSection;
         Button btnAddLecture;
         RelativeLayout rlSectionItem;
         RecyclerView rvLectures;
@@ -47,6 +50,7 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.ViewHold
             this.tvLecturer = itemView.findViewById(R.id.txt_lecturer);
             this.rvLectures = itemView.findViewById(R.id.rv_lecture_list);
             this.btnAddLecture = itemView.findViewById(R.id.btn_add_lecture);
+            this.btnRemoveSection = itemView.findViewById(R.id.btn_section_options);
 
             this.rlSectionItem.setOnClickListener(v -> {
                 if (rvLectures.getVisibility() == View.GONE) {
@@ -65,7 +69,6 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.ViewHold
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.listitem_section, parent, false);
-        view.setTag(RV_BUTTON_CLICKED_TAG);
         return new ViewHolder(view);
     }
 
@@ -76,16 +79,32 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.ViewHold
         holder.tvSectionName.setText(section.getTitle());
         holder.tvLecturer.setText(section.getLecturer());
 
+        this.setLectureListRecyclerView(holder, section);
+        this.setAddLectureButtonClickListener(holder, position);
+        this.setRemoveSectionButtonClickListener(holder, position);
+    }
+
+    private void setLectureListRecyclerView(ViewHolder holder, Section section) {
         RecyclerView rvLectures = holder.rvLectures;
         LinearLayoutManager layoutManager = new LinearLayoutManager(this.context);
         rvLectures.setLayoutManager(layoutManager);
         rvLectures.setAdapter(new LectureAdapter(this.context, section.getLectures()));
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rvLectures.getContext(),
-                layoutManager.getOrientation());
+        DividerItemDecoration dividerItemDecoration =
+                new DividerItemDecoration(rvLectures.getContext(), layoutManager.getOrientation());
         rvLectures.addItemDecoration(dividerItemDecoration);
+    }
 
+    private void setAddLectureButtonClickListener(ViewHolder holder, int position) {
+        holder.btnAddLecture.setTag(BTN_ADD_LECTURE_TAG);
         holder.btnAddLecture.setOnClickListener(view ->
-                this.addLectureClickListener.onRecyclerViewButtonClicked(view, position)
+                this.recyclerViewButtonClickListener.onRecyclerViewButtonClicked(view, position)
+        );
+    }
+
+    private void setRemoveSectionButtonClickListener(ViewHolder holder, int position) {
+        holder.btnRemoveSection.setTag(BTN_REMOVE_SECTION_TAG);
+        holder.btnRemoveSection.setOnClickListener(view ->
+                this.recyclerViewButtonClickListener.onRecyclerViewButtonClicked(view, position)
         );
     }
 

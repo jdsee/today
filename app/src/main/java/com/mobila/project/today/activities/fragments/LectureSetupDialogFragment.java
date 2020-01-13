@@ -38,11 +38,18 @@ public class LectureSetupDialogFragment extends GeneralConfirmationDialogFragmen
         LayoutInflater inflater = Objects.requireNonNull(getActivity()).getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_set_up_lecture_text, null);
         builder.setView(view);
+
         this.txtRoomNr = view.findViewById(R.id.txt_room_nr_pick);
         this.txtRoomNr.setHint(bundle.getString(ROOM_NR_EDIT_TEXT_HINT));
+
+        //TODO default value if there is already another lecture with roomNr
+
         this.txtDate = view.findViewById(R.id.txt_date_pick);
         this.txtDate.setHint(bundle.getString(DATE_EDIT_TEXT_HINT));
         this.txtDate.setOnClickListener(v -> this.showDatePickerDialog());
+
+        String dateNowFormat = this.getCalendarStringRepresentation(Calendar.getInstance());
+        this.txtDate.setText(dateNowFormat);
     }
 
     @Override
@@ -58,15 +65,19 @@ public class LectureSetupDialogFragment extends GeneralConfirmationDialogFragmen
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        java.text.SimpleDateFormat dateFormat =
-                new SimpleDateFormat(DateUtils.DAY_DATE_FORMAT, Locale.getDefault());
-
-        Calendar c = Calendar.getInstance();
-        c.set(year, month, dayOfMonth);
-        String date = dateFormat.format(c.getTime());
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, dayOfMonth);
+        String date = this.getCalendarStringRepresentation(calendar);
 
         Log.d(TAG, "user entered date: " + date);
 
         this.txtDate.setText(date);
+    }
+
+    private String getCalendarStringRepresentation(Calendar calendar) {
+        SimpleDateFormat dateFormat =
+                new SimpleDateFormat(DateUtils.DAY_DATE_FORMAT, Locale.getDefault());
+
+        return dateFormat.format(calendar.getTime());
     }
 }

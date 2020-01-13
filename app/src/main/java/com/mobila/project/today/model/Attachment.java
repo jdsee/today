@@ -4,13 +4,10 @@ import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import androidx.annotation.NonNull;
-
-import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
-import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
+import com.mobila.project.today.model.dataProviding.dataAccess.DataKeyNotFoundException;
+import com.mobila.project.today.model.dataProviding.dataAccess.OrganizerDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.AttachmentDataAccess;
 
-import java.io.File;
 import java.util.UUID;
 
 public class Attachment implements Identifiable, Parcelable {

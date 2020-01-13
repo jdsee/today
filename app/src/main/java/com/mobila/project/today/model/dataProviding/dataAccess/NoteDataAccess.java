@@ -2,7 +2,6 @@ package com.mobila.project.today.model.dataProviding.dataAccess;
 
 import android.text.Spannable;
 
-import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
 import com.mobila.project.today.model.Identifiable;
 
 public interface NoteDataAccess extends ParentDataAccess{
@@ -16,10 +15,4 @@ public interface NoteDataAccess extends ParentDataAccess{
     Spannable getContent(Identifiable note) throws DataKeyNotFoundException;
 
     void setContent(Identifiable note, Spannable content) throws DataKeyNotFoundException;
-
-    //List<NoteReference> getReferences(Identifiable note) throws DataKeyNotFoundException;
-
-    //void addReference(Identifiable note, Identifiable reference, int row) throws DataKeyNotFoundException;
-
-    //void removeReference(Identifiable reference);
 }

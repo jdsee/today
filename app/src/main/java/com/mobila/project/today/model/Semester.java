@@ -1,9 +1,10 @@
 package com.mobila.project.today.model;
 
 import android.content.ContentValues;
+import android.util.Log;
 
 import com.mobila.project.today.UncheckedTodayException;
-import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
+import com.mobila.project.today.model.dataProviding.dataAccess.OrganizerDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.RootDataAccess;
 import com.mobila.project.today.model.dataProviding.dataAccess.SemesterDataAccess;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.SemesterTable;
@@ -15,12 +16,14 @@ import java.util.Objects;
  * Allows access to all data of the "Semester"-entity.
  */
 public class Semester implements Identifiable {
+    private static final String TAG = Semester.class.getSimpleName();
+
     private static RootDataAccess rootDataAccess;
     private static SemesterDataAccess semesterDataAccess;
 
     private final String ID;
     private int semesterNr;
-    private List<Course> courses;
+//    private List<Course> courses;
 
     public Semester(int semesterNr){
         this(KeyGenerator.getUniqueKey(), semesterNr);
@@ -29,7 +32,7 @@ public class Semester implements Identifiable {
     public Semester(String id, int semesterNr) {
         this.ID = id;
         this.semesterNr = semesterNr;
-        this.courses = null;
+//        this.courses = null;
 
         OrganizerDataProvider dataProvider = OrganizerDataProvider.getInstance();
         rootDataAccess = dataProvider.getRootDataAccess();
@@ -46,7 +49,7 @@ public class Semester implements Identifiable {
     }
 
     private void initCourses() {
-        this.courses = semesterDataAccess.getCourses(this);
+//        this.courses = semesterDataAccess.getCourses(this);
     }
 
     /**
@@ -55,22 +58,18 @@ public class Semester implements Identifiable {
      * @return a list with all courses contained in this semester
      */
     public List<Course> getCourses() throws UncheckedTodayException {
-        if (this.courses == null)
-            this.initCourses();
-        return this.courses;
+        return semesterDataAccess.getCourses(this);
     }
 
     public void addCourse(Course course) throws UncheckedTodayException {
         semesterDataAccess.addCourse(this, course);
-        if (this.courses == null)
-            this.initCourses();
-        else this.courses.add(course);
     }
 
     public void removeCourse(Course course) throws UncheckedTodayException {
-        semesterDataAccess.removeCourse(this, course);
-        if (this.courses != null)
-            this.courses.remove(course);
+        for (Task task : course.getTasks()) {
+            course.removeTask(task);
+            Log.d(TAG, "task deleted(id: " + task.getID() + ")");
+        }
         semesterDataAccess.removeCourse(this, course);
     }
 
@@ -92,12 +91,12 @@ public class Semester implements Identifiable {
         if (o == null || getClass() != o.getClass()) return false;
         Semester semester = (Semester) o;
         return semesterNr == semester.semesterNr &&
-                ID.equals(semester.ID) &&
-                Objects.equals(courses, semester.courses);
+                ID.equals(semester.ID);
+//                && Objects.equals(courses, semester.courses);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(rootDataAccess, semesterDataAccess, ID, semesterNr, courses);
+        return Objects.hash(rootDataAccess, semesterDataAccess, ID, semesterNr/*, courses*/);
     }
 }

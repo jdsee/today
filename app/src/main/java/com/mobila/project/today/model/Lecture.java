@@ -3,14 +3,12 @@ package com.mobila.project.today.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
-import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
+import com.mobila.project.today.model.dataProviding.dataAccess.DataKeyNotFoundException;
+import com.mobila.project.today.model.dataProviding.dataAccess.OrganizerDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.LectureDataAccess;
-import com.mobila.project.today.model.dataProviding.dataAccess.RootDataAccess;
 
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 public class Lecture implements Identifiable, Parcelable {
     public static final String INTENT_EXTRA_CODE = "EXTRA_LECTURE";
@@ -20,7 +18,7 @@ public class Lecture implements Identifiable, Parcelable {
     private int lectureNr;
     private Date date;
     private String roomNr;
-    private List<Attachment> attachments;
+    //private List<Attachment> attachments;
 
     public Lecture(String id, int lectureNr, Date date, String roomNr) {
         this.ID = id;
@@ -83,19 +81,20 @@ public class Lecture implements Identifiable, Parcelable {
     }
 
     public List<Attachment> getAttachments() throws DataKeyNotFoundException {
-        if (this.attachments == null)
-            this.attachments = this.dataAccess.getAttachments(this);
-        return attachments;
+//        if (this.attachments == null)
+//            this.attachments = this.dataAccess.getAttachments(this);
+//        return attachments;
+        return this.dataAccess.getAttachments(this);
     }
 
     public void addAttachment(Attachment attachment) throws DataKeyNotFoundException {
         this.dataAccess.addAttachment(this, attachment);
-        this.attachments.add(attachment);
+        //this.attachments.add(attachment);
     }
 
     public void removeAttachment(Attachment attachment) throws DataKeyNotFoundException {
         this.dataAccess.removeAttachment(this, attachment);
-        this.attachments.remove(attachment);
+        //this.attachments.remove(attachment);
     }
 
     public int getLectureNr() throws DataKeyNotFoundException {

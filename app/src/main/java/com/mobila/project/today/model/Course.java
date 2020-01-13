@@ -3,8 +3,8 @@ package com.mobila.project.today.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
-import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
+import com.mobila.project.today.model.dataProviding.dataAccess.DataKeyNotFoundException;
+import com.mobila.project.today.model.dataProviding.dataAccess.OrganizerDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.CourseDataAccess;
 import com.mobila.project.today.model.dataProviding.dataAccess.RootDataAccess;
 
@@ -23,13 +23,13 @@ public class Course implements Identifiable, Parcelable {
 
     private final String ID;
     private String title;
-    private List<Task> tasks;
+//    private List<Task> tasks;
     private List<Section> sections;
 
     public Course(String ID, String title) {
         this.ID = ID;
         this.title = title;
-        this.tasks = null;
+//        this.tasks = null;
         this.sections = null;
 
         OrganizerDataProvider dataProvider = OrganizerDataProvider.getInstance();
@@ -99,9 +99,10 @@ public class Course implements Identifiable, Parcelable {
      * @return a list with all sections contained in this course
      */
     public List<Section> getSections() throws DataKeyNotFoundException {
-        if (this.sections == null)
-            this.sections = this.dataAccess.getSections(this);
-        return this.sections;
+//        if (this.sections == null)
+//            this.sections = this.dataAccess.getSections(this);
+//        return this.sections;
+        return this.dataAccess.getSections(this);
     }
 
     /**
@@ -110,8 +111,8 @@ public class Course implements Identifiable, Parcelable {
      * @param section section to add
      */
     public void addSection(Section section) throws DataKeyNotFoundException {
-        if (this.sections != null)
-            this.sections.add(section);
+//        if (this.sections != null)
+//            this.sections.add(section);
         this.dataAccess.addSection(this, section);
     }
 
@@ -119,8 +120,8 @@ public class Course implements Identifiable, Parcelable {
      * Removes a section of this course.
      */
     public void removeSection(Section section) throws DataKeyNotFoundException {
-        if (this.sections != null)
-            this.sections.remove(section);
+//        if (this.sections != null)
+//            this.sections.remove(section);
         this.dataAccess.removeSection(this, section);
     }
 
@@ -130,17 +131,18 @@ public class Course implements Identifiable, Parcelable {
      * @return a list with all tasks contained in this course
      */
     public List<Task> getTasks() throws DataKeyNotFoundException {
-        if (this.tasks == null)
-            this.tasks = this.dataAccess.getTasks(this);
-        return this.tasks;
+//        if (this.tasks == null)
+//            this.tasks = this.dataAccess.getTasks(this);
+//        return this.tasks;
+        return this.dataAccess.getTasks(this);
     }
 
     /**
      * Adds a task to this course.
      */
     public void addTask(Task task) throws DataKeyNotFoundException {
-        if (this.tasks != null)
-            this.tasks.add(task);
+//        if (this.tasks != null)
+//            this.tasks.add(task);
         this.dataAccess.addTask(this, task);
     }
 
@@ -148,8 +150,8 @@ public class Course implements Identifiable, Parcelable {
      * Removes a task contained in this course.
      */
     public void removeTask(Task task) throws DataKeyNotFoundException {
-        if (this.tasks != null)
-            this.tasks.remove(task);
+//        if (this.tasks != null)
+//            this.tasks.remove(task);
         this.dataAccess.removeTask(this, task);
     }
 

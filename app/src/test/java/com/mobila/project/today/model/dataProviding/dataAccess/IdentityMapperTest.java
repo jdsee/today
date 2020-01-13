@@ -19,6 +19,8 @@ public class IdentityMapperTest {
     private List<Course> courses2;
     private Semester sem1;
     private Semester sem2;
+    private Course course;
+    private Course identicalCourse;
 
     @Before
     public void setup() {
@@ -30,6 +32,10 @@ public class IdentityMapperTest {
             this.courses2.add(Mockito.mock(Course.class));
         }
 
+        String identicalId = "111";
+        this.course = this.getMockedCourse(identicalId);
+        this.identicalCourse = this.getMockedCourse(identicalId);
+
         this.sem1 = Mockito.mock(Semester.class);
         this.sem2 = Mockito.mock(Semester.class);
         Mockito.when(this.sem1.getID()).thenReturn("sem1");
@@ -38,14 +44,21 @@ public class IdentityMapperTest {
         this.identityMapper = new IdentityMapper<>();
     }
 
+    private Course getMockedCourse(String id) {
+        Course mockedCourse = Mockito.mock(Course.class);
+        Mockito.when(mockedCourse.getID()).thenReturn(id);
+        return mockedCourse;
+    }
+
     @Test
     public void getFromEmptyMap_Test() {
         //when
         List<Course> result = this.identityMapper.get(this.sem1);
         //then
-        assertEquals(null, result);
+        assertNull(result);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test(expected = NullPointerException.class)
     public void getWithNullParam_Test() {
         //when
@@ -96,26 +109,86 @@ public class IdentityMapperTest {
         List<Course> resultSem2 = this.identityMapper.get(sem2);
         //then
         assertEquals(courses1, resultSem1);
-        assertEquals(null, resultSem2);
+        assertNull(resultSem2);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test(expected = NullPointerException.class)
     public void addEntryWitNullParam_Test1() {
         this.identityMapper.add(null, this.courses1);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test(expected = NullPointerException.class)
     public void addEntryWitNullParam_Test2() {
         this.identityMapper.add(this.sem1, null);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test(expected = NullPointerException.class)
     public void overwriteEntryWithNullParam_Test1() {
         this.identityMapper.overwrite(null, this.courses1);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test(expected = NullPointerException.class)
     public void overwriteEntryWithNullParam_Test2() {
         this.identityMapper.overwrite(this.sem1, null);
     }
+
+    @Test
+    public void addElement_Test() {
+        //given
+        this.identityMapper.add(sem1, courses1);
+        this.identityMapper.add(sem2, courses2);
+        int expectedSize = this.courses1.size() + 1;
+        //when
+        this.identityMapper.addElement(sem1, this.course);
+        //then
+        assertEquals(expectedSize, this.courses1.size());
+        assertTrue(this.identityMapper.get(sem1).contains(this.course));
+        assertEquals(expectedSize, this.identityMapper.get(sem1).size());
+
+    }
+
+    @Test
+    public void addElementWithSameId_Test() {
+        //given
+        this.identityMapper.add(sem1, courses1);
+        this.identityMapper.add(sem2, courses2);
+        int expectedSize = this.courses1.size() + 1;
+        //when
+        this.identityMapper.addElement(sem1, this.course);
+        this.identityMapper.addElement(sem1, identicalCourse);
+        //then
+        assertEquals(expectedSize, this.courses1.size());
+        assertEquals(expectedSize, this.identityMapper.get(sem1).size());
+
+        assertTrue(this.identityMapper.get(sem1).contains(this.course));
+        List<Course> result = this.identityMapper.get(sem1);
+        assertTrue(result.stream()
+                .anyMatch(c -> identicalCourse.getID().equals(c.getID())));
+
+        Mockito.verifyZeroInteractions(this.courses2.get(0));
+    }
+
+    @Test
+    public void removeElement() {
+        //given
+        this.courses1.add(this.course);
+        this.identityMapper.add(sem1, courses1);
+        this.identityMapper.add(sem2, courses2);
+        int expectedSize = courses1.size() - 1;
+        //when
+        this.identityMapper.removeElement(sem1, this.identicalCourse);
+        //then
+        assertEquals(expectedSize, this.identityMapper.get(sem1).size());
+        assertEquals(expectedSize, this.courses1.size());
+
+        assertFalse(this.identityMapper.get(sem1).contains(course));
+
+        Mockito.verifyZeroInteractions(this.courses2.get(0));
+    }
+
+
 }

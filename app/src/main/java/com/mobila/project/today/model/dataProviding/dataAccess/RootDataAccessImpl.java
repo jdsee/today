@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.mobila.project.today.model.Semester;
 import com.mobila.project.today.model.Task;
-import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.SemesterTable;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.TaskTable;
 
@@ -27,6 +26,7 @@ class RootDataAccessImpl extends ParentDataAccessImpl implements RootDataAccess 
         return instance;
     }
 
+
     private RootDataAccessImpl() {
         this(null);
     }
@@ -43,7 +43,7 @@ class RootDataAccessImpl extends ParentDataAccessImpl implements RootDataAccess 
     @Override
     public List<Semester> getAllSemesters() {
         if (this.semesters == null) {
-            this.semesters = this.getAllSemestersFromDB();
+            return this.getAllSemestersFromDB();
         }
         return this.semesters;
     }
@@ -60,7 +60,8 @@ class RootDataAccessImpl extends ParentDataAccessImpl implements RootDataAccess 
             semesters.add(semester);
         }
         cursor.close();
-        return semesters;
+        this.semesters=semesters;
+        return this.semesters;
     }
 
     @Override

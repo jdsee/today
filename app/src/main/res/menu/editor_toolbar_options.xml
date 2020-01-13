@@ -3,9 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item android:id="@+id/action_share"
-        android:title="@string/share"
-        android:icon="@drawable/baseline_share_24"
-        app:showAsAction="always"
+        android:title="@string/share_note"
+        app:showAsAction="ifRoom"
         android:onClick="onShareLectureClicked"/>
+    <item android:id="@+id/action_share_pdf"
+        android:title="@string/share_pdf"
+        app:showAsAction="ifRoom"
+        android:onClick="onSharePdfClicked"/>
+    <item android:id="@+id/action_delete_lecture"
+        android:title="@string/delete_lecture"
+        app:showAsAction="ifRoom"
+        android:onClick="onDeleteLectureClicked"/>
 
 </menu>

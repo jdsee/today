@@ -1,11 +1,15 @@
 package com.mobila.project.today.activities.editorView;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.Spannable;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,64 +20,47 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.annotation.NonNull;
 
 import com.mobila.project.today.R;
 import com.mobila.project.today.activities.DatabaseConnectionActivity;
-import com.mobila.project.today.activities.adapters.AttachmentAdapter;
-import com.mobila.project.today.activities.adapters.RecyclerViewButtonClickListener;
-import com.mobila.project.today.activities.adapters.TaskAdapter;
 import com.mobila.project.today.activities.editorView.listeners.EditorKeyboardEventListener;
 import com.mobila.project.today.activities.editorView.listeners.TitleOnEditorActionListener;
 import com.mobila.project.today.activities.editorView.listeners.noteFocusChangeListener;
-import com.mobila.project.today.control.AttachmentControl;
-import com.mobila.project.today.control.CommunicationController;
+import com.mobila.project.today.activities.fragments.GeneralConfirmationDialogFragment;
+import com.mobila.project.today.activities.fragments.SimpleConfirmationDialogFragment;
+import com.mobila.project.today.control.ShareContentManager;
 import com.mobila.project.today.control.NoteControl;
-import com.mobila.project.today.control.utils.AttachmentUtils;
 import com.mobila.project.today.control.utils.DateUtils;
-import com.mobila.project.today.model.Attachment;
 import com.mobila.project.today.model.Note;
-import com.mobila.project.today.model.Section;
 import com.mobila.project.today.model.Lecture;
-import com.mobila.project.today.model.Task;
-import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 
 import java.text.SimpleDateFormat;
-import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-import static com.mobila.project.today.control.AttachmentControl.REQUEST_FILE_OPEN;
-import static com.mobila.project.today.control.AttachmentControl.REQUEST_TAKE_PHOTO;
-
-public class EditorActivity extends DatabaseConnectionActivity
-        implements RecyclerViewButtonClickListener {
+public class EditorActivity extends DatabaseConnectionActivity implements GeneralConfirmationDialogFragment.DialogListener {
 
     private static final String TAG = EditorActivity.class.getName();
+    private static final String DELETE_LECTURE_DIALOG_CODE = "DELETE_LECTURE_DIALOG";
     private Lecture lecture;
-    private Section section;
-    private List<Task> tasks;
-    private List<Attachment> attachments;
 
     private EditText contentEditText;
     private EditText titleEditText;
 
     private NoteControl noteEditor;
-    private AttachmentControl attachmentControl;
-
-    private RecyclerView fileContainer;
 
     private boolean keyBoardOpen;
     private boolean focusOnNoteContent;
     private Note note;
 
-    private AttachmentAdapter attachmentAdapter;
+    private AttachmentView attachmentView;
+    private TaskView taskView;
+
+    private ShareContentManager shareContentManager;
 
     /**
      * Method for creating this activity.
@@ -84,40 +71,72 @@ public class EditorActivity extends DatabaseConnectionActivity
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //Slide-in Animation
-        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         //set view
         super.onCreate(savedInstanceState);
         //get Note from Intent
 
-        this.lecture = getIntent().getParcelableExtra(Lecture.INTENT_EXTRA_CODE);
-        this.note = lecture.getNote();
-
-        this.section = lecture.getSection();
-        this.tasks = lecture.getSection().getCourse().getTasks();
-        this.attachments = lecture.getAttachments();
-
-
-        setupViews();
+        setContentView(R.layout.activity_editor);
+        setSupportActionBar(findViewById(R.id.editor_toolbar));
 
         this.contentEditText = findViewById(R.id.editor_content);
         this.titleEditText = findViewById(R.id.editor_title);
 
+        this.lecture = getIntent().getParcelableExtra(Lecture.INTENT_EXTRA_CODE);
+        this.shareContentManager = new ShareContentManager(this);
+
+        if (lecture != null) {
+            this.note = lecture.getNote();
+            this.contentEditText.setText(this.note.getContent());
+            this.titleEditText.setText(this.note.getTitle());
+            this.setupSubtitle();
+            this.attachmentView = new AttachmentView(this, this.lecture);
+            this.taskView = new TaskView(this, this.lecture);
+        } else {
+            this.note = shareContentManager.getNoteFromIntent(getIntent());
+            this.findViewById(R.id.tasks_open_button).setVisibility(View.GONE);
+            hideShareIfNecessary();
+        }
+
         this.contentEditText.setText(this.note.getContent());
         this.titleEditText.setText(this.note.getTitle());
 
-        this.attachmentAdapter = new AttachmentAdapter(this.getApplicationContext(), this, this.attachments);
 
         hideCameraIfNotAvailable();
-        setupContent();
+
         setupListeners();
         setupControls();
+        showAppropriateMenu();
     }
+
+    private void hideShareIfNecessary() {
+        findViewById(R.id.menu_button).setVisibility(View.GONE);
+    }
+
+    /**
+     * Method for setting up and displaying the note.
+     * This is where the Title and the contentEditText of the note get connected with their respective view
+     */
+    private void setupSubtitle() {
+        this.titleEditText.setHint("Lecture " + this.lecture.getLectureNr());
+        TextView textView = findViewById(R.id.editor_subtitle);
+        SimpleDateFormat lectureDate =
+                new SimpleDateFormat(DateUtils.DAY_DATE_FORMAT, Locale.getDefault());
+        textView.setText(String.format(
+                "%s  -  %s", lectureDate.format(lecture.getDate()), this.lecture.getSection().getTitle()));
+        Objects.requireNonNull(getSupportActionBar()).setTitle("");
+    }
+
 
     @Override
     protected void onPause() {
+        if (this.taskView != null) this.taskView.removeCheckedTasks();
         this.saveContent();
         super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     /**
@@ -129,17 +148,6 @@ public class EditorActivity extends DatabaseConnectionActivity
 
         Spannable content = this.contentEditText.getText();
         note.setContent(content);
-    }
-
-    /**
-     * Method for Setting up the theme of the activity and all the recycler-view containers like
-     * the attachment-view and the task-view
-     */
-    private void setupViews() {
-        setContentView(R.layout.activity_editor);
-        setSupportActionBar(findViewById(R.id.editor_toolbar));
-        initAttachmentsView();
-        initTaskView();
     }
 
     /**
@@ -157,7 +165,6 @@ public class EditorActivity extends DatabaseConnectionActivity
      */
     private void setupControls() {
         this.noteEditor = new NoteControl(this, this.contentEditText);
-        this.attachmentControl = new AttachmentControl(this);
     }
 
     /**
@@ -172,28 +179,13 @@ public class EditorActivity extends DatabaseConnectionActivity
     }
 
     /**
-     * Method for setting up and displaying the note.
-     * This is where the Title and the contentEditText of the note get connected with their respective view
-     */
-    private void setupContent() {
-        //Todo Title just needs to be preset if no other has been set
-        this.titleEditText.setHint("Lecture " + this.lecture.getLectureNr());
-        TextView textView = findViewById(R.id.editor_subtitle);
-        SimpleDateFormat lectureDate =
-                new SimpleDateFormat(DateUtils.DAY_DATE_FORMAT, Locale.getDefault());
-        textView.setText(String.format(
-                "%s  -  %s", lectureDate.format(lecture.getDate()), this.section.getTitle()));
-        Objects.requireNonNull(getSupportActionBar()).setTitle("");
-    }
-
-    /**
      * Method for setting the state of the keyboard
      *
      * @param keyBoardOpen Defines if the keyboard is open or closed
      */
     public void setKeyboardOpen(Boolean keyBoardOpen) {
         this.keyBoardOpen = keyBoardOpen;
-        closeAttachments();
+        if (this.attachmentView != null) this.attachmentView.closeAttachments();
     }
 
     /**
@@ -245,11 +237,6 @@ public class EditorActivity extends DatabaseConnectionActivity
             assert imm != null;
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
-        //TODO save note
-
-
-        //sliding animation to the left out of the activity
-        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
     /**
@@ -332,7 +319,22 @@ public class EditorActivity extends DatabaseConnectionActivity
      * @param view the clicked camera-icon. Is only needed for using this method via the layout
      */
     public void onTakePhotoPickerPressed(View view) {
-        startActivityForResult(attachmentControl.getTakePictureIntent(), REQUEST_TAKE_PHOTO);
+        this.attachmentView.onTakePhotoPickerPressed();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        Log.d(TAG, "request permission returned. " + permissions[0] + " " + grantResults[0]);
+
+        //for now only camera permission is requested
+
+        if (requestCode == 1
+                && permissions[0].equals(Manifest.permission.CAMERA)
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            this.attachmentView.intentTakePhoto();
+        }
     }
 
     /**
@@ -341,7 +343,7 @@ public class EditorActivity extends DatabaseConnectionActivity
      * @param view the pressed file-icon. Is only needed for using this method via the layout
      */
     public void onFilePickerPressed(View view) {
-        startActivityForResult(attachmentControl.getOpenFileIntent(), REQUEST_FILE_OPEN);
+        this.attachmentView.onFilePickerPressed();
     }
 
     /**
@@ -353,24 +355,10 @@ public class EditorActivity extends DatabaseConnectionActivity
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //TODO Needs to avoid contentEditText provider all together after SQL db is established to make contentEditText provider obsolete
         super.onActivityResult(requestCode, resultCode, data);
-        OrganizerDataProvider.getInstance().openDbConnection(this);
-        Uri uri = attachmentControl.onActivityResult(requestCode, resultCode, data);
-        this.addFileToAttachments(uri);
-        updateFileNumber();
+        this.attachmentView.onActivityResult(requestCode, resultCode, data);
     }
 
-    public void addFileToAttachments(Uri uri) {
-        if (uri != null) {
-            String fileName = AttachmentUtils.getFileName(this.getApplicationContext(), uri);
-            this.lecture.addAttachment(new Attachment(fileName, uri));
-
-            this.attachmentAdapter.notifyDataSetChanged();
-
-            Log.d(TAG, "file behind uri has been added to attachments");
-        }
-    }
 
     /**
      * Method for detecting if the device on which the application is installed has a camera
@@ -401,90 +389,7 @@ public class EditorActivity extends DatabaseConnectionActivity
      * @param view the view that calls this Method. Only needed for calling this Method via layout
      */
     public void onAttachmentsPressed(View view) {
-        if (fileContainer.getVisibility() == View.VISIBLE) {
-            closeAttachments();
-        } else if (lecture.getAttachments().size() != 0) {
-            openAttachments();
-        } else Toast.makeText(
-                this, "Your attachments go here", Toast.LENGTH_SHORT).show();
-    }
-
-    /**
-     * Method for closing the attachment-view
-     */
-    public void closeAttachments() {
-        fileContainer.setVisibility(View.GONE);
-        displayFileNumber();
-    }
-
-    /**
-     * Method for opening the attachmentControl-view
-     */
-    public void openAttachments() {
-        fileContainer.setVisibility(View.VISIBLE);
-        findViewById(R.id.attachment_counter).setVisibility(View.GONE);
-        hideFileNumber();
-    }
-
-    /**
-     * Method for hiding the attachment file-counter
-     */
-    private void hideFileNumber() {
-        findViewById(R.id.attachment_counter).setVisibility(View.GONE);
-    }
-
-    /**
-     * Method for displaying the file-counter.
-     * It only display a number if there are actually file/s saved
-     */
-    public void displayFileNumber() {
-        TextView attachmentCounter = findViewById(R.id.attachment_counter);
-        if (attachments.size() == 0) {
-            attachmentCounter.setVisibility(View.GONE);
-        } else {
-            attachmentCounter.setVisibility(View.VISIBLE);
-        }
-    }
-
-    /**
-     * Method for synchronising the file-counter with the saved attachmentControl
-     */
-    public void updateFileNumber() {
-        TextView attachmentCounter = findViewById(R.id.attachment_counter);
-        int numberOfAttachments = attachments.size();
-        attachmentCounter.setText(
-                String.format(Locale.getDefault(), "%d", numberOfAttachments));
-        if (numberOfAttachments == 0)
-            closeAttachments();
-        if (this.fileContainer.getVisibility() == View.GONE)
-            displayFileNumber();
-    }
-
-    /**
-     * Method for initializing the attachmentControl-view
-     */
-    private void initAttachmentsView() {
-        this.fileContainer = findViewById(R.id.recycler_view_files);
-        this.attachmentAdapter = new AttachmentAdapter(this, this, this.lecture.getAttachments());
-        this.fileContainer.setAdapter(attachmentAdapter);
-        this.fileContainer.setLayoutManager(new LinearLayoutManager(this));
-    }
-
-    @Override
-    public void onRecyclerViewButtonClicked(View view, int position) {
-        lecture.removeAttachment(this.attachments.get(position));
-        this.attachmentAdapter.notifyDataSetChanged();
-    }
-
-    /**
-     * Method for initializing the task-view
-     */
-    private void initTaskView() {
-        RecyclerView recyclerView = findViewById(R.id.rv_course_tasks);
-        TaskAdapter taskAdapter =
-                new TaskAdapter(this, tasks);
-        recyclerView.setAdapter(taskAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        this.attachmentView.onAttachmentsPressed();
     }
 
     /**
@@ -494,9 +399,7 @@ public class EditorActivity extends DatabaseConnectionActivity
      */
     public void openTasks(View view) {
         closeFontOptionMenus();
-        displayCloseTasksButton();
-        CoordinatorLayout noteView = findViewById(R.id.note_view);
-        noteView.setVisibility(View.VISIBLE);
+        this.taskView.openTasks();
     }
 
     /**
@@ -505,29 +408,7 @@ public class EditorActivity extends DatabaseConnectionActivity
      * @param view the view that was clicked on. Only needed for calling this method via layout
      */
     public void closeTasks(View view) {
-        displayTasksButton();
-        CoordinatorLayout noteView = findViewById(R.id.note_view);
-        noteView.setVisibility(View.GONE);
-    }
-
-    /**
-     * Method for displaying the tasks-button
-     */
-    private void displayTasksButton() {
-        CoordinatorLayout taskButton = findViewById(R.id.note_action_button);
-        taskButton.setVisibility(View.VISIBLE);
-        CoordinatorLayout closeButton = findViewById(R.id.go_back_actionButton);
-        closeButton.setVisibility(View.GONE);
-    }
-
-    /**
-     * Method for displaying the close-tasks-button
-     */
-    private void displayCloseTasksButton() {
-        CoordinatorLayout taskButton = findViewById(R.id.note_action_button);
-        taskButton.setVisibility(View.GONE);
-        CoordinatorLayout closeButton = findViewById(R.id.go_back_actionButton);
-        closeButton.setVisibility(View.VISIBLE);
+        this.taskView.closeTasks();
     }
 
     /**
@@ -535,7 +416,7 @@ public class EditorActivity extends DatabaseConnectionActivity
      * The font-options should be only shown if the note-contentEditText is in focus and the keyboard open
      */
     public void showAppropriateMenu() {
-        if (keyBoardOpen && focusOnNoteContent) {
+        if ((keyBoardOpen && focusOnNoteContent) | this.attachmentView == null) {
             showFontMenu();
         } else {
             showAttachmentMenu();
@@ -547,21 +428,65 @@ public class EditorActivity extends DatabaseConnectionActivity
      */
     private void showFontMenu() {
         findViewById(R.id.edit_items).setVisibility(View.VISIBLE);
-        findViewById(R.id.attachment_items).setVisibility(View.GONE);
+        if (this.attachmentView != null) this.attachmentView.hideAttachmentMenu();
     }
 
     /**
      * Method for displaying the attachment-view and hiding the font-menu
      */
     private void showAttachmentMenu() {
-        findViewById(R.id.attachment_items).setVisibility(View.VISIBLE);
+        if (this.attachmentView != null) this.attachmentView.showAttachmentMenu();
         findViewById(R.id.edit_items).setVisibility(View.GONE);
     }
 
     public void onShareLectureClicked(MenuItem item) {
-        CommunicationController communicator = new CommunicationController(this);
         Spannable spannable = this.contentEditText.getText();
         String noteTitle = this.titleEditText.getText().toString();
-        communicator.sendSpannable(spannable, noteTitle);
+        this.shareContentManager.sendSpannable(spannable, noteTitle);
+    }
+
+    public void onSharePdfClicked(MenuItem item) {
+        EditText out = new EditText(this);
+        out.setText(this.titleEditText.getText());
+        Editable outText = out.getText();
+        outText.setSpan(new StyleSpan(Typeface.BOLD), 0, out.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        outText.setSpan(new RelativeSizeSpan(3f), 0, out.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        outText.append("\n\n\n");
+        outText.append(this.contentEditText.getText());
+
+
+        Editable cachedContent = this.contentEditText.getText();
+        this.contentEditText.setText(outText);
+
+        this.shareContentManager.createPdfFromContentView(contentEditText, titleEditText.getText().toString());
+
+        this.contentEditText.setText(cachedContent);
+    }
+
+    public void onDeleteLectureClicked(MenuItem item) {
+        SimpleConfirmationDialogFragment deleteConfirmationDialog = new SimpleConfirmationDialogFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(SimpleConfirmationDialogFragment.DIALOG_MESSAGE_EXTRA, "Do you really want to delete this lecture?");
+        bundle.putString(SimpleConfirmationDialogFragment.DIALOG_CONFIRMING_EXTRA, "delete");
+        bundle.putString(SimpleConfirmationDialogFragment.DIALOG_DECLINING_EXTRA, "cancel");
+        deleteConfirmationDialog.setArguments(bundle);
+        deleteConfirmationDialog.setDialogListener(this);
+        deleteConfirmationDialog.show(getSupportFragmentManager(), DELETE_LECTURE_DIALOG_CODE);
+    }
+
+    @Override
+    public void onDialogConfirmation(Bundle resultBundle, GeneralConfirmationDialogFragment dialog) {
+        String dialogType = dialog.getTag();
+        Objects.requireNonNull(dialogType, "dialog tag missing");
+        switch (dialogType) {
+            case DELETE_LECTURE_DIALOG_CODE:
+                this.lecture.getSection().removeLecture(this.lecture);
+                onBackPressed();
+                break;
+            default:
+                NullPointerException e = new NullPointerException("dialog code unknown");
+                Log.e(TAG, e.getMessage(), e);
+                throw e;
+        }
     }
 }

@@ -3,11 +3,10 @@ package com.mobila.project.today.model.dataProviding.dataAccess;
 import android.content.ContentValues;
 
 import com.mobila.project.today.model.Identifiable;
-import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
 
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.AttachmentTable;
 
-public class AttachmentDataAccessImpl extends ParentDataAccessImpl implements AttachmentDataAccess {
+class AttachmentDataAccessImpl extends ParentDataAccessImpl implements AttachmentDataAccess {
     private static AttachmentDataAccess instance;
 
     static AttachmentDataAccess getInstance() {

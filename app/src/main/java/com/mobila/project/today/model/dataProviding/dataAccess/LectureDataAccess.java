@@ -1,11 +1,9 @@
 package com.mobila.project.today.model.dataProviding.dataAccess;
 
-import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
 import com.mobila.project.today.model.Attachment;
 import com.mobila.project.today.model.Identifiable;
 import com.mobila.project.today.model.Note;
 import com.mobila.project.today.model.Section;
-import com.mobila.project.today.model.dataProviding.dataAccess.databank.DBHelper;
 
 import java.util.Date;
 import java.util.List;

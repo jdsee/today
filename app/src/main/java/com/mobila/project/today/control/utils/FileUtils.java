@@ -1,6 +1,7 @@
 package com.mobila.project.today.control.utils;
 
 import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,15 +10,15 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.OpenableColumns;
+import android.util.Log;
 import android.webkit.MimeTypeMap;
+import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
 import com.mobila.project.today.R;
-import com.mobila.project.today.model.Attachment;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,7 +27,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
-public interface AttachmentUtils {
+public interface FileUtils {
+    String TAG = FileUtils.class.getSimpleName();
+
     /**
      * Method for obtaining the Mime-Type of a file
      *
@@ -35,24 +38,11 @@ public interface AttachmentUtils {
      * @return the Mime-Type of the file
      */
     static String getMimeType(Context context, Uri uri) {
-        String mimeType;
-        if (Objects.requireNonNull(uri.getScheme()).equals(ContentResolver.SCHEME_CONTENT)) {
-            ContentResolver cr = context.getContentResolver();
-            mimeType = cr.getType(uri);
-        } else {
-            String fileExtension = MimeTypeMap.getFileExtensionFromUrl(uri
-                    .toString());
-            mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
-                    fileExtension.toLowerCase());
-        }
-        return mimeType;
-       /* ContentResolver cR = context.getContentResolver();
-        MimeTypeMap mime = MimeTypeMap.getSingleton();
-        String type = mime.getExtensionFromMimeType(cR.getType(uri));
+        ContentResolver cR = context.getContentResolver();
 
-        System.out.println("FILE URI: " + uri);
+        Log.d(TAG, "FILE URI: " + uri);
 
-        return cR.getType(uri);*/
+        return cR.getType(uri);
     }
 
 
@@ -84,6 +74,11 @@ public interface AttachmentUtils {
         return result;
     }
 
+    static String getFileNameWOExtension(Context context, Uri uri){
+        String fileNameWExtension = getFileName(context, uri);
+        return fileNameWExtension.substring(0, fileNameWExtension.lastIndexOf('.'));
+    }
+
     /**
      * Method for receiving a symbolic icon for a file-type
      *
@@ -92,50 +87,50 @@ public interface AttachmentUtils {
      * @return a Drawable containing a symbolic icon
      */
     static Drawable getDrawable(Context context, String mimeType) {
-        switch (mimeType) {
-            case "application/pdf":
-                return ContextCompat.getDrawable(context, R.drawable.file_format_pdf);
-            case "image/jpeg":
-                return ContextCompat.getDrawable(context, R.drawable.file_format_jpg);
-            case "audio/mpeg":
-                return ContextCompat.getDrawable(context, R.drawable.file_format_mp3);
-            case "application/zip":
-                return ContextCompat.getDrawable(context, R.drawable.file_format_zip);
-            case "text/plain":
-                return ContextCompat.getDrawable(context, R.drawable.file_format_txt);
-            case "application/msword":
-                return ContextCompat.getDrawable(context, R.drawable.file_format_doc);
-            case "application/x-msdos-program":
-                return ContextCompat.getDrawable(context, R.drawable.file_format_exe);
-            case "application/x-flac":
-                return ContextCompat.getDrawable(context, R.drawable.file_format_flac);
-            case "image/gif":
-                return ContextCompat.getDrawable(context, R.drawable.file_format_gif);
-            case "text/html":
-                return ContextCompat.getDrawable(context, R.drawable.file_format_html);
-            case "application/x-iso9660-image":
-                return ContextCompat.getDrawable(context, R.drawable.file_format_iso);
-            case "application/x-javascript":
-                return ContextCompat.getDrawable(context, R.drawable.file_format_js);
-            case "video/mp4":
-                return ContextCompat.getDrawable(context, R.drawable.file_format_mp4);
-            case "application/vnd.ms-powerpoint":
-                return ContextCompat.getDrawable(context, R.drawable.file_format_ppt);
-            case "image/x-photoshop":
-                return ContextCompat.getDrawable(context, R.drawable.file_format_psd);
-            case "application/rar":
-                return ContextCompat.getDrawable(context, R.drawable.file_format_rar);
-            case "image/svg+xml":
-                return ContextCompat.getDrawable(context, R.drawable.file_format_svg);
-            case "audio/x-wav":
-                return ContextCompat.getDrawable(context, R.drawable.file_format_wav);
-            case "audio/x-ms-wma":
-                return ContextCompat.getDrawable(context, R.drawable.file_format_wma);
-            case "application/xml":
-                return ContextCompat.getDrawable(context, R.drawable.file_format_xml);
-            default:
-                return ContextCompat.getDrawable(context, R.drawable.file_format_unknown);
-        }
+        if (mimeType != null)
+            switch (mimeType) {
+                case "application/pdf":
+                    return ContextCompat.getDrawable(context, R.drawable.file_format_pdf);
+                case "image/jpeg":
+                    return ContextCompat.getDrawable(context, R.drawable.file_format_jpg);
+                case "audio/mpeg":
+                    return ContextCompat.getDrawable(context, R.drawable.file_format_mp3);
+                case "application/zip":
+                    return ContextCompat.getDrawable(context, R.drawable.file_format_zip);
+                case "text/plain":
+                    return ContextCompat.getDrawable(context, R.drawable.file_format_txt);
+                case "application/msword":
+                    return ContextCompat.getDrawable(context, R.drawable.file_format_doc);
+                case "application/x-msdos-program":
+                    return ContextCompat.getDrawable(context, R.drawable.file_format_exe);
+                case "application/x-flac":
+                    return ContextCompat.getDrawable(context, R.drawable.file_format_flac);
+                case "image/gif":
+                    return ContextCompat.getDrawable(context, R.drawable.file_format_gif);
+                case "text/html":
+                    return ContextCompat.getDrawable(context, R.drawable.file_format_html);
+                case "application/x-iso9660-image":
+                    return ContextCompat.getDrawable(context, R.drawable.file_format_iso);
+                case "application/x-javascript":
+                    return ContextCompat.getDrawable(context, R.drawable.file_format_js);
+                case "video/mp4":
+                    return ContextCompat.getDrawable(context, R.drawable.file_format_mp4);
+                case "application/vnd.ms-powerpoint":
+                    return ContextCompat.getDrawable(context, R.drawable.file_format_ppt);
+                case "image/x-photoshop":
+                    return ContextCompat.getDrawable(context, R.drawable.file_format_psd);
+                case "application/rar":
+                    return ContextCompat.getDrawable(context, R.drawable.file_format_rar);
+                case "image/svg+xml":
+                    return ContextCompat.getDrawable(context, R.drawable.file_format_svg);
+                case "audio/x-wav":
+                    return ContextCompat.getDrawable(context, R.drawable.file_format_wav);
+                case "audio/x-ms-wma":
+                    return ContextCompat.getDrawable(context, R.drawable.file_format_wma);
+                case "application/xml":
+                    return ContextCompat.getDrawable(context, R.drawable.file_format_xml);
+            }
+        return ContextCompat.getDrawable(context, R.drawable.file_format_unknown);
     }
 
     /**
@@ -179,12 +174,17 @@ public interface AttachmentUtils {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setDataAndType(uri, getMimeType(context, uri));
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        context.startActivity(intent);
+        try {
+            context.startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(context, "There is no Application to open files of this type.", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "File could not be opened");
+        }
     }
 
     static void copy(InputStream src, File dst) throws IOException {
         try (InputStream in = src) {
-            try (OutputStream out = new FileOutputStream(dst)) {
+            try (OutputStream out  = new FileOutputStream(dst)) {
                 // Transfer bytes from in to out
                 byte[] buf = new byte[1024];
                 int len;

@@ -10,17 +10,13 @@ import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
 
-import com.mobila.project.today.model.Attachment;
-import com.mobila.project.today.model.Lecture;
-import com.mobila.project.today.control.utils.AttachmentUtils;
-import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
-import com.mobila.project.today.model.dataProviding.OrganizerDataProvider;
+import com.mobila.project.today.control.utils.FileUtils;
+import com.mobila.project.today.model.dataProviding.dataAccess.DataKeyNotFoundException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
 import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
@@ -47,7 +43,7 @@ public class AttachmentControl {
         //ensuring there is a camera on the device
         if (takePictureIntent.resolveActivity(context.getPackageManager()) != null) {
             //Create File for photo
-            File photoFile = AttachmentUtils.createImageFile(context);
+            File photoFile = FileUtils.createImageFile(context);
             this.currentImagePath = photoFile.getAbsolutePath();
             //check if file was created
             Uri photoURI = FileProvider.getUriForFile(context,
@@ -91,13 +87,15 @@ public class AttachmentControl {
             } else if (requestCode == REQUEST_FILE_OPEN && data != null) {
                 try {
                     Uri fileUri = data.getData();
-                    InputStream fileInputStream = context.getContentResolver().openInputStream(fileUri);
+                    File destinationFile;
+                    try (InputStream fileInputStream =context.getContentResolver().openInputStream(Objects.requireNonNull(fileUri))) {
 
-                    String destinationFileName = AttachmentUtils.getFileName(context, fileUri);
-                    File destinationFile = new File(context.getExternalFilesDir(
-                            Environment.DIRECTORY_DOCUMENTS), destinationFileName);
+                        String destinationFileName = FileUtils.getFileName(context, fileUri);
+                        destinationFile = new File(context.getExternalFilesDir(
+                                Environment.DIRECTORY_DOCUMENTS), destinationFileName);
 
-                    AttachmentUtils.copy(fileInputStream, destinationFile);
+                        FileUtils.copy(fileInputStream, destinationFile);
+                    }
 
                     Uri destinationUri = FileProvider.getUriForFile(context,
                             context.getApplicationContext().getPackageName() + ".fileprovider", destinationFile);

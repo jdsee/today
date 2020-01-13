@@ -1,20 +1,9 @@
-package com.mobila.project.today.model.dataProviding;
+package com.mobila.project.today.model.dataProviding.dataAccess;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.mobila.project.today.model.dataProviding.dataAccess.AttachmentDataAccess;
-import com.mobila.project.today.model.dataProviding.dataAccess.CourseDataAccess;
-import com.mobila.project.today.model.dataProviding.dataAccess.LectureDataAccess;
-import com.mobila.project.today.model.dataProviding.dataAccess.NoteDataAccess;
-import com.mobila.project.today.model.dataProviding.dataAccess.ParentDataAccess;
-import com.mobila.project.today.model.dataProviding.dataAccess.RootDataAccess;
-import com.mobila.project.today.model.dataProviding.dataAccess.SectionDataAccess;
-import com.mobila.project.today.model.dataProviding.dataAccess.SemesterDataAccess;
-import com.mobila.project.today.model.dataProviding.dataAccess.TaskDataAccess;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.DBHelper;
-
-import java.util.LinkedList;
 
 class OrganizerDataProviderImpl implements OrganizerDataProvider {
     private static OrganizerDataProviderImpl instance;
@@ -24,10 +13,10 @@ class OrganizerDataProviderImpl implements OrganizerDataProvider {
     private final TaskDataAccess taskAccess;
     private final SectionDataAccess sectionAccess;
     private final NoteDataAccess noteAccess;
-
-    private DBHelper dbHelper;
-
     private final LectureDataAccess lectureAccess;
+    private final AttachmentDataAccess attachmentAccess;
+
+    private SQLiteDatabase database;
 
     static OrganizerDataProviderImpl getInstance() {
         if (instance == null)
@@ -43,12 +32,13 @@ class OrganizerDataProviderImpl implements OrganizerDataProvider {
         this.sectionAccess = SectionDataAccess.getInstance();
         this.lectureAccess = LectureDataAccess.getInstance();
         this.noteAccess = NoteDataAccess.getInstance();
+        this.attachmentAccess = AttachmentDataAccess.getInstance();
     }
 
     @Override
     public void openDbConnection(Context context) {
-        this.dbHelper = new DBHelper(context);
-        SQLiteDatabase database = dbHelper.getWritableDatabase();
+        DBHelper dbHelper = new DBHelper(context);
+        this.database = dbHelper.getWritableDatabase();
 
         this.rootAccess.openDbConnection(database);
         this.semesterAccess.openDbConnection(database);
@@ -61,8 +51,13 @@ class OrganizerDataProviderImpl implements OrganizerDataProvider {
 
     @Override
     public void closeDbConnection() {
-        if (this.dbHelper != null)
-            this.dbHelper.close();
+        if (this.database != null && this.database.isOpen())
+            this.database.close();
+    }
+
+    @Override
+    public boolean isOpen() {
+        return this.database != null && this.database.isOpen();
     }
 
     @Override
@@ -102,6 +97,6 @@ class OrganizerDataProviderImpl implements OrganizerDataProvider {
 
     @Override
     public AttachmentDataAccess getAttachmentDataAccess() {
-        return AttachmentDataAccess.getInstance();
+        return this.attachmentAccess;
     }
 }

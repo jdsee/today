@@ -8,7 +8,6 @@ import android.util.Log;
 import com.mobila.project.today.model.Course;
 import com.mobila.project.today.model.Identifiable;
 import com.mobila.project.today.model.Lecture;
-import com.mobila.project.today.model.dataProviding.DataKeyNotFoundException;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.CourseTable;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.LectureTable;
 import com.mobila.project.today.model.dataProviding.dataAccess.databank.SectionTable;
@@ -22,7 +21,6 @@ class SectionDataAccessImpl extends ParentDataAccessImpl implements SectionDataA
 
     private static final String TAG = SectionDataAccessImpl.class.getName();
     private static final String LOG_MSG_DB_UPDATE = "section has been updated in database";
-    private static final String NO_LECTURES_FOR_SECTION_MSG = "no lectures related to given section";
 
     private IdentityMapper<Lecture> lectureCache;
 
@@ -40,7 +38,7 @@ class SectionDataAccessImpl extends ParentDataAccessImpl implements SectionDataA
     }
 
     /**
-     * SUPPOSED FOR TESTING REASONS ONLY!
+     * Supposed for TESTING REASONS ONLY.
      * Do not use this constructor for normal instantiating,
      * it is only supposed to be used for dependency injection -> mockInjection
      *
@@ -59,11 +57,11 @@ class SectionDataAccessImpl extends ParentDataAccessImpl implements SectionDataA
                 null, null, null);
         if (!sectionCursor.moveToNext())
             throw new DataKeyNotFoundException("FATAL ERROR: no parent found for given section!");
-        String sectionID = sectionCursor.getString(sectionCursor.getColumnIndex(SectionTable.COLUMN_RELATED_TO));
+        String courseID = sectionCursor.getString(sectionCursor.getColumnIndex(SectionTable.COLUMN_RELATED_TO));
         sectionCursor.close();
 
         Cursor courseCursor = this.database.query(CourseTable.TABLE_NAME, CourseTable.ALL_COLUMNS,
-                CourseTable.COLUMN_ID + "=?", new String[]{sectionID},
+                CourseTable.COLUMN_ID + "=?", new String[]{courseID},
                 null, null, null);
         courseCursor.moveToFirst();
         Course course = new Course(
@@ -76,33 +74,30 @@ class SectionDataAccessImpl extends ParentDataAccessImpl implements SectionDataA
     }
 
     @Override
-    public List<Lecture> getLectures(Identifiable course) throws DataKeyNotFoundException {
-        List<Lecture> lectures = this.lectureCache.get(course);
+    public List<Lecture> getLectures(Identifiable section) throws DataKeyNotFoundException {
+        List<Lecture> lectures = this.lectureCache.get(section);
         if (lectures == null) {
-            lectures = this.getLecturesFromDB(course);
-            this.lectureCache.add(course, lectures);
+            lectures = this.getLecturesFromDB(section);
+            this.lectureCache.add(section, lectures);
         }
-        return lectures;
+        return this.lectureCache.get(section);
     }
 
-    private List<Lecture> getLecturesFromDB(Identifiable course) {
+    private List<Lecture> getLecturesFromDB(Identifiable  section) {
         Cursor cursor = this.database.query(
                 LectureTable.TABLE_NAME,
                 new String[]{LectureTable.COLUMN_ID, LectureTable.COLUMN_NR,
                         LectureTable.COLUMN_DATE, LectureTable.COLUMN_ROOM_NR},
                 LectureTable.COLUMN_RELATED_TO + "=?",
-                new String[]{course.getID()}, null, null, null);
+                new String[]{section.getID()}, null, null, null);
         List<Lecture> lectures = new LinkedList<>();
         while (cursor.moveToNext()) {
-            String lectureId = cursor.getString(cursor.getColumnIndex(LectureTable.COLUMN_ID));
-            int lectureNr = cursor.getInt(cursor.getColumnIndex(LectureTable.COLUMN_NR));
-            long dateValue = cursor.getLong(cursor.getColumnIndex(LectureTable.COLUMN_DATE));
-
-            Log.d(TAG, "READING FROM DB - lecture date as long: " + dateValue);
-
-            Date date = new Date(dateValue);
-            String roomNr = cursor.getString(cursor.getColumnIndex(LectureTable.COLUMN_ROOM_NR));
-            Lecture lecture = new Lecture(lectureId, lectureNr, date, roomNr);
+            Lecture lecture = new Lecture(
+                    cursor.getString(cursor.getColumnIndex(LectureTable.COLUMN_ID)),
+                    cursor.getInt(cursor.getColumnIndex(LectureTable.COLUMN_NR)),
+                    new Date(cursor.getLong(cursor.getColumnIndex(LectureTable.COLUMN_DATE))),
+                    cursor.getString(cursor.getColumnIndex(LectureTable.COLUMN_ROOM_NR))
+            );
             lectures.add(lecture);
         }
         cursor.close();
@@ -122,8 +117,6 @@ class SectionDataAccessImpl extends ParentDataAccessImpl implements SectionDataA
         values.put(LectureTable.COLUMN_DATE, lecture.getDate().getTime());
         values.put(LectureTable.COLUMN_ROOM_NR, lecture.getRoomNr());
         values.put(LectureTable.COLUMN_RELATED_TO, section.getID());
-
-        Log.d(TAG, "WRITING TO DB - lecture date as long: " + lecture.getDate().getTime());
 
         this.database.insert(LectureTable.TABLE_NAME, null, values);
 

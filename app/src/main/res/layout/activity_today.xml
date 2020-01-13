@@ -131,9 +131,11 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view_courses"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="wrap_content" />
 
             <ImageButton
+                android:id="@+id/add_courseButton"
+                android:visibility="visible"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:background="@color/standardBackground"

@@ -69,6 +69,7 @@ public abstract class GeneralConfirmationDialogFragment extends DialogFragment {
      */
     private void addButtonsToBuilder(Bundle entryBundle, AlertDialog.Builder builder) {
         Bundle resultBundle = new Bundle();
+        resultBundle.putAll(entryBundle);
         builder.setPositiveButton(entryBundle.getString(DIALOG_CONFIRMING_EXTRA),
                 (dialog, which) -> {
                     resultBundle.putBoolean(RESPONSE_CONFIRMED_EXTRA, true);

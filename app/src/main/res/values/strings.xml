@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">today</string>
-    <string name="share">share lecture</string>
+    <string name="share_note">share note</string>
     <string name="settings">app settings</string>
     <string name="delete_note">delete lecture</string>
     <string name="app_bar_note">Note</string>
@@ -40,7 +40,7 @@
     <string name="background_font_colour_red">Red</string>
 
     <string name="semester">Semester</string>
-    <string name="add_lecture">Add lecture</string>
+    <string name="add_course">Add course</string>
     <string name="date_format">yyyy.MM.dd-HH:mm:ss</string>
     <string name="add_task">Add task</string>
     <string name="task_item_title">Example task</string>
@@ -49,5 +49,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="add_course">Add course</string>
+    <string name="add_lecture">Add lecture</string>
+    <string name="add_section">Add section</string>
+    <string name="enter_task">enter task</string>
+    <string name="share_pdf">open as .pdf</string>
+    <string name="delete_lecture">delete lecture</string>
 </resources>

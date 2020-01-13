@@ -12,12 +12,12 @@ import java.util.Objects;
 class IdentityMapper<T extends Identifiable> {
     private final Map<String, List<T>> map = new HashMap<>();
 
-    public List<T> get(@NonNull Identifiable key) {
+    List<T> get(@NonNull Identifiable key) {
         Objects.requireNonNull(key);
         return this.map.get(key.getID());
     }
 
-    public void add(@NonNull Identifiable key, @NonNull List<T> values) {
+    void add(@NonNull Identifiable key, @NonNull List<T> values) {
         Objects.requireNonNull(key);
         Objects.requireNonNull(values);
         String id = key.getID();
@@ -39,10 +39,14 @@ class IdentityMapper<T extends Identifiable> {
      * @param key     the key related to element
      * @param element the element that is to be added
      */
-    public void addElement(Identifiable key, T element) {
-        List<T> elements = this.map.get(key);
-        if (elements != null && !elements.contains(element))
-            elements.add(element);
+    void addElement(Identifiable key, T element) {
+        List<T> entries = this.map.get(key.getID());
+        if (entries != null) {
+            T equal = this.findEqualEntry(entries, element);
+            if (!entries.contains(element) && !entries.contains(equal)) {
+                entries.add(element);
+            }
+        }
     }
 
     /**
@@ -52,7 +56,7 @@ class IdentityMapper<T extends Identifiable> {
      * @param key    the key related to the values
      * @param values the values to be added
      */
-    public void overwrite(@NonNull Identifiable key, @NonNull List<T> values) {
+    void overwrite(@NonNull Identifiable key, @NonNull List<T> values) {
         Objects.requireNonNull(key);
         Objects.requireNonNull(values);
         this.map.put(key.getID(), values);
@@ -64,7 +68,7 @@ class IdentityMapper<T extends Identifiable> {
      *
      * @param key the key whose entry should be removed
      */
-    public void remove(Identifiable key) {
+    void remove(Identifiable key) {
         this.map.remove(key.getID());
     }
 
@@ -75,9 +79,18 @@ class IdentityMapper<T extends Identifiable> {
      * @param key     the key related to element
      * @param element the element that is to be removed
      */
-    public void removeElement(Identifiable key, T element) {
-        List<T> elements = this.map.get(key);
-        if (elements != null)
-            elements.remove(element);
+    void removeElement(Identifiable key, T element) {
+        List<T> entries = this.map.get(key.getID());
+        if (entries != null) {
+            T condemned = this.findEqualEntry(entries, element);
+            entries.remove(condemned);
+        }
+    }
+
+    private T findEqualEntry(List<T> entries, T sought) {
+        return entries.stream()
+                .filter(t -> sought.getID().equals(t.getID()))
+                .findFirst()
+                .orElse(null);
     }
 }
