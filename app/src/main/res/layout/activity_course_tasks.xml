@@ -8,7 +8,7 @@
     tools:context=".activities.taskView.CourseTasksActivity">
 
     <Button
-        android:id="@+id/btn_add_task"
+        android:id="@+id/add_task_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="onAddTaskClicked"
