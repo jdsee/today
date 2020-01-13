@@ -95,7 +95,7 @@ class SectionDataAccessImpl extends ParentDataAccessImpl implements SectionDataA
             Lecture lecture = new Lecture(
                     cursor.getString(cursor.getColumnIndex(LectureTable.COLUMN_ID)),
                     cursor.getInt(cursor.getColumnIndex(LectureTable.COLUMN_NR)),
-                    new Date(cursor.getInt(cursor.getColumnIndex(LectureTable.COLUMN_DATE))),
+                    new Date(cursor.getLong(cursor.getColumnIndex(LectureTable.COLUMN_DATE))),
                     cursor.getString(cursor.getColumnIndex(LectureTable.COLUMN_ROOM_NR))
             );
             lectures.add(lecture);
