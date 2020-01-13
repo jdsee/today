@@ -78,7 +78,7 @@ public class ShareContentManager {
         return filePath;
     }
 
-    public void createPdfFromContentView(View content){
+    public void createPdfFromContentView(View content, String title){
         PdfDocument document = new PdfDocument();
         PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(content.getWidth(),content.getHeight(), 1).create();
         PdfDocument.Page page = document.startPage(pageInfo);
@@ -88,7 +88,7 @@ public class ShareContentManager {
 
         try {
             File filePath = this.getSharedFilePath();
-            File pdfFile = new File(filePath, Calendar.getInstance().getTime() + ".pdf");
+            File pdfFile = new File(filePath, title + ".pdf");
             FileOutputStream fos = new FileOutputStream(pdfFile);
             document.writeTo(fos);
             document.close();

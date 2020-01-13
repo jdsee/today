@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">today</string>
-    <string name="share">share lecture</string>
+    <string name="share_note">share note</string>
     <string name="settings">app settings</string>
     <string name="delete_note">delete lecture</string>
     <string name="app_bar_note">Note</string>
@@ -52,4 +52,5 @@
     <string name="add_lecture">Add lecture</string>
     <string name="add_section">Add section</string>
     <string name="enter_task">enter task</string>
+    <string name="share_pdf">open as .pdf</string>
 </resources>

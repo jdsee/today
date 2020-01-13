@@ -437,12 +437,12 @@ public class EditorActivity extends DatabaseConnectionActivity {
     }
 
     public void onShareLectureClicked(MenuItem item) {
-//        Spannable spannable = this.contentEditText.getText();
-//        String noteTitle = this.titleEditText.getText().toString();
-//        this.shareContentManager.sendSpannable(spannable, noteTitle);
-//DONTDELTME!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        Spannable spannable = this.contentEditText.getText();
+        String noteTitle = this.titleEditText.getText().toString();
+        this.shareContentManager.sendSpannable(spannable, noteTitle);
+    }
 
-
+    public void onSharePdfClicked(MenuItem item) {
         EditText out = new EditText(this);
         out.setText(this.titleEditText.getText());
         Editable outText = out.getText();
@@ -455,7 +455,7 @@ public class EditorActivity extends DatabaseConnectionActivity {
         Editable cachedContent = this.contentEditText.getText();
         this.contentEditText.setText(outText);
 
-        this.shareContentManager.createPdfFromContentView(contentEditText);
+        this.shareContentManager.createPdfFromContentView(contentEditText, titleEditText.getText().toString());
 
         this.contentEditText.setText(cachedContent);
     }
