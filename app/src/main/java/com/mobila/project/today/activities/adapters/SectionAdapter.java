@@ -23,7 +23,7 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.ViewHold
     private final Context context;
     private List<Section> sections;
 
-    private RecyclerViewButtonClickListener recyclerViewButtoneClickListener;
+    private RecyclerViewButtonClickListener recyclerViewButtonClickListener;
     public static final String BTN_ADD_LECTURE_TAG = "BTN_ADD_LECTURE";
     public static final String BTN_REMOVE_SECTION_TAG = "BTN_REMOVE_SECTION";
 
@@ -31,7 +31,7 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.ViewHold
                           RecyclerViewButtonClickListener addLectureClickListener) {
         this.sections = sections;
         this.context = context;
-        this.recyclerViewButtoneClickListener = addLectureClickListener;
+        this.recyclerViewButtonClickListener = addLectureClickListener;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -94,17 +94,17 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionAdapter.ViewHold
         rvLectures.addItemDecoration(dividerItemDecoration);
     }
 
-    public void setAddLectureButtonClickListener(ViewHolder holder, int position) {
+    private void setAddLectureButtonClickListener(ViewHolder holder, int position) {
         holder.btnAddLecture.setTag(BTN_ADD_LECTURE_TAG);
         holder.btnAddLecture.setOnClickListener(view ->
-                this.recyclerViewButtoneClickListener.onRecyclerViewButtonClicked(view, position)
+                this.recyclerViewButtonClickListener.onRecyclerViewButtonClicked(view, position)
         );
     }
 
     private void setRemoveSectionButtonClickListener(ViewHolder holder, int position) {
         holder.btnRemoveSection.setTag(BTN_REMOVE_SECTION_TAG);
         holder.btnRemoveSection.setOnClickListener(view ->
-                this.recyclerViewButtoneClickListener.onRecyclerViewButtonClicked(view, position)
+                this.recyclerViewButtonClickListener.onRecyclerViewButtonClicked(view, position)
         );
     }
 

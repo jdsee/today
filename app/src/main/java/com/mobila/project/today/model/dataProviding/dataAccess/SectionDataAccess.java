@@ -13,7 +13,7 @@ public interface SectionDataAccess extends ParentDataAccess {
 
     Course getCourse(Identifiable section);
 
-    List<Lecture> getLectures(Identifiable course) throws DataKeyNotFoundException;
+    List<Lecture> getLectures(Identifiable section) throws DataKeyNotFoundException;
 
     void addLecture(Identifiable section, Lecture lecture) throws DataKeyNotFoundException;
 

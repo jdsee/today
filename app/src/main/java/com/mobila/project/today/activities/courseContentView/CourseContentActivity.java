@@ -204,7 +204,7 @@ public class CourseContentActivity extends DatabaseConnectionActivity
             e.printStackTrace();
             Log.e(TAG, "given date could not be parsed", e);
         }
-        String roomNr = resultBundle.getString(LectureSetupDialogFragment.ROOM_NR_EDIT_TEXT_HINT);
+        String roomNr = resultBundle.getString(LectureSetupDialogFragment.ROOM_NR_EDIT_TEXT_CONTENT);
         Lecture lecture = new Lecture(lectureNr, date, roomNr);
 
         currentSection.addLecture(lecture);

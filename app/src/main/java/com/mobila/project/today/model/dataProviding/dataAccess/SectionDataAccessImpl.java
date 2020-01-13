@@ -74,22 +74,22 @@ class SectionDataAccessImpl extends ParentDataAccessImpl implements SectionDataA
     }
 
     @Override
-    public List<Lecture> getLectures(Identifiable course) throws DataKeyNotFoundException {
-        List<Lecture> lectures = this.lectureCache.get(course);
+    public List<Lecture> getLectures(Identifiable section) throws DataKeyNotFoundException {
+        List<Lecture> lectures = this.lectureCache.get(section);
         if (lectures == null) {
-            lectures = this.getLecturesFromDB(course);
-            this.lectureCache.add(course, lectures);
+            lectures = this.getLecturesFromDB(section);
+            this.lectureCache.add(section, lectures);
         }
-        return lectures;
+        return this.lectureCache.get(section);
     }
 
-    private List<Lecture> getLecturesFromDB(Identifiable course) {
+    private List<Lecture> getLecturesFromDB(Identifiable  section) {
         Cursor cursor = this.database.query(
                 LectureTable.TABLE_NAME,
                 new String[]{LectureTable.COLUMN_ID, LectureTable.COLUMN_NR,
                         LectureTable.COLUMN_DATE, LectureTable.COLUMN_ROOM_NR},
                 LectureTable.COLUMN_RELATED_TO + "=?",
-                new String[]{course.getID()}, null, null, null);
+                new String[]{section.getID()}, null, null, null);
         List<Lecture> lectures = new LinkedList<>();
         while (cursor.moveToNext()) {
             Lecture lecture = new Lecture(

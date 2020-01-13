@@ -12,8 +12,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.mobila.project.today.R;
 import com.mobila.project.today.activities.editorView.EditorActivity;
+import com.mobila.project.today.control.utils.DateUtils;
 import com.mobila.project.today.model.Lecture;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
@@ -60,7 +62,9 @@ public class LectureAdapter extends RecyclerView.Adapter<LectureAdapter.ViewHold
         holder.tvLectureTitle.setText(lectureTitle);
 
         holder.tvRoomNr.setText(lecture.getRoomNr());
-        holder.tvTime.setText(lecture.getDate().toString());
+        SimpleDateFormat date =
+                new SimpleDateFormat(DateUtils.DAY_W_TIME_FORMAT, Locale.getDefault());
+        holder.tvTime.setText(date.format(lecture.getDate()));
 
         holder.itemView.setOnClickListener(
                 v -> this.openLectureInEditor(position));

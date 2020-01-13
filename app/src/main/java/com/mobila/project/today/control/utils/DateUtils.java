@@ -11,6 +11,8 @@ public class DateUtils {
 
     public static final String DAY_WEEKDAY_FORMAT = "EEEE";
 
+    public static final String DAY_W_TIME_FORMAT = "dd.MM.yyyy hh:mm";
+
     public static Date parseStringToDate(String dateString) throws ParseException {
         java.text.SimpleDateFormat dateFormat =
                 new SimpleDateFormat(DAY_DATE_FORMAT, Locale.getDefault());

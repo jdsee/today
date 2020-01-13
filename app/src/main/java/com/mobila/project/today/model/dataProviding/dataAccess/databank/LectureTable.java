@@ -17,7 +17,7 @@ public class LectureTable {
                     COLUMN_ID + " TEXT PRIMARY KEY, " +
                     COLUMN_NR + " INTEGER, " +
                     COLUMN_DATE + " INTEGER, " +
-                    COLUMN_ROOM_NR + " INTEGER, " +
+                    COLUMN_ROOM_NR + " STRING, " +
                     COLUMN_RELATED_TO + " TEXT REFERENCES " + SectionTable.TABLE_NAME + " ON DELETE CASCADE);";
 
     static final String SQL_DELETE =
