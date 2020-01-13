@@ -1,10 +1,16 @@
 package com.mobila.project.today.activities.editorView;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.Spannable;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
+import android.util.Log;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +20,8 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 import com.mobila.project.today.R;
 import com.mobila.project.today.activities.DatabaseConnectionActivity;
@@ -71,6 +79,8 @@ public class EditorActivity extends DatabaseConnectionActivity {
         this.titleEditText = findViewById(R.id.editor_title);
 
         this.lecture = getIntent().getParcelableExtra(Lecture.INTENT_EXTRA_CODE);
+        this.shareContentManager = new ShareContentManager(this);
+
         if (lecture != null) {
             this.note = lecture.getNote();
             this.contentEditText.setText(this.note.getContent());
@@ -79,7 +89,6 @@ public class EditorActivity extends DatabaseConnectionActivity {
             this.attachmentView = new AttachmentView(this, this.lecture);
             this.taskView = new TaskView(this, this.lecture);
         } else {
-            this.shareContentManager = new ShareContentManager(this);
             this.note = shareContentManager.getNoteFromIntent(getIntent());
             this.findViewById(R.id.tasks_open_button).setVisibility(View.GONE);
             hideShareIfNecessary();
@@ -117,7 +126,7 @@ public class EditorActivity extends DatabaseConnectionActivity {
 
     @Override
     protected void onPause() {
-        if (this.taskView!=null) this.taskView.removeCheckedTasks();
+        if (this.taskView != null) this.taskView.removeCheckedTasks();
         this.saveContent();
         super.onPause();
     }
@@ -310,6 +319,21 @@ public class EditorActivity extends DatabaseConnectionActivity {
         this.attachmentView.onTakePhotoPickerPressed();
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        Log.d(TAG, "request permission returned. " + permissions[0] + " " + grantResults[0]);
+
+        //for now only camera permission is requested
+
+        if (requestCode == 1
+                && permissions[0].equals(Manifest.permission.CAMERA)
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            this.attachmentView.intentTakePhoto();
+        }
+    }
+
     /**
      * Method for importing one file into a note
      *
@@ -389,7 +413,7 @@ public class EditorActivity extends DatabaseConnectionActivity {
      * The font-options should be only shown if the note-contentEditText is in focus and the keyboard open
      */
     public void showAppropriateMenu() {
-        if ((keyBoardOpen && focusOnNoteContent)|this.attachmentView==null) {
+        if ((keyBoardOpen && focusOnNoteContent) | this.attachmentView == null) {
             showFontMenu();
         } else {
             showAttachmentMenu();
@@ -401,20 +425,38 @@ public class EditorActivity extends DatabaseConnectionActivity {
      */
     private void showFontMenu() {
         findViewById(R.id.edit_items).setVisibility(View.VISIBLE);
-        if (this.attachmentView!=null) this.attachmentView.hideAttachmentMenu();
+        if (this.attachmentView != null) this.attachmentView.hideAttachmentMenu();
     }
 
     /**
      * Method for displaying the attachment-view and hiding the font-menu
      */
     private void showAttachmentMenu() {
-        if (this.attachmentView!=null) this.attachmentView.showAttachmentMenu();
+        if (this.attachmentView != null) this.attachmentView.showAttachmentMenu();
         findViewById(R.id.edit_items).setVisibility(View.GONE);
     }
 
     public void onShareLectureClicked(MenuItem item) {
-        Spannable spannable = this.contentEditText.getText();
-        String noteTitle = this.titleEditText.getText().toString();
-        this.shareContentManager.sendSpannable(spannable, noteTitle);
+//        Spannable spannable = this.contentEditText.getText();
+//        String noteTitle = this.titleEditText.getText().toString();
+//        this.shareContentManager.sendSpannable(spannable, noteTitle);
+//DONTDELTME!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+        EditText out = new EditText(this);
+        out.setText(this.titleEditText.getText());
+        Editable outText = out.getText();
+        outText.setSpan(new StyleSpan(Typeface.BOLD), 0, out.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        outText.setSpan(new RelativeSizeSpan(3f), 0, out.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        outText.append("\n\n\n");
+        outText.append(this.contentEditText.getText());
+
+
+        Editable cachedContent = this.contentEditText.getText();
+        this.contentEditText.setText(outText);
+
+        this.shareContentManager.createPdfFromContentView(contentEditText);
+
+        this.contentEditText.setText(cachedContent);
     }
 }

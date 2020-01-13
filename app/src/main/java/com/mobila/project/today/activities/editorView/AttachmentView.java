@@ -136,11 +136,12 @@ public class AttachmentView implements RecyclerViewButtonClickListener{
             if (this.activity.shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
                 Toast.makeText(this.activity, "Camera permission is needed to add photos.", Toast.LENGTH_SHORT).show();
             }
+            Log.d(TAG, "requesting camera permissions");
             this.activity.requestPermissions(new String[]{Manifest.permission.CAMERA}, REQUEST_TAKE_PHOTO);
         }
     }
 
-    private void intentTakePhoto() {
+    void intentTakePhoto() {
         try {
             this.activity.startActivityForResult(attachmentControl.getTakePictureIntent(), REQUEST_TAKE_PHOTO);
         } catch (Exception e) {

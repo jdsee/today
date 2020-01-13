@@ -2,24 +2,33 @@ package com.mobila.project.today.control;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
 
+import com.mobila.project.today.control.utils.DateUtils;
 import com.mobila.project.today.control.utils.FileUtils;
 import com.mobila.project.today.model.Note;
 
+import org.w3c.dom.Document;
+
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.Calendar;
 
 public class ShareContentManager {
 
@@ -31,7 +40,6 @@ public class ShareContentManager {
     }
 
     public void sendSpannable(Spannable spannable, String fileName) {
-        this.testFileCreation();
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
 
@@ -46,10 +54,7 @@ public class ShareContentManager {
     private File createFileFromSpannable(Spannable spannable, String fileName) {
         String spanAsHtml = Html.toHtml(spannable, Html.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE);
 
-        File filePath = new File(this.context.getFilesDir(), "shared");
-        if (!filePath.exists()) {
-            filePath.mkdir();
-        }
+        File filePath = this.getSharedFilePath();
         File shareFile = null;
         try {
             shareFile = new File(filePath, fileName + ".today");
@@ -65,20 +70,36 @@ public class ShareContentManager {
         return shareFile;
     }
 
-    private void testFileCreation() {
+    private File getSharedFilePath() {
         File filePath = new File(this.context.getFilesDir(), "shared");
         if (!filePath.exists()) {
             filePath.mkdir();
         }
+        return filePath;
+    }
+
+    public void createPdfFromContentView(View content){
+        PdfDocument document = new PdfDocument();
+        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(content.getWidth(),content.getHeight(), 1).create();
+        PdfDocument.Page page = document.startPage(pageInfo);
+        content.draw(page.getCanvas());
+        document.finishPage(page);
+
+
         try {
-            File file = new File(filePath, "sample");
-            FileWriter writer = new FileWriter(file);
-            writer.append("ciao");
-            writer.flush();
-            writer.close();
-            Toast.makeText(this.context, "Send your note", Toast.LENGTH_LONG).show();
-            Log.d(TAG, "created new file: " + file.getAbsolutePath() + ", exists: " + file.exists());
-        } catch (Exception e) {
+            File filePath = this.getSharedFilePath();
+            File pdfFile = new File(filePath, Calendar.getInstance().getTime() + ".pdf");
+            FileOutputStream fos = new FileOutputStream(pdfFile);
+            document.writeTo(fos);
+            document.close();
+            fos.close();
+
+            Uri fileUri = FileProvider.getUriForFile(context,
+                    context.getApplicationContext().getPackageName() + ".fileprovider", pdfFile);
+
+            FileUtils.openFile(this.context, fileUri);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -110,6 +131,7 @@ public class ShareContentManager {
 
             InputStream fileInputStream;
             try {
+                assert uri != null;
                 fileInputStream = this.context.getContentResolver().openInputStream(uri);
                 String fileString = ShareContentManager.convertStreamToString(fileInputStream);
                 Spannable spannable = new SpannableString(Html.fromHtml(fileString, Html.FROM_HTML_MODE_LEGACY));

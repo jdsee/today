@@ -35,8 +35,8 @@ public class DatabaseConnectionActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
         openDBConnectionIfNotOpenedYet();
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void openDBConnectionIfNotOpenedYet() {

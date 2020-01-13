@@ -2,6 +2,7 @@ package com.mobila.project.today.model;
 
 import com.mobila.project.today.model.dataProviding.dataAccess.OrganizerDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.RootDataAccess;
+import com.mobila.project.today.model.dataProviding.dataAccess.databank.CourseTable;
 
 import java.util.List;
 
@@ -26,6 +27,9 @@ public class Student {
     }
 
     public void removeSemester(Semester semester){
+        for (Course course : semester.getCourses()){
+            semester.removeCourse(course);
+        }
         this.rootDataAccess.removeSemester(semester);
     }
 

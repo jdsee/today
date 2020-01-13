@@ -48,7 +48,7 @@ public class TodayActivity extends DatabaseConnectionActivity
     private List<Semester> semesters;
 
     TextView semesterView;
-    int currentSemester;
+    int currentSemesterPosition;
 
     CourseAdapter courseAdapter;
 
@@ -75,7 +75,6 @@ public class TodayActivity extends DatabaseConnectionActivity
     @Override
     protected void onResume() {
         super.onResume();
-//        this.semesters = student.getAllSemesters();
         this.onDataSetChanged();
     }
 
@@ -89,6 +88,11 @@ public class TodayActivity extends DatabaseConnectionActivity
         this.tasks.clear();
         this.tasks.addAll(this.student.getAllTasks());
         this.taskAdapter.notifyDataSetChanged();
+
+        if (this.courseAdapter != null && !this.semesters.isEmpty()) {
+            this.courseAdapter.notifyDataSetChanged();
+            this.courseAdapter.setNewSemester(this.semesters.get(currentSemesterPosition));
+        }
     }
 
     private void setTimeDisplayed() {
@@ -106,7 +110,7 @@ public class TodayActivity extends DatabaseConnectionActivity
     }
 
     private void initSemesterView() {
-        currentSemester = semesters.size() != 0 ? semesters.size() - 1 : -1;
+        currentSemesterPosition = semesters.size() != 0 ? semesters.size() - 1 : -1;
         this.setSemester();
         showAppropriateSemesterButtons();
     }
@@ -125,42 +129,47 @@ public class TodayActivity extends DatabaseConnectionActivity
     private void initCourseView() {
         RecyclerView courseRecyclerView = findViewById(R.id.recycler_view_courses);
         if (!semesters.isEmpty()) {
-            this.courseAdapter = new CourseAdapter(this, this, semesters.get(currentSemester));
+            Semester semester = semesters.get(currentSemesterPosition);
+            this.courseAdapter = new CourseAdapter(this, this, semester);
             courseRecyclerView.setAdapter(courseAdapter);
             courseRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         }
     }
 
     public void goBackSemester(View view) {
-        if (currentSemester > 0) {
-            currentSemester--;
+        if (currentSemesterPosition > 0) {
+            currentSemesterPosition--;
         }
         this.setSemester();
         showAppropriateSemesterButtons();
-        initCourseView();
+        this.courseAdapter.setNewSemester(semesters.get(currentSemesterPosition));
     }
 
     public void goForwardSemester(View view) {
         if (this.semesters.isEmpty()) {
-            this.currentSemester = 0;
+            this.currentSemesterPosition = 0;
             student.addSemester(new Semester(getMaxSemester() + 1));
             initSemesterView();
-        } else if (currentSemester == semesters.size() - 1) {
+        } else if (currentSemesterPosition == semesters.size() - 1) {
             student.addSemester(new Semester(getMaxSemester() + 1));
-            currentSemester++;
+            currentSemesterPosition++;
         }
-        if (currentSemester < semesters.size() - 1) {
-            currentSemester++;
+        if (currentSemesterPosition < semesters.size() - 1) {
+            currentSemesterPosition++;
         }
         this.setSemester();
         showAppropriateSemesterButtons();
-        initCourseView();
+
+        Semester actualSemester = semesters.get(currentSemesterPosition);
+        if (this.courseAdapter == null)
+            this.courseAdapter = new CourseAdapter(this, this,actualSemester);
+        this.courseAdapter.setNewSemester(actualSemester);
     }
 
     private void showAppropriateSemesterButtons() {
         ImageButton goForwardButton = findViewById(R.id.go_foreward_semester);
         ImageButton goBackwardsButton = findViewById(R.id.go_back_semester);
-        if (currentSemester == semesters.size() - 1) {
+        if (currentSemesterPosition == semesters.size() - 1) {
             goForwardButton.setImageResource(R.drawable.baseline_add_24);
             showAddCourseButton(true);
         } else if (semesters.isEmpty()) {
@@ -170,9 +179,9 @@ public class TodayActivity extends DatabaseConnectionActivity
             goForwardButton.setImageResource(R.drawable.baseline_arrow_back_ios_24);
             showAddCourseButton(true);
         }
-        if (currentSemester <= 0) {
+        if (currentSemesterPosition <= 0) {
             goBackwardsButton.setImageResource(R.drawable.transparent_placeholder);
-            if (currentSemester < 0) showAddCourseButton(false);
+            if (currentSemesterPosition < 0) showAddCourseButton(false);
         } else {
             goBackwardsButton.setImageResource(R.drawable.baseline_arrow_back_ios_24);
             showAddCourseButton(true);
@@ -186,10 +195,10 @@ public class TodayActivity extends DatabaseConnectionActivity
     }
 
     private void setSemester() {
-        if (!semesters.isEmpty() && currentSemester >= 0) {
+        if (!semesters.isEmpty() && currentSemesterPosition >= 0) {
             try {
                 semesterView.setText(String.format(Locale.getDefault(),
-                        "Semester %d", semesters.get(currentSemester).getSemesterNr()));
+                        "Semester %d", semesters.get(currentSemesterPosition).getSemesterNr()));
             } catch (UncheckedTodayException ignored) {
             }
         } else {
@@ -256,9 +265,9 @@ public class TodayActivity extends DatabaseConnectionActivity
         boolean confirmed =
                 resultBundle.getBoolean(SimpleConfirmationDialogFragment.RESPONSE_CONFIRMED_EXTRA);
         if (!semesters.isEmpty() && confirmed) {
-            this.student.removeSemester(semesters.get(currentSemester));
-            if (currentSemester > 0) {
-                currentSemester--;
+            this.student.removeSemester(semesters.get(currentSemesterPosition));
+            if (currentSemesterPosition > 0) {
+                currentSemesterPosition--;
             }
             this.setSemester();
             showAppropriateSemesterButtons();
@@ -269,7 +278,7 @@ public class TodayActivity extends DatabaseConnectionActivity
     private void onAddCourseDialogConfirmation(Bundle resultBundle) {
         String courseName = resultBundle.getString(OneEditTextDialogFragment.CONFIRMED_STRING);
         Course course = new Course(courseName);
-        semesters.get(currentSemester).addCourse(course);
+        semesters.get(currentSemesterPosition).addCourse(course);
         initCourseView();
     }
 

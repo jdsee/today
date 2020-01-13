@@ -33,6 +33,12 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.ViewHolder
         this.rvChangeListener = rvChangeListener;
     }
 
+    public void setNewSemester(Semester semester){
+        this.semester = semester;
+        this.courses= semester.getCourses();
+        this.notifyDataSetChanged();
+    }
+
 
     @NonNull
     @Override

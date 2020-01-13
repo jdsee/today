@@ -13,10 +13,9 @@ class OrganizerDataProviderImpl implements OrganizerDataProvider {
     private final TaskDataAccess taskAccess;
     private final SectionDataAccess sectionAccess;
     private final NoteDataAccess noteAccess;
-
-    private DBHelper dbHelper;
-
     private final LectureDataAccess lectureAccess;
+    private final AttachmentDataAccess attachmentAccess;
+
     private SQLiteDatabase database;
 
     static OrganizerDataProviderImpl getInstance() {
@@ -33,12 +32,13 @@ class OrganizerDataProviderImpl implements OrganizerDataProvider {
         this.sectionAccess = SectionDataAccess.getInstance();
         this.lectureAccess = LectureDataAccess.getInstance();
         this.noteAccess = NoteDataAccess.getInstance();
+        this.attachmentAccess = AttachmentDataAccess.getInstance();
     }
 
     @Override
     public void openDbConnection(Context context) {
-        this.dbHelper = new DBHelper(context);
-        SQLiteDatabase database = dbHelper.getWritableDatabase();
+        DBHelper dbHelper = new DBHelper(context);
+        this.database = dbHelper.getWritableDatabase();
 
         this.rootAccess.openDbConnection(database);
         this.semesterAccess.openDbConnection(database);
@@ -51,8 +51,8 @@ class OrganizerDataProviderImpl implements OrganizerDataProvider {
 
     @Override
     public void closeDbConnection() {
-        if (this.dbHelper != null)
-            this.dbHelper.close();
+        if (this.database != null && this.database.isOpen())
+            this.database.close();
     }
 
     @Override
@@ -97,6 +97,6 @@ class OrganizerDataProviderImpl implements OrganizerDataProvider {
 
     @Override
     public AttachmentDataAccess getAttachmentDataAccess() {
-        return AttachmentDataAccess.getInstance();
+        return this.attachmentAccess;
     }
 }

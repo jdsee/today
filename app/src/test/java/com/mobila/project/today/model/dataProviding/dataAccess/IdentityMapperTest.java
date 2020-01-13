@@ -9,7 +9,6 @@ import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import static org.junit.Assert.*;
 
@@ -56,9 +55,10 @@ public class IdentityMapperTest {
         //when
         List<Course> result = this.identityMapper.get(this.sem1);
         //then
-        assertEquals(null, result);
+        assertNull(result);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test(expected = NullPointerException.class)
     public void getWithNullParam_Test() {
         //when
@@ -109,24 +109,28 @@ public class IdentityMapperTest {
         List<Course> resultSem2 = this.identityMapper.get(sem2);
         //then
         assertEquals(courses1, resultSem1);
-        assertEquals(null, resultSem2);
+        assertNull(resultSem2);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test(expected = NullPointerException.class)
     public void addEntryWitNullParam_Test1() {
         this.identityMapper.add(null, this.courses1);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test(expected = NullPointerException.class)
     public void addEntryWitNullParam_Test2() {
         this.identityMapper.add(this.sem1, null);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test(expected = NullPointerException.class)
     public void overwriteEntryWithNullParam_Test1() {
         this.identityMapper.overwrite(null, this.courses1);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test(expected = NullPointerException.class)
     public void overwriteEntryWithNullParam_Test2() {
         this.identityMapper.overwrite(this.sem1, null);
@@ -163,9 +167,7 @@ public class IdentityMapperTest {
         assertTrue(this.identityMapper.get(sem1).contains(this.course));
         List<Course> result = this.identityMapper.get(sem1);
         assertTrue(result.stream()
-                .filter(Objects::nonNull)
-                .anyMatch(c -> c.getID().equals(identicalCourse.getID())));
-        //TODO where does this NullPointerException comes from?
+                .anyMatch(c -> identicalCourse.getID().equals(c.getID())));
 
         Mockito.verifyZeroInteractions(this.courses2.get(0));
     }

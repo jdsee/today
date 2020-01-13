@@ -38,22 +38,9 @@ public interface FileUtils {
      * @return the Mime-Type of the file
      */
     static String getMimeType(Context context, Uri uri) {
-        /*String mimeType;
-        if (Objects.requireNonNull(uri.getScheme()).equals(ContentResolver.SCHEME_CONTENT)) {
-            ContentResolver cr = context.getContentResolver();
-            mimeType = cr.getType(uri);
-        } else {
-            String fileExtension = MimeTypeMap.getFileExtensionFromUrl(uri
-                    .toString());
-            mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
-                    fileExtension.toLowerCase());
-        }
-        return mimeType;*/
         ContentResolver cR = context.getContentResolver();
-        MimeTypeMap mime = MimeTypeMap.getSingleton();
-        String type = mime.getExtensionFromMimeType(cR.getType(uri));
 
-        System.out.println("FILE URI: " + uri);
+        Log.d(TAG, "FILE URI: " + uri);
 
         return cR.getType(uri);
     }
@@ -197,7 +184,7 @@ public interface FileUtils {
 
     static void copy(InputStream src, File dst) throws IOException {
         try (InputStream in = src) {
-            try (OutputStream out = new FileOutputStream(dst)) {
+            try (OutputStream out  = new FileOutputStream(dst)) {
                 // Transfer bytes from in to out
                 byte[] buf = new byte[1024];
                 int len;
