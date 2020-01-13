@@ -53,4 +53,5 @@
     <string name="add_section">Add section</string>
     <string name="enter_task">enter task</string>
     <string name="share_pdf">open as .pdf</string>
+    <string name="delete_lecture">delete lecture</string>
 </resources>

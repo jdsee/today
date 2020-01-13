@@ -459,4 +459,9 @@ public class EditorActivity extends DatabaseConnectionActivity {
 
         this.contentEditText.setText(cachedContent);
     }
+
+    public void onDeleteLectureClicked(MenuItem item) {
+        this.lecture.getSection().removeLecture(this.lecture);
+        onBackPressed();
+    }
 }

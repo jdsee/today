@@ -10,5 +10,9 @@
         android:title="@string/share_pdf"
         app:showAsAction="ifRoom"
         android:onClick="onSharePdfClicked"/>
+    <item android:id="@+id/action_delete_lecture"
+        android:title="@string/delete_lecture"
+        app:showAsAction="ifRoom"
+        android:onClick="onDeleteLectureClicked"/>
 
 </menu>
