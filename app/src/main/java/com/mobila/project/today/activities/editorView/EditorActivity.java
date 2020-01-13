@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Spannable;
@@ -33,6 +34,7 @@ import com.mobila.project.today.activities.fragments.SimpleConfirmationDialogFra
 import com.mobila.project.today.control.ShareContentManager;
 import com.mobila.project.today.control.NoteControl;
 import com.mobila.project.today.control.utils.DateUtils;
+import com.mobila.project.today.control.utils.FileUtils;
 import com.mobila.project.today.model.Note;
 import com.mobila.project.today.model.Lecture;
 
@@ -88,10 +90,13 @@ public class EditorActivity extends DatabaseConnectionActivity implements Genera
             this.note = lecture.getNote();
             this.contentEditText.setText(this.note.getContent());
             this.titleEditText.setText(this.note.getTitle());
+            this.titleEditText.setHint("Lecture " + this.lecture.getLectureNr());
             this.setupSubtitle();
             this.attachmentView = new AttachmentView(this, this.lecture);
             this.taskView = new TaskView(this, this.lecture);
         } else {
+            TextView subTitle = findViewById(R.id.editor_subtitle);
+            subTitle.setText("");
             this.note = shareContentManager.getNoteFromIntent(getIntent());
             this.findViewById(R.id.tasks_open_button).setVisibility(View.GONE);
             hideShareIfNecessary();
@@ -117,11 +122,10 @@ public class EditorActivity extends DatabaseConnectionActivity implements Genera
      * This is where the Title and the contentEditText of the note get connected with their respective view
      */
     private void setupSubtitle() {
-        this.titleEditText.setHint("Lecture " + this.lecture.getLectureNr());
-        TextView textView = findViewById(R.id.editor_subtitle);
+        TextView subTitle = findViewById(R.id.editor_subtitle);
         SimpleDateFormat lectureDate =
                 new SimpleDateFormat(DateUtils.DAY_DATE_FORMAT, Locale.getDefault());
-        textView.setText(String.format(
+        subTitle.setText(String.format(
                 "%s  -  %s", lectureDate.format(lecture.getDate()), this.lecture.getSection().getTitle()));
         Objects.requireNonNull(getSupportActionBar()).setTitle("");
     }
@@ -446,21 +450,7 @@ public class EditorActivity extends DatabaseConnectionActivity implements Genera
     }
 
     public void onConvertPdfClicked(MenuItem item) {
-        EditText out = new EditText(this);
-        out.setText(this.titleEditText.getText());
-        Editable outText = out.getText();
-        outText.setSpan(new StyleSpan(Typeface.BOLD), 0, out.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-        outText.setSpan(new RelativeSizeSpan(3f), 0, out.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        outText.append("\n\n\n");
-        outText.append(this.contentEditText.getText());
-
-
-        Editable cachedContent = this.contentEditText.getText();
-        this.contentEditText.setText(outText);
-
-        this.shareContentManager.createPdfFromContentView(contentEditText, titleEditText.getText().toString());
-
-        this.contentEditText.setText(cachedContent);
+        FileUtils.openFile(this, writeNoteContentIntoPDF());
     }
 
     public void onDeleteLectureClicked(MenuItem item) {
@@ -491,5 +481,25 @@ public class EditorActivity extends DatabaseConnectionActivity implements Genera
     }
 
     public void onSharePdfClicked(MenuItem item) {
+        this.shareContentManager.sharePdf(writeNoteContentIntoPDF());
+    }
+
+
+    private Uri writeNoteContentIntoPDF(){
+        EditText out = new EditText(this);
+        out.setText(this.titleEditText.getText());
+        Editable outText = out.getText();
+        outText.setSpan(new StyleSpan(Typeface.BOLD), 0, out.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        outText.setSpan(new RelativeSizeSpan(3f), 0, out.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        outText.append("\n\n\n");
+        outText.append(this.contentEditText.getText());
+
+        Editable cachedContent = this.contentEditText.getText();
+        this.contentEditText.setText(outText);
+
+        Uri fileUri = this.shareContentManager.createPdfFromContentView(contentEditText, titleEditText.getText().toString());
+
+        this.contentEditText.setText(cachedContent);
+        return fileUri;
     }
 }
