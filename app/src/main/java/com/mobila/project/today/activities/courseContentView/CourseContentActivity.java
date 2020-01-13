@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.mobila.project.today.R;
 import com.mobila.project.today.activities.DatabaseConnectionActivity;
@@ -104,7 +105,7 @@ public class CourseContentActivity extends DatabaseConnectionActivity
         Bundle bundle = new Bundle();
 
         bundle.putString(TwoEditTextDialogFragment.DIALOG_MESSAGE_EXTRA, "Add section");
-        bundle.putString(TwoEditTextDialogFragment.FIRST_EDIT_TEXT_HINT, "section name");
+        bundle.putString(TwoEditTextDialogFragment.FIRST_EDIT_TEXT_HINT, "*section name");
         bundle.putString(TwoEditTextDialogFragment.SECOND_EDIT_TEXT_HINT, "lecturer");
         bundle.putString(TwoEditTextDialogFragment.DIALOG_CONFIRMING_EXTRA, "add");
         bundle.putString(TwoEditTextDialogFragment.DIALOG_DECLINING_EXTRA, "cancel");
@@ -212,10 +213,15 @@ public class CourseContentActivity extends DatabaseConnectionActivity
     }
 
     private void onAddSectionDialogConfirmation(Bundle resultBundle) {
-        Section section = new Section(
-                resultBundle.getString(TwoEditTextDialogFragment.FIRST_EDIT_TEXT_CONTENT),
-                resultBundle.getString(TwoEditTextDialogFragment.SECOND_EDIT_TEXT_CONTENT)
-        );
-        this.course.addSection(section);
+
+        String sectionName = resultBundle.getString(TwoEditTextDialogFragment.FIRST_EDIT_TEXT_CONTENT);
+
+        if (sectionName==null||!sectionName.isEmpty()) {
+            Section section = new Section(
+                    sectionName,
+                    resultBundle.getString(TwoEditTextDialogFragment.SECOND_EDIT_TEXT_CONTENT)
+            );
+            this.course.addSection(section);
+        } else Toast.makeText(this,"Please give sections a name!", Toast.LENGTH_LONG).show();
     }
 }

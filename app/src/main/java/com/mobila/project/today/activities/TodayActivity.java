@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mobila.project.today.R;
 import com.mobila.project.today.UncheckedTodayException;
@@ -28,6 +29,7 @@ import com.mobila.project.today.model.Student;
 import com.mobila.project.today.model.Task;
 
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -277,9 +279,11 @@ public class TodayActivity extends DatabaseConnectionActivity
 
     private void onAddCourseDialogConfirmation(Bundle resultBundle) {
         String courseName = resultBundle.getString(OneEditTextDialogFragment.CONFIRMED_STRING);
-        Course course = new Course(courseName);
-        semesters.get(currentSemesterPosition).addCourse(course);
-        initCourseView();
+        if (courseName==null||!courseName.isEmpty()) {
+            Course course = new Course(courseName);
+            semesters.get(currentSemesterPosition).addCourse(course);
+            initCourseView();
+        } else Toast.makeText(this,"Please give courses a name!", Toast.LENGTH_LONG).show();
     }
 
     private int getMaxSemester() {
