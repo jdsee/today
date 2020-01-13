@@ -78,13 +78,14 @@ public class ShareContentManager {
         return filePath;
     }
 
-    public void createPdfFromContentView(View content, String title){
+    public Uri createPdfFromContentView(View content, String title){
         PdfDocument document = new PdfDocument();
         PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(content.getWidth(),content.getHeight(), 1).create();
         PdfDocument.Page page = document.startPage(pageInfo);
         content.draw(page.getCanvas());
         document.finishPage(page);
 
+        Uri fileUri = null;
 
         try {
             File filePath = this.getSharedFilePath();
@@ -94,13 +95,13 @@ public class ShareContentManager {
             document.close();
             fos.close();
 
-            Uri fileUri = FileProvider.getUriForFile(context,
+            fileUri = FileProvider.getUriForFile(context,
                     context.getApplicationContext().getPackageName() + ".fileprovider", pdfFile);
 
-            FileUtils.openFile(this.context, fileUri);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return fileUri;
     }
 
     private static String convertStreamToString(InputStream is) throws IOException {
@@ -143,5 +144,14 @@ public class ShareContentManager {
             }
         }
         return receivedNote;
+    }
+
+    public void sharePdf(Uri pdfUri) {
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_STREAM, pdfUri);
+        shareIntent.setType(FileUtils.getMimeType(this.context, pdfUri));
+        context.startActivity(Intent.createChooser(
+                shareIntent, "Sending: " + FileUtils.getFileName(this.context, pdfUri)));
     }
 }

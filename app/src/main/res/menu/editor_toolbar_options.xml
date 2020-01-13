@@ -2,17 +2,31 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/action_share"
-        android:title="@string/share_note"
-        app:showAsAction="ifRoom"
-        android:onClick="onShareLectureClicked"/>
-    <item android:id="@+id/action_share_pdf"
-        android:title="@string/share_pdf"
-        app:showAsAction="ifRoom"
-        android:onClick="onSharePdfClicked"/>
-    <item android:id="@+id/action_delete_lecture"
+    <item
+        android:id="@+id/action_delete_lecture"
+        android:onClick="onDeleteLectureClicked"
         android:title="@string/delete_lecture"
-        app:showAsAction="ifRoom"
-        android:onClick="onDeleteLectureClicked"/>
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_convert_to_pdf"
+        android:onClick="onConvertPdfClicked"
+        android:title="@string/open_pdf"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/share_menu"
+        android:title="@string/share">
+        <menu>
+            <item
+                android:id="@+id/action_share"
+                android:onClick="onShareLectureClicked"
+                android:title="@string/share_note"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_share_pdf"
+                android:onClick="onSharePdfClicked"
+                android:title="@string/share_pdf"
+                app:showAsAction="never" />
+        </menu>
+    </item>
 
 </menu>
