@@ -445,7 +445,7 @@ public class EditorActivity extends DatabaseConnectionActivity implements Genera
         this.shareContentManager.sendSpannable(spannable, noteTitle);
     }
 
-    public void onSharePdfClicked(MenuItem item) {
+    public void onConvertPdfClicked(MenuItem item) {
         EditText out = new EditText(this);
         out.setText(this.titleEditText.getText());
         Editable outText = out.getText();
@@ -488,5 +488,8 @@ public class EditorActivity extends DatabaseConnectionActivity implements Genera
                 Log.e(TAG, e.getMessage(), e);
                 throw e;
         }
+    }
+
+    public void onSharePdfClicked(MenuItem item) {
     }
 }
