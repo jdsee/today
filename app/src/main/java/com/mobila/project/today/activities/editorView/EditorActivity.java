@@ -28,6 +28,8 @@ import com.mobila.project.today.activities.DatabaseConnectionActivity;
 import com.mobila.project.today.activities.editorView.listeners.EditorKeyboardEventListener;
 import com.mobila.project.today.activities.editorView.listeners.TitleOnEditorActionListener;
 import com.mobila.project.today.activities.editorView.listeners.noteFocusChangeListener;
+import com.mobila.project.today.activities.fragments.GeneralConfirmationDialogFragment;
+import com.mobila.project.today.activities.fragments.SimpleConfirmationDialogFragment;
 import com.mobila.project.today.control.ShareContentManager;
 import com.mobila.project.today.control.NoteControl;
 import com.mobila.project.today.control.utils.DateUtils;
@@ -40,9 +42,10 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.Objects;
 
-public class EditorActivity extends DatabaseConnectionActivity {
+public class EditorActivity extends DatabaseConnectionActivity implements GeneralConfirmationDialogFragment.DialogListener {
 
     private static final String TAG = EditorActivity.class.getName();
+    private static final String DELETE_LECTURE_DIALOG_CODE = "DELETE_LECTURE_DIALOG";
     private Lecture lecture;
 
     private EditText contentEditText;
@@ -461,7 +464,29 @@ public class EditorActivity extends DatabaseConnectionActivity {
     }
 
     public void onDeleteLectureClicked(MenuItem item) {
-        this.lecture.getSection().removeLecture(this.lecture);
-        onBackPressed();
+        SimpleConfirmationDialogFragment deleteConfirmationDialog = new SimpleConfirmationDialogFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(SimpleConfirmationDialogFragment.DIALOG_MESSAGE_EXTRA, "Do you really want to delete this lecture?");
+        bundle.putString(SimpleConfirmationDialogFragment.DIALOG_CONFIRMING_EXTRA, "delete");
+        bundle.putString(SimpleConfirmationDialogFragment.DIALOG_DECLINING_EXTRA, "cancel");
+        deleteConfirmationDialog.setArguments(bundle);
+        deleteConfirmationDialog.setDialogListener(this);
+        deleteConfirmationDialog.show(getSupportFragmentManager(), DELETE_LECTURE_DIALOG_CODE);
+    }
+
+    @Override
+    public void onDialogConfirmation(Bundle resultBundle, GeneralConfirmationDialogFragment dialog) {
+        String dialogType = dialog.getTag();
+        Objects.requireNonNull(dialogType, "dialog tag missing");
+        switch (dialogType) {
+            case DELETE_LECTURE_DIALOG_CODE:
+                this.lecture.getSection().removeLecture(this.lecture);
+                onBackPressed();
+                break;
+            default:
+                NullPointerException e = new NullPointerException("dialog code unknown");
+                Log.e(TAG, e.getMessage(), e);
+                throw e;
+        }
     }
 }
