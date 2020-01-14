@@ -5,6 +5,7 @@ import android.content.Context;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.mobila.project.today.model.Course;
+import com.mobila.project.today.model.Section;
 import com.mobila.project.today.model.Semester;
 import com.mobila.project.today.model.Student;
 import com.mobila.project.today.model.Task;
@@ -36,7 +37,8 @@ public class ModelIntegrationTest {
 
         this.setupSemesters();
         this.setupTasks();
-        this.setUpCourses();
+        this.setupCourses();
+        this.setupSections();
 
         this.openDatabaseConnection();
     }
@@ -77,10 +79,10 @@ public class ModelIntegrationTest {
     private Course course1;
     private Course course2;
     private Course course3;
-    List<Course> courses;
+    private List<Course> courses;
     private List<Course> resultCourses;
 
-    private void setUpCourses() {
+    private void setupCourses() {
         this.course1 = new Course("course1");
         this.course2 = new Course("course2");
         this.course3 = new Course("course3");
@@ -88,6 +90,22 @@ public class ModelIntegrationTest {
         this.courses.add(this.course1);
         this.courses.add(this.course2);
         this.courses.add(this.course3);
+    }
+
+    private Section section1;
+    private Section section2;
+    private Section section3;
+    private List<Section> sections;
+    private List<Section> resultSections;
+
+    private void setupSections(){
+        this.section1 = new Section("title1", "lecturer1");
+        this.section2 = new Section("title2", "lecturer2");
+        this.section3 = new Section("title3", "lecturer3");
+        this.sections = new LinkedList<>();
+        this.sections.add(section1);
+        this.sections.add(section2);
+        this.sections.add(section3);
     }
 
     private void openDatabaseConnection() {
@@ -193,7 +211,6 @@ public class ModelIntegrationTest {
     public void addAndGetCoursesViaSemester() {
         semester1.addCourse(course1);
         semester1.addCourse(course2);
-
         semester3.addCourse(course3);
 
         resultCourses = semester1.getCourses();
@@ -202,7 +219,63 @@ public class ModelIntegrationTest {
         assertTrue(resultCourses.contains(course1));
         assertTrue(resultCourses.contains(course2));
         assertFalse(resultCourses.contains(course3));
-
-
     }
+
+    @Test
+    public void removeCourseViaSemester(){
+        semester1.addCourse(course1);
+        semester1.addCourse(course2);
+
+        semester1.removeCourse(course2);
+
+        resultCourses=semester1.getCourses();
+
+        assertEquals(1, resultCourses.size());
+    }
+
+    @Test
+    public void removeCourseViaSemesterWithNotAddedCourseShouldNotDoAnything(){
+        semester1.addCourse(course1);
+        semester1.addCourse(course2);
+
+        semester1.removeCourse(course3);
+
+        resultCourses=semester1.getCourses();
+
+        assertEquals(2, resultCourses.size());
+    }
+
+    @Test
+    public void removeCourseViaSemesterWithNullParameterShouldNotDoAnything(){
+        semester1.addCourse(course1);
+        semester1.addCourse(course2);
+
+        semester1.removeCourse(null);
+
+        resultCourses=semester1.getCourses();
+
+        assertEquals(2, resultCourses.size());
+    }
+
+    @Test
+    public void setSemesterNrShouldSucceed(){
+        semester1.setSemesterNr(42);
+
+        assertEquals(42, semester1.getSemesterNr());
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void setSemesterNrDoubleShouldFail(){
+        for (Semester semester:semesters) {
+            this.student.addSemester(semester);
+        }
+        semester3.setSemesterNr(2);
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void setSemesterNumberNegativeShouldFail(){
+        semester1.setSemesterNr(-1);
+    }
+
+
 }
