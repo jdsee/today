@@ -2,6 +2,7 @@ package com.mobila.project.today.integrationTests;
 
 import android.content.Context;
 
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.mobila.project.today.model.Course;
@@ -14,6 +15,7 @@ import com.mobila.project.today.model.dataProviding.dataAccess.RootDataAccess;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.sql.Date;
 import java.util.LinkedList;
@@ -29,6 +31,10 @@ public class ModelIntegrationTest {
 
     @Before
     public void setup() {
+        Context testContext = ApplicationProvider.getApplicationContext();
+
+        OrganizerDataProvider.getInstance().openDbConnection(testContext);
+
         this.instrumentationContext = InstrumentationRegistry.getInstrumentation().getContext();
 
         this.rootDataAccess = OrganizerDataProvider.getInstance().getRootDataAccess();
@@ -38,7 +44,7 @@ public class ModelIntegrationTest {
         this.setupTasks();
         this.setUpCourses();
 
-        this.openDatabaseConnection();
+//        this.openDatabaseConnection();
     }
 
     private Semester semester1;
@@ -168,7 +174,7 @@ public class ModelIntegrationTest {
     public void getEmptyTasksViaStudent_Test() {
         this.resultTasks = this.student.getAllTasks();
 
-        assertNotNull(this.resultSemesters);
+        assertNotNull(this.resultTasks);
         assertTrue(this.resultTasks.isEmpty());
     }
 

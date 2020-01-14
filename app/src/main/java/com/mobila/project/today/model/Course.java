@@ -9,6 +9,7 @@ import com.mobila.project.today.model.dataProviding.dataAccess.CourseDataAccess;
 import com.mobila.project.today.model.dataProviding.dataAccess.RootDataAccess;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Allows access to all data contained in the "Course"-entity.
@@ -158,5 +159,20 @@ public class Course implements Identifiable, Parcelable {
     @Override
     public String getID() {
         return this.ID;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Course course = (Course) o;
+        return ID.equals(course.ID) &&
+                Objects.equals(title, course.title) &&
+                Objects.equals(sections, course.sections);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(ID, title, sections);
     }
 }

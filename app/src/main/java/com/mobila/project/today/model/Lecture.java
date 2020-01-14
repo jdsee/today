@@ -9,6 +9,7 @@ import com.mobila.project.today.model.dataProviding.dataAccess.LectureDataAccess
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class Lecture implements Identifiable, Parcelable {
     public static final String INTENT_EXTRA_CODE = "EXTRA_LECTURE";
@@ -128,4 +129,21 @@ public class Lecture implements Identifiable, Parcelable {
     public String getID() {
         return this.ID;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Lecture lecture = (Lecture) o;
+        return lectureNr == lecture.lectureNr &&
+                ID.equals(lecture.ID) &&
+                Objects.equals(date, lecture.date) &&
+                Objects.equals(roomNr, lecture.roomNr);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(ID, lectureNr, date, roomNr);
+    }
 }
+

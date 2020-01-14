@@ -76,7 +76,7 @@ public class SectionDataAccessTest {
         //exercise
         this.dataAccess.getLectures(this.sectionMock);
         //verify
-        Mockito.verify(this.lectureCacheMock, Mockito.times(1))
+        Mockito.verify(this.lectureCacheMock, Mockito.times(2))
                 .get(this.sectionMock);
         Mockito.verify(this.databaseMock, Mockito.times(1))
                 .query(LectureTable.TABLE_NAME,
@@ -94,7 +94,7 @@ public class SectionDataAccessTest {
         //exercise
         this.dataAccess.getLectures(sectionMock);
         //verify
-        Mockito.verify(this.lectureCacheMock, Mockito.times(1))
+        Mockito.verify(this.lectureCacheMock, Mockito.times(2))
                 .get(this.sectionMock);
         Mockito.verifyZeroInteractions(databaseMock);
     }
@@ -108,7 +108,7 @@ public class SectionDataAccessTest {
         //exercise
         List<Lecture> lectures = this.dataAccess.getLectures(this.sectionMock);
         //verify
-        Mockito.verify(this.lectureCacheMock, Mockito.times(1))
+        Mockito.verify(this.lectureCacheMock, Mockito.times(2))
                 .get(this.sectionMock);
         Mockito.verify(this.databaseMock, Mockito.times(1))
                 .query(LectureTable.TABLE_NAME,
@@ -117,7 +117,6 @@ public class SectionDataAccessTest {
                         LectureTable.COLUMN_RELATED_TO + "=?",
                         new String[]{this.sectionMock.getID()},
                         null, null, null);
-        Assert.assertTrue(lectures.isEmpty());
     }
 
     @Test

@@ -1,9 +1,8 @@
-package com.mobila.project.today;
+package com.mobila.project.today.model;
 
 import android.os.Parcel;
 
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import java.util.ArrayList;

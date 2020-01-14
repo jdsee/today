@@ -1,9 +1,8 @@
-package com.mobila.project.today;
+package com.mobila.project.today.model;
 
 import android.os.Parcel;
 
 import com.mobila.project.today.model.dataProviding.dataAccess.TaskDataAccess;
-import com.mobila.project.today.model.Task;
 
 import org.junit.Before;
 import org.junit.Test;

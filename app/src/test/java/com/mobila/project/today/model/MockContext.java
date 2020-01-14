@@ -1,4 +1,4 @@
-package com.mobila.project.today;
+package com.mobila.project.today.model;
 
 import android.content.Context;
 import android.content.SharedPreferences;

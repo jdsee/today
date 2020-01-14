@@ -46,7 +46,6 @@ public class Attachment implements Identifiable, Parcelable {
         );
     }
 
-
     @Override
     public int describeContents() {
         //todo
