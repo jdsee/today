@@ -12,11 +12,14 @@ import com.mobila.project.today.model.Student;
 import com.mobila.project.today.model.Task;
 import com.mobila.project.today.model.dataProviding.dataAccess.OrganizerDataProvider;
 import com.mobila.project.today.model.dataProviding.dataAccess.RootDataAccess;
+import com.mobila.project.today.model.dataProviding.dataAccess.databank.DBHelper;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
 
 import java.sql.Date;
 import java.util.LinkedList;
@@ -24,6 +27,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
+@RunWith(RobolectricTestRunner.class)
 public class ModelIntegrationTest {
     private Context instrumentationContext;
 
@@ -32,9 +36,9 @@ public class ModelIntegrationTest {
 
     @Before
     public void setup() {
-        Context testContext = ApplicationProvider.getApplicationContext();
+        DBHelper dbHelper = new DBHelper(ApplicationProvider.getApplicationContext());
 
-        OrganizerDataProvider.getInstance().openDbConnection(testContext);
+        //TODO inject db to OrganizerDataProvider!
 
         this.instrumentationContext = InstrumentationRegistry.getInstrumentation().getContext();
 
