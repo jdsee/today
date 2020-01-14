@@ -52,7 +52,7 @@
     <string name="add_lecture">Add lecture</string>
     <string name="add_section">Add section</string>
     <string name="enter_task">enter task</string>
-    <string name="open_pdf">open as .pdf</string>
+    <string name="open_pdf">open note as .pdf</string>
     <string name="delete_lecture">delete lecture</string>
     <string name="share">share note…</string>
     <string name="share_pdf">… as .pdf</string>
